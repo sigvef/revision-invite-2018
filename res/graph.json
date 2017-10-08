@@ -11,11 +11,15 @@
     "type": "SceneSwitcherNode",
     "connected": {
       "A": "SpinningCube.render",
-      "B": "SpinningCube.render"
+      "B": "Metatron.render"
     }
   },
   {
     "id": "SpinningCube",
     "type": "spinningCube"
+  },
+  {
+    "id": "Metatron",
+    "type": "metatron"
   }
 ]
