@@ -11,7 +11,8 @@
     "type": "SceneSwitcherNode",
     "connected": {
       "A": "SpinningCube.render",
-      "B": "Metatron.render"
+      "B": "Metatron.render",
+      "C": "toon.render"
     }
   },
   {
@@ -21,5 +22,19 @@
   {
     "id": "Metatron",
     "type": "metatron"
+  },
+  {
+    "id": "iceberg",
+    "type": "iceberg"
+  },
+  {
+    "id": "toon",
+    "type": "toonNode",
+    "options": {
+      "shader": "toon"
+    },
+    "connected": {
+        "image": "iceberg.render"
+    }
   }
 ]
