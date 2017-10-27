@@ -18,6 +18,7 @@
       this.scene.add(light);
 
       this.camera.position.z = 200;
+      this.scene.add(new THREE.AmbientLight(0xffffff, 0.2));
     }
 
     update(frame) {

@@ -24,17 +24,50 @@ float diagonal_four(vec2 uv) {
 }
 
 float diagonals(vec2 uv, float color) {
-    uv *= 20. * (0.5 + color * 0.5);
+    uv *= 30. * (0.5 + color * 0.5);
     float gap = mod(uv.x + uv.y * 16. / 9., 1.);
-    if(gap > color * 0.5) {
+    if(gap > (-0.1 + color * 0.5)) {
         return 1.;
     }
     return 0.;
 }
 
+float readGreyscale(vec2 uv) {
+    vec4 color = texture2D(tDiffuse, uv);
+    return (color.r + color.g + color.b) / 3. * color.a; 
+}
+
 void main() {
-    vec3 color = texture2D(tDiffuse, vUv).rgb;
-    float greyscale = (color.r + color.g + color.b) / 3.; 
+    float delta = 0.003;
+    vec2 aspect = vec2(9., 16.) / 16.;
+    float left = readGreyscale(vUv - vec2(delta, 0.) * aspect);
+    float right = readGreyscale(vUv + vec2(delta, 0.) * aspect);
+    float up = readGreyscale(vUv - vec2(0., delta * aspect));
+    float down = readGreyscale(vUv + vec2(0., delta) * aspect);
+    float greyscale = readGreyscale(vUv);
     float pattern = diagonals(vUv, greyscale);
-    gl_FragColor = vec4(vec3(pattern), 1.);
+    if(left < delta) {
+        pattern = 0.;
+    }
+    if(right < delta) {
+        pattern = 0.;
+    }
+    if(up < delta) {
+        pattern = 0.;
+    }
+    if(down < delta) {
+        pattern = 0.;
+    }
+    if(left < delta) {
+        pattern = 0.;
+    }
+
+    if(left < delta && right < delta && up < delta && down < delta) {
+        pattern = 1.;
+    }
+
+    vec3 lightColor = vec3(1., 249. / 255., 225. / 255.);
+    vec3 darkColor = vec3(16. / 255., 11. / 255., 8. / 255.);
+
+    gl_FragColor = vec4(mix(darkColor, lightColor, pattern), 1.);
 }
