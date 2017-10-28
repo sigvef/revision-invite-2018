@@ -34,7 +34,8 @@
       "shader": "toon"
     },
     "connected": {
-        "image": "iceberg.render"
+        "image": "iceberg.render",
+        "coloring": "iceberg.renderColoring"
     }
   }
 ]
