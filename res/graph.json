@@ -12,7 +12,8 @@
     "connected": {
       "A": "SpinningCube.render",
       "B": "Metatron.render",
-      "C": "toon.render"
+      "C": "toon.render",
+      "D": "logotransition.render"
     }
   },
   {
@@ -34,8 +35,12 @@
       "shader": "toon"
     },
     "connected": {
-        "image": "iceberg.render",
-        "coloring": "iceberg.renderColoring"
+      "image": "iceberg.render",
+      "coloring": "iceberg.renderColoring"
     }
+  },
+  {
+    "id": "logotransition",
+    "type": "logotransition"
   }
 ]
