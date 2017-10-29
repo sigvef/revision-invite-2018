@@ -177,39 +177,38 @@
             const r = smoothstep(34, 140, t);
             const g = smoothstep(34, 0, t);
             const b = smoothstep(34, 32, t);
+            const a = smoothstep(0, 0.5, t);
+            this.ctx.fillStyle = `rgba(0, 0, 0, ${a})`;
+            const shadowOffset = 8 / scale;
+            this.ctx.translate(shadowOffset, shadowOffset * 9 / 16);
+            this.ctx.fill(paths.boxes[letter]);
+            this.ctx.translate(-shadowOffset, -shadowOffset * 9 / 16);
             this.ctx.fillStyle = `rgb(${r | 0}, ${g | 0}, ${b | 0})`;
             this.ctx.fill(paths.boxes[letter]);
           } else if(item === 'letters') {
-          this.ctx.fillStyle = 'black';
+            this.ctx.fillStyle = `rgba(0, 0, 0, 0.9)`;
             const shadowOffset = 8 / scale;
             this.ctx.translate(shadowOffset, shadowOffset * 9 / 16);
-            this.ctx.fill(paths.letters[letter]);
+            this.ctx.fill(paths.letters[letter], 'evenodd');
             this.ctx.translate(-shadowOffset, -shadowOffset * 9 / 16);
             this.ctx.fillStyle = 'white';
-            this.ctx.fill(paths.letters[letter]);
+            this.ctx.fill(paths.letters[letter], 'evenodd');
           }
 
           this.ctx.restore();
-          /*
-          this.ctx.fillStyle = 'red';
-          this.ctx.save();
-          this.ctx.translate(x, y);
-          this.ctx.fillRect(animation.anchor.x - 5, animation.anchor.y - 5, 10, 10);
-          this.ctx.restore();
-          */
         }
       }
       this.ctx.save()
       this.ctx.fillStyle = 'white';
       this.ctx.strokeStyle = '#222';
       this.ctx.globalAlpha = smoothstep(0, 1, t);
-      this.ctx.fill((paths.letters.two));
+      this.ctx.fill((paths.letters.two), 'evenodd');
       this.ctx.stroke((paths.letters.two));
-      this.ctx.fill((paths.letters.zero));
+      this.ctx.fill((paths.letters.zero), 'evenodd');
       this.ctx.stroke((paths.letters.zero));
-      this.ctx.fill((paths.letters.one));
+      this.ctx.fill((paths.letters.one), 'evenodd');
       this.ctx.stroke((paths.letters.one));
-      this.ctx.fill((paths.letters.eight));
+      this.ctx.fill((paths.letters.eight), 'evenodd');
       this.ctx.stroke((paths.letters.eight));
       this.ctx.restore()
 
