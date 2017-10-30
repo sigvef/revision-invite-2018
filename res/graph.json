@@ -13,7 +13,8 @@
       "A": "SpinningCube.render",
       "B": "Metatron.render",
       "C": "toon.render",
-      "D": "logotransition.render"
+      "D": "butterflies.render",
+      "E": "logotransition.render"
     }
   },
   {
@@ -42,5 +43,9 @@
   {
     "id": "logotransition",
     "type": "logotransition"
+  },
+  {
+    "id": "butterflies",
+    "type": "butterflies"
   }
 ]
