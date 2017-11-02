@@ -13,8 +13,8 @@
       "A": "SpinningCube.render",
       "B": "Metatron.render",
       "C": "toon.render",
-      "D": "butterflies.render",
-      "E": "logotransition.render"
+      "D": "logotransition.render",
+      "E": "butterflies.render"
     }
   },
   {
