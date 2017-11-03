@@ -13,8 +13,8 @@
       "A": "SpinningCube.render",
       "B": "Metatron.render",
       "C": "toon.render",
-      "D": "butterflies.render",
-      "E": "logotransition.render"
+      "D": "logotransition.render",
+      "E": "metaballs.render"
     }
   },
   {
@@ -47,5 +47,16 @@
   {
     "id": "butterflies",
     "type": "butterflies"
+  },
+  {
+    "id": "metaballs",
+    "type": "metaballs",
+    "options": {
+      "shader": "triangle"
+    },
+    "connected": {
+        "image": "butterflies.render",
+        "ballpositions": "butterflies.ballpositions"
+    }
   }
 ]

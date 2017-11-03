@@ -1,9 +1,10 @@
 (function(global) {
   class butterflies extends NIN.THREENode {
-    constructor(id, options) {
+    constructor(id) {
       super(id, {
         outputs: {
-          render: new NIN.TextureOutput()
+          render: new NIN.TextureOutput(),
+          ballpositions: new NIN.Output()
         }
       });
 
@@ -20,13 +21,24 @@
       CustomSinCurve.prototype.constructor = CustomSinCurve;
 
       CustomSinCurve.prototype.getPoint = function(t) {
-        const x = t * 20;
+        const x = t * 20 * 2;
         t += this.offset;
         const y = 0.5 * (Math.cos( 2 + t/353) + 2 * Math.sin(t / 10) + Math.sin(2 * Math.PI * t));
         const z = 0.5 * (Math.cos( 2 + t/142) + 3 * Math.sin(t / 40) + Math.sin(2 * Math.PI * t * 1.4));
         return new THREE.Vector3(x, y, z).multiplyScalar(10);
       };
 
+      this.bg = new THREE.Mesh(
+          new THREE.CylinderGeometry(10000, 10000, 1000, 32),
+          new THREE.MeshBasicMaterial({
+            color: 0xffffff,
+            map: Loader.loadTexture('res/bg.jpg'),
+            side: THREE.BackSide,
+          }));
+      this.bg.material.map.wrapS = THREE.RepeatWrapping;
+      this.bg.material.map.wrapT = THREE.RepeatWrapping;
+      this.bg.material.map.repeat.set(20, 1);
+      this.scene.add(this.bg);
 
       this.colors = [
         0x0db3d6,
@@ -41,13 +53,15 @@
 
       this.butterflies = [];
 
-      this.particleSystem = new ParticleSystem({
+      this.particleSystem = new window.ParticleSystem({
         color: new THREE.Color(0xfffffff)
       });
       //this.scene.add(this.particleSystem.particles);
+      //
+      this.outputs.ballpositions.setValue([]);
 
       for(let i = 0; i < 6; i++) {
-        var path = new CustomSinCurve(i / 6 + Math.random() * Math.PI * 2);
+        var path = new CustomSinCurve(Math.random() * Math.PI * 2);
         var geometry = new THREE.TubeGeometry(path, 50, 0.2, 8);
         var material = new THREE.ShaderMaterial(SHADERS.butterflylines).clone();
         const color = new THREE.Color(this.colors[i]);
@@ -56,35 +70,44 @@
         material.uniforms.b.value = color.b;
         var mesh = new THREE.Mesh(geometry, material);
         mesh.path = path;
+        mesh.scale.x = 0.5;
         this.scene.add(mesh);
         this.lines.push(mesh);
-        mesh.percentageOffset = Math.random() * 0.1;
+        mesh.percentageOffset = (Math.random() - 0.5) * 0.1 * 0.5;
 
         const butterflyMesh = new THREE.Mesh(
-          new THREE.SphereGeometry(0.7),
+          new THREE.SphereGeometry(0.7, 32 , 32),
           new THREE.MeshBasicMaterial({color: 0xffffff}));
         this.butterflies.push(butterflyMesh);
         this.scene.add(butterflyMesh);
+        this.outputs.ballpositions.getValue().push(butterflyMesh.position.clone());
       }
     }
 
 
     update(frame) {
       super.update(frame);
-      this.camera.position.x = (frame - 2000) / 2;
+      const frameStart = 7011;
+      this.camera.position.x = (frame - frameStart) / 2 / 2;
 
-      const t = (frame - 2250) / 150;
+      const t = (frame - frameStart - 250) / 80;
       const fov = easeIn(5, 45, t);
       this.camera.fov = fov;
       this.camera.updateProjectionMatrix();
       this.camera.position.z = smoothstep(500, 0, t);
+      this.camera.position.x += smoothstep(0, 10, t);
+      const percentage = (frame - frameStart) / 500 / 2;
+      const lookAtX = easeOut(this.camera.position.x, this.lines[0].path.getPoint(percentage).x / 2, t);
+      this.camera.lookAt(new THREE.Vector3(lookAtX, 0, 0));
       const xOffset = smoothstep(0, 200, t);
-      this.camera.lookAt(new THREE.Vector3(this.camera.position.x - xOffset, 0, 0));
 
       for(let i = 0; i < this.lines.length; i++) {
-        const percentage = (frame - 2000) / 500 + this.lines[i].percentageOffset;
+        const percentage = (frame - frameStart) / 500 / 2 + this.lines[i].percentageOffset;
         this.lines[i].material.uniforms.percentage.value = percentage;
         this.butterflies[i].position.copy(this.lines[i].path.getPoint(percentage));
+        this.butterflies[i].position.x /= 2;
+        this.outputs.ballpositions.value[i].copy(this.butterflies[i].position);
+        this.outputs.ballpositions.value[i].x = this.butterflies[i].position.x - this.camera.position.x;
         const angle = Math.random() * Math.PI * 2;
         const amplitude = 0.05;
         const dy = amplitude * Math.cos(angle);
@@ -97,6 +120,10 @@
       }
 
       this.particleSystem.update();
+
+      this.bg.scale.y = smoothstep(1, 0.02, t);
+      this.bg.scale.x = smoothstep(1, 0.1, t);
+      this.bg.scale.z = smoothstep(1, 0.1, t);
     }
 
     render(renderer) {
