@@ -1,0 +1,12 @@
+{
+    "tDiffuse": { "type": "t", "value": null },
+    "A": { "type": "t", "value": null },
+    "frame": { "type": "f", "value": 0.0 },
+    "sphere1": { "type": "v3", "value": null },
+    "sphere2": { "type": "v3", "value": null },
+    "sphere3": { "type": "v3", "value": null },
+    "sphere4": { "type": "v3", "value": null },
+    "sphere5": { "type": "v3", "value": null },
+    "sphere6": { "type": "v3", "value": null },
+    "disformationAmount": { "type": "f", "value": 0.0 }
+}
