@@ -8,6 +8,7 @@
           C: new NIN.TextureInput(),
           D: new NIN.TextureInput(),
           E: new NIN.TextureInput(),
+          F: new NIN.TextureInput(),
         },
         outputs: {
           render: new NIN.TextureOutput(),
@@ -21,6 +22,7 @@
       this.inputs.C.enabled = false;
       this.inputs.D.enabled = false;
       this.inputs.E.enabled = false;
+      this.inputs.F.enabled = false;
 
       let selectedScene;
       if (BEAN < 48 * 4) {
@@ -31,8 +33,10 @@
         selectedScene = this.inputs.C;
       } else if (BEAN < 48 * 56) {
         selectedScene = this.inputs.D;
-      } else {
+      } else if (BEAN < 48 * 64) {
         selectedScene = this.inputs.E;
+      } else {
+        selectedScene = this.inputs.F;
       }
 
       selectedScene.enabled = true;
