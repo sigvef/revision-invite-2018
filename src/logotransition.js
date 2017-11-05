@@ -173,7 +173,7 @@
     }
 
     render() {
-      this.ctx.fillStyle = '#222';
+      this.ctx.fillStyle = 'rgb(255, 73, 130)';
       this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
 
       this.ctx.save();
@@ -206,7 +206,7 @@
         this.ctx.translate(x, y);
       }
 
-      this.ctx.fillStyle = 'white';
+      this.ctx.fillStyle = '#00e04f';
 
       for(let item of ['boxes', 'letters']) {
         for(let letter of 'REVISiON') {
@@ -224,9 +224,9 @@
           this.ctx.scale(scale, scale);
           this.ctx.translate(-animation.anchor.x, -animation.anchor.y);
           if(item === 'boxes') {
-            const r = smoothstep(34, 140, t);
-            const g = smoothstep(34, 0, t);
-            const b = smoothstep(34, 32, t);
+            const r = smoothstep(255, 55, t);
+            const g = smoothstep(73, 60, t);
+            const b = smoothstep(130, 63, t);
             const a = smoothstep(0, 0.5, t);
             this.ctx.fillStyle = `rgba(0, 0, 0, ${a})`;
             const shadowOffset = 8 / scale;
@@ -241,7 +241,7 @@
             this.ctx.translate(shadowOffset, shadowOffset * 9 / 16);
             this.ctx.fill(paths.letters[letter], 'evenodd');
             this.ctx.translate(-shadowOffset, -shadowOffset * 9 / 16);
-            this.ctx.fillStyle = 'white';
+            this.ctx.fillStyle = '#00e04f';
             this.ctx.fill(paths.letters[letter], 'evenodd');
           }
 
@@ -249,8 +249,8 @@
         }
       }
       this.ctx.save();
-      this.ctx.fillStyle = 'white';
-      this.ctx.strokeStyle = '#222';
+      this.ctx.fillStyle = '#00e04f';
+      this.ctx.strokeStyle = 'rgb(255, 73, 130)';
       this.ctx.globalAlpha = smoothstep(0, 1, t);
       this.ctx.fill((paths.letters.two), 'evenodd');
       this.ctx.stroke((paths.letters.two));

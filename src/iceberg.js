@@ -26,12 +26,20 @@
       this.scene.add(this.cone);
       this.cone.position.x = 150;
 
-      this.lightball = new THREE.Mesh(
+
+      this.pinklightball = new THREE.Mesh(
           new THREE.SphereGeometry(10),
-          new THREE.MeshBasicMaterial({color: 0xff9a36}));
-      this.scene.add(this.lightball);
-      this.orangelight = new THREE.PointLight(0xff9a36);
-      this.scene.add(this.orangelight);
+          new THREE.MeshBasicMaterial({color: 0xff00ff}));
+      this.greenlightball = new THREE.Mesh(
+          new THREE.SphereGeometry(10),
+          new THREE.MeshBasicMaterial({color: 0xff00ff}));
+      this.scene.add(this.pinklightball);
+      this.scene.add(this.greenlightball);
+      this.pinklight = new THREE.PointLight(0xff00ff);
+      this.greenlight = new THREE.PointLight(0xff00ff);
+
+      this.scene.add(this.pinklight);
+      this.scene.add(this.greenlight);
 
       /* override rendertarget to get RGBA format */
       this.renderTarget = new THREE.WebGLRenderTarget(640, 360, {
@@ -64,10 +72,14 @@
       this.cone.rotation.x = frame / 100;
       this.cone.rotation.y = frame / 100;
 
-      this.lightball.position.x = 100 * Math.sin(frame / 121);
-      this.lightball.position.y = 100 * Math.sin(frame / 123);
-      this.lightball.position.z = 100 * Math.cos(frame / 142);
-      this.orangelight.position.copy(this.lightball.position);
+      this.pinklightball.position.x = 100 * Math.sin(frame / 121);
+      this.pinklightball.position.y = 100 * Math.sin(frame / 123);
+      this.pinklightball.position.z = 100 * Math.cos(frame / 142);
+      this.pinklight.position.copy(this.pinklightball.position);
+      this.greenlightball.position.x = 100 * Math.sin(1 + frame / 121);
+      this.greenlightball.position.y = 100 * Math.sin(2 + frame / 123);
+      this.greenlightball.position.z = 100 * Math.cos(3 + frame / 142);
+      this.greenlight.position.copy(this.greenlightball.position);
 
       this.camera.position.x = 500 * Math.sin(frame / 100);
       this.camera.position.y = 200;
@@ -84,23 +96,35 @@
     render(renderer) {
       this.light.visible = true;
       this.ambientLight.visible = true;
-      this.lightball.material.color.setHex(0xffffff);
-      this.orangelight.color.setHex(0xffffff);
-      this.orangelight.intensity = 1;
+      this.pinklightball.material.color.setHex(0xffffff);
+      this.pinklight.color.setHex(0xffffff);
+      this.pinklight.intensity = 1;
+      this.greenlightball.material.color.setHex(0xffffff);
+      this.greenlight.color.setHex(0xffffff);
+      this.greenlight.intensity = 1;
       renderer.setClearColor(new THREE.Color(0x000000), 0);
       super.render(renderer);
 
       this.light.visible = false;
       this.ambientLight.visible = false;
-      this.lightball.material.color.setRGB(
-          (0xff - 0xff) / 0xff, 
-          (0xff - 0x9a) / 0xff,
-          (0xff - 0x36) / 0xff);
-      this.orangelight.color.setRGB(
-          (0xff - 0xff) / 0xff, 
-          (0xff - 0x9a) / 0xff,
-          (0xff - 0x36) / 0xff);
-      this.orangelight.intensity = 0.25;
+      this.pinklightball.material.color.setRGB(
+          (0xff - 255) / 0xff, 
+          (0xff - 73) / 0xff,
+          (0xff - 130) / 0xff);
+      this.pinklight.color.setRGB(
+          (0xff - 255) / 0xff, 
+          (0xff - 73) / 0xff,
+          (0xff - 130) / 0xff);
+      this.pinklight.intensity = 0.25;
+      this.greenlightball.material.color.setRGB(
+          (0xff - 0x00) / 0xff, 
+          (0xff - 0xe0) / 0xff,
+          (0xff - 0x4f) / 0xff);
+      this.greenlight.color.setRGB(
+          (0xff - 0x00) / 0xff, 
+          (0xff - 0xe0) / 0xff,
+          (0xff - 0x4f) / 0xff);
+      this.greenlight.intensity = 0.25;
       renderer.setClearColor(new THREE.Color(0x000000), 1);
       renderer.render(this.scene, this.camera, this.renderTargetColoring, true);
       this.outputs.renderColoring.setValue(this.renderTargetColoring.texture);
