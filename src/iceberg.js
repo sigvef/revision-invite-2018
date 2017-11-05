@@ -75,6 +75,12 @@
       this.camera.lookAt(new THREE.Vector3(0, 0, 0));
     }
 
+    resize() {
+      const scale = 1 / 2;
+      this.renderTarget.setSize(16 * GU, 9 * GU);
+      this.renderTargetColoring.setSize(16 * GU * scale, 9 * GU * scale);
+    }
+
     render(renderer) {
       this.light.visible = true;
       this.ambientLight.visible = true;
