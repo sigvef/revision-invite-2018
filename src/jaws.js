@@ -32,14 +32,16 @@
       this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
       this.ctx.save();
       this.ctx.scale(GU, GU);
-      this.ctx.beginPath();
-      this.ctx.moveTo(0, 0);
-      this.ctx.lineWidth = 0.1;
-      for(let i = 0; i < 9; i++) {
-        this.ctx.lineTo(i * 3, 8);
-        this.ctx.lineTo(i * 3 + 1.5, 0);
-      }
-      this.ctx.fill();
+
+      this.ctx.translate(8, 4.5);
+      const t = smoothstep(0, 1, (this.frame - FRAME_FOR_BEAN(3552) + 20) / 20);
+      const angle = lerp(0, Math.PI, t);
+      this.ctx.rotate(angle);
+      const scale = 1 + (t * (1 - t)) * 8;
+      this.ctx.scale(scale, scale);
+      this.ctx.translate(-8, -3 - (1 - t) * 1.5);
+
+      this.ctx.lineWidth = 0.2;
 
       const timings = {
         0: FRAME_FOR_BEAN(3456),
@@ -58,7 +60,7 @@
         24: FRAME_FOR_BEAN(3504 + 48 * 2),
         26: FRAME_FOR_BEAN(3514 + 48 * 2),
         28: FRAME_FOR_BEAN(3528 + 48 * 2),
-        30: FRAME_FOR_BEAN(3539 + 48 * 2),
+        30: FRAME_FOR_BEAN(3536 + 48 * 2),
       };
 
       for(let i = 0; i < 32; i+=2) {
