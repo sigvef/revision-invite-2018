@@ -14,7 +14,8 @@
       "B": "Metatron.render",
       "C": "toon.render",
       "D": "logotransition.render",
-      "E": "metaballs.render"
+      "E": "metaballs.render",
+      "F": "carousel.render"
     }
   },
   {
@@ -55,8 +56,22 @@
       "shader": "triangle"
     },
     "connected": {
-        "image": "butterflies.render",
-        "ballpositions": "butterflies.ballpositions"
+      "image": "butterflies.render",
+      "ballpositions": "butterflies.ballpositions"
     }
+  },
+  {
+    "id": "carousel",
+    "type": "carouselNode",
+    "options": {
+      "shader": "carousel"
+    },
+    "connected": {
+      "overlay": "revisionBars.render"
+    }
+  },
+  {
+    "id": "revisionBars",
+    "type": "revisionBars"
   }
 ]
