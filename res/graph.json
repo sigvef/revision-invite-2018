@@ -15,7 +15,8 @@
       "C": "toon.render",
       "D": "logotransition.render",
       "E": "metaballs.render",
-      "F": "carousel.render"
+      "F": "carousel.render",
+      "G": "jaws.render"
     }
   },
   {
@@ -73,5 +74,9 @@
   {
     "id": "revisionBars",
     "type": "revisionBars"
+  },
+  {
+    "id": "jaws",
+    "type": "jaws"
   }
 ]
