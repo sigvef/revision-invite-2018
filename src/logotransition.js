@@ -28,6 +28,40 @@
   };
 
   const animations = {
+    letterEntry: {
+      R: {
+        y: 1000,
+        t: FRAME_FOR_BEAN(1860),
+      },
+      E: {
+        y: -1000,
+        t: FRAME_FOR_BEAN(1862),
+      },
+      V: {
+        y: 1000,
+        t: FRAME_FOR_BEAN(1864),
+      },
+      I: {
+        y: -1000,
+        t: FRAME_FOR_BEAN(1866),
+      },
+      S: {
+        y: 1000,
+        t: FRAME_FOR_BEAN(1868),
+      },
+      i: {
+        y: -1000,
+        t: FRAME_FOR_BEAN(1870),
+      },
+      O: {
+        y: 1000,
+        t: FRAME_FOR_BEAN(1871),
+      },
+      N: {
+        y: -1000,
+        t: FRAME_FOR_BEAN(1872),
+      },
+    },
     letters: {
       R: {
         x: 370,
@@ -147,6 +181,20 @@
       const scale = 16 / 1920;
       this.ctx.scale(scale, scale);
 
+      const cameraZoomScale = 1.5;
+      this.ctx.translate(1920 / 2, 1080 / 2);
+      if(this.frame >= FRAME_FOR_BEAN(1872) && this.frame < FRAME_FOR_BEAN(1882)) {
+        this.ctx.rotate(-0.1);
+        this.ctx.scale(cameraZoomScale, cameraZoomScale);
+        this.ctx.translate(-100, 10);
+      }
+      if(this.frame >= FRAME_FOR_BEAN(1882) && this.frame < FRAME_FOR_BEAN(1888)) {
+        this.ctx.rotate(0.1);
+        this.ctx.scale(0.9, 0.9);
+        this.ctx.translate(-20, 0);
+      }
+      this.ctx.translate(-1920 / 2, -1080 / 2);
+
 
       const t = (this.frame - 4930) / (4940 - 4930);
 
@@ -164,8 +212,10 @@
         for(let letter of 'REVISiON') {
           this.ctx.save();
           const animation = animations.letters[letter];
+          const letterEntry = animations.letterEntry[letter];
+          let y = easeIn(letterEntry.y, animation.y, (this.frame - letterEntry.t + 20) / 20);
           const x = smoothstep(animation.x, 0, t);
-          const y = smoothstep(animation.y, 0, t);
+          y = smoothstep(y, 0, t);
           const rotation = smoothstep(animation.rotation, 0, t);
           const scale = smoothstep(animation.scale, 1, t);
           this.ctx.translate(animation.anchor.x, animation.anchor.y);
@@ -186,7 +236,7 @@
             this.ctx.fillStyle = `rgb(${r | 0}, ${g | 0}, ${b | 0})`;
             this.ctx.fill(paths.boxes[letter]);
           } else if(item === 'letters') {
-            this.ctx.fillStyle = `rgba(0, 0, 0, 0.9)`;
+            this.ctx.fillStyle = 'rgba(0, 0, 0, 0.9)';
             const shadowOffset = 8 / scale;
             this.ctx.translate(shadowOffset, shadowOffset * 9 / 16);
             this.ctx.fill(paths.letters[letter], 'evenodd');
@@ -198,7 +248,7 @@
           this.ctx.restore();
         }
       }
-      this.ctx.save()
+      this.ctx.save();
       this.ctx.fillStyle = 'white';
       this.ctx.strokeStyle = '#222';
       this.ctx.globalAlpha = smoothstep(0, 1, t);
@@ -210,7 +260,7 @@
       this.ctx.stroke((paths.letters.one));
       this.ctx.fill((paths.letters.eight), 'evenodd');
       this.ctx.stroke((paths.letters.eight));
-      this.ctx.restore()
+      this.ctx.restore();
 
       this.ctx.restore();
       this.output.needsUpdate = true;
