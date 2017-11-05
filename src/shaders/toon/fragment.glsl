@@ -87,7 +87,7 @@ void main() {
     vec4 color = texture2D(coloring, vUv);
 
     vec3 lightColor = vec3(1., 249. / 255., 225. / 255.);
-    vec3 darkColor = vec3(16. / 255., 11. / 255., 8. / 255.);
+    vec3 darkColor = vec3(55. / 255., 60. / 255., 63. / 255.);
 
     gl_FragColor = vec4((1. - (1.0 * color.rgb)) * mix(darkColor, lightColor, pattern), 1.);
 }
