@@ -1,0 +1,7 @@
+{
+    "t": { "type": "f", "value": 0.0 },
+    "smallCircleRadius": { "type": "f", "value": 0.3 },
+    "bigCircleRadius": { "type": "f", "value": 0.2 },
+    "waveIndex": { "type": "f", "value": 0.0 },
+    "angle": { "type": "f", "value": 0.0 }
+}

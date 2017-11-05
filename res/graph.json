@@ -19,7 +19,8 @@
       "H": "trainmodel.render",
       "I": "metaballs.render",
       "J": "carousel.render",
-      "K": "jaws.render"
+      "K": "jaws.render",
+      "L": "star.render"
     }
   },
   {
@@ -118,6 +119,13 @@
     },
     "connected": {
       "image": "GridNode.render"
+    }
+  },
+  {
+    "id": "star",
+    "type": "starNode",
+    "options": {
+      "shader": "star"
     }
   }
 ]
