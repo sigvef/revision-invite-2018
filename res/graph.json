@@ -13,10 +13,11 @@
       "A": "SpinningCube.render",
       "B": "Metatron.render",
       "C": "toon.render",
-      "D": "logotransition.render",
-      "E": "metaballs.render",
-      "F": "carousel.render",
-      "G": "jaws.render"
+      "F": "logotransition.render",
+      "G": "letterbox.render",
+      "I": "metaballs.render",
+      "J": "carousel.render",
+      "K": "jaws.render"
     }
   },
   {
@@ -78,5 +79,19 @@
   {
     "id": "jaws",
     "type": "jaws"
+  },
+  {
+    "id": "chilla",
+    "type": "chilla"
+  },
+  {
+    "id": "letterbox",
+    "type": "letterboxNode",
+    "options": {
+      "shader": "letterbox"
+    },
+    "connected": {
+        "image": "chilla.render"
+    }
   }
 ]
