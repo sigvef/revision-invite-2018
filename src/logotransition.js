@@ -173,7 +173,11 @@
     }
 
     render() {
-      this.ctx.fillStyle = 'rgb(255, 73, 130)';
+      const t = (this.frame - 4930) / (4940 - 4930);
+      const r = smoothstep(55, 255, t);
+      const g = smoothstep(60, 73, t);
+      const b = smoothstep(63, 130, t);
+      this.ctx.fillStyle = `rgb(${r|0}, ${g|0}, ${b|0})`;
       this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
 
       this.ctx.save();
@@ -194,9 +198,6 @@
         this.ctx.translate(-20, 0);
       }
       this.ctx.translate(-1920 / 2, -1080 / 2);
-
-
-      const t = (this.frame - 4930) / (4940 - 4930);
 
       {
         const shake = easeIn(0, 10, t / 2 + 1);
@@ -224,9 +225,9 @@
           this.ctx.scale(scale, scale);
           this.ctx.translate(-animation.anchor.x, -animation.anchor.y);
           if(item === 'boxes') {
-            const r = smoothstep(255, 55, t);
-            const g = smoothstep(73, 60, t);
-            const b = smoothstep(130, 63, t);
+            const r = 55;
+            const g = 60;
+            const b = 63;
             const a = smoothstep(0, 0.5, t);
             this.ctx.fillStyle = `rgba(0, 0, 0, ${a})`;
             const shadowOffset = 8 / scale;
@@ -240,8 +241,11 @@
             const shadowOffset = 8 / scale;
             this.ctx.translate(shadowOffset, shadowOffset * 9 / 16);
             this.ctx.fill(paths.letters[letter], 'evenodd');
+            const r = smoothstep(255, 255, t);
+            const g = smoothstep(255, 255, t);
+            const b = smoothstep(255, 255, t);
             this.ctx.translate(-shadowOffset, -shadowOffset * 9 / 16);
-            this.ctx.fillStyle = '#00e04f';
+            this.ctx.fillStyle = `rgb(${r|0}, ${g|0}, ${b|0})`;
             this.ctx.fill(paths.letters[letter], 'evenodd');
           }
 
@@ -249,7 +253,7 @@
         }
       }
       this.ctx.save();
-      this.ctx.fillStyle = '#00e04f';
+      this.ctx.fillStyle = 'white';
       this.ctx.strokeStyle = 'rgb(255, 73, 130)';
       this.ctx.globalAlpha = smoothstep(0, 1, t);
       this.ctx.fill((paths.letters.two), 'evenodd');
