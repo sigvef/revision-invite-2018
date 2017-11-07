@@ -15,6 +15,7 @@
       "C": "toon.render",
       "F": "logotransition.render",
       "G": "letterbox.render",
+      "H": "trainmodel.render",
       "I": "metaballs.render",
       "J": "carousel.render",
       "K": "jaws.render"
@@ -91,7 +92,14 @@
       "shader": "letterbox"
     },
     "connected": {
-        "image": "chilla.render"
+      "image": "chilla.render"
+    }
+  },
+  {
+    "id": "trainmodel",
+    "type": "trainmodelNode",
+    "options": {
+      "shader": "trainmodel"
     }
   }
 ]
