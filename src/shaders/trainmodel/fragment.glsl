@@ -141,9 +141,20 @@ float opS( float d1, float d2 )
     return max(-d2,d1);
 }
 
-vec2 opU( vec2 d1, vec2 d2 )
-{
+vec2 opU( vec2 d1, vec2 d2 ) {
     return (d1.x<d2.x) ? d1 : d2;
+}
+
+float smin( float a, float b, float k) {
+        float h = clamp(0.5+0.5*(b-a)/k, 0.0, 1.0 );
+            return mix( b, a, h ) - k*h*(1.0-h);
+}
+
+vec2 opUsmooth(vec2 d1, vec2 d2, float k) {
+
+    float material = (d1.x<d2.x) ? d1.y : d2.y;
+    float dist = smin(d1.x, d2.x, k);
+    return vec2(dist, material);
 }
 
 vec3 opRep( vec3 p, vec3 c )
@@ -164,8 +175,22 @@ vec3 opTwist( vec3 p )
 
 vec2 wheel(vec3 pos, float size) {
     vec3 rotated = (rotationMatrix(vec3(0., 0., 1.), PI / 2.) * vec4(pos, 1.)).xyz;
-    vec2 res = vec2(sdCylinder(rotated, vec2(.4 * size, .05)), 45.);
-    return res;
+    float res = sdCylinder(rotated, vec2(.4 * size, .05));
+    res = smin(res, sdCylinder(rotated + vec3(0., .05, 0.), vec2(.44 * size, .01)), 0.05);
+    res = max(res, -sdCylinder(rotated, vec2(.35 * size, 0.1)));
+    res = min(res, sdCylinder(rotated, vec2(.1 * size, 0.04)));
+    res = min(res, sdCylinder(rotated, vec2(.1 * size, 0.04)));
+
+    float spokes = 1e99;
+    mat4 spokeRotation = rotationMatrix(vec3(0., 1., 0.), PI / 2. / 3.);
+    vec3 circleRotated = rotated;
+    for(int i = 0; i < 8; i++) {
+        circleRotated = (spokeRotation * vec4(circleRotated, 1.)).xyz;
+        spokes = min(spokes, sdBox(circleRotated, vec3(size, 0.02, 0.03 * size)));
+    }
+    spokes = max(spokes, sdCylinder(rotated, vec2(.38 * size, 0.05)));
+    res = min(res, spokes);
+    return vec2(res, 45.);
 }
 
 vec2 cabin(vec3 pos) {
@@ -184,7 +209,7 @@ vec2 train(vec3 pos) {
     res = vec2(max(res.x, sdBox(lifted, vec3(3., 2., 2.5))), 1.);
     res = opU(res, vec2(sdBox(lifted - vec3(0., 0., 0.3), vec3(.3, 2., .5)), 45.));
     float size = 0.6 + 0.4 * step(-.45, pos.z);
-    res = opU(res, wheel(opRep(pos + vec3(0., -.5, 0.) + vec3(0., .15 - size / 3., 1.25), vec3(.7, .0, size * 0.85)), size));
+    res = opU(res, wheel(opRep(pos + vec3(0., -.5, 0.) + vec3(0., .15 - size / PI, 1.25), vec3(.7, .0, size * 0.9)), size));
     res = vec2(max(res.x, sdBox(lifted, vec3(.5, 2.15, 2.5))), 1.);
 
     res = opU(res, cabin(lifted + vec3(0., -2.5, .25)));
