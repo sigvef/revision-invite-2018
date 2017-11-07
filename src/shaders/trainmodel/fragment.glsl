@@ -181,7 +181,7 @@ vec2 wheel(vec3 pos, float size) {
     res = min(res, sdCylinder(rotated, vec2(.1 * size, 0.04)));
     res = min(res, sdCylinder(rotated, vec2(.1 * size, 0.04)));
 
-    float spokes = 1e99;
+    float spokes = 1e9;
     mat4 spokeRotation = rotationMatrix(vec3(0., 1., 0.), PI / 2. / 3.);
     vec3 circleRotated = rotated;
     for(int i = 0; i < 8; i++) {
@@ -199,6 +199,12 @@ vec2 cabin(vec3 pos) {
     return res;
 }
 
+float chimneyCone(vec3 pos) {
+    float res = sdCone(pos, normalize(vec3(.5, .2, 1.)));
+    res = smin(res, sdCylinder(pos + vec3(0., -.1, 0), vec2(.2, 0.9)), .1);
+    return res;
+}
+
 vec2 train(vec3 pos) {
     vec4 p4 = vec4(pos, 1.);
     vec3 rotated = (rotationMatrix(vec3(1., 0., 0.), PI / 2.) * p4).xyz;
@@ -213,6 +219,10 @@ vec2 train(vec3 pos) {
     res = vec2(max(res.x, sdBox(lifted, vec3(.5, 2.15, 2.5))), 1.);
 
     res = opU(res, cabin(lifted + vec3(0., -2.5, .25)));
+
+    rotated = (rotationMatrix(vec3(1., 0., 0.), PI / 2.) * vec4(rotated, 1.)).xyz;
+    res.x = min(res.x, chimneyCone(rotated + vec3(0., 1.6, -1.5)));
+    res.x = max(res.x, -chimneyCone(rotated * 0.98 + vec3(0., 1.6, 0.98 * -1.5)));
     return res;
 }
 
@@ -341,7 +351,7 @@ void main() {
     p.x = p.x / 9. * 16.;
 
     // camera   
-    vec3 ro = 2. * vec3( -0.5+3.5*cos(0.1*time), 1.0, 0.5 + 4.0*sin(0.1*time) );
+    vec3 ro = 2. * vec3( -0.5+3.5*cos(0.1*time), 2.0, 0.5 + 4.0*sin(0.1*time) );
     vec3 ta = vec3( -0.5, -0.4, 0.5 );
     // camera-to-world transformation
     mat3 ca = setCamera( ro, ta, 0.0 );
