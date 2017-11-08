@@ -4,6 +4,10 @@ varying vec2 vUv;
 
 #define PI 3.141592653589793
 
+float rand(vec2 co){
+      return fract(sin(dot(co.xy ,vec2(12.9898,78.233))) * 43758.5453);
+}
+
 mat4 rotationMatrix(vec3 axis, float angle)
 {
     axis = normalize(axis);
@@ -173,7 +177,7 @@ vec3 opTwist( vec3 p )
 
 //------------------------------------------------------------------
 
-vec2 wheel(vec3 pos, float size) {
+float wheel(vec3 pos, float size) {
     vec3 rotated = (rotationMatrix(vec3(0., 0., 1.), PI / 2.) * vec4(pos, 1.)).xyz;
     float res = sdCylinder(rotated, vec2(.4 * size, .05));
     res = smin(res, sdCylinder(rotated + vec3(0., .05, 0.), vec2(.44 * size, .01)), 0.05);
@@ -190,45 +194,58 @@ vec2 wheel(vec3 pos, float size) {
     }
     spokes = max(spokes, sdCylinder(rotated, vec2(.38 * size, 0.05)));
     res = min(res, spokes);
-    return vec2(res, 45.);
+    return res;
 }
 
-vec2 cabin(vec3 pos) {
-    vec2 res = vec2(sdBox(pos, vec3(.75)), 1.);
-    res = max(res, vec2(sdCylinder(pos - vec3(0., 0., 1.25), vec2(2., 5.)), 1.));
-    return res;
+float cabin(vec3 pos) {
+    float roof = sdBox(pos, vec3(1., .85, 1.1));
+    roof = max(roof, sdCylinder(pos - vec3(0., 0., 1.25), vec2(2., 5.)));
+    roof = max(roof, -sdCylinder(pos - vec3(0., 0., 1.35), vec2(2., 5.)));
+
+    float res = sdBox(pos, vec3(0.95, .75, 1.));
+    res = max(res, sdCylinder(pos - vec3(0., 0., 1.25), vec2(2., 5.)));
+    return min(res, roof);
 }
 
 float chimneyCone(vec3 pos) {
     float res = sdCone(pos, normalize(vec3(.5, .2, 1.)));
-    res = smin(res, sdCylinder(pos + vec3(0., -.1, 0), vec2(.2, 0.9)), .1);
+    res = smin(res, sdCylinder(pos + vec3(0., -.1, 0), vec2(.2, 0.95)), .1);
     return res;
 }
 
-vec2 train(vec3 pos) {
+float train(vec3 pos) {
     vec4 p4 = vec4(pos, 1.);
     vec3 rotated = (rotationMatrix(vec3(1., 0., 0.), PI / 2.) * p4).xyz;
     vec3 lifter = vec3(0., 0., 1.5);
     vec3 lifted = rotated + lifter;
-    vec2 res = vec2(sdCylinder(lifted, vec2(.5, 2.)), 45.);
-    res = opU(res, vec2(sdCylinder(opRep(lifted, vec3(0., 1., 0.)), vec2(.52, .05)), 45.));
-    res = vec2(max(res.x, sdBox(lifted, vec3(3., 2., 2.5))), 1.);
-    res = opU(res, vec2(sdBox(lifted - vec3(0., 0., 0.3), vec3(.3, 2., .5)), 45.));
-    float size = 0.6 + 0.4 * step(-.45, pos.z);
-    res = opU(res, wheel(opRep(pos + vec3(0., -.5, 0.) + vec3(0., .15 - size / PI, 1.25), vec3(.7, .0, size * 0.9)), size));
-    res = vec2(max(res.x, sdBox(lifted, vec3(.5, 2.15, 2.5))), 1.);
+    float res = sdCylinder(lifted, vec2(.7, 2.));
 
-    res = opU(res, cabin(lifted + vec3(0., -2.5, .25)));
+    rotated.y = -rotated.y;
+    res = smin(res, sdSphere(rotated - vec3(0., 2.02, -1.5), .01), 1.);
+    rotated.y = -rotated.y;
+
+    float rings = sdCylinder(opRep(lifted, vec3(0., .7, 0.)), vec2(.72, .05));
+    rings = max(rings, sdBox(lifted, vec3(5., 2.15, 2.5)));
+    res = smin(rings, res, .02);
+    res = smin(res, sdBox(lifted - vec3(0., 0.5, 0.3), vec3(.45, 2.5, .8)), .05);
+    float size = 1. - 0.4 * step(1.45, pos.z);
+    vec3 mirrored = pos;
+    mirrored.x = -abs(mirrored.x);
+    float wheels = wheel(opRep(mirrored + vec3(0., -.35, 0.) + vec3(0., .15 - size / PI, 1.25), vec3(1.1, .0, size * 0.9)), size);
+    wheels = max(wheels, sdBox(lifted + vec3(0., -.45, 0.), vec3(1.2, 2.6, 2.5)));
+    res = min(res, wheels);
+
+    res = smin(res, cabin(lifted + vec3(0., -2.2, .3)), .01);
 
     rotated = (rotationMatrix(vec3(1., 0., 0.), PI / 2.) * vec4(rotated, 1.)).xyz;
-    res.x = min(res.x, chimneyCone(rotated + vec3(0., 1.6, -1.5)));
-    res.x = max(res.x, -chimneyCone(rotated * 0.98 + vec3(0., 1.6, 0.98 * -1.5)));
+    res = smin(res, chimneyCone(rotated + vec3(0., 1.9, -1.4)), .15);
+    res = max(res, -chimneyCone(rotated * 0.98 + vec3(0., 1.9, 0.98 * -1.4)));
     return res;
 }
 
 vec2 map(vec3 pos) {
-    vec2 checkeredFloor = vec2(sdPlane(pos), 1.);
-    return opU(checkeredFloor, train(pos));
+    float res = train(pos);
+    return vec2(res, 1.);
 }
 
 vec2 castRay( vec3 ro, vec3 rd ) {
@@ -297,7 +314,8 @@ vec3 render( in vec3 ro, in vec3 rd ) {
         vec3 ref = reflect( rd, nor );
         
         // material        
-        col = 0.45 + 0.35*sin( vec3(0.05,0.08,0.10)*(m-1.0) );
+        //col = 0.45 + 0.35*sin( vec3(0.05,0.08,0.10)*(m-1.0) );
+        col = vec3(55. / 255., 60. / 255., 63. / 255.);
         if( m<1.5 )
         {
             
