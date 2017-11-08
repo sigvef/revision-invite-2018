@@ -10,7 +10,7 @@
     "id": "sceneSwitcherNode",
     "type": "SceneSwitcherNode",
     "connected": {
-      "A": "GridNode.render",
+      "A": "GridShader.render",
       "B": "Metatron.render",
       "C": "toon.render",
       "F": "logotransition.render",
@@ -101,5 +101,15 @@
   {
     "id": "GridNode",
     "type": "gridNode"
+  },
+  {
+    "id": "GridShader",
+    "type": "GridShaderNode",
+    "options": {
+      "shader": "GridShader"
+    },
+    "connected": {
+      "image": "GridNode.render"
+    }
   }
 ]
