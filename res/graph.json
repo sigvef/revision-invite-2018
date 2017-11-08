@@ -25,7 +25,8 @@
       "_18_low_down_B_theme_2": "metaballs.render",
       "_19_groovy_B_theme_1": "chromaTransition.render",
       "_21_third_A_theme_1": "text.render",
-      "_22_third_A_theme_2": "barndoors.render"
+      "_22_third_A_theme_2": "barndoors.render",
+      "_23_orthocube": "OrthoCube.render"
     }
   },
   {
@@ -124,6 +125,13 @@
     },
     "connected": {
       "image": "GridNode.render"
+    }
+  },
+  {
+    "id": "OrthoCube",
+    "type": "OrthoCubeNode",
+    "options": {
+      "shader": "OrthoCube"
     }
   },
   {
