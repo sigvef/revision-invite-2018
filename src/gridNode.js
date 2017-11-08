@@ -1,5 +1,5 @@
 (function(global) {
-  class spinningCube extends NIN.THREENode {
+  class gridNode extends NIN.THREENode {
     constructor(id, options) {
       super(id, {
         camera: options.camera,
@@ -27,5 +27,5 @@
     }
   }
 
-  global.spinningCube = spinningCube;
+  global.gridNode = gridNode;
 })(this);

@@ -10,7 +10,7 @@
     "id": "sceneSwitcherNode",
     "type": "SceneSwitcherNode",
     "connected": {
-      "A": "SpinningCube.render",
+      "A": "GridNode.render",
       "B": "Metatron.render",
       "C": "toon.render",
       "F": "logotransition.render",
@@ -20,10 +20,6 @@
       "J": "carousel.render",
       "K": "jaws.render"
     }
-  },
-  {
-    "id": "SpinningCube",
-    "type": "spinningCube"
   },
   {
     "id": "Metatron",
@@ -101,5 +97,9 @@
     "options": {
       "shader": "trainmodel"
     }
+  },
+  {
+    "id": "GridNode",
+    "type": "gridNode"
   }
 ]
