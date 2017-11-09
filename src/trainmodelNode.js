@@ -2,10 +2,16 @@
   class trainmodelNode extends NIN.ShaderNode {
     constructor(id, options) {
       super(id, options);
+      this.snareThrob = 0;
     }
 
     update(frame) {
       this.uniforms.frame.value = frame;
+      this.snareThrob *= 0.97;
+      if(BEAT && BEAN % 48 == 24) {
+        this.snareThrob = 1;
+      }
+      this.uniforms.snareThrob.value = this.snareThrob;
     }
 
     resize() {
