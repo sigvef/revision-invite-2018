@@ -4,6 +4,8 @@ varying vec2 vUv;
 
 #define PI 3.141592653589793
 
+#define SPEED 2.
+
 float rand(vec2 co){
       return fract(sin(dot(co.xy ,vec2(12.9898,78.233))) * 43758.5453);
 }
@@ -178,6 +180,7 @@ vec3 opTwist( vec3 p )
 //------------------------------------------------------------------
 
 float wheel(vec3 pos, float size) {
+    pos = (rotationMatrix(vec3(-1., 0., 0.), SPEED * frame / 60.) * vec4(pos, 1.)).xyz;
     vec3 rotated = (rotationMatrix(vec3(0., 0., 1.), PI / 2.) * vec4(pos, 1.)).xyz;
     float res = sdCylinder(rotated, vec2(.4 * size, .05));
     res = smin(res, sdCylinder(rotated + vec3(0., .05, 0.), vec2(.44 * size, .01)), 0.05);
@@ -214,6 +217,9 @@ float chimneyCone(vec3 pos) {
 }
 
 vec2 train(vec3 pos) {
+
+    pos.y = pos.y * (1. + 0.1 * sin(frame * PI * 2. / 60. / 60. * 115.));
+
     float material = 1.;
     vec4 p4 = vec4(pos, 1.);
     vec3 rotated = (rotationMatrix(vec3(1., 0., 0.), PI / 2.) * p4).xyz;
@@ -246,6 +252,7 @@ vec2 train(vec3 pos) {
 }
 
 float tracks(vec3 pos) {
+    pos -= vec3(0., 0., PI / 4. * SPEED * frame / 60.);
     vec3 repped = opRep(pos, vec3(.56 * 2., .2, 0.));
     float res = sdBox(repped, vec3(.04, .01, 10000.));
     res = smin(res, sdBox(opRep(pos, vec3(.56 * 2., 0., 0.)), vec3(.01, .04, 100000.)), .1);
@@ -255,6 +262,11 @@ float tracks(vec3 pos) {
 }
 
 vec2 map(vec3 pos) {
+
+    pos -= vec3(0., 1.5, 0.);
+    pos = (rotationMatrix(vec3(0., 0., 1.), sin(frame / 60.) + 5. * sin(1. - pos.z / 10. + frame / 100. + .5 * cos(frame / 100. - pos.z / 7.))) * vec4(pos, 1.)).xyz;
+    pos += vec3(0., 1.5, 0.);
+
     vec2 res = train(pos);
 
     res.x = min(res.x, tracks(pos));
@@ -389,7 +401,7 @@ void main() {
     p.x = p.x / 9. * 16.;
 
     // camera   
-    vec3 ro = 2. * vec3( -0.5+3.5*cos(0.1*time), 2.0, 0.5 + 4.0*sin(0.1*time) );
+    vec3 ro = 3. * vec3( -0.5+3.5*cos(0.1*time), 2.0, 0.5 + 4.0*sin(0.1*time) );
     vec3 ta = vec3( -0.5, -0.4, 0.5 );
     // camera-to-world transformation
     mat3 ca = setCamera( ro, ta, 0.0 );
