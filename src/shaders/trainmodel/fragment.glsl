@@ -213,7 +213,8 @@ float chimneyCone(vec3 pos) {
     return res;
 }
 
-float train(vec3 pos) {
+vec2 train(vec3 pos) {
+    float material = 1.;
     vec4 p4 = vec4(pos, 1.);
     vec3 rotated = (rotationMatrix(vec3(1., 0., 0.), PI / 2.) * p4).xyz;
     vec3 lifter = vec3(0., 0., 1.5);
@@ -227,6 +228,7 @@ float train(vec3 pos) {
     float rings = sdCylinder(opRep(lifted, vec3(0., .7, 0.)), vec2(.72, .05));
     rings = max(rings, sdBox(lifted, vec3(5., 2.15, 2.5)));
     res = smin(rings, res, .02);
+
     res = smin(res, sdBox(lifted - vec3(0., 0.5, 0.3), vec3(.45, 2.5, .8)), .05);
     float size = 1. - 0.4 * step(1.45, pos.z);
     vec3 mirrored = pos;
@@ -240,16 +242,27 @@ float train(vec3 pos) {
     rotated = (rotationMatrix(vec3(1., 0., 0.), PI / 2.) * vec4(rotated, 1.)).xyz;
     res = smin(res, chimneyCone(rotated + vec3(0., 1.9, -1.4)), .15);
     res = max(res, -chimneyCone(rotated * 0.98 + vec3(0., 1.9, 0.98 * -1.4)));
+    return vec2(res, material);
+}
+
+float tracks(vec3 pos) {
+    vec3 repped = opRep(pos, vec3(.56 * 2., .2, 0.));
+    float res = sdBox(repped, vec3(.04, .01, 10000.));
+    res = smin(res, sdBox(opRep(pos, vec3(.56 * 2., 0., 0.)), vec3(.01, .04, 100000.)), .1);
+    res = min(res, sdBox(opRep(pos + vec3(0., .2, 0.), vec3(0., 0., 1.)), vec3(1., .1, .1)));
+    res = max(res, sdBox(pos, vec3(1., .2, 100000.)));
     return res;
 }
 
 vec2 map(vec3 pos) {
-    float res = train(pos);
-    return vec2(res, 1.);
+    vec2 res = train(pos);
+
+    res.x = min(res.x, tracks(pos));
+    return res;
 }
 
 vec2 castRay( vec3 ro, vec3 rd ) {
-    float tmin = 1.0;
+    float tmin = .1;
     float tmax = 20.0;
     
     float t = tmin;
@@ -303,7 +316,8 @@ float calcAO(vec3 pos, vec3 nor ) {
 }
 
 vec3 render( in vec3 ro, in vec3 rd ) { 
-    vec3 col = vec3(0.7, 0.9, 1.0) +rd.y*0.8;
+    vec3 col = vec3(0., 224. / 255., 79. / 255.);
+    col = pow( col, 1. / vec3(0.4545) );
     vec2 res = castRay(ro,rd);
     float t = res.x;
     float m = res.y;
@@ -315,13 +329,19 @@ vec3 render( in vec3 ro, in vec3 rd ) {
         
         // material        
         //col = 0.45 + 0.35*sin( vec3(0.05,0.08,0.10)*(m-1.0) );
-        col = vec3(55. / 255., 60. / 255., 63. / 255.);
+        if(m > 1.5) {
+            col = pow(vec3(255. / 255., 73. / 255., 130. / 255.), 1. / vec3(.4545));
+        } else {
+            col = pow(vec3(55. / 255., 60. / 255., 63. / 255.), 1. / vec3(.4545));
+        }
+        /*
         if( m<1.5 )
         {
             
             float f = mod( floor(5.0*pos.z) + floor(5.0*pos.x), 2.0);
             col = 0.3 + 0.1*f*vec3(1.0);
         }
+        */
 
         // lighitng        
         float occ = calcAO( pos, nor );
@@ -345,10 +365,10 @@ vec3 render( in vec3 ro, in vec3 rd ) {
         lin += 0.25*fre*vec3(1.00,1.00,1.00)*occ;
         col = col*lin;
 
-        col = mix( col, vec3(0.8,0.9,1.0), 1.0-exp( -0.0002*t*t*t ) );
+        //col = mix( col, vec3(0.8,0.9,1.0), 1.0-exp( -0.0002*t*t*t ) );
     }
 
-    return vec3( clamp(col,0.0,1.0) );
+    return vec3( clamp(col, 0.0, 1.0) );
 }
 
 mat3 setCamera( in vec3 ro, in vec3 ta, float cr )
