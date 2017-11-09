@@ -1,10 +1,11 @@
 uniform float frame;
+uniform float snareThrob;
 
 varying vec2 vUv;
 
 #define PI 3.141592653589793
 
-#define SPEED 2.
+#define SPEED 16.
 
 float rand(vec2 co){
       return fract(sin(dot(co.xy ,vec2(12.9898,78.233))) * 43758.5453);
@@ -218,7 +219,7 @@ float chimneyCone(vec3 pos) {
 
 vec2 train(vec3 pos) {
 
-    pos.y = pos.y * (1. + 0.1 * sin(frame * PI * 2. / 60. / 60. * 115.));
+    pos.y = pos.y * (1. + 0.1 * -sin(frame * PI * 2. / 60. / 60. * 115.));
 
     float material = 1.;
     vec4 p4 = vec4(pos, 1.);
@@ -239,16 +240,19 @@ vec2 train(vec3 pos) {
     float size = 1. - 0.4 * step(1.45, pos.z);
     vec3 mirrored = pos;
     mirrored.x = -abs(mirrored.x);
-    float wheels = wheel(opRep(mirrored + vec3(0., -.35, 0.) + vec3(0., .15 - size / PI, 1.25), vec3(1.1, .0, size * 0.9)), size);
-    wheels = max(wheels, sdBox(lifted + vec3(0., -.45, 0.), vec3(1.2, 2.6, 2.5)));
-    res = min(res, wheels);
 
     res = smin(res, cabin(lifted + vec3(0., -2.2, .3)), .01);
 
     rotated = (rotationMatrix(vec3(1., 0., 0.), PI / 2.) * vec4(rotated, 1.)).xyz;
     res = smin(res, chimneyCone(rotated + vec3(0., 1.9, -1.4)), .15);
     res = max(res, -chimneyCone(rotated * 0.98 + vec3(0., 1.9, 0.98 * -1.4)));
-    return vec2(res, material);
+
+    float wheels = wheel(opRep(mirrored + vec3(0., -.35, 0.) + vec3(0., .15 - size / PI, 1.25), vec3(1.1, .0, size * 0.9)), size);
+    wheels = max(wheels, sdBox(lifted + vec3(0., -.45, 0.), vec3(1.2, 2.6, 2.5)));
+    res = min(res, wheels);
+    vec2 final = opU(vec2(res, 10.), vec2(wheels, pos.z / 5.));
+
+    return final;
 }
 
 float tracks(vec3 pos) {
@@ -269,7 +273,7 @@ vec2 map(vec3 pos) {
 
     vec2 res = train(pos);
 
-    res.x = min(res.x, tracks(pos));
+    res = opU(res, vec2(tracks(pos), 20.));
     return res;
 }
 
@@ -328,7 +332,11 @@ float calcAO(vec3 pos, vec3 nor ) {
 }
 
 vec3 render( in vec3 ro, in vec3 rd ) { 
-    vec3 col = vec3(0., 224. / 255., 79. / 255.);
+    vec3 green = vec3(0., 224. / 255., 79. / 255.);
+    vec3 black = vec3(55. / 255., 60. / 255., 63. / 255.);
+    vec3 pink = vec3(255. /255., 73. / 255., 130. / 255.);
+    vec3 white = vec3(.7);
+    vec3 col = black;
     col = pow( col, 1. / vec3(0.4545) );
     vec2 res = castRay(ro,rd);
     float t = res.x;
@@ -341,10 +349,14 @@ vec3 render( in vec3 ro, in vec3 rd ) {
         
         // material        
         //col = 0.45 + 0.35*sin( vec3(0.05,0.08,0.10)*(m-1.0) );
-        if(m > 1.5) {
-            col = pow(vec3(255. / 255., 73. / 255., 130. / 255.), 1. / vec3(.4545));
+        if(m > 15.) {
+            col = pow(green, 1. / vec3(.4545));
+        } else if(m < 1.5) {
+            col = pow(
+                    mix(black, pink, 2. * snareThrob * max(0., sin(.5 + frame * PI * 2. / 60. / 60. * 115. / 2. - pos.z / 2.)))
+                    , 1. / vec3(.4545));
         } else {
-            col = pow(vec3(55. / 255., 60. / 255., 63. / 255.), 1. / vec3(.4545));
+            col = pow(white, 1. / vec3(.4545));
         }
         /*
         if( m<1.5 )

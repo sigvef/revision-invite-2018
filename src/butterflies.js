@@ -10,10 +10,15 @@
 
       this.camera = new THREE.PerspectiveCamera(.5, 16/9, 1, 100000);
 
+      this.random = new Random(1041);
+
+      this.throb = 0;
+
+      const that = this;
       function CustomSinCurve(offset) {
         THREE.Curve.call(this);
         this.offset = offset;
-        this.scale = 10 + Math.random() * 5;
+        this.scale = 10 + that.random() * 5;
         this.scale /= 10;
       }
 
@@ -30,23 +35,21 @@
 
       this.bg = new THREE.Mesh(
           new THREE.CylinderGeometry(10000, 10000, 1000, 32),
-          new THREE.MeshBasicMaterial({
-            color: 0xffffff,
-            map: Loader.loadTexture('res/bg.jpg'),
+          new THREE.MeshStandardMaterial({
+            color: new THREE.Color(55 / 255, 60 / 255, 63 / 255),
+            emissive: 0xff4982,
+            emissiveIntensity: 1,
             side: THREE.BackSide,
           }));
-      this.bg.material.map.wrapS = THREE.RepeatWrapping;
-      this.bg.material.map.wrapT = THREE.RepeatWrapping;
-      this.bg.material.map.repeat.set(20, 1);
       this.scene.add(this.bg);
 
       this.colors = [
-        0x0db3d6,
-        0x7eb40b,
-        0x803d73,
-        0xfbdc09,
-        0xc8331a,
-        0x64686b,
+        0x00e04f,
+        0x00e04f,
+        0x00e04f,
+        0x00e04f,
+        0x00e04f,
+        0x00e04f,
       ];
 
       this.lines = [];
@@ -61,7 +64,7 @@
       this.outputs.ballpositions.setValue([]);
 
       for(let i = 0; i < 6; i++) {
-        var path = new CustomSinCurve(Math.random() * Math.PI * 2);
+        var path = new CustomSinCurve(this.random() * Math.PI * 2);
         var geometry = new THREE.TubeGeometry(path, 50, 0.2, 8);
         var material = new THREE.ShaderMaterial(SHADERS.butterflylines).clone();
         const color = new THREE.Color(this.colors[i]);
@@ -73,11 +76,15 @@
         mesh.scale.x = 0.5;
         this.scene.add(mesh);
         this.lines.push(mesh);
-        mesh.percentageOffset = (Math.random() - 0.5) * 0.1 * 0.5;
+        mesh.percentageOffset = (this.random() - 0.5) * 0.1 * 0.5;
 
         const butterflyMesh = new THREE.Mesh(
           new THREE.SphereGeometry(0.7, 32 , 32),
-          new THREE.MeshBasicMaterial({color: 0xffffff}));
+          new THREE.MeshStandardMaterial({
+            color: new THREE.Color(55 / 255, 60 / 255, 63 / 255),
+            emissive: 0xffffff,
+            emissiveIntensity: 1,
+          }));
         this.butterflies.push(butterflyMesh);
         this.scene.add(butterflyMesh);
         this.outputs.ballpositions.getValue().push(butterflyMesh.position.clone());
@@ -90,7 +97,21 @@
       const frameStart = 7011;
       this.camera.position.x = (frame - frameStart) / 2 / 2;
 
-      const t = (frame - frameStart - 250) / 80;
+      /*
+      for(let i = 0; i < this.lines.length; i++) {
+        const line = this.lines[i];
+        line.material.uniforms.r.value = lerp(0, 1, this.throb);
+        line.material.uniforms.g.value = lerp(0xe0 / 255, 1, this.throb);
+        line.material.uniforms.b.value = lerp(0x4f / 255, 1, this.throb);
+      }
+      */
+
+      this.throb *= 0.85;
+      if(BEAT && BEAN % 12 == 0) {
+        this.throb = 1;
+      }
+
+      const t = (frame - frameStart - 250) / 150;
       const fov = easeIn(5, 45, t);
       this.camera.fov = fov;
       this.camera.updateProjectionMatrix();
@@ -108,14 +129,14 @@
         this.butterflies[i].position.x /= 2;
         this.outputs.ballpositions.value[i].copy(this.butterflies[i].position);
         this.outputs.ballpositions.value[i].x = this.butterflies[i].position.x - this.camera.position.x;
-        const angle = Math.random() * Math.PI * 2;
+        const angle = this.random() * Math.PI * 2;
         const amplitude = 0.05;
         const dy = amplitude * Math.cos(angle);
         const dz = amplitude * Math.cos(angle);
         this.particleSystem.spawn(this.butterflies[i].position, {
-          x: -0.001 * Math.random(),
-          y: dy * Math.random(),
-          z: dz * Math.random(),
+          x: -0.001 * this.random(),
+          y: dy * this.random(),
+          z: dz * this.random(),
         });
       }
 
