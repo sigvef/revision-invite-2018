@@ -109,5 +109,12 @@
     "options": {
       "shader": "lulle"
     }
+  },
+  {
+    "id": "lulle",
+    "type": "lulleNode",
+    "options": {
+      "shader": "lulle"
+    }
   }
 ]
