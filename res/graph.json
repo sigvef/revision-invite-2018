@@ -104,7 +104,6 @@
     "type": "gridNode"
   },
   {
-<<<<<<< HEAD
     "id": "lulle",
     "type": "lulleNode",
     "options": {
@@ -112,11 +111,6 @@
     }
   },
   {
-    "id": "lulle",
-    "type": "lulleNode",
-    "options": {
-      "shader": "lulle"
-=======
     "id": "GridShader",
     "type": "GridShaderNode",
     "options": {
@@ -124,7 +118,6 @@
     },
     "connected": {
       "image": "GridNode.render"
->>>>>>> master
     }
   }
 ]
