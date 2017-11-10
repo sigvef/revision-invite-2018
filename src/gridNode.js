@@ -1,4 +1,4 @@
-(function(global) {
+(function (global) {
   class gridNode extends NIN.THREENode {
     constructor(id, options) {
       super(id, {
@@ -8,8 +8,8 @@
         }
       });
 
-      this.cube = new THREE.Mesh(new THREE.BoxGeometry(50, 5, 5),
-                                 new THREE.MeshBasicMaterial({ color: 0x000fff }));
+      this.cube = new THREE.Mesh(new THREE.BoxGeometry(100, 5, 5),
+        new THREE.MeshBasicMaterial({ color: 0x000fff }));
       this.scene.add(this.cube);
 
       var light = new THREE.PointLight(0xffffff, 1, 100);
@@ -22,8 +22,8 @@
     update(frame) {
       super.update(frame);
 
-      this.cube.rotation.x = Math.sin(frame / 10);
-      this.cube.rotation.y = Math.cos(frame / 10);
+      this.cube.rotation.x = Math.sin(frame / 20);
+      this.cube.rotation.y = Math.cos(frame / 20);
     }
   }
 

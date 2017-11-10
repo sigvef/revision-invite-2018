@@ -1,4 +1,4 @@
-(function(global) {
+(function (global) {
   class SceneSwitcherNode extends NIN.Node {
     constructor(id) {
       super(id, {
@@ -37,14 +37,12 @@
       this.inputs.L.enabled = false;
 
       let selectedScene;
-      if (BEAN < 48 * 4) {
+      if (BEAN < 48 * 8) {
         selectedScene = this.inputs.A;
-      } else if (BEAN < 48 * 8) {
-        selectedScene = this.inputs.B;
       } else if (BEAN < 48 * 16) {
-        selectedScene = this.inputs.C;
+        selectedScene = this.inputs.B;
       } else if (BEAN < 48 * 24) {
-        selectedScene = this.inputs.D;
+        selectedScene = this.inputs.C;
       } else if (BEAN < 48 * 32) {
         selectedScene = this.inputs.E;
       } else if (BEAN < 48 * 40) {

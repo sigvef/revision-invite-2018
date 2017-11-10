@@ -10,9 +10,9 @@
     "id": "sceneSwitcherNode",
     "type": "SceneSwitcherNode",
     "connected": {
-      "A": "GridNode.render",
-      "B": "Metatron.render",
-      "C": "toon.render",
+      "A": "GridShader.render",
+      "B": "toon.render",
+      "C": "Metatron.render",
       "D": "lulle.render",
       "F": "logotransition.render",
       "G": "letterbox.render",
@@ -104,6 +104,7 @@
     "type": "gridNode"
   },
   {
+<<<<<<< HEAD
     "id": "lulle",
     "type": "lulleNode",
     "options": {
@@ -115,6 +116,15 @@
     "type": "lulleNode",
     "options": {
       "shader": "lulle"
+=======
+    "id": "GridShader",
+    "type": "GridShaderNode",
+    "options": {
+      "shader": "GridShader"
+    },
+    "connected": {
+      "image": "GridNode.render"
+>>>>>>> master
     }
   }
 ]
