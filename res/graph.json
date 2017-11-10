@@ -13,6 +13,7 @@
       "A": "GridShader.render",
       "B": "toon.render",
       "C": "Metatron.render",
+      "D": "lulle.render",
       "F": "logotransition.render",
       "G": "letterbox.render",
       "H": "trainmodel.render",
@@ -103,6 +104,19 @@
     "type": "gridNode"
   },
   {
+<<<<<<< HEAD
+    "id": "lulle",
+    "type": "lulleNode",
+    "options": {
+      "shader": "lulle"
+    }
+  },
+  {
+    "id": "lulle",
+    "type": "lulleNode",
+    "options": {
+      "shader": "lulle"
+=======
     "id": "GridShader",
     "type": "GridShaderNode",
     "options": {
@@ -110,6 +124,7 @@
     },
     "connected": {
       "image": "GridNode.render"
+>>>>>>> master
     }
   }
 ]
