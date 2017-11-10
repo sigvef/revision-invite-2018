@@ -13,6 +13,7 @@
       "A": "GridNode.render",
       "B": "Metatron.render",
       "C": "toon.render",
+      "D": "lulle.render",
       "F": "logotransition.render",
       "G": "letterbox.render",
       "H": "trainmodel.render",
@@ -101,5 +102,12 @@
   {
     "id": "GridNode",
     "type": "gridNode"
+  },
+  {
+    "id": "lulle",
+    "type": "lulleNode",
+    "options": {
+      "shader": "lulle"
+    }
   }
 ]
