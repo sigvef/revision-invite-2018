@@ -11,8 +11,8 @@
     "type": "SceneSwitcherNode",
     "connected": {
       "A": "GridShader.render",
-      "B": "Metatron.render",
-      "C": "toon.render",
+      "B": "toon.render",
+      "C": "Metatron.render",
       "F": "logotransition.render",
       "G": "letterbox.render",
       "H": "trainmodel.render",
