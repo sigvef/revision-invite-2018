@@ -14,6 +14,7 @@
       "B": "toon.render",
       "C": "Metatron.render",
       "D": "lulle.render",
+      "E": "GodsOrKings.render",
       "F": "logotransition.render",
       "G": "letterbox.render",
       "H": "trainmodel.render",
@@ -127,5 +128,9 @@
     "options": {
       "shader": "star"
     }
+  },
+  {
+    "id": "GodsOrKings",
+    "type": "godsOrKings"
   }
 ]
