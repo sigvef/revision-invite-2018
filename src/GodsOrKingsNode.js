@@ -1,5 +1,5 @@
 (function(global) {
-  class KingsOrQueensNode extends NIN.ShaderNode {
+  class GodsOrKingsNode extends NIN.ShaderNode {
     constructor(id, options) {
       super(id, options);
     }
@@ -9,5 +9,5 @@
     }
   }
 
-  global.KingsOrQueensNode = KingsOrQueensNode;
+  global.GodsOrKingsNode = GodsOrKingsNode;
 })(this);
