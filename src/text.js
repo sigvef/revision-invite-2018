@@ -363,7 +363,7 @@
     update(frame) {
       super.update(frame);
 
-      const startBean = 80 * 12 * 4;
+      const startBean = 70 * 12 * 4;
 
       // This clears the canvas
       this.canvas.width += 0;
