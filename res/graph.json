@@ -14,7 +14,7 @@
       "B": "toon.render",
       "C": "Metatron.render",
       "D": "lulle.render",
-      "E": "KingsOrQueens.render",
+      "E": "GodsOrKings.render",
       "F": "logotransition.render",
       "G": "letterbox.render",
       "H": "trainmodel.render",
@@ -131,10 +131,10 @@
     }
   },
   {
-    "id": "KingsOrQueens",
-    "type": "KingsOrQueensNode",
+    "id": "GodsOrKings",
+    "type": "GodsOrKingsNode",
     "options": {
-      "shader": "KingsOrQueens"
+      "shader": "GodsOrKings"
     }
   },
   {
