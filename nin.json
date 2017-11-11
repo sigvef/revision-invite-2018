@@ -9,7 +9,7 @@
     "path": "res/music.mp3",
     "bpm": 115,
     "subdivision": 12,
-    "BEANOffset": 0
+    "BEANOffset": 48
   },
   "googleAnalyticsID": "Your GA ID"
 }
