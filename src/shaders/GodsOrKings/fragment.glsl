@@ -55,12 +55,39 @@ vec2 castRay(in vec3 ro, in vec3 rd) {
     return vec2(t, m);
 }
 
+float softshadow(in vec3 ro, in vec3 rd, in float mint, in float tmax) {
+    float res = 1.0;
+    float t = mint;
+    for(int i = 0; i < 16; i++) {
+        float h = map(ro + rd*t).x;
+        res = min(res, 8.0 * h / t);
+        t += clamp(h, 0.02, 0.10);
+        if(h < 0.001 || t > tmax) {
+            break;
+        }
+    }
+    return clamp(res, 0.0, 1.0);
+}
+
 vec3 calcNormal(in vec3 pos) {
     vec2 e = vec2(1.0,-1.0)*0.5773*0.0005;
     return normalize(e.xyy*map(pos + e.xyy).x +
                      e.yyx*map(pos + e.yyx).x +
                      e.yxy*map(pos + e.yxy).x +
                      e.xxx*map(pos + e.xxx).x);
+}
+
+float calcAO(in vec3 pos, in vec3 nor) {
+    float occ = 0.0;
+    float sca = 1.0;
+    for(int i = 0; i < 5; i++) {
+        float hr = 0.01 + 0.12 * float(i) / 4.0;
+        vec3 aopos =  nor * hr + pos;
+        float dd = map(aopos).x;
+        occ += -(dd - hr) * sca;
+        sca *= 0.95;
+    }
+    return clamp(1.0 - 3.0 * occ, 0.0, 1.0);
 }
 
 vec3 render(in vec3 ro, in vec3 rd) {
@@ -81,7 +108,27 @@ vec3 render(in vec3 ro, in vec3 rd) {
             col = 0.3 + 0.1*f*vec3(1.0);
         }
 
-        // lighting
+        // lighitng
+        float occ = calcAO(pos, nor);
+        vec3  lig = normalize(vec3(-0.4, 0.7, -0.6));
+        float amb = clamp(0.5 + 0.5 * nor.y, 0.0, 1.0);
+        float dif = clamp(dot(nor, lig), 0.0, 1.0);
+        float bac = clamp(dot(nor, normalize(vec3(-lig.x, 0.0, -lig.z))), 0.0, 1.0 ) * clamp(1.0-pos.y, 0.0, 1.0);
+        float dom = smoothstep(-0.1, 0.1, ref.y);
+        float fre = pow(clamp(1.0 + dot(nor, rd), 0.0, 1.0), 2.0);
+        float spe = pow(clamp(dot(ref, lig), 0.0, 1.0), 16.0);
+
+        dif *= softshadow(pos, lig, 0.02, 2.5);
+        dom *= softshadow(pos, ref, 0.02, 2.5);
+
+        vec3 lin = vec3(0.0);
+        lin += 1.30 * dif * vec3(1.00, 0.80, 0.55);
+        lin += 2.00 * spe * vec3(1.00, 0.90, 0.70) * dif;
+        lin += 0.40 * amb * vec3(0.40, 0.60, 1.00) * occ;
+        lin += 0.50 * dom * vec3(0.40, 0.60, 1.00) * occ;
+        lin += 0.50 * bac * vec3(0.25, 0.25, 0.25) * occ;
+        lin += 0.25 * fre * vec3(1.00, 1.00, 1.00) * occ;
+        //col = col*lin;
 
         // mix
         col = mix(col, vec3(0.8, 0.9, 1.0), 1.0 - exp(-0.0002 * t * t * t));
