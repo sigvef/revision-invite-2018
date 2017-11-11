@@ -1,4 +1,29 @@
 (function(global) {
+
+  function generateFlower() {
+    const canvas = document.createElement('canvas');
+    const ctx = canvas.getContext('2d');
+    canvas.width = 256;
+    canvas.height = 256;
+    ctx.fillStyle = 'rgba(0, 0, 0, 0)';
+    ctx.fillRect(0, 0, canvas.width, canvas.heigth);
+    ctx.scale(canvas.width / 2, canvas.height / 2);
+    ctx.translate(1, 1);
+    ctx.fillStyle = 'rgb(255, 73, 130)';
+    ctx.strokeStyle = 'white';
+    ctx.lineWidth = 0.03;
+    const numberOfPetals = 3 + Math.random() * 21 | 0;
+    ctx.arc(Math.random()-0.5, Math.random() - 0.5, Math.random() * 0.5, 0, 2 * Math.PI);
+    ctx.fill();
+    ctx.stroke();
+    for(let i = 0; i < numberOfPetals; i++) {
+      ctx.rotate(Math.PI * 2 / numberOfPetals);
+      ctx.drawImage(canvas, 0, 0, canvas.width, canvas.height, -1, -1, 2, 2);
+    }
+
+    return new THREE.CanvasTexture(canvas);
+  }
+
   class butterflies extends NIN.THREENode {
     constructor(id) {
       super(id, {
@@ -9,6 +34,24 @@
       });
 
       this.camera = new THREE.PerspectiveCamera(.5, 16/9, 1, 100000);
+
+      const flowerGeometry = new THREE.BoxGeometry(20, 20, 20);
+      this.flowers = [];
+      for(let i = 0; i < 200; i++) {
+        const flower = new THREE.Mesh(
+            flowerGeometry,
+            new THREE.MeshBasicMaterial({
+              map: generateFlower(),
+              transparent: true,
+            }));
+        this.flowers.push(flower);
+        flower.position.set(
+            (Math.random()- 0.5) * 100,
+            (Math.random()- 0.5) * 100,
+            (Math.random()- 0.5) * 100);
+        this.scene.add(flower);
+      }
+
 
       this.random = new Random(1041);
 
@@ -97,6 +140,10 @@
       const frameStart = 7011;
       this.camera.position.x = (frame - frameStart) / 2 / 2;
 
+      for(let flower of this.flowers) {
+        flower.lookAt(this.camera.position);
+      }
+
       /*
       for(let i = 0; i < this.lines.length; i++) {
         const line = this.lines[i];
@@ -142,7 +189,7 @@
 
       this.particleSystem.update();
 
-      this.bg.scale.y = smoothstep(1, 0.02, t);
+      //this.bg.scale.y = smoothstep(1, 0.02, t);
       this.bg.scale.x = smoothstep(1, 0.1, t);
       this.bg.scale.z = smoothstep(1, 0.1, t);
     }
