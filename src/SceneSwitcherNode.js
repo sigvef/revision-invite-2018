@@ -3,19 +3,34 @@
     constructor(id) {
       super(id, {
         inputs: {
-          A: new NIN.TextureInput(),
-          B: new NIN.TextureInput(),
-          C: new NIN.TextureInput(),
-          D: new NIN.TextureInput(),
-          E: new NIN.TextureInput(),
-          F: new NIN.TextureInput(),
-          G: new NIN.TextureInput(),
-          H: new NIN.TextureInput(),
-          I: new NIN.TextureInput(),
-          J: new NIN.TextureInput(),
-          K: new NIN.TextureInput(),
-          L: new NIN.TextureInput(),
-          M: new NIN.TextureInput(),
+          _00_silence: new NIN.TextureInput(),
+          _01_pre_intro_with_car_rev_sounds: new NIN.TextureInput(),
+          _02_intro_1: new NIN.TextureInput(),
+          _03_intro_2: new NIN.TextureInput(),
+          _04_car_rev_interstitial: new NIN.TextureInput(),
+          _05_first_A_theme_1: new NIN.TextureInput(),
+          _06_first_A_theme_2: new NIN.TextureInput(),
+          _07_first_B_theme_1: new NIN.TextureInput(),
+          _08_first_B_theme_2: new NIN.TextureInput(),
+          _09_second_A_theme_1: new NIN.TextureInput(),
+          _10_second_A_theme_2: new NIN.TextureInput(),
+          _11_illuminati_confirmed: new NIN.TextureInput(),
+          _12_first_C_theme_1: new NIN.TextureInput(),
+          _13_first_C_theme_2: new NIN.TextureInput(),
+          _14_second_C_theme_1: new NIN.TextureInput(),
+          _15_second_C_theme_2: new NIN.TextureInput(),
+          _16_low_down_B_theme_1: new NIN.TextureInput(),
+          _17_low_down_B_theme_piano_snippet: new NIN.TextureInput(),
+          _18_low_down_B_theme_2: new NIN.TextureInput(),
+          _19_groovy_B_theme_1: new NIN.TextureInput(),
+          _20_groovy_B_theme_2: new NIN.TextureInput(),
+          _21_third_A_theme_1: new NIN.TextureInput(),
+          _22_third_A_theme_2: new NIN.TextureInput(),
+          _23_third_B_theme_1: new NIN.TextureInput(),
+          _24_third_B_theme_2: new NIN.TextureInput(),
+          _25_final_A_theme_1: new NIN.TextureInput(),
+          _26_complex_final_A_theme_outtro_1: new NIN.TextureInput(),
+          _27_complex_final_A_theme_outtro_2: new NIN.TextureInput(),
         },
         outputs: {
           render: new NIN.TextureOutput(),
@@ -24,46 +39,92 @@
     }
 
     update() {
-      this.inputs.A.enabled = false;
-      this.inputs.B.enabled = false;
-      this.inputs.C.enabled = false;
-      this.inputs.D.enabled = false;
-      this.inputs.E.enabled = false;
-      this.inputs.F.enabled = false;
-      this.inputs.G.enabled = false;
-      this.inputs.H.enabled = false;
-      this.inputs.I.enabled = false;
-      this.inputs.J.enabled = false;
-      this.inputs.K.enabled = false;
-      this.inputs.L.enabled = false;
-      this.inputs.M.enabled = false;
+      this.inputs._00_silence.enabled = false;
+      this.inputs._01_pre_intro_with_car_rev_sounds.enabled = false;
+      this.inputs._02_intro_1.enabled = false;
+      this.inputs._03_intro_2.enabled = false;
+      this.inputs._04_car_rev_interstitial.enabled = false;
+      this.inputs._05_first_A_theme_1.enabled = false;
+      this.inputs._06_first_A_theme_2.enabled = false;
+      this.inputs._07_first_B_theme_1.enabled = false;
+      this.inputs._08_first_B_theme_2.enabled = false;
+      this.inputs._09_second_A_theme_1.enabled = false;
+      this.inputs._10_second_A_theme_2.enabled = false;
+      this.inputs._11_illuminati_confirmed.enabled = false;
+      this.inputs._12_first_C_theme_1.enabled = false;
+      this.inputs._13_first_C_theme_2.enabled = false;
+      this.inputs._14_second_C_theme_1.enabled = false;
+      this.inputs._15_second_C_theme_2.enabled = false;
+      this.inputs._16_low_down_B_theme_1.enabled = false;
+      this.inputs._17_low_down_B_theme_piano_snippet.enabled = false;
+      this.inputs._18_low_down_B_theme_2.enabled = false;
+      this.inputs._19_groovy_B_theme_1.enabled = false;
+      this.inputs._20_groovy_B_theme_2.enabled = false;
+      this.inputs._21_third_A_theme_1.enabled = false;
+      this.inputs._22_third_A_theme_2.enabled = false;
+      this.inputs._23_third_B_theme_1.enabled = false;
+      this.inputs._24_third_B_theme_2.enabled = false;
+      this.inputs._25_final_A_theme_1.enabled = false;
+      this.inputs._26_complex_final_A_theme_outtro_1.enabled = false;
+      this.inputs._27_complex_final_A_theme_outtro_2.enabled = false;
 
       let selectedScene;
-      const offsettedBean = BEAN - PROJECT.music.BEANOffset;
-      if (offsettedBean < 48 * 8) {
-        selectedScene = this.inputs.A;
-      } else if (offsettedBean < 48 * 16) {
-        selectedScene = this.inputs.B;
-      } else if (offsettedBean < 48 * 24) {
-        selectedScene = this.inputs.C;
-      } else if (offsettedBean < 48 * 32) {
-        selectedScene = this.inputs.E;
-      } else if (offsettedBean < 48 * 40) {
-        selectedScene = this.inputs.F;
-      } else if (offsettedBean < 48 * 48) {
-        selectedScene = this.inputs.G;
-      } else if (offsettedBean < 48 * 56) {
-        selectedScene = this.inputs.H;
-      } else if (offsettedBean < 48 * 64) {
-        selectedScene = this.inputs.I;
-      } else if (offsettedBean < 48 * 72) {
-        selectedScene = this.inputs.J;
-      } else if (offsettedBean < 48 * 79) {
-        selectedScene = this.inputs.K;
-      } else if (offsettedBean < 48 * 87) {
-        selectedScene = this.inputs.L;
+      if (BEAN < 48 * 1) {
+        selectedScene = this.inputs._00_silence;
+      } else if (BEAN < 48 * 5) {
+        selectedScene = this.inputs._01_pre_intro_with_car_rev_sounds;
+      } else if (BEAN < 48 * 9) {
+        selectedScene = this.inputs._02_intro_1;
+      } else if (BEAN < 48 * 13) {
+        selectedScene = this.inputs._03_intro_2;
+      } else if (BEAN < 48 * 14) {
+        selectedScene = this.inputs._04_car_rev_interstitial;
+      } else if (BEAN < 48 * 18) {
+        selectedScene = this.inputs._05_first_A_theme_1;
+      } else if (BEAN < 48 * 22) {
+        selectedScene = this.inputs._06_first_A_theme_2;
+      } else if (BEAN < 48 * 26) {
+        selectedScene = this.inputs._07_first_B_theme_1;
+      } else if (BEAN < 48 * 30) {
+        selectedScene = this.inputs._08_first_B_theme_2;
+      } else if (BEAN < 48 * 34) {
+        selectedScene = this.inputs._09_second_A_theme_1;
+      } else if (BEAN < 48 * 37) {
+        selectedScene = this.inputs._10_second_A_theme_2;
+      } else if (BEAN < 48 * 38) {
+        selectedScene = this.inputs._11_illuminati_confirmed;
+      } else if (BEAN < 48 * 42) {
+        selectedScene = this.inputs._12_first_C_theme_1;
+      } else if (BEAN < 48 * 46) {
+        selectedScene = this.inputs._13_first_C_theme_2;
+      } else if (BEAN < 48 * 50) {
+        selectedScene = this.inputs._14_second_C_theme_1;
+      } else if (BEAN < 48 * 54) {
+        selectedScene = this.inputs._15_second_C_theme_2;
+      } else if (BEAN < 48 * 57) {
+        selectedScene = this.inputs._16_low_down_B_theme_1;
+      } else if (BEAN < 48 * 58) {
+        selectedScene = this.inputs._17_low_down_B_theme_piano_snippet;
+      } else if (BEAN < 48 * 62) {
+        selectedScene = this.inputs._18_low_down_B_theme_2;
+      } else if (BEAN < 48 * 66) {
+        selectedScene = this.inputs._19_groovy_B_theme_1;
+      } else if (BEAN < 48 * 70) {
+        selectedScene = this.inputs._20_groovy_B_theme_2;
+      } else if (BEAN < 48 * 76) {
+        selectedScene = this.inputs._21_third_A_theme_1;
+      } else if (BEAN < 48 * 80) {
+        selectedScene = this.inputs._22_third_A_theme_2;
+      } else if (BEAN < 48 * 84) {
+        selectedScene = this.inputs._23_third_B_theme_1;
+      } else if (BEAN < 48 * 88) {
+        selectedScene = this.inputs._24_third_B_theme_2;
+      } else if (BEAN < 48 * 92) {
+        selectedScene = this.inputs._25_final_A_theme_1;
+      } else if (BEAN < 48 * 96) {
+        selectedScene = this.inputs._26_complex_final_A_theme_outtro_1;
       } else {
-        selectedScene = this.inputs.M;
+        selectedScene = this.inputs._27_complex_final_A_theme_outtro_2;
       }
 
       selectedScene.enabled = true;
