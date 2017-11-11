@@ -15,6 +15,7 @@
           J: new NIN.TextureInput(),
           K: new NIN.TextureInput(),
           L: new NIN.TextureInput(),
+          M: new NIN.TextureInput(),
         },
         outputs: {
           render: new NIN.TextureOutput(),
@@ -35,6 +36,7 @@
       this.inputs.J.enabled = false;
       this.inputs.K.enabled = false;
       this.inputs.L.enabled = false;
+      this.inputs.M.enabled = false;
 
       let selectedScene;
       const offsettedBean = BEAN - PROJECT.music.BEANOffset;
@@ -56,10 +58,12 @@
         selectedScene = this.inputs.I;
       } else if (offsettedBean < 48 * 72) {
         selectedScene = this.inputs.J;
-      } else if (offsettedBean < 48 * 80) {
+      } else if (offsettedBean < 48 * 79) {
         selectedScene = this.inputs.K;
-      } else {
+      } else if (offsettedBean < 48 * 87) {
         selectedScene = this.inputs.L;
+      } else {
+        selectedScene = this.inputs.M;
       }
 
       selectedScene.enabled = true;
