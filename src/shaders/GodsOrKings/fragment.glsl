@@ -15,18 +15,64 @@ float sdSphere(vec3 p, float size) {
     return length(p) - size;
 }
 
+float sdCylinder(vec3 p, vec2 h) {
+    vec2 d = abs(vec2(length(p.xz), p.y)) - h;
+    return min(max(d.x, d.y), 0.0) + length(max(d, 0.0));
+}
+
+float sdTriPrism(vec3 p, vec2 h) {
+    vec3 q = abs(p);
+    float d1 = q.z - h.y;
+    float d2 = max(q.x * 0.866025 + p.y * 0.5, -p.y) - h.x * 0.5;
+    return length(max(vec2(d1, d2), 0.0)) + min(max(d1, d2), 0.);
+}
+
 // operations
 
+// Union
 vec2 opU(vec2 d1, vec2 d2) {
     return d1.x > d2.x ? d2 : d1;
 }
 
+// Subtract
+float opS(float d1, float d2) {
+    return max(-d2, d1);
+}
+
+// translate/scale
+/*
+vec3 opTx(vec3 p, mat4 m) {
+    vec3 q = inverse(m) * p;
+    return primitive(q);
+}
+*/
+
+
 // framework
 
 vec2 map(in vec3 pos) {
+    // crown start
     vec2 res = opU(vec2(sdPlane(pos), 1.0),
-                   vec2(sdSphere(pos-vec3(.0, 1.5, .0), 1.5), 366.0)
+                   vec2(
+                       opS(sdCylinder(pos-vec3(.0, .0, .0), vec2(1., 1.)),
+                           sdCylinder(pos-vec3(.0, .0, .0), vec2(.8, 2.))
+                           )
+                   , 66.0)
                    );
+    res = opU(res,
+              vec2(sdTriPrism(pos-vec3(.0, 1.25, .8), vec2(.5, .1)), 88.0)
+              );
+    res = opU(res,
+              vec2(sdTriPrism(pos-vec3(1., 1.25, .0), vec2(.5, .1)), 88.0)
+              );
+    res = opU(res,
+              vec2(sdTriPrism(pos-vec3(-1., 1.25, .0), vec2(.5, .1)), 88.0)
+              );
+    res = opU(res,
+              vec2(sdTriPrism(pos-vec3(.0, 1.25, -.8), vec2(.5, .1)), 88.0)
+              );
+    // crown end
+
     return res;
 }
 
@@ -153,7 +199,7 @@ void main() {
     vec2 p = (vUv - 0.5) * 2.;
 
     // camera
-    #if 0
+    #if 1
     vec3 ro = 3. * vec3( -0.5+3.5*cos(0.1*time), 2.0, 0.5 + 4.0*sin(0.1*time) );
     #else
     vec3 ro = 3. * vec3( -0.5+3.5*cos(0.1), 2.0, 0.5 + 4.0*sin(0.1) );
