@@ -15,17 +15,33 @@ float sdSphere(vec3 p, float size) {
     return length(p) - size;
 }
 
+float sdCylinder(vec3 p, vec2 h) {
+    vec2 d = abs(vec2(length(p.xz), p.y)) - h;
+    return min(max(d.x, d.y), 0.0) + length(max(d, 0.0));
+}
+
 // operations
 
+// Union
 vec2 opU(vec2 d1, vec2 d2) {
     return d1.x > d2.x ? d2 : d1;
 }
+
+// Subtract
+float opS(float d1, float d2) {
+    return max(-d2, d1);
+}
+
 
 // framework
 
 vec2 map(in vec3 pos) {
     vec2 res = opU(vec2(sdPlane(pos), 1.0),
-                   vec2(sdSphere(pos-vec3(.0, 1.5, .0), 1.5), 366.0)
+                   vec2(
+                       opS(sdCylinder(pos-vec3(.0, .0, .0), vec2(1., 1.)),
+                           sdCylinder(pos-vec3(.0, .0, .0), vec2(.8, 2.))
+                           )
+                   , 66.0)
                    );
     return res;
 }
@@ -153,7 +169,7 @@ void main() {
     vec2 p = (vUv - 0.5) * 2.;
 
     // camera
-    #if 0
+    #if 1
     vec3 ro = 3. * vec3( -0.5+3.5*cos(0.1*time), 2.0, 0.5 + 4.0*sin(0.1*time) );
     #else
     vec3 ro = 3. * vec3( -0.5+3.5*cos(0.1), 2.0, 0.5 + 4.0*sin(0.1) );
