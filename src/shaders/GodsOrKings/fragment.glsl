@@ -39,10 +39,19 @@ float opS(float d1, float d2) {
     return max(-d2, d1);
 }
 
+// translate/scale
+/*
+vec3 opTx(vec3 p, mat4 m) {
+    vec3 q = inverse(m) * p;
+    return primitive(q);
+}
+*/
+
 
 // framework
 
 vec2 map(in vec3 pos) {
+    // crown start
     vec2 res = opU(vec2(sdPlane(pos), 1.0),
                    vec2(
                        opS(sdCylinder(pos-vec3(.0, .0, .0), vec2(1., 1.)),
@@ -53,6 +62,16 @@ vec2 map(in vec3 pos) {
     res = opU(res,
               vec2(sdTriPrism(pos-vec3(.0, 1.25, .8), vec2(.5, .1)), 88.0)
               );
+    res = opU(res,
+              vec2(sdTriPrism(pos-vec3(1., 1.25, .0), vec2(.5, .1)), 88.0)
+              );
+    res = opU(res,
+              vec2(sdTriPrism(pos-vec3(-1., 1.25, .0), vec2(.5, .1)), 88.0)
+              );
+    res = opU(res,
+              vec2(sdTriPrism(pos-vec3(.0, 1.25, -.8), vec2(.5, .1)), 88.0)
+              );
+    // crown end
 
     return res;
 }
