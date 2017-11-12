@@ -1,5 +1,6 @@
 uniform float frame;
 uniform float snareThrob;
+uniform sampler2D tDiffuse;
 
 varying vec2 vUv;
 
@@ -202,13 +203,27 @@ float wheel(vec3 pos, float size) {
 }
 
 float cabin(vec3 pos) {
-    float roof = sdBox(pos, vec3(1., .85, 1.1));
-    roof = max(roof, sdCylinder(pos - vec3(0., 0., 1.25), vec2(2., 5.)));
-    roof = max(roof, -sdCylinder(pos - vec3(0., 0., 1.35), vec2(2., 5.)));
 
-    float res = sdBox(pos, vec3(0.95, .75, 1.));
-    res = max(res, sdCylinder(pos - vec3(0., 0., 1.25), vec2(2., 5.)));
-    return min(res, roof);
+    float cabinLength = 100.;
+
+    float roof = sdBox(pos + vec3(0., 0.75 - cabinLength, 0.), vec3(1., cabinLength + 0.1, 1.1));
+    roof = max(roof, sdCylinder(pos - vec3(0., 0., 1.25), vec2(2., cabinLength)));
+    roof = max(roof, -sdCylinder(pos - vec3(0., 0., 1.35), vec2(2., cabinLength)));
+
+    float res = sdBox(pos + vec3(0., 0.75 - cabinLength, 0.), vec3(0.95, cabinLength, 1.));
+    res = max(res, sdCylinder(pos - vec3(0., 0., 1.25), vec2(2., cabinLength)));
+    res = min(res, roof);
+
+    float gapsBetweenCars = sdBox(opRep(pos + vec3(0., 3.75, 0.), vec3(0., 10., 0.)), vec3(10., .3, 10.));
+    res = max(res, -gapsBetweenCars);
+
+    float interior = sdBox(pos - vec3(0., 0., 0.2), vec3(0.9, cabinLength, 0.7));
+    res = max(res, -interior);
+
+    float windows = sdBox(opRep(pos - vec3(0., 1.1, 0.), vec3(0., 10.3 / 2., 0.)), vec3(2., 1.7, .3));
+    res = max(res, -windows);
+
+    return res;
 }
 
 float chimneyCone(vec3 pos) {
@@ -219,7 +234,7 @@ float chimneyCone(vec3 pos) {
 
 vec2 train(vec3 pos) {
 
-    pos.y = pos.y * (1. + 0.1 * -sin(frame * PI * 2. / 60. / 60. * 115.));
+    //pos.y = pos.y * (1. + 0.1 * -sin(frame * PI * 2. / 60. / 60. * 115.));
 
     float material = 1.;
     vec4 p4 = vec4(pos, 1.);
@@ -248,9 +263,9 @@ vec2 train(vec3 pos) {
     res = max(res, -chimneyCone(rotated * 0.98 + vec3(0., 1.9, 0.98 * -1.4)));
 
     float wheels = wheel(opRep(mirrored + vec3(0., -.35, 0.) + vec3(0., .15 - size / PI, 1.25), vec3(1.1, .0, size * 0.9)), size);
-    wheels = max(wheels, sdBox(lifted + vec3(0., -.45, 0.), vec3(1.2, 2.6, 2.5)));
+    wheels = max(wheels, sdBox(lifted + vec3(0., -.45, 0.), vec3(1.2, 100., 2.5)));
     res = min(res, wheels);
-    vec2 final = opU(vec2(res, 10.), vec2(wheels, pos.z / 5.));
+    vec2 final = opU(vec2(res, 2.), vec2(wheels, 1.));
 
     return final;
 }
@@ -265,21 +280,39 @@ float tracks(vec3 pos) {
     return res;
 }
 
+vec2 twister(vec3 pos) {
+    float size = 0.3;
+    float res = sdBox(pos, vec3(size, size, 100.));
+    res = max(res, sdBox(pos + vec3(0., 0., -100.), vec3(size, size, 100.)));
+    return vec2(res, 3.);
+}
+
+vec3 twistPosition(vec3 pos) {
+    return (rotationMatrix(vec3(0., 0., 1.), sin(frame / 60.) + 5. * sin(1. - pos.z / 10. + frame / 100. + .5 * cos(frame / 100. - pos.z / 7.))) * vec4(pos, 1.)).xyz;
+}
+
 vec2 map(vec3 pos) {
 
+    pos.z += -10. + (frame - 5258.) / 20.;
+
     pos -= vec3(0., 1.5, 0.);
-    pos = (rotationMatrix(vec3(0., 0., 1.), sin(frame / 60.) + 5. * sin(1. - pos.z / 10. + frame / 100. + .5 * cos(frame / 100. - pos.z / 7.))) * vec4(pos, 1.)).xyz;
+    //pos = (rotationMatrix(vec3(0., 0., 1.), sin(frame / 60.) + 5. * sin(1. - pos.z / 10. + frame / 100. + .5 * cos(frame / 100. - pos.z / 7.))) * vec4(pos, 1.)).xyz;
     pos += vec3(0., 1.5, 0.);
 
     vec2 res = train(pos);
 
-    res = opU(res, vec2(tracks(pos), 20.));
+    //pos = (rotationMatrix(vec3(0., 0., 1.), sin(frame / 60.) + 5. * sin(1. - pos.z / 10. + frame / 100. + .5 * cos(frame / 100. - pos.z / 7.))) * vec4(pos, 1.)).xyz;
+    //pos -= vec3(0., 1.5, 0.);
+    vec3 twistedPos = twistPosition(pos - vec3(0., 1.5, 0.));
+    res = opU(res, twister(twistedPos));
+
+    res = opU(res, vec2(tracks(pos), 2.));
     return res;
 }
 
 vec2 castRay( vec3 ro, vec3 rd ) {
     float tmin = .1;
-    float tmax = 20.0;
+    float tmax = 200.0;
     
     float t = tmin;
     float m = -1.0;
@@ -349,8 +382,12 @@ vec3 render( in vec3 ro, in vec3 rd ) {
         
         // material        
         //col = 0.45 + 0.35*sin( vec3(0.05,0.08,0.10)*(m-1.0) );
-        if(m > 15.) {
+        if(m > 3.5) {
             col = pow(green, 1. / vec3(.4545));
+        }
+        if(m > 2.5) {
+            vec3 twistedPos = twistPosition(pos - vec3(0., 1.5, 0.));
+            col = pow(texture2D(tDiffuse, mod(twistedPos.zy - 0.5, vec2(1., 1.))).rgb, 1. / vec3(.4545));
         } else if(m < 1.5) {
             col = pow(
                     mix(black, pink, 2. * snareThrob * max(0., sin(.5 + frame * PI * 2. / 60. / 60. * 115. / 2. - pos.z / 2.)))
@@ -413,8 +450,9 @@ void main() {
     p.x = p.x / 9. * 16.;
 
     // camera   
-    vec3 ro = 3. * vec3( -0.5+3.5*cos(0.1*time), 2.0, 0.5 + 4.0*sin(0.1*time) );
-    vec3 ta = vec3( -0.5, -0.4, 0.5 );
+    float cameraTime = 0.05 * time + 1.;
+    vec3 ro = 1.2 * vec3( -0.5+3.5*cos(cameraTime), 2.0, 0.5 + 4.0*sin(cameraTime) );
+    vec3 ta = vec3( -0.5, 0.8, 0.5 );
     // camera-to-world transformation
     mat3 ca = setCamera( ro, ta, 0.0 );
     // ray direction
