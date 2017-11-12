@@ -24,7 +24,7 @@
       "_19_groovy_B_theme_1": "carousel.render",
       "_20_groovy_B_theme_2": "jaws.render",
       "_21_third_A_theme_1": "text.render",
-      "_22_third_A_theme_2": "star.render"
+      "_22_third_A_theme_2": "barndoors.render"
     }
   },
   {
@@ -142,5 +142,15 @@
   {
     "id": "text",
     "type": "text"
+  },
+  {
+    "id": "barndoors",
+    "type": "barndoorsNode",
+    "options": {
+      "shader": "barndoors"
+    },
+    "connected": {
+      "A": "star.render"
+    }
   }
 ]
