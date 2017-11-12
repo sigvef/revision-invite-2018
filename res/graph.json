@@ -20,6 +20,7 @@
       "_11_illuminati_confirmed": "logotransition.render",
       "_12_first_C_theme_1": "letterbox.render",
       "_13_first_C_theme_2": "trainmodel.render",
+      "_14_second_C_theme_1": "pyramids.render",
       "_16_low_down_B_theme_1": "metaballs.render",
       "_18_low_down_B_theme_2": "butterflies.render",
       "_19_groovy_B_theme_1": "chromaTransition.render",
@@ -172,5 +173,9 @@
   {
     "id": "starChroma",
     "type": "starChroma"
+  },
+  {
+    "id": "pyramids",
+    "type": "pyramids"
   }
 ]
