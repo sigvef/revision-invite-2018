@@ -22,8 +22,7 @@
       "_13_first_C_theme_2": "trainmodel.render",
       "_16_low_down_B_theme_1": "metaballs.render",
       "_18_low_down_B_theme_2": "butterflies.render",
-      "_19_groovy_B_theme_1": "carousel.render",
-      "_20_groovy_B_theme_2": "jaws.render",
+      "_19_groovy_B_theme_1": "chromaTransition.render",
       "_21_third_A_theme_1": "text.render",
       "_22_third_A_theme_2": "barndoors.render"
     }
@@ -157,5 +156,21 @@
   {
     "id": "RevisionFezLogo",
     "type": "revisionFezLogo"
+  },
+  {
+    "id": "chromaTransition",
+    "type": "chromaTransitionNode",
+    "options": {
+      "shader": "chromaTransition"
+    },
+    "connected": {
+      "A": "carousel.render",
+      "B": "jaws.render",
+      "chroma": "starChroma.render"
+    }
+  },
+  {
+    "id": "starChroma",
+    "type": "starChroma"
   }
 ]

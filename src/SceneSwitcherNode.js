@@ -23,7 +23,8 @@
           _17_low_down_B_theme_piano_snippet: new NIN.TextureInput(),
           _18_low_down_B_theme_2: new NIN.TextureInput(),
           _19_groovy_B_theme_1: new NIN.TextureInput(),
-          _20_groovy_B_theme_2: new NIN.TextureInput(),
+          //_20_groovy_B_theme_2: new NIN.TextureInput(),
+          // 19 and 20 currently merged and handled by transition node
           _21_third_A_theme_1: new NIN.TextureInput(),
           _22_third_A_theme_2: new NIN.TextureInput(),
           _23_third_B_theme_1: new NIN.TextureInput(),
@@ -59,7 +60,7 @@
       this.inputs._17_low_down_B_theme_piano_snippet.enabled = false;
       this.inputs._18_low_down_B_theme_2.enabled = false;
       this.inputs._19_groovy_B_theme_1.enabled = false;
-      this.inputs._20_groovy_B_theme_2.enabled = false;
+      //this.inputs._20_groovy_B_theme_2.enabled = false;
       this.inputs._21_third_A_theme_1.enabled = false;
       this.inputs._22_third_A_theme_2.enabled = false;
       this.inputs._23_third_B_theme_1.enabled = false;
@@ -110,7 +111,8 @@
       } else if (BEAN < 48 * 66) {
         selectedScene = this.inputs._19_groovy_B_theme_1;
       } else if (BEAN < 48 * 70) {
-        selectedScene = this.inputs._20_groovy_B_theme_2;
+        selectedScene = this.inputs._19_groovy_B_theme_1;
+        //selectedScene = this.inputs._20_groovy_B_theme_2;
       } else if (BEAN < 48 * 76) {
         selectedScene = this.inputs._21_third_A_theme_1;
       } else if (BEAN < 48 * 80) {
