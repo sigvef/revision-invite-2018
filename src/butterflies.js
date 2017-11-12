@@ -1,6 +1,17 @@
 (function(global) {
 
+  const petalRandom = new Random(1248);
+
+  const petalCache = [];
+  let petalCacheIndex = -1;
+  const MAX_PETALS = 32;
+
   function generateFlower() {
+    petalCacheIndex = (petalCacheIndex + 1) % MAX_PETALS;
+    const cached = petalCache[petalCacheIndex];
+    if(cached) {
+      return cached;
+    }
     const canvas = document.createElement('canvas');
     const ctx = canvas.getContext('2d');
     canvas.width = 256;
@@ -11,17 +22,119 @@
     ctx.translate(1, 1);
     ctx.fillStyle = 'rgb(255, 73, 130)';
     ctx.strokeStyle = 'white';
-    ctx.lineWidth = 0.03;
-    const numberOfPetals = 3 + Math.random() * 21 | 0;
-    ctx.arc(Math.random()-0.5, Math.random() - 0.5, Math.random() * 0.5, 0, 2 * Math.PI);
-    ctx.fill();
-    ctx.stroke();
+    ctx.strokeStyle = '#b71346';
+    ctx.lineWidth = 0.06;
+    const numberOfPetals = 3 + petalRandom() * 21 | 0;
+    const innerRadius = 0.2 + petalRandom()  * 0.5;
+    const outerRadius = innerRadius + petalRandom() * (1 - innerRadius);
+    ctx.moveTo(innerRadius, 0);
+    const controlPoint1 = {
+      x: petalRandom() - 0.5,
+      y: petalRandom() - 0.5,
+    };
+    const controlPoint2 = {
+      x: petalRandom() - 0.5,
+      y: petalRandom() - 0.5,
+    };
     for(let i = 0; i < numberOfPetals; i++) {
+      ctx.bezierCurveTo( 
+          controlPoint1.x, controlPoint1.y,
+          controlPoint2.x, controlPoint2.y,
+          outerRadius, 0);
       ctx.rotate(Math.PI * 2 / numberOfPetals);
-      ctx.drawImage(canvas, 0, 0, canvas.width, canvas.height, -1, -1, 2, 2);
+      ctx.bezierCurveTo( 
+          -controlPoint1.x, -controlPoint1.y,
+          -controlPoint2.x, -controlPoint2.y,
+          innerRadius, 0);
     }
 
-    return new THREE.CanvasTexture(canvas);
+    ctx.stroke();
+    ctx.fill();
+
+    ctx.save();
+    ctx.scale(1.2, 1.2);
+    ctx.globalCompositeOperation = 'destination-over';
+    ctx.fillStyle = 'rgba(0, 0, 0, 0.2)';
+    ctx.beginPath();
+    ctx.moveTo(innerRadius, 0);
+    for(let i = 0; i < numberOfPetals; i++) {
+      ctx.bezierCurveTo( 
+          controlPoint1.x, controlPoint1.y,
+          controlPoint2.x, controlPoint2.y,
+          outerRadius, 0);
+      ctx.rotate(Math.PI * 2 / numberOfPetals);
+      ctx.bezierCurveTo( 
+          -controlPoint1.x, -controlPoint1.y,
+          -controlPoint2.x, -controlPoint2.y,
+          innerRadius, 0);
+    }
+    ctx.fill();
+    ctx.restore();
+
+    ctx.save();
+    ctx.scale(0.8, 0.8);
+    ctx.fillStyle = 'rgba(255, 255, 255, 0.5)';
+    ctx.beginPath();
+    ctx.moveTo(innerRadius, 0);
+    for(let i = 0; i < numberOfPetals; i++) {
+      ctx.bezierCurveTo( 
+          controlPoint1.x, controlPoint1.y,
+          controlPoint2.x, controlPoint2.y,
+          outerRadius, 0);
+      ctx.rotate(Math.PI * 2 / numberOfPetals);
+      ctx.bezierCurveTo( 
+          -controlPoint1.x, -controlPoint1.y,
+          -controlPoint2.x, -controlPoint2.y,
+          innerRadius, 0);
+    }
+    ctx.fill();
+    ctx.restore();
+
+    ctx.save();
+    ctx.scale(0.45, 0.45);
+    ctx.fillStyle = 'rgba(255, 255, 255, 0.5)';
+    ctx.beginPath();
+    ctx.moveTo(innerRadius, 0);
+    for(let i = 0; i < numberOfPetals; i++) {
+      ctx.bezierCurveTo( 
+          controlPoint1.x, controlPoint1.y,
+          controlPoint2.x, controlPoint2.y,
+          outerRadius, 0);
+      ctx.rotate(Math.PI * 2 / numberOfPetals);
+      ctx.bezierCurveTo( 
+          -controlPoint1.x, -controlPoint1.y,
+          -controlPoint2.x, -controlPoint2.y,
+          innerRadius, 0);
+    }
+    ctx.fill();
+    ctx.restore();
+
+    const height = petalRandom() * 0.3;
+    const radius = 0.01 + petalRandom() * 0.1;
+    for(let i = 0; i < numberOfPetals; i++) {
+
+      ctx.fillStyle = 'rgba(255, 255, 255, 0.5)';
+      ctx.beginPath();
+      ctx.arc(height, 0, radius * 0.5, 0, Math.PI * 2);
+      ctx.fill();
+
+      ctx.rotate(Math.PI * 2 / numberOfPetals);
+    }
+
+    ctx.globalCompositeOperation = 'destination-over';
+    const gradient = ctx.createRadialGradient(0, 0, 0, 0, 0, 0.5);
+    gradient.addColorStop(0, 'rgba(0,0,0,0.25)');
+    gradient.addColorStop(0.2, 'rgba(0,0,0,0.25)');
+    gradient.addColorStop(0.4, 'rgba(0,0,0,0.2)');
+    gradient.addColorStop(1, 'rgba(0,0,0,0)');
+    ctx.fillStyle = gradient;
+    ctx.beginPath();
+    ctx.arc(0, 0.2, 0.5, 0, Math.PI * 2);
+    ctx.fill();
+
+    const value = new THREE.CanvasTexture(canvas);
+    petalCache[petalCacheIndex] = value;
+    return value;
   }
 
   class butterflies extends NIN.THREENode {
@@ -37,7 +150,7 @@
 
       const flowerGeometry = new THREE.BoxGeometry(20, 20, 20);
       this.flowers = [];
-      for(let i = 0; i < 200; i++) {
+      for(let i = 0; i < 1000; i++) {
         const flower = new THREE.Mesh(
             flowerGeometry,
             new THREE.MeshBasicMaterial({
@@ -46,9 +159,9 @@
             }));
         this.flowers.push(flower);
         flower.position.set(
-            (Math.random()- 0.5) * 100,
-            (Math.random()- 0.5) * 100,
-            (Math.random()- 0.5) * 100);
+            (petalRandom()- 0.5) * 100,
+            (petalRandom()- 0.5) * 200,
+            (petalRandom()- 0.5) * 400);
         this.scene.add(flower);
       }
 
@@ -79,8 +192,7 @@
       this.bg = new THREE.Mesh(
           new THREE.CylinderGeometry(10000, 10000, 1000, 32),
           new THREE.MeshStandardMaterial({
-            color: new THREE.Color(55 / 255, 60 / 255, 63 / 255),
-            emissive: 0xff4982,
+            emissive: new THREE.Color(255 / 255, 73 / 255, 130 / 255),
             emissiveIntensity: 1,
             side: THREE.BackSide,
           }));
@@ -167,7 +279,6 @@
       const percentage = (frame - frameStart) / 500 / 2;
       const lookAtX = easeOut(this.camera.position.x, this.lines[0].path.getPoint(percentage).x / 2, t);
       this.camera.lookAt(new THREE.Vector3(lookAtX, 0, 0));
-      const xOffset = smoothstep(0, 200, t);
 
       for(let i = 0; i < this.lines.length; i++) {
         const percentage = (frame - frameStart) / 500 / 2 + this.lines[i].percentageOffset;
@@ -192,11 +303,18 @@
       //this.bg.scale.y = smoothstep(1, 0.02, t);
       this.bg.scale.x = smoothstep(1, 0.1, t);
       this.bg.scale.z = smoothstep(1, 0.1, t);
+
+      const baseFrame = FRAME_FOR_BEAN(2592);
+      for(let i = 0; i < this.flowers.length; i++) {
+        const flower = this.flowers[i];
+        const scale = elasticOut(0.0001, 1, 2.2, (frame - baseFrame - 100 - flower.position.x * 3) / 40);
+        flower.scale.set(scale, scale, scale);
+        flower.rotation.z = frame / 302 * (1 + flower.position.z / 200);
+      }
+
     }
 
     render(renderer) {
-      renderer.setClearColor(new THREE.Color(34 / 255, 34 / 255, 34 / 255));
-      this.particleSystem.render();
       super.render(renderer);
     }
   }
