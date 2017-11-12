@@ -12,6 +12,7 @@
     "connected": {
       "_02_intro_1": "GridShader.render",
       "_03_intro_2": "toon.render",
+      "_05_first_A_theme_1": "RevisionFezLogo.render",
       "_07_first_B_theme_1": "Metatron.render",
       "_08_first_B_theme_2": "lulle.render",
       "_09_second_A_theme_1": "GodsOrKings.render",
@@ -152,5 +153,9 @@
     "connected": {
       "A": "star.render"
     }
+  },
+  {
+    "id": "RevisionFezLogo",
+    "type": "revisionFezLogo"
   }
 ]
