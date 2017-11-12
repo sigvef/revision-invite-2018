@@ -20,6 +20,13 @@ float sdCylinder(vec3 p, vec2 h) {
     return min(max(d.x, d.y), 0.0) + length(max(d, 0.0));
 }
 
+float sdTriPrism(vec3 p, vec2 h) {
+    vec3 q = abs(p);
+    float d1 = q.z - h.y;
+    float d2 = max(q.x * 0.866025 + p.y * 0.5, -p.y) - h.x * 0.5;
+    return length(max(vec2(d1, d2), 0.0)) + min(max(d1, d2), 0.);
+}
+
 // operations
 
 // Union
@@ -43,6 +50,10 @@ vec2 map(in vec3 pos) {
                            )
                    , 66.0)
                    );
+    res = opU(res,
+              vec2(sdTriPrism(pos-vec3(.0, 1.25, .8), vec2(.5, .1)), 88.0)
+              );
+
     return res;
 }
 
