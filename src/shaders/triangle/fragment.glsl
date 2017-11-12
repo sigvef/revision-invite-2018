@@ -43,7 +43,7 @@ float smin(float a, float b, float k) {
 float map(vec3 p) {
     float timer = clamp((frame - 7512.) / 50., 0., 1.);
     float size = smoothstep(0., 0.85, timer);
-    float sminParameter = .5 - max(0., (frame - 7512.) / 1000.);
+    float sminParameter = .5 - max(0., (frame - 7512.) / (7762. - 7512.) / 2.);
     float zscale = -1.;
     float yscale = 1.;
     float xscale = 4.;
@@ -129,7 +129,7 @@ void main() {
     if(blackColDistance > farClippingPlane) {
         color = mix(textureColor, vec4(vec3(0.1, 0., 0.1), 1.), vec4(timer));
     }
-    float visibleTimer = clamp((frame - 7511.), 0., 1.);
+    float visibleTimer = clamp((frame - 7512.), 0., 1.);
     color = mix(textureColor, color, vec4(visibleTimer));
 
     gl_FragColor = color;
