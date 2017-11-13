@@ -13,6 +13,18 @@
       this.cameraLight = new THREE.PointLight(0xffffff, 1, 100);
       this.scene.add(this.cameraLight);
 
+      this.groundMirror = new THREE.Mirror(demo.renderer, this.camera, {
+        clipBias: 0.003,
+        textureWidth: 16 * GU,
+        textureHeight: 16 * GU,
+        color: 0x232323,
+      });
+      const planeGeo = new THREE.PlaneBufferGeometry(50, 50);
+      const mirrorMesh = new THREE.Mesh(planeGeo, this.groundMirror.material);
+      mirrorMesh.add(this.groundMirror);
+      mirrorMesh.rotateX(-Math.PI / 2);
+      this.scene.add(mirrorMesh);
+
       this.pyramids = [
         {
           x: 1.5,
@@ -61,7 +73,7 @@
       for (const [index, pyramid] of this.pyramids.entries()) {
         if (BEAN >= startBEAN + pyramid.bean) {
           const localT = (frame - FRAME_FOR_BEAN(startBEAN + pyramid.bean)) / 120;
-          const scale = elasticOut(0, 1, 1.0, localT);
+          const scale = elasticOut(0.0001, 1, 1.0, localT);
           this.pyramidMeshes[index].scale.set(scale, scale, scale);
           this.pyramidMeshes[index].position.y = elasticOut(0, .5, 1.0, localT);
         } else {
@@ -76,6 +88,12 @@
       );
       this.camera.lookAt(new THREE.Vector3(0, 0, lerp(2, 6, t)));
       this.cameraLight.position.copy(this.camera.position);
+    }
+
+    render(renderer) {
+      renderer.setClearColor(0x000000, 1);
+      this.groundMirror.render();
+      super.render(renderer);
     }
   }
 
