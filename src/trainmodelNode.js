@@ -2,6 +2,8 @@
   class trainmodelNode extends NIN.ShaderNode {
     constructor(id, options) {
       options.outputs = options.outputs || {};
+      options.inputs = options.inputs || {};
+      options.inputs.twistertex = new NIN.TextureInput();
       super(id, options);
       this.snareThrob = 0;
 
@@ -26,7 +28,7 @@
         this.snareThrob = 1;
       }
       this.uniforms.snareThrob.value = this.snareThrob;
-      this.uniforms.tDiffuse.value = this.revisionTexture;
+      this.uniforms.tDiffuse.value = this.inputs.twistertex.getValue();
     }
 
     resize() {

@@ -150,13 +150,15 @@
 
       const flowerGeometry = new THREE.BoxGeometry(20, 20, 20);
       this.flowers = [];
-      for(let i = 0; i < 1000; i++) {
+      for(let i = 0; i < 500; i++) {
         const flower = new THREE.Mesh(
             flowerGeometry,
             new THREE.MeshBasicMaterial({
               map: generateFlower(),
+              color: '#ffffff',
               transparent: true,
             }));
+        flower.material.intensity = 1;
         this.flowers.push(flower);
         flower.position.set(
             (petalRandom()- 0.5) * 100,
@@ -252,9 +254,31 @@
       const frameStart = 7011;
       this.camera.position.x = (frame - frameStart) / 2 / 2;
 
+      if(FRAME_FOR_BEAN(2784) > frame) {
+        this.bg.material.emissive.setRGB(255 / 255, 73 / 255, 130 / 255);
+      } else {
+        this.bg.material.emissive.setRGB(0 / 255, 0.5 * 73 / 255, 0.5 * 130 / 255);
+      }
+
+      if(FRAME_FOR_BEAN(2784) < frame && BEAT && BEAN % 12 == 0) {
+        for(let flower of this.flowers) {
+          if(Math.random() < 0.1) {
+            flower.material.intensity = 1;
+          }
+        }
+      }
+
       for(let flower of this.flowers) {
         flower.lookAt(this.camera.position);
+        if(FRAME_FOR_BEAN(2784) > frame) {
+          flower.material.intensity = 1;
+        } else {
+          flower.material.intensity *= 0.95;
+        }
+        const color = flower.material.intensity * 0.85 + 0.15;
+        flower.material.color.setRGB(color, color, color);
       }
+
 
       /*
       for(let i = 0; i < this.lines.length; i++) {

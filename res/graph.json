@@ -104,6 +104,9 @@
     "type": "trainmodelNode",
     "options": {
       "shader": "trainmodel"
+    },
+    "connected": {
+        "twistertex": "letterbox.render"
     }
   },
   {
