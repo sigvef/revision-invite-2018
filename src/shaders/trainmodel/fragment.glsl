@@ -281,14 +281,18 @@ float tracks(vec3 pos) {
 }
 
 vec2 twister(vec3 pos) {
-    float size = 0.3;
+    float size = 0.3 + 0.2 * snareThrob;
     float res = sdBox(pos, vec3(size, size, 100.));
     res = max(res, sdBox(pos + vec3(0., 0., -100.), vec3(size, size, 100.)));
     return vec2(res, 3.);
 }
 
+float rotationAmount(float z) {
+    return sin(frame / 60.) + 5. * sin(1. - z / 10. + frame / 100. + .5 * cos(frame / 100. - z / 7.));
+}
+
 vec3 twistPosition(vec3 pos) {
-    return (rotationMatrix(vec3(0., 0., 1.), sin(frame / 60.) + 5. * sin(1. - pos.z / 10. + frame / 100. + .5 * cos(frame / 100. - pos.z / 7.))) * vec4(pos, 1.)).xyz;
+    return (rotationMatrix(vec3(0., 0., 1.), rotationAmount(pos.z)) * vec4(pos, 1.)).xyz;
 }
 
 vec2 map(vec3 pos) {
@@ -301,9 +305,8 @@ vec2 map(vec3 pos) {
 
     vec2 res = train(pos);
 
-    //pos = (rotationMatrix(vec3(0., 0., 1.), sin(frame / 60.) + 5. * sin(1. - pos.z / 10. + frame / 100. + .5 * cos(frame / 100. - pos.z / 7.))) * vec4(pos, 1.)).xyz;
-    //pos -= vec3(0., 1.5, 0.);
     vec3 twistedPos = twistPosition(pos - vec3(0., 1.5, 0.));
+    twistedPos -= vec3(0., 0.2, 0.);
     res = opU(res, twister(twistedPos));
 
     res = opU(res, vec2(tracks(pos), 2.));
@@ -374,6 +377,7 @@ vec3 render( in vec3 ro, in vec3 rd ) {
     vec2 res = castRay(ro,rd);
     float t = res.x;
     float m = res.y;
+    float emissive = 0.;
     if( m>-0.5 )
     {
         vec3 pos = ro + t*rd;
@@ -386,12 +390,19 @@ vec3 render( in vec3 ro, in vec3 rd ) {
             col = pow(green, 1. / vec3(.4545));
         }
         if(m > 2.5) {
-            vec3 twistedPos = twistPosition(pos - vec3(0., 1.5, 0.));
-            col = pow(texture2D(tDiffuse, mod(twistedPos.zy - 0.5, vec2(1., 1.))).rgb, 1. / vec3(.4545));
+            float z = pos.z + -10. + (frame - 5258.) / 20.;
+            float amount = rotationAmount(z);
+            vec2 normalizedPos = vec2(pos.x, pos.y - 1.5) / 0.3;
+            normalizedPos -= vec2(-sin(amount) * 0.2, cos(amount) * 0.2) / 0.3;
+            float angle = -amount + atan(normalizedPos.y, normalizedPos.x);
+            vec2 uv = vec2(z, 0.);
+            uv.y = mod(angle / PI * 2. + 0.5, 1.);
+            uv.x = mod(1. - uv.x, 1.);
+            col = pow(texture2D(tDiffuse, mod(uv, 1.)).rgb, 1. / vec3(.4545));
+            col *= snareThrob;
+            emissive = step(0.02, col.g);
         } else if(m < 1.5) {
-            col = pow(
-                    mix(black, pink, 2. * snareThrob * max(0., sin(.5 + frame * PI * 2. / 60. / 60. * 115. / 2. - pos.z / 2.)))
-                    , 1. / vec3(.4545));
+            col = pow(white, 1./vec3(.4545));
         } else {
             col = pow(white, 1. / vec3(.4545));
         }
@@ -424,9 +435,9 @@ vec3 render( in vec3 ro, in vec3 rd ) {
         lin += 0.50*dom*vec3(0.40,0.60,1.00)*occ;
         lin += 0.50*bac*vec3(0.25,0.25,0.25)*occ;
         lin += 0.25*fre*vec3(1.00,1.00,1.00)*occ;
-        col = col*lin;
+        col = mix(col * lin, col, emissive);
 
-        //col = mix( col, vec3(0.8,0.9,1.0), 1.0-exp( -0.0002*t*t*t ) );
+        col = mix( col, vec3(0.8,0.9,1.0), 1.0-exp( -0.0002*t*t*t ) );
     }
 
     return vec3( clamp(col, 0.0, 1.0) );
