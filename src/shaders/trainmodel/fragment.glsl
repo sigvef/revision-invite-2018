@@ -2,6 +2,8 @@ uniform float frame;
 uniform float snareThrob;
 uniform sampler2D tDiffuse;
 
+# define FRAME_OFFSET 200.
+
 varying vec2 vUv;
 
 #define PI 3.141592653589793
@@ -182,7 +184,7 @@ vec3 opTwist( vec3 p )
 //------------------------------------------------------------------
 
 float wheel(vec3 pos, float size) {
-    pos = (rotationMatrix(vec3(-1., 0., 0.), SPEED * frame / 60.) * vec4(pos, 1.)).xyz;
+    pos = (rotationMatrix(vec3(-1., 0., 0.), SPEED * (frame + FRAME_OFFSET) / 60.) * vec4(pos, 1.)).xyz;
     vec3 rotated = (rotationMatrix(vec3(0., 0., 1.), PI / 2.) * vec4(pos, 1.)).xyz;
     float res = sdCylinder(rotated, vec2(.4 * size, .05));
     res = smin(res, sdCylinder(rotated + vec3(0., .05, 0.), vec2(.44 * size, .01)), 0.05);
@@ -271,7 +273,7 @@ vec2 train(vec3 pos) {
 }
 
 float tracks(vec3 pos) {
-    pos -= vec3(0., 0., PI / 4. * SPEED * frame / 60.);
+    pos -= vec3(0., 0., PI / 4. * SPEED * (frame + FRAME_OFFSET) / 60.);
     vec3 repped = opRep(pos, vec3(.56 * 2., .2, 0.));
     float res = sdBox(repped, vec3(.04, .01, 10000.));
     res = smin(res, sdBox(opRep(pos, vec3(.56 * 2., 0., 0.)), vec3(.01, .04, 100000.)), .1);
@@ -288,7 +290,7 @@ vec2 twister(vec3 pos) {
 }
 
 float rotationAmount(float z) {
-    return sin(frame / 60.) + 5. * sin(1. - z / 10. + frame / 100. + .5 * cos(frame / 100. - z / 7.));
+    return sin((frame + FRAME_OFFSET) / 60.) + 5. * sin(1. - z / 10. + (frame + FRAME_OFFSET) / 100. + .5 * cos((frame + FRAME_OFFSET) / 100. - z / 7.));
 }
 
 vec3 twistPosition(vec3 pos) {
@@ -297,7 +299,7 @@ vec3 twistPosition(vec3 pos) {
 
 vec2 map(vec3 pos) {
 
-    pos.z += -10. + (frame - 5258.) / 20.;
+    pos.z += -10. + ((frame + FRAME_OFFSET) - 5258.) / 20.;
 
     pos -= vec3(0., 1.5, 0.);
     //pos = (rotationMatrix(vec3(0., 0., 1.), sin(frame / 60.) + 5. * sin(1. - pos.z / 10. + frame / 100. + .5 * cos(frame / 100. - pos.z / 7.))) * vec4(pos, 1.)).xyz;
@@ -390,7 +392,7 @@ vec3 render( in vec3 ro, in vec3 rd ) {
             col = pow(green, 1. / vec3(.4545));
         }
         if(m > 2.5) {
-            float z = pos.z + -10. + (frame - 5258.) / 20.;
+            float z = pos.z + -10. + ((frame + FRAME_OFFSET) - 5258.) / 20.;
             float amount = rotationAmount(z);
             vec2 normalizedPos = vec2(pos.x, pos.y - 1.5) / 0.3;
             normalizedPos -= vec2(-sin(amount) * 0.2, cos(amount) * 0.2) / 0.3;
@@ -453,7 +455,8 @@ mat3 setCamera( in vec3 ro, in vec3 ta, float cr )
 }
 
 void main() {
-    float time = 15.0 + frame / 1000. * 60.;
+    
+    float time = 15.0 + (frame + FRAME_OFFSET) / 1000. * 60.;
 
     
     vec3 tot = vec3(0.0);

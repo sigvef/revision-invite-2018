@@ -29,6 +29,8 @@
       }
       this.uniforms.snareThrob.value = this.snareThrob;
       this.uniforms.tDiffuse.value = this.inputs.twistertex.getValue();
+
+      demo.nm.nodes.bloom.opacity = easeOut(1, 0.2, (frame - FRAME_FOR_BEAN(2004)) / (FRAME_FOR_BEAN(2016 + 12) - FRAME_FOR_BEAN(2004)));
     }
 
     resize() {

@@ -96,7 +96,7 @@
         selectedScene = this.inputs._10_second_A_theme_2;
       } else if (BEAN < 48 * 38) {
         selectedScene = this.inputs._11_illuminati_confirmed;
-      } else if (BEAN < 48 * 42) {
+      } else if (BEAN < 48 * 42 - 12) {
         selectedScene = this.inputs._12_first_C_theme_1;
       } else if (BEAN < 48 * 46) {
         selectedScene = this.inputs._13_first_C_theme_2;
