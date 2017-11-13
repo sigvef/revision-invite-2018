@@ -82,6 +82,8 @@
       super.update(frame);
       this.frame = frame;
 
+      demo.nm.nodes.bloom.opacity = 0.2;
+
       for(let i = 0; i < this.crossers.length; i++) {
         const crosser = this.crossers[i];
         const scale = easeOut(0.00001, 1, (frame - FRAME_FOR_BEAN(1920 - 96) - i * 4) / 20);
