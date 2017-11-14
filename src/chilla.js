@@ -26,6 +26,8 @@
       this.scene.add(this.leftRail);
       this.scene.add(this.rightRail);
 
+      this.kickThrob = 0;
+
       this.train = new THREE.Object3D();
       this.scene.add(this.train);
 
@@ -122,6 +124,7 @@
       this.caboose.scale.set(scale, scale, scale);
       this.chimney.scale.set(scale, scale, scale);
 
+
       if(BEAN >= 1992) {
         const xOffset = 10 + (frame - FRAME_FOR_BEAN(1992)) / 50;
         const yOffset = 5 + (frame - FRAME_FOR_BEAN(1992)) / 50;
@@ -130,6 +133,25 @@
         this.camera.up = new THREE.Vector3(0, 0, 1);
         this.camera.lookAt(new THREE.Vector3(this.camera.position.x - 10 - xOffset, cameraY, 0));
       }
+
+      this.kickThrob *= 0.75;
+      if(BEAT && BEAN >= 1920) {
+        switch(BEAN % 96) { 
+        case 0:
+        case 42:
+        case 48:
+        case 48 + 9:
+        case 48 + 18:
+        case 48 + 24 + 6:
+        case 48 + 24 + 8:
+        case 48 + 24 + 10:
+          this.kickThrob = 1;
+        }
+      }
+
+      this.camera.rotation.x += this.kickThrob * (Math.random() - 0.5) * 0.05;
+      this.camera.rotation.y += this.kickThrob * (Math.random() - 0.5) * 0.05;
+      this.camera.rotation.z += this.kickThrob * (Math.random() - 0.5) * 0.05;
     }
 
     render(renderer) {

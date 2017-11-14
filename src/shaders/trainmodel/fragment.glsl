@@ -1,5 +1,6 @@
 uniform float frame;
 uniform float snareThrob;
+uniform float kickThrob;
 uniform sampler2D tDiffuse;
 
 # define FRAME_OFFSET 200.
@@ -264,12 +265,19 @@ vec2 train(vec3 pos) {
     res = smin(res, chimneyCone(rotated + vec3(0., 1.9, -1.4)), .15);
     res = max(res, -chimneyCone(rotated * 0.98 + vec3(0., 1.9, 0.98 * -1.4)));
 
+    /*
     float wheels = wheel(opRep(mirrored + vec3(0., -.35, 0.) + vec3(0., .15 - size / PI, 1.25), vec3(1.1, .0, size * 0.9)), size);
     wheels = max(wheels, sdBox(lifted + vec3(0., -.45, 0.), vec3(1.2, 100., 2.5)));
+    float gapsBetweenCars = sdBox(opRep(rotated + vec3(0., 0., 8.6), vec3(0., 0., 10.)), vec3(10., 10., .54));
+    wheels = max(wheels, -gapsBetweenCars);
     res = min(res, wheels);
+    */
+    return vec2(res, 2.);
+    /*
     vec2 final = opU(vec2(res, 2.), vec2(wheels, 1.));
 
     return final;
+    */
 }
 
 float tracks(vec3 pos) {
@@ -299,10 +307,12 @@ vec3 twistPosition(vec3 pos) {
 
 vec2 map(vec3 pos) {
 
+    pos = pos * (1. - kickThrob * 0.1);
+
     pos.z += -10. + ((frame + FRAME_OFFSET) - 5258.) / 20.;
 
     pos -= vec3(0., 1.5, 0.);
-    //pos = (rotationMatrix(vec3(0., 0., 1.), sin(frame / 60.) + 5. * sin(1. - pos.z / 10. + frame / 100. + .5 * cos(frame / 100. - pos.z / 7.))) * vec4(pos, 1.)).xyz;
+    pos = (rotationMatrix(vec3(0., 0., 1.), sin(frame / 60.) + 5. * sin(1. - pos.z / 10. + frame / 100. + .5 * cos(frame / 100. - pos.z / 7.))) * vec4(pos, 1.)).xyz;
     pos += vec3(0., 1.5, 0.);
 
     vec2 res = train(pos);
@@ -311,18 +321,17 @@ vec2 map(vec3 pos) {
     twistedPos -= vec3(0., 0.2, 0.);
     res = opU(res, twister(twistedPos));
 
-    res = opU(res, vec2(tracks(pos), 2.));
+    res = opU(res, vec2(tracks(pos), 1.));
     return res;
 }
 
 vec2 castRay( vec3 ro, vec3 rd ) {
-    float tmin = .1;
+    float tmin = 1.;
     float tmax = 200.0;
     
     float t = tmin;
     float m = -1.0;
-    for( int i=0; i<64; i++ )
-    {
+    for( int i=0; i<50; i++ ) {
         float precis = 0.0005*t;
         vec2 res = map( ro+rd*t );
         if( res.x<precis || t>tmax ) break;
@@ -374,7 +383,7 @@ vec3 render( in vec3 ro, in vec3 rd ) {
     vec3 black = vec3(55. / 255., 60. / 255., 63. / 255.);
     vec3 pink = vec3(255. /255., 73. / 255., 130. / 255.);
     vec3 white = vec3(.7);
-    vec3 col = black;
+    vec3 col = white;
     col = pow( col, 1. / vec3(0.4545) );
     vec2 res = castRay(ro,rd);
     float t = res.x;
@@ -402,9 +411,11 @@ vec3 render( in vec3 ro, in vec3 rd ) {
             uv.x = mod(1. - uv.x, 1.);
             col = pow(texture2D(tDiffuse, mod(uv, 1.)).rgb, 1. / vec3(.4545));
             col *= snareThrob;
-            emissive = step(0.02, col.g);
-        } else if(m < 1.5) {
+            emissive = step(0.02, col.r);
+        } else if(m > 1.5) {
             col = pow(white, 1./vec3(.4545));
+        } else if(m > .5) {
+            col = pow(black, 1./vec3(.4545));
         } else {
             col = pow(white, 1. / vec3(.4545));
         }
@@ -465,7 +476,8 @@ void main() {
 
     // camera   
     float cameraTime = 0.05 * time + 1.;
-    vec3 ro = 1.2 * vec3( -0.5+3.5*cos(cameraTime), 2.0, 0.5 + 4.0*sin(cameraTime) );
+    float dist = 1.2 + 2. * smoothstep(0., 1., clamp((frame - 5227.) / (5759. - 5227.), 0., 1.));
+    vec3 ro = dist * vec3( -0.5+3.5*cos(cameraTime), 2.0, 0.5 + 4.0*sin(cameraTime) );
     vec3 ta = vec3( -0.5, 0.8, 0.5 );
     // camera-to-world transformation
     mat3 ca = setCamera( ro, ta, 0.0 );
