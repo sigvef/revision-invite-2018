@@ -10,15 +10,18 @@
 
       const canvas = document.createElement('canvas');
       const ctx = canvas.getContext('2d');
-      canvas.width = 512 * 2 * 2;
-      canvas.height = 128 * 2;
-      ctx.fillStyle = 'rgb(255, 73, 130)';
+      canvas.width = 2048;
+      canvas.height = 1024;
+      ctx.fillStyle = '#00e04f';
       ctx.fillRect(0, 0, canvas.width, canvas.height);
       ctx.textAlign = 'center';
       ctx.textBaseline = 'middle';
       ctx.font = '130pt monospace';
       ctx.fillStyle = 'white';
       ctx.fillText('R E V I S i o N', canvas.width / 2, canvas.height / 2);
+      ctx.fillStyle = 'rgb(55, 60, 63)';
+      ctx.fillRect(0, 0, canvas.width, canvas.height / 16);
+      ctx.fillRect(0, canvas.height - canvas.height / 16, canvas.width, canvas.height / 16);
       this.revisionTexture = new THREE.CanvasTexture(canvas);
     }
 
