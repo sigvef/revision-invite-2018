@@ -170,6 +170,7 @@
     update(frame) {
       super.update(frame);
       this.frame = frame;
+      demo.nm.nodes.bloom.opacity = 0.1;
     }
 
     render() {

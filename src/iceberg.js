@@ -85,6 +85,8 @@
       this.camera.position.y = 200;
       this.camera.position.z = 500 * Math.cos(frame / 100);
       this.camera.lookAt(new THREE.Vector3(0, 0, 0));
+
+      demo.nm.nodes.bloom.opacity = 0.1;
     }
 
     resize() {
