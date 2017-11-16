@@ -227,6 +227,7 @@
     "id": "bouncyGeometry",
     "type": "bouncyGeometry"
   },
+  {
     "id": "dithering",
     "type": "ditheringNode",
     "options": {
