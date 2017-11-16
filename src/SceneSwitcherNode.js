@@ -32,7 +32,6 @@
           _25_final_A_theme_1: new NIN.TextureInput(),
           _26_complex_final_A_theme_outtro_1: new NIN.TextureInput(),
           _27_complex_final_A_theme_outtro_2: new NIN.TextureInput(),
-          _23_orthocube: new NIN.TextureInput(),
         },
         outputs: {
           render: new NIN.TextureOutput(),
@@ -69,7 +68,6 @@
       this.inputs._25_final_A_theme_1.enabled = false;
       this.inputs._26_complex_final_A_theme_outtro_1.enabled = false;
       this.inputs._27_complex_final_A_theme_outtro_2.enabled = false;
-      this.inputs._23_orthocube.enabled = false;
 
       let selectedScene;
       if (BEAN < 48 * 1) {
@@ -120,8 +118,7 @@
       } else if (BEAN < 48 * 80) {
         selectedScene = this.inputs._22_third_A_theme_2;
       } else if (BEAN < 48 * 84) {
-        //selectedScene = this.inputs._23_third_B_theme_1;
-        selectedScene = this.inputs._23_orthocube;
+        selectedScene = this.inputs._23_third_B_theme_1;
       } else if (BEAN < 48 * 88) {
         selectedScene = this.inputs._24_third_B_theme_2;
       } else if (BEAN < 48 * 92) {

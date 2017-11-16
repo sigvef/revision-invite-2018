@@ -28,7 +28,8 @@
       "_19_groovy_B_theme_1": "chromaTransition.render",
       "_21_third_A_theme_1": "text.render",
       "_22_third_A_theme_2": "barndoors.render",
-      "_23_orthocube": "OrthoCube.render"
+      "_23_third_B_theme_1": "OrthoCube.render",
+      "_24_third_B_theme_2": "patterns.render"
     }
   },
   {
@@ -240,5 +241,9 @@
   {
     "id": "predith",
     "type": "predith"
+  },
+  {
+    "id": "patterns",
+    "type": "patterns"
   }
 ]
