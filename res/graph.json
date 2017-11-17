@@ -25,11 +25,11 @@
       "_15_second_C_theme_2": "dithering.render",
       "_16_low_down_B_theme_1": "butterflies.render",
       "_18_low_down_B_theme_2": "metaballs.render",
-      "_19_groovy_B_theme_1": "chromaTransition.render",
-      "_21_third_A_theme_1": "text.render",
-      "_22_third_A_theme_2": "barndoors.render",
-      "_23_third_B_theme_1": "OrthoCube.render",
-      "_24_third_B_theme_2": "patterns.render"
+      "_19_groovy_B_theme": "chromaTransition.render",
+      "_20_A_theme_breakdown": "text.render",
+      "_21_third_B_theme_1": "barndoors.render",
+      "_22_third_B_theme_2": "OrthoCube.render",
+      "_23_final_A_theme_rolldown": "patterns.render"
     }
   },
   {
@@ -245,5 +245,9 @@
   {
     "id": "patterns",
     "type": "patterns"
+  },
+  {
+    "id": "triangalons",
+    "type": "triangalons"
   }
 ]
