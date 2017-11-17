@@ -22,16 +22,12 @@
           _16_low_down_B_theme_1: new NIN.TextureInput(),
           _17_low_down_B_theme_piano_snippet: new NIN.TextureInput(),
           _18_low_down_B_theme_2: new NIN.TextureInput(),
-          _19_groovy_B_theme_1: new NIN.TextureInput(),
-          //_20_groovy_B_theme_2: new NIN.TextureInput(),
-          // 19 and 20 currently merged and handled by transition node
-          _21_third_A_theme_1: new NIN.TextureInput(),
-          _22_third_A_theme_2: new NIN.TextureInput(),
-          _23_third_B_theme_1: new NIN.TextureInput(),
-          _24_third_B_theme_2: new NIN.TextureInput(),
-          _25_final_A_theme_1: new NIN.TextureInput(),
-          _26_complex_final_A_theme_outtro_1: new NIN.TextureInput(),
-          _27_complex_final_A_theme_outtro_2: new NIN.TextureInput(),
+          _19_groovy_B_theme: new NIN.TextureInput(),
+          _20_A_theme_breakdown: new NIN.TextureInput(),
+          _21_third_B_theme_1: new NIN.TextureInput(),
+          _22_third_B_theme_2: new NIN.TextureInput(),
+          _23_final_A_theme_rolldown: new NIN.TextureInput(),
+          _24_outro: new NIN.TextureInput(),
         },
         outputs: {
           render: new NIN.TextureOutput(),
@@ -59,15 +55,12 @@
       this.inputs._16_low_down_B_theme_1.enabled = false;
       this.inputs._17_low_down_B_theme_piano_snippet.enabled = false;
       this.inputs._18_low_down_B_theme_2.enabled = false;
-      this.inputs._19_groovy_B_theme_1.enabled = false;
-      //this.inputs._20_groovy_B_theme_2.enabled = false;
-      this.inputs._21_third_A_theme_1.enabled = false;
-      this.inputs._22_third_A_theme_2.enabled = false;
-      this.inputs._23_third_B_theme_1.enabled = false;
-      this.inputs._24_third_B_theme_2.enabled = false;
-      this.inputs._25_final_A_theme_1.enabled = false;
-      this.inputs._26_complex_final_A_theme_outtro_1.enabled = false;
-      this.inputs._27_complex_final_A_theme_outtro_2.enabled = false;
+      this.inputs._19_groovy_B_theme.enabled = false;
+      this.inputs._20_A_theme_breakdown.enabled = false;
+      this.inputs._21_third_B_theme_1.enabled = false;
+      this.inputs._22_third_B_theme_2.enabled = false;
+      this.inputs._23_final_A_theme_rolldown.enabled = false;
+      this.inputs._24_outro.enabled = false;
 
       let selectedScene;
       if (BEAN < 48 * 1) {
@@ -108,25 +101,18 @@
         selectedScene = this.inputs._17_low_down_B_theme_piano_snippet;
       } else if (BEAN < 48 * 62) {
         selectedScene = this.inputs._18_low_down_B_theme_2;
-      } else if (BEAN < 48 * 66) {
-        selectedScene = this.inputs._19_groovy_B_theme_1;
       } else if (BEAN < 48 * 70) {
-        selectedScene = this.inputs._19_groovy_B_theme_1;
-        //selectedScene = this.inputs._20_groovy_B_theme_2;
-      } else if (BEAN < 48 * 76) {
-        selectedScene = this.inputs._21_third_A_theme_1;
-      } else if (BEAN < 48 * 80) {
-        selectedScene = this.inputs._22_third_A_theme_2;
-      } else if (BEAN < 48 * 84) {
-        selectedScene = this.inputs._23_third_B_theme_1;
-      } else if (BEAN < 48 * 88) {
-        selectedScene = this.inputs._24_third_B_theme_2;
-      } else if (BEAN < 48 * 92) {
-        selectedScene = this.inputs._25_final_A_theme_1;
-      } else if (BEAN < 48 * 96) {
-        selectedScene = this.inputs._26_complex_final_A_theme_outtro_1;
+        selectedScene = this.inputs._19_groovy_B_theme;
+      } else if (BEAN < 48 * 76.5) {
+        selectedScene = this.inputs._20_A_theme_breakdown;
+      } else if (BEAN < 48 * 80.5) {
+        selectedScene = this.inputs._21_third_B_theme_1;
+      } else if (BEAN < 48 * 84.5) {
+        selectedScene = this.inputs._22_third_B_theme_2;
+      } else if (BEAN < 48 * 88.5) {
+        selectedScene = this.inputs._23_final_A_theme_rolldown;
       } else {
-        selectedScene = this.inputs._27_complex_final_A_theme_outtro_2;
+        selectedScene = this.inputs._24_outro;
       }
       selectedScene.enabled = true;
       this.outputs.render.setValue(selectedScene.getValue());
