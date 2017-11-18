@@ -4,6 +4,7 @@
       options.outputs = options.outputs || {};
       options.inputs = options.inputs || {};
       options.inputs.twistertex = new NIN.TextureInput();
+      options.inputs.camera = new NIN.Input();
       super(id, options);
       this.snareThrob = 0;
       this.kickThrob = 0;
@@ -23,9 +24,17 @@
       ctx.fillRect(0, 0, canvas.width, canvas.height / 16);
       ctx.fillRect(0, canvas.height - canvas.height / 16, canvas.width, canvas.height / 16);
       this.revisionTexture = new THREE.CanvasTexture(canvas);
+      this.uniforms.trainCameraPosition.value = new THREE.Vector3(0, 0, 0);
+      this.uniforms.trainCameraRotation.value = new THREE.Vector3(0, 0, 0);
     }
 
     update(frame) {
+      const camera = this.inputs.camera.getValue();
+      if(camera) {
+        this.uniforms.trainCameraPosition.value.copy(camera.position);
+        this.uniforms.trainCameraRotation.value.copy(camera.rotation);
+        this.quad.material.needsUpdate = true;
+      }
       this.uniforms.frame.value = frame;
       this.snareThrob *= 0.97;
       if(BEAT && BEAN % 48 == 24) {
@@ -35,7 +44,10 @@
       this.uniforms.tDiffuse.value = this.inputs.twistertex.getValue();
       this.uniforms.tDiffuse.value = this.revisionTexture;
 
-      demo.nm.nodes.bloom.opacity = easeOut(1.5, 0.5, (frame - FRAME_FOR_BEAN(2004)) / (FRAME_FOR_BEAN(2016 + 12) - FRAME_FOR_BEAN(2004)));
+      const twistAmount = smoothstep(0, 1, (frame - FRAME_FOR_BEAN(2028)) / (FRAME_FOR_BEAN(2040) - FRAME_FOR_BEAN(2028)));
+      this.uniforms.twistAmount.value = twistAmount;
+
+      demo.nm.nodes.bloom.opacity = easeOut(1.5, 0.5, (frame - FRAME_FOR_BEAN(2016)) / (FRAME_FOR_BEAN(2028) - FRAME_FOR_BEAN(2016)));
 
       this.kickThrob *= 0.95;
       if(BEAT && BEAN >= 1920) {

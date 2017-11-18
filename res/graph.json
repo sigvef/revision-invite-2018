@@ -111,7 +111,8 @@
       "shader": "trainmodel"
     },
     "connected": {
-      "twistertex": "letterbox.render"
+      "twistertex": "letterbox.render",
+      "camera": "traincam.camera"
     }
   },
   {
@@ -255,5 +256,9 @@
   {
     "id": "diamondillium",
     "type": "diamondillium"
+  },
+  {
+    "id": "traincam",
+    "type": "traincam"
   }
 ]
