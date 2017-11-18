@@ -10,6 +10,7 @@
     "id": "sceneSwitcherNode",
     "type": "SceneSwitcherNode",
     "connected": {
+      "_01_pre_intro_with_car_rev_sounds": "diamondillium.render",
       "_02_intro_1": "GridShader.render",
       "_03_intro_2": "toon.render",
       "_05_first_A_theme_1": "RevisionFezLogo.render",
@@ -250,5 +251,9 @@
   {
     "id": "triangalons",
     "type": "triangalons"
+  },
+  {
+    "id": "diamondillium",
+    "type": "diamondillium"
   }
 ]
