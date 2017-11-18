@@ -1,6 +1,9 @@
 uniform float frame;
 uniform float snareThrob;
 uniform float kickThrob;
+uniform float twistAmount;
+uniform vec3 trainCameraPosition;
+uniform vec3 trainCameraRotation;
 uniform sampler2D tDiffuse;
 
 # define FRAME_OFFSET 200.
@@ -298,7 +301,7 @@ vec2 twister(vec3 pos) {
 }
 
 float rotationAmount(float z) {
-    return sin((frame + FRAME_OFFSET) / 60.) + 5. * sin(1. - z / 10. + (frame + FRAME_OFFSET) / 100. + .5 * cos((frame + FRAME_OFFSET) / 100. - z / 7.));
+    return twistAmount * (sin((frame + FRAME_OFFSET) / 60.) + 5. * sin(1. - z / 10. + (frame + FRAME_OFFSET) / 100. + .5 * cos((frame + FRAME_OFFSET) / 100. - z / 7.)));
 }
 
 vec3 twistPosition(vec3 pos) {
@@ -312,7 +315,7 @@ vec2 map(vec3 pos) {
     pos.z += -10. + ((frame + FRAME_OFFSET) - 5258.) / 20.;
 
     pos -= vec3(0., 1.5, 0.);
-    pos = (rotationMatrix(vec3(0., 0., 1.), sin(frame / 60.) + 5. * sin(1. - pos.z / 10. + frame / 100. + .5 * cos(frame / 100. - pos.z / 7.))) * vec4(pos, 1.)).xyz;
+    pos = (rotationMatrix(vec3(0., 0., 1.), twistAmount * (sin(frame / 60.) + 5. * sin(1. - pos.z / 10. + frame / 100. + .5 * cos(frame / 100. - pos.z / 7.)))) * vec4(pos, 1.)).xyz;
     pos += vec3(0., 1.5, 0.);
 
     vec2 res = train(pos);
@@ -480,7 +483,8 @@ void main() {
     vec3 ro = dist * vec3( -0.5+3.5*cos(cameraTime), 2.0, 0.5 + 4.0*sin(cameraTime) );
     vec3 ta = vec3( -0.5, 0.8, 0.5 );
     // camera-to-world transformation
-    mat3 ca = setCamera( ro, ta, 0.0 );
+    ro = trainCameraPosition;
+    mat3 ca = setCamera(ro, ta, 0.0 );
     // ray direction
     vec3 rd = ca * normalize( vec3(p.xy,2.0) );
 

@@ -84,8 +84,6 @@
       super.update(frame);
       this.frame = frame;
 
-      demo.nm.nodes.bloom.opacity = 0.2;
-
       for(let i = 0; i < this.crossers.length; i++) {
         const crosser = this.crossers[i];
         const scale = easeOut(0.00001, 1, (frame - FRAME_FOR_BEAN(1920 - 96) - i * 4) / 20);
@@ -125,6 +123,7 @@
       this.chimney.scale.set(scale, scale, scale);
 
 
+
       if(BEAN >= 1992) {
         const xOffset = 10 + (frame - FRAME_FOR_BEAN(1992)) / 50;
         const yOffset = 5 + (frame - FRAME_FOR_BEAN(1992)) / 50;
@@ -149,13 +148,20 @@
         }
       }
 
+      this.whiteoutAmount = (frame - 4757) / 80;
+      demo.nm.nodes.bloom.opacity = easeOut(10, 0.1 + this.kickThrob, this.whiteoutAmount * 2);
+
       this.camera.rotation.x += this.kickThrob * (Math.random() - 0.5) * 0.05;
       this.camera.rotation.y += this.kickThrob * (Math.random() - 0.5) * 0.05;
       this.camera.rotation.z += this.kickThrob * (Math.random() - 0.5) * 0.05;
     }
 
     render(renderer) {
-      renderer.setClearColor(0x00e04f);
+      const clearColor = new THREE.Color(
+          easeOut(1, 0, this.whiteoutAmount),
+          easeOut(1, 0xe0 / 255, this.whiteoutAmount),
+          easeOut(1, 0x4f / 255, this.whiteoutAmount));
+      renderer.setClearColor(clearColor.getHex());
       return super.render(renderer);
     }
   }
