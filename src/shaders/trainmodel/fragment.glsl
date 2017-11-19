@@ -208,9 +208,12 @@ float wheel(vec3 pos, float size) {
     return res;
 }
 
-float cabin(vec3 pos) {
+float cabin(vec3 pos, bool far) {
 
     float cabinLength = 100.;
+    if(!far) {
+        cabinLength = 1.;
+    }
 
     float roof = sdBox(pos + vec3(0., 0.75 - cabinLength, 0.), vec3(1., cabinLength + 0.1, 1.1));
     roof = max(roof, sdCylinder(pos - vec3(0., 0., 1.25), vec2(2., cabinLength)));
@@ -219,6 +222,10 @@ float cabin(vec3 pos) {
     float res = sdBox(pos + vec3(0., 0.75 - cabinLength, 0.), vec3(0.95, cabinLength, 1.));
     res = max(res, sdCylinder(pos - vec3(0., 0., 1.25), vec2(2., cabinLength)));
     res = min(res, roof);
+
+    if(!far) {
+        return res;
+    }
 
     float gapsBetweenCars = sdBox(opRep(pos + vec3(0., 3.75, 0.), vec3(0., 10., 0.)), vec3(10., .3, 10.));
     res = max(res, -gapsBetweenCars);
@@ -262,7 +269,9 @@ vec2 train(vec3 pos) {
     vec3 mirrored = pos;
     mirrored.x = -abs(mirrored.x);
 
-    res = smin(res, cabin(lifted + vec3(0., -2.2, .3)), .01);
+    res = min(res, cabin(lifted + vec3(0., -2.2, .3), true));
+
+    res = smin(res, cabin(lifted + vec3(0., -2.2, .3), false), .01);
 
     rotated = (rotationMatrix(vec3(1., 0., 0.), PI / 2.) * vec4(rotated, 1.)).xyz;
     res = smin(res, chimneyCone(rotated + vec3(0., 1.9, -1.4)), .15);
@@ -296,7 +305,7 @@ float tracks(vec3 pos) {
 vec2 twister(vec3 pos) {
     float size = 0.3 + 0.2 * snareThrob;
     float res = sdBox(pos, vec3(size, size, 100.));
-    res = max(res, sdBox(pos + vec3(0., 0., -100.), vec3(size, size, 100.)));
+    res = max(res, sdBox(pos + vec3(0., 0., -105.), vec3(size, size, 100.)));
     return vec2(res, 3.);
 }
 
