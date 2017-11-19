@@ -5,6 +5,8 @@ uniform sampler2D tDiffuse;
 
 varying vec2 vUv;
 
+#define PI 3.141592653589793238462643383279
+
 // primitives
 
 float sdPlane(vec3 p) {
@@ -59,18 +61,17 @@ vec2 map(in vec3 pos) {
                            )
                    , 66.0)
                    );
-    res = opU(res,
-              vec2(sdTriPrism(pos-vec3(.0, 1.25, .8), vec2(.5, .1)), 88.0)
-              );
-    res = opU(res,
-              vec2(sdTriPrism(pos-vec3(1., 1.25, .0), vec2(.5, .1)), 88.0)
-              );
-    res = opU(res,
-              vec2(sdTriPrism(pos-vec3(-1., 1.25, .0), vec2(.5, .1)), 88.0)
-              );
-    res = opU(res,
-              vec2(sdTriPrism(pos-vec3(.0, 1.25, -.8), vec2(.5, .1)), 88.0)
-              );
+    // bumps on crown
+    int numOfBumps = 8;
+    for(int i = 0; i < 8; ++i) {
+        res = opU(res,
+                  vec2(sdTriPrism(pos-vec3((sin(float(i) / float(numOfBumps)*2.0*PI)),
+                                           1.25,
+                                           cos(float(i) / float(numOfBumps)*2.0*PI)),
+                                  vec2(.5, .1)),
+                      88.0)
+                  );
+    }
     // crown end
 
     return res;
