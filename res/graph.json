@@ -238,7 +238,7 @@
       "shader": "dithering"
     },
     "connected": {
-      "tDiffuse": "predith.render"
+      "tDiffuse": "pyramids.render"
     }
   },
   {
