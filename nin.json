@@ -1,7 +1,8 @@
 {
   "title": "My project",
   "authors": [
-    "capitalism"
+    "capitalism",
+    "sigvef"
   ],
   "description": "This is my project",
   "previewImage": "https://raw.githubusercontent.com/ninjadev/nin/master/nin/frontend/app/images/nin-dark.png",
