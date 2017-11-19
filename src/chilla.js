@@ -21,7 +21,7 @@
       this.rightRail.material.uniforms.g.value = 60 / 255;
       this.rightRail.material.uniforms.b.value = 63 / 255;
       this.leftRail.material.uniforms.r.value = 55 / 255;
-      this.leftRail.material.uniforms.g.value = 50 / 255;
+      this.leftRail.material.uniforms.g.value = 60 / 255;
       this.leftRail.material.uniforms.b.value = 63 / 255;
       this.scene.add(this.leftRail);
       this.scene.add(this.rightRail);
