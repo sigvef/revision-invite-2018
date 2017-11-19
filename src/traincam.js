@@ -34,19 +34,20 @@
           this.camera.position.x = 2;
         }
       }
-      if(frame > FRAME_FOR_BEAN(2112)) {
-        const distance = easeIn(4, 16, (frame - FRAME_FOR_BEAN(2160)) / (FRAME_FOR_BEAN(2208) - FRAME_FOR_BEAN(2160)));
-        this.camera.position.z = 0;
-        this.camera.position.y = distance;
-        this.camera.position.x = distance;
+      if(frame >= FRAME_FOR_BEAN(2112)) {
+        const t = (frame - FRAME_FOR_BEAN(2136)) / (FRAME_FOR_BEAN(2160) - FRAME_FOR_BEAN(2136));
+        this.camera.position.z = smoothstep(-0.8, -5, t);
+        this.camera.position.y = smoothstep(4, 1.9, t);
+        this.camera.position.x = smoothstep(4, .75, t);
+
+        const newT = (frame - FRAME_FOR_BEAN(2160)) / (FRAME_FOR_BEAN(2208) - FRAME_FOR_BEAN(2160));
+        this.camera.position.z = easeIn(this.camera.position.z, .6, newT);
+        this.camera.position.y = easeIn(this.camera.position.y, 2.2, newT);
+        this.camera.position.x = easeIn(this.camera.position.x, .25, newT);
       }
 
       this.outputs.camera.value = this.camera;
 
-    }
-
-    resize() {
-      this.renderTarget.setSize(16 * GU, 9 * GU);
     }
   }
 
