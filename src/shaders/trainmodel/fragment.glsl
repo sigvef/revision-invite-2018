@@ -5,6 +5,7 @@ uniform float twistAmount;
 uniform vec3 trainCameraPosition;
 uniform vec3 trainCameraRotation;
 uniform sampler2D tDiffuse;
+uniform sampler2D overlay;
 
 # define FRAME_OFFSET 200.
 
@@ -471,6 +472,12 @@ void main() {
     vec2 p = (vUv - 0.5) * 2.;
     p.x = p.x / 9. * 16.;
 
+    vec4 overlayColor = texture2D(overlay, vUv);
+    if(overlayColor.a > 0.9) {
+        gl_FragColor = vec4(overlayColor.rgb, 1.);
+        return;
+    }
+
     // camera   
     float cameraTime = 0.05 * time + 1.;
     float dist = 1.2 + 2. * smoothstep(0., 1., clamp((frame - 5227.) / (5759. - 5227.), 0., 1.));
@@ -490,5 +497,5 @@ void main() {
 
     tot += col;
 
-    gl_FragColor = vec4( tot, 1.0 );
+    gl_FragColor = vec4(mix(tot, overlayColor.rgb, vec3(overlayColor.a)), 1.0);
 }

@@ -112,7 +112,8 @@
     },
     "connected": {
       "twistertex": "letterbox.render",
-      "camera": "traincam.camera"
+      "camera": "traincam.camera",
+      "overlay": "trainoverlay.render"
     }
   },
   {
@@ -260,5 +261,9 @@
   {
     "id": "traincam",
     "type": "traincam"
+  },
+  {
+    "id": "trainoverlay",
+    "type": "trainoverlay"
   }
 ]
