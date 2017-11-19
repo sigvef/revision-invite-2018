@@ -5,6 +5,7 @@
       options.inputs = options.inputs || {};
       options.inputs.twistertex = new NIN.TextureInput();
       options.inputs.camera = new NIN.Input();
+      options.inputs.overlay = new NIN.TextureInput();
       super(id, options);
       this.snareThrob = 0;
       this.kickThrob = 0;
@@ -65,6 +66,7 @@
         }
       }
       this.uniforms.kickThrob.value = this.kickThrob;
+      this.uniforms.overlay.value = this.inputs.overlay.getValue();
     }
 
     resize() {
