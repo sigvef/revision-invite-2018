@@ -4,7 +4,7 @@
     "t": { "type": "f", "value": 0.0 },
     "divisions": { "type": "f", "value": 3.0},
     "radiusMultiplier": { "type": "f", "value": 0.0},
-    "foregroundColor": { "type": "v4", "value": null },
-    "backgroundColor": { "type": "v4", "value": null },
+    "foregroundColor": { "type": "v3", "value": null },
+    "backgroundColor": { "type": "v3", "value": null },
     "origo": { "type": "v2", "value": null }
 }
