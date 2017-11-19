@@ -17,7 +17,7 @@
         clipBias: 0.003,
         textureWidth: 16 * GU,
         textureHeight: 16 * GU,
-        color: 0x232323,
+        color: 'rgb(55, 60, 63)',
       });
       const planeGeo = new THREE.PlaneBufferGeometry(50, 50);
       const mirrorMesh = new THREE.Mesh(planeGeo, this.groundMirror.material);
@@ -47,7 +47,7 @@
           z: 5,
           radius: 1,
           height: 1,
-          color: new THREE.Color('purple'),
+          color: new THREE.Color('#00e04f'),
           bean: 24,
         }
       ];
@@ -68,7 +68,7 @@
       super.update(frame);
 
       const startBEAN = 46 * 12 * 4;
-      const t = (frame - FRAME_FOR_BEAN(startBEAN)) / (FRAME_FOR_BEAN(50 * 12 * 4) - FRAME_FOR_BEAN(startBEAN));
+      const t = (frame - FRAME_FOR_BEAN(startBEAN)) / (FRAME_FOR_BEAN(54 * 12 * 4) - FRAME_FOR_BEAN(startBEAN));
 
       for (const [index, pyramid] of this.pyramids.entries()) {
         if (BEAN >= startBEAN + pyramid.bean) {
@@ -91,7 +91,8 @@
     }
 
     render(renderer) {
-      renderer.setClearColor(0x000000, 1);
+      const clearColor = new THREE.Color(55 / 255, 60 / 255, 63 / 255);
+      renderer.setClearColor(clearColor, 1);
       this.groundMirror.render();
       super.render(renderer);
     }
