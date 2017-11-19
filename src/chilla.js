@@ -125,16 +125,18 @@
 
 
       if(BEAN >= 1992) {
-        const xOffset = 10 + (frame - FRAME_FOR_BEAN(1992)) / 50;
-        const yOffset = 5 + (frame - FRAME_FOR_BEAN(1992)) / 50;
+        const xOffset = 12 + (frame - FRAME_FOR_BEAN(1992)) / 50;
+        const yOffset = 9.2 + (frame - FRAME_FOR_BEAN(1992)) / 50;
+        const zOffset = -.5 + (frame - FRAME_FOR_BEAN(1992)) / 50;
         this.camera.position.x += xOffset;
         this.camera.position.y += yOffset;
+        this.camera.position.z -= zOffset;
         this.camera.up = new THREE.Vector3(0, 0, 1);
-        this.camera.lookAt(new THREE.Vector3(this.camera.position.x - 10 - xOffset, cameraY, 0));
+        this.camera.lookAt(new THREE.Vector3(this.camera.position.x - 5 - xOffset, cameraY - yOffset / 2, 0));
       }
 
       this.kickThrob *= 0.75;
-      if(BEAT && BEAN >= 1920) {
+      if(BEAT && BEAN >= 1824) {
         switch(BEAN % 96) { 
         case 0:
         case 42:

@@ -9,6 +9,7 @@
 
       this.camera = new THREE.PerspectiveCamera(25, 16/9, 1, 100000);
       this.outputs.camera.value = this.camera;
+      this.kickThrob = 0;
     }
 
     update(frame) {
@@ -18,6 +19,21 @@
       this.camera.rotation.x = 0;
       this.camera.rotation.y = 0;
       this.camera.rotation.z = 0;
+
+      this.kickThrob *= 0.75;
+      if(BEAT && BEAN >= 1920) {
+        switch(BEAN % 96) { 
+        case 0:
+        case 42:
+        case 48:
+        case 48 + 9:
+        case 48 + 18:
+        case 48 + 24 + 6:
+        case 48 + 24 + 8:
+        case 48 + 24 + 10:
+          this.kickThrob = 1;
+        }
+      }
 
       if(frame >= FRAME_FOR_BEAN(2064 -2) && frame < FRAME_FOR_BEAN(2112)) {
         if(frame >= FRAME_FOR_BEAN(2064 + 10)) {
@@ -45,6 +61,10 @@
         this.camera.position.y = easeIn(this.camera.position.y, 2.2, newT);
         this.camera.position.x = easeIn(this.camera.position.x, .25, newT);
       }
+
+      this.camera.position.x += this.kickThrob * (Math.random() - 0.5) * 0.2;
+      this.camera.position.y += this.kickThrob * (Math.random() - 0.5) * 0.2;
+      this.camera.position.z += this.kickThrob * (Math.random() - 0.5) * 0.2;
 
       this.outputs.camera.value = this.camera;
 
