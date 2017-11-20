@@ -18,7 +18,7 @@
       "_07_first_B_theme_1": "Metatron.render",
       "_08_first_B_theme_2": "lulle.render",
       "_09_second_A_theme_1": "GodsOrKings.render",
-      "_10_second_A_theme_2": "logotransition.render",
+      "_10_second_A_theme_2": "ewerk.render",
       "_11_illuminati_confirmed": "logotransition.render",
       "_12_first_C_theme_1": "letterbox.render",
       "_13_first_C_theme_2": "trainmodel.render",
@@ -265,5 +265,12 @@
   {
     "id": "trainoverlay",
     "type": "trainoverlay"
+  },
+  {
+    "id": "ewerk",
+    "type": "ewerk",
+    "options": {
+      "shader": "map"
+    }
   }
 ]
