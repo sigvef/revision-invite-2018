@@ -31,7 +31,8 @@
       "_21_third_B_theme_1": "barndoors.render",
       "_22_third_B_theme_2": "OrthoCube.render",
       "_23_final_A_theme_rolldown": "patterns.render",
-      "_24_outro": "triangalons.render"
+      "_24_outro": "triangalons.render",
+      "_25_outro_2": "bowties.render"
     }
   },
   {
@@ -272,5 +273,9 @@
     "options": {
       "shader": "map"
     }
+  },
+  {
+    "id": "bowties",
+    "type": "bowties"
   }
 ]
