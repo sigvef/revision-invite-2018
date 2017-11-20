@@ -206,24 +206,38 @@
               height: 4.5,
             },
             {
-              bean: 79,
+              bean: 57,
               x: 10.67,
               y: 0,
               width: 5.33,
               height: 4.5,
             },
             {
+              bean: 70,
+              x: 10.67,
+              y: 4.5,
+              width: 5.33,
+              height: 4.5,
+            },
+            {
+              bean: 79,
+              x: 5.33,
+              y: 4.5,
+              width: 5.34,
+              height: 4.5,
+            },
+            {
               bean: 94,
-              x: 12,
-              y: 0,
+              x: 4,
+              y: 4.5,
               width: 4,
               height: 4.5,
-            }
+            },
           ],
         },
         {
           letter: 'S',
-          bg: 'rgb(25, 1, 25)',
+          bg: 'purple',
           script: [
             {
               bean: 33,
@@ -250,7 +264,7 @@
               bean: 70,
               x: 0,
               y: 4.5,
-              width: 8,
+              width: 10.67,
               height: 4.5,
             },
             {
@@ -274,40 +288,33 @@
           bg: 'purple',
           script: [
             {
-              bean: 48,
-              x: 16,
-              y: 4.5,
-              width: 0,
-              height: 4.5,
-            },
-            {
               bean: 57,
               x: 10.67,
-              y: 4.5,
+              y: 0,
+              width: 5.33,
+              height: 0,
+            },
+            {
+              bean: 70,
+              x: 10.67,
+              y: 0,
               width: 5.33,
               height: 4.5,
             },
             {
-              bean: 70,
-              x: 8,
-              y: 4.5,
-              width: 8,
-              height: 4.5,
-            },
-            {
               bean: 79,
-              x: 5.33,
-              y: 4.5,
-              width: 5.34,
+              x: 10.67,
+              y: 0,
+              width: 5.33,
               height: 4.5,
             },
             {
               bean: 94,
-              x: 4,
-              y: 4.5,
+              x: 12,
+              y: 0,
               width: 4,
               height: 4.5,
-            },
+            }
           ],
         },
         {
