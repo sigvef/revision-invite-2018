@@ -27,6 +27,11 @@
 
     render() {
 
+      const startScale = easeOut(
+          0.000001, 1,
+          (this.frame - FRAME_FOR_BEAN(3720)) /
+          (FRAME_FOR_BEAN(3720 + 12) - FRAME_FOR_BEAN(3720)));
+
       this.ctx.fillStyle = '#0f933e';
       this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
       this.ctx.save();
@@ -46,7 +51,8 @@
           const rotation =  2 * (innerRotation +
             1 * Math.sin(innerRotation)) / 4;
           this.ctx.rotate(rotation);
-          const scale = 0.75 + 0.25 * Math.sin(rotation);
+          let scale = 0.75 + 0.25 * Math.sin(rotation);
+          scale *= startScale;
           this.ctx.scale(scale, scale);
           this.ctx.beginPath();
           this.ctx.moveTo(-side / 2, -radius);
