@@ -9,10 +9,12 @@
     }
 
     update(frame) {
-      const startFrame = FRAME_FOR_BEAN(79 * 12 * 4);
-      const endFrame = FRAME_FOR_BEAN(80 * 12 * 4);
+      const startBean = 81 * 12 * 4;
+      const endBean = 81 * 12 * 4 + 24;
+      const startFrame = FRAME_FOR_BEAN(startBean);
+      const endFrame = FRAME_FOR_BEAN(endBean);
       const t = (frame - startFrame) / (endFrame - startFrame);
-      this.uniforms.openAmount.value = lerp(1, 0, t);
+      this.uniforms.openAmount.value = easeIn(1, 0, t);
       this.uniforms.A.value = this.inputs.A.getValue();
       this.uniforms.B.value = this.inputs.B.getValue();
     }

@@ -28,9 +28,12 @@
       "_18_low_down_B_theme_2": "metaballs.render",
       "_19_groovy_B_theme": "chromaTransition.render",
       "_20_A_theme_breakdown": "text.render",
-      "_21_third_B_theme_1": "barndoors.render",
-      "_22_third_B_theme_2": "OrthoCube.render",
-      "_23_final_A_theme_rolldown": "patterns.render",
+      "_21_third_B_theme_1": "patterns.render",
+      "_22_third_B_theme_2": "triangalons.render",
+      "_22_third_B_theme_3": "bowties.render",
+      "_22_third_B_theme_4": "barndoors.render",
+      "_22_third_B_theme_5": "OrthoCube.render",
+      "_23_final_A_theme_rolldown": "OrthoCube.render",
       "_24_outro": "triangalons.render",
       "_25_outro_2": "bowties.render"
     }

@@ -26,6 +26,9 @@
           _20_A_theme_breakdown: new NIN.TextureInput(),
           _21_third_B_theme_1: new NIN.TextureInput(),
           _22_third_B_theme_2: new NIN.TextureInput(),
+          _22_third_B_theme_3: new NIN.TextureInput(),
+          _22_third_B_theme_4: new NIN.TextureInput(),
+          _22_third_B_theme_5: new NIN.TextureInput(),
           _23_final_A_theme_rolldown: new NIN.TextureInput(),
           _24_outro: new NIN.TextureInput(),
           _25_outro_2: new NIN.TextureInput(),
@@ -60,8 +63,12 @@
       this.inputs._20_A_theme_breakdown.enabled = false;
       this.inputs._21_third_B_theme_1.enabled = false;
       this.inputs._22_third_B_theme_2.enabled = false;
+      this.inputs._22_third_B_theme_3.enabled = false;
+      this.inputs._22_third_B_theme_4.enabled = false;
+      this.inputs._22_third_B_theme_5.enabled = false;
       this.inputs._23_final_A_theme_rolldown.enabled = false;
       this.inputs._24_outro.enabled = false;
+      this.inputs._25_outro_2.enabled = false;
 
       let selectedScene;
       if (BEAN < 48 * 1) {
@@ -106,10 +113,16 @@
         selectedScene = this.inputs._19_groovy_B_theme;
       } else if (BEAN < 48 * 76.5) {
         selectedScene = this.inputs._20_A_theme_breakdown;
-      } else if (BEAN < 48 * 80.5) {
+      } else if (BEAN < 48 * 78.5) {
         selectedScene = this.inputs._21_third_B_theme_1;
-      } else if (BEAN < 48 * 84.5) {
+      } else if (BEAN < 48 * 79.5) {
         selectedScene = this.inputs._22_third_B_theme_2;
+      } else if (BEAN < 48 * 80.5) {
+        selectedScene = this.inputs._22_third_B_theme_3;
+      } else if (BEAN < 48 * 81.5) {
+        selectedScene = this.inputs._22_third_B_theme_4;
+      } else if (BEAN < 48 * 84.5) {
+        selectedScene = this.inputs._22_third_B_theme_5;
       } else if (BEAN < 48 * 88.5) {
         selectedScene = this.inputs._23_final_A_theme_rolldown;
       } else if (BEAN < 48 * 90.5 - 6) {

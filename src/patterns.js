@@ -12,6 +12,8 @@
 
       this.circlePannerCanvas = document.createElement('canvas');
       this.circlePannerCtx = this.circlePannerCanvas.getContext('2d');
+      this.spikeballAmount = 0;
+      this.spikeballDirection = -1;
 
       this.canvas = document.createElement('canvas');
       this.ctx = this.canvas.getContext('2d');
@@ -41,6 +43,23 @@
 
       this.scopes[1].x = 6 + 6 * Math.sin(Math.PI + frame / 50);
       this.scopes[1].y = 6 + 3 * Math.cos(Math.PI + frame / 60);
+
+      this.spikeballAmount *= 0.75;
+
+      if(BEAT && BEAN == 3672) {
+        this.spikeballAmount = 0;
+        this.spikeballDirection = -1;
+      }
+
+      if(BEAT) {
+        switch(BEAN % 24) {
+        case 6:
+        case 9:
+        case 18:
+          this.spikeballDirection = -this.spikeballDirection;
+          this.spikeballAmount = 1;
+        }
+      }
     }
 
     resize() {
@@ -62,10 +81,9 @@
       ctx.beginPath();
       ctx.moveTo(0, 0);
       ctx.fillStyle = '#00e04f';
-      let amount = Math.sin(this.frame * Math.PI * 2 / 60 / 60 * 115 / 2);
-      let sign = Math.sign(amount);
-      amount = Math.pow(amount, 8);
-      amount *= sign;
+      const amount = this.spikeballDirection > 0
+                   ? (this.spikeballAmount - 0.5) * 2
+                   : (0.5 - this.spikeballAmount) * 2;
       for(let j = 0; j < 20; j++) {
         for(let i = 0; i < 17; i++) {
           ctx.lineTo(j % 2 ? i : 16 - i,
@@ -81,15 +99,32 @@
       ctx.strokeStyle = 'rgb(55, 60, 63)';
       ctx.stroke();
 
+      const scaler = this.zoomer(ctx);
       ctx.globalCompositeOperation = 'destination-in';
       ctx.beginPath();
-      ctx.moveTo(12 + 1.5, 5);
+      let i = 0;
+      const zoomX = 11.9;
+      const zoomY = 7.8;
+      const startBean = 3672 + 12;
+      const beanLength = 12 * 3;
+      this.scopes[1].r = easeIn(2, 10,
+          (this.frame - FRAME_FOR_BEAN(startBean + 24)) /
+          (FRAME_FOR_BEAN(startBean + 24 + 24) - FRAME_FOR_BEAN(startBean + 24)));
       for(let scope of this.scopes) {
-        ctx.moveTo(scope.x + scope.r, scope.y);
-        ctx.arc(scope.x, scope.y, scope.r, 0, Math.PI * 2);
+        const beanOffset = i * 3;
+        const scopeScale = elasticOut(0.000001, 1, 0.95,
+            (this.frame - FRAME_FOR_BEAN(3672 + beanOffset)) /
+            (FRAME_FOR_BEAN(3672 + 24 + beanOffset) - FRAME_FOR_BEAN(3672 + beanOffset)));
+        i++;
+        ctx.save();
+        ctx.translate(scope.x, scope.y);
+        ctx.scale(scopeScale, scopeScale);
+        ctx.moveTo(0 + scope.r, 0);
+        ctx.arc(0, 0, scope.r, 0, Math.PI * 2);
+        ctx.restore();
       }
       ctx.fill();
-      ctx.lineWidth = 0.1;
+      ctx.lineWidth = 0.1 / scaler;
       ctx.strokeStyle = 'white';
       ctx.globalCompositeOperation = 'source-over';
       ctx.stroke();
@@ -102,11 +137,12 @@
       const ctx = this.circlePannerCtx;
       ctx.save();
       ctx.scale(GU, GU);
+      const scaler = this.zoomer(ctx);
       ctx.fillStyle = '#85062e';
       ctx.strokeStyle = 'white';
-      ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
       ctx.fillStyle = 'rgb(255, 73, 130)';
-      ctx.lineWidth = 0.1;
+      ctx.lineWidth = 0.1 / scaler;
       const radius = 0.25 + this.throb * 0.25;
       for(let i = -2; i < 20; i++) {
         for(let j = -2; j < 20; j++) {
@@ -122,6 +158,21 @@
         }
       }
       ctx.restore();
+    }
+
+    zoomer(ctx) {
+      const zoomX = 11.9;
+      const zoomY = 7.8;
+      const startBean = 3672 + 12;
+      const beanLength = 12 * 3;
+      let scaler = Math.log10(easeIn(10, 100,
+          (this.frame - FRAME_FOR_BEAN(startBean)) /
+          (FRAME_FOR_BEAN(startBean + beanLength) - FRAME_FOR_BEAN(startBean))));
+    
+      ctx.translate(zoomX, zoomY);
+      ctx.scale(scaler, scaler);
+      ctx.translate(-zoomX, -zoomY);
+      return scaler;
     }
 
     render() {
