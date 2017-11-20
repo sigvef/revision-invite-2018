@@ -28,6 +28,7 @@
           _22_third_B_theme_2: new NIN.TextureInput(),
           _23_final_A_theme_rolldown: new NIN.TextureInput(),
           _24_outro: new NIN.TextureInput(),
+          _25_outro_2: new NIN.TextureInput(),
         },
         outputs: {
           render: new NIN.TextureOutput(),
@@ -111,8 +112,10 @@
         selectedScene = this.inputs._22_third_B_theme_2;
       } else if (BEAN < 48 * 88.5) {
         selectedScene = this.inputs._23_final_A_theme_rolldown;
-      } else {
+      } else if (BEAN < 48 * 90.5 - 6) {
         selectedScene = this.inputs._24_outro;
+      } else {
+        selectedScene = this.inputs._25_outro_2;
       }
       selectedScene.enabled = true;
       this.outputs.render.setValue(selectedScene.getValue());
