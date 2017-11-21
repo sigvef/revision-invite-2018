@@ -62,6 +62,30 @@
         this.scene.add(pyramidMesh);
         this.pyramidMeshes.push(pyramidMesh);
       }
+
+      this.lasers = [];
+      for (const pyramid of this.pyramids) {
+        const laserBeam = new global.Laser();
+        this.scene.add(laserBeam.object3d);
+        const object3d = laserBeam.object3d;
+        object3d.position.x = pyramid.x;
+        object3d.position.y = 11;
+        object3d.position.z = pyramid.z;
+        object3d.rotation.z = -Math.PI / 2;
+        this.lasers.push(laserBeam);
+      }
+
+      this.rings = [];
+      for (const pyramid of this.pyramids) {
+        const ring = new THREE.Mesh(
+            new THREE.TorusGeometry(pyramid.radius, .1, 4, 4),
+            new THREE.MeshStandardMaterial({color: 0xffffff})
+        );
+        ring.position.set(pyramid.x, 0, pyramid.z);
+        ring.rotation.x = -Math.PI/2;
+        this.rings.push(ring);
+        this.scene.add(ring);
+      }
     }
 
     update(frame) {
@@ -76,8 +100,18 @@
           const scale = elasticOut(0.0001, 1, 1.0, localT);
           this.pyramidMeshes[index].scale.set(scale, scale, scale);
           this.pyramidMeshes[index].position.y = elasticOut(0, .5, 1.0, localT);
+
+          const size = lerp(lerp(0, 1, localT * 2),
+                            0,
+                            localT * 2 - 1);
+          this.rings[index].scale.set(size, size, size);
+          this.rings[index].position.y = lerp(0, 1, localT * 2- .9);
+
+          this.lasers[index].update(localT - 1);
         } else {
           this.pyramidMeshes[index].scale.set(0, 0, 0);
+          this.rings[index].scale.set(0, 0, 0);
+          this.lasers[index].update(0);
         }
       }
 
@@ -88,6 +122,7 @@
       );
       this.camera.lookAt(new THREE.Vector3(0, 0, lerp(2, 6, t)));
       this.cameraLight.position.copy(this.camera.position);
+
     }
 
     render(renderer) {
