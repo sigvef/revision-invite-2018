@@ -8,6 +8,13 @@ const float EPS = 0.001;
 const float END = 100.0;
 const float START = 0.0;
 
+vec2 minmin(vec2 d1, vec2 d2) {
+    if (d1.x > d2.x) {
+        return d2;
+    }
+    return d1;
+}
+
 float displace(vec3 p, float d1) {
     float d2 = 0.05*(1.-sin(20.*p.x))*(1.-cos(20.*p.y))*cos(20.*p.z-frame/60.);
     return d1+d2;
@@ -17,25 +24,46 @@ float sphere(vec3 p, float s) {
     return length(p)-s;
 }
 
-float sdf(in vec3 p) {
-    float sphere1 = sphere(p-vec3(sin(frame/60.),cos(frame/60.), 0.0), 1.5);
-    float sphere2 = displace(p, sphere1);
-    return sphere2;
+float boxy(vec3 p, vec3 b) {
+    return length(max(abs(p)-b, .0));
 }
 
-float march(vec3 eye, vec3 dir, float s, float e) {
+float repBox(vec3 p, vec3 c) {
+    vec3 q = mod(p, c)-.5*c;
+    vec3 boxCoord = floor(p / vec3(4.0, 4.0, 6.0));
+    float box = boxy(q, vec3(1.5, 1.5, 1.5));
+    return box;
+}
+
+float twist(vec3 p) {
+    float c = cos(20.0*p.y);
+    float s = sin(20.0*p.y);
+    mat2 m = mat2(c, -s, s, c);
+    vec3 q = vec3(m*p.xz, p.y);
+    return sphere(q, 1.5);
+}
+
+vec2 sdf(in vec3 p) {
+    float sphere1 = sphere(p-vec3(sin(frame/60.),cos(frame/60.), 0.0), 1.5);
+    float sphere3 = twist(p-vec3(sin(frame/60.),cos(frame/60.), 0.0));
+    float sphere2 = displace(p*0.6, sphere3);
+    float reps = repBox(p, vec3(12.0));
+    return minmin(vec2(sphere2, 1.0), vec2(reps,2.0));
+}
+
+vec2 march(vec3 eye, vec3 dir, float s, float e) {
     float d = s;
     for (int i = 0; i < MAX_STEPS; i++) {
-        float dist = sdf(eye + d * dir);
-        if (dist < EPS) {
-            return d;
+        vec2 res = sdf(eye + d * dir);
+        if (res.x < EPS) {
+            return vec2(d, res.y);
         }
-        d += dist;
+        d += res.x;
         if (d >= e) {
-            return e;
+            return vec2(e, .0);
         }
     }
-    return e;
+    return vec2(e, .0);
 }
 
 vec3 rayDir(float fov, vec2 uv) {
@@ -47,9 +75,9 @@ vec3 rayDir(float fov, vec2 uv) {
 
 vec3 estimateNormal(vec3 p) {
     return normalize(vec3(
-        sdf(vec3(p.x + EPS, p.yz)) - sdf(vec3(p.x - EPS, p.yz)),
-        sdf(vec3(p.x, p.y + EPS, p.z)) - sdf(vec3(p.x, p.y - EPS, p.z)),
-        sdf(vec3(p.xy, p.z + EPS)) - sdf(vec3(p.xy, p.z - EPS))
+        sdf(vec3(p.x + EPS, p.yz)).x - sdf(vec3(p.x - EPS, p.yz)).x,
+        sdf(vec3(p.x, p.y + EPS, p.z)).x - sdf(vec3(p.x, p.y - EPS, p.z)).x,
+        sdf(vec3(p.xy, p.z + EPS)).x - sdf(vec3(p.xy, p.z - EPS)).x
     ));
 }
 
@@ -79,8 +107,6 @@ vec3 phongIllumination(vec3 k_a, vec3 k_d, vec3 k_s, float alpha, vec3 p, vec3 e
     vec3 color = ambientLight * k_a;
     
     vec3 light1Pos = vec3(4.0, 2.0, 50.0);
-    //vec3 light1Pos = vec3(0.0, 9.0, -50.0 + 9.0 * cos(frame / 90.));
-    //vec3 light1Pos = vec3(0.0, 1.0*frame/100.0, 30.0*frame/2000.0);
     vec3 light1Intensity = vec3(0.5, 0.5, 0.5);
     
     vec3 phongContrib = phongContribForLight(k_d, k_s, alpha, p, eye, light1Pos, light1Intensity);
@@ -91,7 +117,10 @@ vec3 phongIllumination(vec3 k_a, vec3 k_d, vec3 k_s, float alpha, vec3 p, vec3 e
     
     phongContrib = phongContribForLight(k_d, k_s, alpha, p, eye, light2Pos, light2Intensity);
     color +=  phongContrib;
-    
+   
+    color *= 2.;
+    color = floor(color);
+    color /= 2.;
     return color;
 }
 
@@ -100,18 +129,23 @@ void main() {
     vec3 eye = vec3(0.0, 0.0, 10.0);
     vec3 dir = rayDir(60.0, vUv);
     
-    float dist = march(eye, dir, START, END);
+    vec2 res = march(eye, dir, START, END);
 
-    if (dist >= END-EPS) {
-        gl_FragColor = vec4(0.0, 0.0, 0.0, 0.2);
+    if (res.x >= END-EPS) {
+        gl_FragColor = vec4(55./255., 60./255., 63./255., 1.);
         return;
     }
 
-    vec3 p = eye + dir * dist;
+    vec3 p = eye + dir * res.x;
 
-    vec3 color = vec3(vUv, 0.5 + 0.5 * sin(frame / 60.0));
+    vec3 color = vec3(.0);
+    if (res.y > 1.5) {
+        color = vec3(.0, 224./255., 79./255.);
+    } else {
+        color = vec3(255./255., 73./255., 130./255.);
+    }
     color = phongIllumination(color, color, vec3(1.0, 1.0, 1.0), 10.0, p, eye);
-
+    
     gl_FragColor = vec4(color, 1.0);
 
 }
