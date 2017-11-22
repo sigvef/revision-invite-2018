@@ -11,7 +11,7 @@
     "type": "SceneSwitcherNode",
     "connected": {
       "_01_pre_intro_with_car_rev_sounds": "diamondillium.render",
-      "_02_intro_1": "GridShader.render",
+      "_02_intro_1": "schmapple.render",
       "_03_intro_2": "toon.render",
       "_05_first_A_theme_1": "RevisionFezLogo.render",
       "_06_first_A_theme_2": "bouncyGeometry.render",
@@ -25,7 +25,7 @@
       "_14_second_C_theme_1": "pyramids.render",
       "_15_second_C_theme_2": "pyramids.render",
       "_16_low_down_B_theme_1": "butterflies.render",
-      "_17_low_down_B_theme_piano_snippet": "schmapple.render",
+      "_17_low_down_B_theme_piano_snippet": "GridShader.render",
       "_18_low_down_B_theme_2": "metaballs.render",
       "_19_groovy_B_theme": "chromaTransition.render",
       "_20_A_theme_breakdown": "text.render",
