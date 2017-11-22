@@ -47,8 +47,8 @@ vec2 sdf(in vec3 p) {
     float sphere1 = sphere(p-vec3(sin(frame/60.),cos(frame/60.), 0.0), 1.5);
     float sphere3 = twist(p-vec3(sin(frame/60.),cos(frame/60.), 0.0));
     float sphere2 = displace(p*0.6, sphere3);
-    float reps = repBox(p, vec3(12.0));
-    return minmin(vec2(sphere2, 1.0), vec2(reps,2.0));
+    float reps = repBox(p*sin(frame/10.), vec3(7.));
+    return minmin(vec2(sphere2, 1.), vec2(reps, 2.));
 }
 
 vec2 march(vec3 eye, vec3 dir, float s, float e) {
