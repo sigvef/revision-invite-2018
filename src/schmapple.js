@@ -25,6 +25,8 @@
       Loader.load('res/revision_logo_outer.png', this.revisionLogoOuter, () => {});
       Loader.load('res/revision_logo_middle.png', this.revisionLogoMiddle, () => {});
 
+      this.kickThrob = 0;
+
       this.texts = [[
           {text: 'Even longer toilet tunnel'},
           {text: 'Dangerously hot campfire'},
@@ -136,8 +138,12 @@
           sentence.throb *= 0.98;
         }
       }
+      this.kickThrob *= 0.95;
+      if(BEAT && BEAN % 12 == 0) {
+        this.kickThrob = 1;
+      }
 
-      if(BEAT && BEAN % 48 == 0) {
+      if(BEAT && BEAN % 24 == 12) {
         for(let row of this.texts) {
           row.blinkOffset++;
           for(let i = 0; i < row.length; i++) {
@@ -187,29 +193,65 @@
       }
 
 
-      this.ctx.save();
-      let scaler = 65 / this.revisionLogoOuter.width;
-      this.ctx.translate(160 / 2, 90 / 2);
-      this.ctx.scale(scaler, scaler);
-      this.ctx.rotate(this.frame / 170);
-      this.ctx.drawImage(this.revisionLogoOuter, -this.revisionLogoOuter.width / 2, -this.revisionLogoOuter.height / 2);
-      this.ctx.restore();
+      if(BEAN >= 420) {
+        this.ctx.save();
+        let scaler = 65 / this.revisionLogoOuter.width;
+        this.ctx.translate(160 / 2, 90 / 2);
+        this.ctx.scale(scaler, scaler);
+        this.ctx.rotate(this.frame / 170);
+        this.ctx.drawImage(this.revisionLogoOuter, -this.revisionLogoOuter.width / 2, -this.revisionLogoOuter.height / 2);
+        this.ctx.restore();
 
-      scaler = 65 / this.revisionLogoInner.width;
-      this.ctx.save();
-      this.ctx.translate(160 / 2, 90 / 2);
-      this.ctx.scale(scaler, scaler);
-      this.ctx.rotate(-this.frame / 160);
-      this.ctx.drawImage(this.revisionLogoInner, -this.revisionLogoInner.width / 2, -this.revisionLogoInner.height / 2);
-      this.ctx.restore();
+        scaler = 65 / this.revisionLogoInner.width;
+        this.ctx.save();
+        this.ctx.translate(160 / 2, 90 / 2);
+        this.ctx.scale(scaler, scaler);
+        this.ctx.rotate(-this.frame / 160);
+        this.ctx.drawImage(this.revisionLogoInner, -this.revisionLogoInner.width / 2, -this.revisionLogoInner.height / 2);
+        this.ctx.restore();
 
-      scaler = 65 / this.revisionLogoMiddle.width;
-      this.ctx.save();
+        scaler = 65 / this.revisionLogoMiddle.width;
+        this.ctx.save();
+        this.ctx.translate(160 / 2, 90 / 2);
+        this.ctx.scale(scaler, scaler);
+        this.ctx.rotate(-this.frame / 160);
+        this.ctx.drawImage(this.revisionLogoMiddle, -this.revisionLogoMiddle.width / 2, -this.revisionLogoMiddle.height / 2);
+        this.ctx.restore();
+      }
+
+      this.ctx.fillStyle = 'white';
+      this.ctx.beginPath();
+
+      const widthT = (this.frame - FRAME_FOR_BEAN(420)) / (FRAME_FOR_BEAN(420+ 24) - FRAME_FOR_BEAN(420));
+      let outerWidth = easeOut(31, 26, widthT);
+      let innerWidth = easeOut(21, 26, widthT);
+      let secondSmallestWidth = easeOut(17.6, 5, widthT);
+      let smallestWidth = easeOut(0, 5, widthT);
+
+      const openingT = (this.frame - FRAME_FOR_BEAN(240)) / (FRAME_FOR_BEAN(240 + 24) - FRAME_FOR_BEAN(240));
+      const openingT2 = (this.frame - FRAME_FOR_BEAN(240 + 3)) / (FRAME_FOR_BEAN(240 + 3 + 24) - FRAME_FOR_BEAN(240 + 3));
+      outerWidth = elasticOut(0, outerWidth, 1, openingT);
+      innerWidth = elasticOut(0, innerWidth, 1, openingT);
+      secondSmallestWidth = elasticOut(0, secondSmallestWidth, 1, openingT2);
+      smallestWidth = elasticOut(0, smallestWidth, 1, openingT2);
+
+      const smallThrobT = (this.frame - FRAME_FOR_BEAN(240)) / (FRAME_FOR_BEAN(240 + 48) - FRAME_FOR_BEAN(240 + 24));
+      secondSmallestWidth = easeOut(secondSmallestWidth * 2, 8, smallThrobT);
+
+      if(BEAN >= 240 + 24) {
+        secondSmallestWidth += this.kickThrob * 8;
+      }
+
       this.ctx.translate(160 / 2, 90 / 2);
-      this.ctx.scale(scaler, scaler);
-      this.ctx.rotate(-this.frame / 160);
-      this.ctx.drawImage(this.revisionLogoMiddle, -this.revisionLogoMiddle.width / 2, -this.revisionLogoMiddle.height / 2);
-      this.ctx.restore();
+      this.ctx.moveTo(outerWidth, 0);
+      this.ctx.arc(0, 0, outerWidth, 0, Math.PI * 2);
+      this.ctx.moveTo(innerWidth, 0);
+      this.ctx.arc(0, 0, innerWidth, 0, Math.PI * 2);
+      this.ctx.moveTo(secondSmallestWidth, 0);
+      this.ctx.arc(0, 0, secondSmallestWidth, 0, Math.PI * 2);
+      this.ctx.moveTo(smallestWidth, 0);
+      this.ctx.arc(0, 0, smallestWidth, 0, Math.PI * 2);
+      this.ctx.fill('evenodd');
 
       this.ctx.restore();
 
