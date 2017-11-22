@@ -25,6 +25,7 @@
       "_14_second_C_theme_1": "pyramids.render",
       "_15_second_C_theme_2": "pyramids.render",
       "_16_low_down_B_theme_1": "butterflies.render",
+      "_17_low_down_B_theme_piano_snippet": "schmapple.render",
       "_18_low_down_B_theme_2": "metaballs.render",
       "_19_groovy_B_theme": "chromaTransition.render",
       "_20_A_theme_breakdown": "text.render",
@@ -283,5 +284,9 @@
   {
     "id": "bowties",
     "type": "bowties"
+  },
+  {
+    "id": "schmapple",
+    "type": "schmapple"
   }
 ]
