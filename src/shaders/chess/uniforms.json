@@ -1,0 +1,6 @@
+{
+    "tDiffuse": { "type": "t", "value": null },
+    "frame": { "type": "f", "value": 0.0 },
+    "foregroundColor": { "type": "v4", "value": null },
+    "backgroundColor": { "type": "v4", "value": null }
+}

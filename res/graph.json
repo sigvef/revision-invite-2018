@@ -23,7 +23,7 @@
       "_12_first_C_theme_1": "letterbox.render",
       "_13_first_C_theme_2": "trainmodel.render",
       "_14_second_C_theme_1": "pyramids.render",
-      "_15_second_C_theme_2": "dithering.render",
+      "_15_second_C_theme_2": "pyramids.render",
       "_16_low_down_B_theme_1": "butterflies.render",
       "_18_low_down_B_theme_2": "metaballs.render",
       "_19_groovy_B_theme": "chromaTransition.render",
@@ -198,7 +198,10 @@
   },
   {
     "id": "pyramids",
-    "type": "pyramids"
+    "type": "pyramids",
+    "options": {
+      "shader": "chess"
+    }
   },
   {
     "id": "bloom",

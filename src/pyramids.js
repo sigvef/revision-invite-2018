@@ -19,11 +19,33 @@
         textureHeight: 16 * GU,
         color: 'rgb(55, 60, 63)',
       });
-      const planeGeo = new THREE.PlaneBufferGeometry(50, 50);
+      const planeGeo = new THREE.PlaneBufferGeometry(100, 100);
       const mirrorMesh = new THREE.Mesh(planeGeo, this.groundMirror.material);
       mirrorMesh.add(this.groundMirror);
       mirrorMesh.rotateX(-Math.PI / 2);
+      //mirrorMesh.material.transparent = true;
       this.scene.add(mirrorMesh);
+
+      this.mirrorOverlayMesh = new THREE.Mesh(
+        planeGeo,
+        new THREE.ShaderMaterial(SHADERS[options.shader])
+      );
+      this.mirrorOverlayMesh.rotateX(-Math.PI / 2);
+      this.mirrorOverlayMesh.position.y = 0.01;
+      this.mirrorOverlayMesh.material.uniforms.foregroundColor.value = new THREE.Vector4(
+        0,
+        0.208,
+        0.228,
+        0.8
+      );
+      this.mirrorOverlayMesh.material.uniforms.backgroundColor.value = new THREE.Vector4(
+        0,
+        0.2,
+        0.22,
+        0.8
+      );
+      this.mirrorOverlayMesh.material.transparent = true;
+      this.scene.add(this.mirrorOverlayMesh);
 
       this.pyramids = [
         {
@@ -40,16 +62,72 @@
           radius: 1,
           height: 1,
           color: new THREE.Color('rgb(255, 73, 130)'),
-          bean: 8,
+          bean: 9,
         },
         {
           x: 1.5,
           z: 5,
           radius: 1,
           height: 1,
-          color: new THREE.Color('#00e04f'),
+          color: new THREE.Color('purple'),
           bean: 24,
-        }
+        },
+        {
+          x: -1.5,
+          z: 7,
+          radius: 1,
+          height: 1,
+          color: new THREE.Color('rgb(0, 224, 79)'),
+          bean: 33,
+        },
+        {
+          x: 1.5,
+          z: 9,
+          radius: 1,
+          height: 1,
+          color: new THREE.Color('rgb(255, 73, 130)'),
+          bean: 48,
+        },
+        {
+          x: -1.5,
+          z: 11,
+          radius: 1,
+          height: 1,
+          color: new THREE.Color('purple'),
+          bean: 57,
+        },
+        {
+          x: 4.5,
+          z: 5,
+          radius: 1,
+          height: 1,
+          color: new THREE.Color('rgb(255, 73, 130)'),
+          bean: 70,
+        },
+        {
+          x: -4.5,
+          z: 7,
+          radius: 1,
+          height: 1,
+          color: new THREE.Color('purple'),
+          bean: 79,
+        },
+        {
+          x: 4.5,
+          z: 9,
+          radius: 1,
+          height: 1,
+          color: new THREE.Color('rgb(0, 224, 79)'),
+          bean: 94,
+        },
+        {
+          x: -4.5,
+          z: 11,
+          radius: 1,
+          height: 1,
+          color: new THREE.Color('rgb(255, 73, 130)'),
+          bean: 103,
+        },
       ];
 
       this.pyramidMeshes = [];
@@ -99,30 +177,46 @@
           const localT = (frame - FRAME_FOR_BEAN(startBEAN + pyramid.bean)) / 120;
           const scale = elasticOut(0.0001, 1, 1.0, localT);
           this.pyramidMeshes[index].scale.set(scale, scale, scale);
-          this.pyramidMeshes[index].position.y = elasticOut(0, .5, 1.0, localT);
+          this.pyramidMeshes[index].position.y = elasticOut(
+            0,
+            pyramid.height / 2,
+            1.0,
+            localT
+          );
 
           const size = lerp(lerp(0, 1, localT * 2),
                             0,
                             localT * 2 - 1);
           this.rings[index].scale.set(size, size, size);
-          this.rings[index].position.y = lerp(0, 1, localT * 2- .9);
+          this.rings[index].position.y = lerp(0, pyramid.height, localT * 2- .9);
 
-          this.lasers[index].update(localT - 1);
+          this.lasers[index].object3d.scale.x = lerp(0, 10, localT - 1);
+          this.lasers[index].object3d.position.y = lerp(
+            pyramid.height,
+            pyramid.height + 10,
+            localT - 1
+          );
         } else {
           this.pyramidMeshes[index].scale.set(0, 0, 0);
           this.rings[index].scale.set(0, 0, 0);
-          this.lasers[index].update(0);
+          this.lasers[index].object3d.scale.x = 0;
+          this.lasers[index].object3d.position.y = 0;
         }
       }
 
-      this.camera.position.set(
-        0,
-        lerp(2, 1, t),
-        lerp(-2, 2, t)
-      );
-      this.camera.lookAt(new THREE.Vector3(0, 0, lerp(2, 6, t)));
-      this.cameraLight.position.copy(this.camera.position);
-
+      if (!this.camera.isOverriddenByFlyControls) {
+        this.camera.position.set(
+          lerp(0.5, 0, t),
+          lerp(2, 0.5, t),
+          lerp(-2, 4, t)
+        );
+        this.camera.lookAt(new THREE.Vector3(
+          lerp(0, -1.5, t),
+          easeIn(0, 1, t),
+          lerp(2, 8, t)
+        ));
+        this.cameraLight.position.copy(this.camera.position);
+      }
     }
 
     render(renderer) {
