@@ -8,22 +8,33 @@
         }
       });
 
-      this.cube = new THREE.Mesh(new THREE.BoxGeometry(100, 5, 5),
-        new THREE.MeshBasicMaterial({ color: 0x000fff }));
-      this.scene.add(this.cube);
+      const splashScreenTexture = Loader.loadTexture('res/Revision-Black-Mesa-Crushed.png');
+      splashScreenTexture.minFilter = THREE.LinearFilter;
+      splashScreenTexture.magFilter = THREE.LinearFilter;
 
-      var light = new THREE.PointLight(0xffffff, 1, 100);
-      light.position.set(50, 50, 50);
-      this.scene.add(light);
+      this.revisionTitle = new THREE.Mesh(
+        new THREE.BoxBufferGeometry(1920, 1080, 1),
+        new THREE.MeshBasicMaterial({
+          map: splashScreenTexture,
+        }),
+      );
 
-      this.camera.position.z = 100;
+      this.scene.add(this.revisionTitle);
+
+      this.camera.position.z = 1000;
+
+      this.throb = 0;
     }
 
     update(frame) {
       super.update(frame);
 
-      this.cube.rotation.x = Math.sin(frame / 20);
-      this.cube.rotation.y = Math.cos(frame / 20);
+      this.throb *= 0.96;
+      if (BEAT && BEAN % 12 == 0) {
+        this.throb = 1.0;
+      }
+
+      this.revisionTitle.material.color.setRGB(this.throb, this.throb, this.throb);
     }
   }
 

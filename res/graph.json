@@ -3,23 +3,39 @@
     "id": "root",
     "type": "NIN.RootNode",
     "connected": {
-      "screen": "sceneSwitcherNode.render"
+      "screen": "bloom.render"
     }
   },
   {
     "id": "sceneSwitcherNode",
     "type": "SceneSwitcherNode",
     "connected": {
-      "A": "GridShader.render",
-      "B": "toon.render",
-      "C": "Metatron.render",
-      "D": "lulle.render",
-      "F": "logotransition.render",
-      "G": "letterbox.render",
-      "H": "trainmodel.render",
-      "I": "metaballs.render",
-      "J": "carousel.render",
-      "K": "jaws.render"
+      "_01_pre_intro_with_car_rev_sounds": "diamondillium.render",
+      "_02_intro_1": "GridShader.render",
+      "_03_intro_2": "toon.render",
+      "_05_first_A_theme_1": "RevisionFezLogo.render",
+      "_06_first_A_theme_2": "bouncyGeometry.render",
+      "_07_first_B_theme_1": "Metatron.render",
+      "_08_first_B_theme_2": "lulle.render",
+      "_09_second_A_theme_1": "GodsOrKings.render",
+      "_10_second_A_theme_2": "ewerk.render",
+      "_11_illuminati_confirmed": "logotransition.render",
+      "_12_first_C_theme_1": "letterbox.render",
+      "_13_first_C_theme_2": "trainmodel.render",
+      "_14_second_C_theme_1": "pyramids.render",
+      "_15_second_C_theme_2": "dithering.render",
+      "_16_low_down_B_theme_1": "butterflies.render",
+      "_18_low_down_B_theme_2": "metaballs.render",
+      "_19_groovy_B_theme": "chromaTransition.render",
+      "_20_A_theme_breakdown": "text.render",
+      "_21_third_B_theme_1": "patterns.render",
+      "_22_third_B_theme_2": "triangalons.render",
+      "_22_third_B_theme_3": "bowties.render",
+      "_22_third_B_theme_4": "barndoors.render",
+      "_22_third_B_theme_5": "OrthoCube.render",
+      "_23_final_A_theme_rolldown": "OrthoCube.render",
+      "_24_outro": "triangalons.render",
+      "_25_outro_2": "bowties.render"
     }
   },
   {
@@ -97,6 +113,11 @@
     "type": "trainmodelNode",
     "options": {
       "shader": "trainmodel"
+    },
+    "connected": {
+      "twistertex": "letterbox.render",
+      "camera": "traincam.camera",
+      "overlay": "trainoverlay.render"
     }
   },
   {
@@ -119,5 +140,145 @@
     "connected": {
       "image": "GridNode.render"
     }
+  },
+  {
+    "id": "OrthoCube",
+    "type": "OrthoCubeNode",
+    "options": {
+      "shader": "OrthoCube"
+    }
+  },
+  {
+    "id": "star",
+    "type": "starNode",
+    "options": {
+      "shader": "star"
+    }
+  },
+  {
+    "id": "GodsOrKings",
+    "type": "GodsOrKingsNode",
+    "options": {
+      "shader": "GodsOrKings"
+    }
+  },
+  {
+    "id": "text",
+    "type": "text"
+  },
+  {
+    "id": "barndoors",
+    "type": "barndoorsNode",
+    "options": {
+      "shader": "barndoors"
+    },
+    "connected": {
+      "A": "star.render"
+    }
+  },
+  {
+    "id": "RevisionFezLogo",
+    "type": "revisionFezLogo"
+  },
+  {
+    "id": "chromaTransition",
+    "type": "chromaTransitionNode",
+    "options": {
+      "shader": "chromaTransition"
+    },
+    "connected": {
+      "A": "carousel.render",
+      "B": "jaws.render",
+      "chroma": "starChroma.render"
+    }
+  },
+  {
+    "id": "starChroma",
+    "type": "starChroma"
+  },
+  {
+    "id": "pyramids",
+    "type": "pyramids"
+  },
+  {
+    "id": "bloom",
+    "type": "AddNode",
+    "options": {
+      "opacity": 0.5,
+      "shader": "Add"
+    },
+    "connected": {
+      "A": "sceneSwitcherNode.render",
+      "B": "blurX.render"
+    }
+  },
+  {
+    "id": "blurX",
+    "type": "BlurPassNode",
+    "options": {
+      "direction": "x"
+    },
+    "connected": {
+      "tDiffuse": "blurY.render"
+    }
+  },
+  {
+    "id": "blurY",
+    "type": "BlurPassNode",
+    "options": {
+      "direction": "y"
+    },
+    "connected": {
+      "tDiffuse": "sceneSwitcherNode.render"
+    }
+  },
+  {
+    "id": "bouncyGeometry",
+    "type": "bouncyGeometry"
+  },
+  {
+    "id": "dithering",
+    "type": "ditheringNode",
+    "options": {
+      "shader": "dithering"
+    },
+    "connected": {
+      "tDiffuse": "pyramids.render"
+    }
+  },
+  {
+    "id": "predith",
+    "type": "predith"
+  },
+  {
+    "id": "patterns",
+    "type": "patterns"
+  },
+  {
+    "id": "triangalons",
+    "type": "triangalons"
+  },
+  {
+    "id": "diamondillium",
+    "type": "diamondillium"
+  },
+  {
+    "id": "traincam",
+    "type": "traincam"
+  },
+  {
+    "id": "trainoverlay",
+    "type": "trainoverlay"
+  },
+  {
+    "id": "ewerk",
+    "type": "ewerk",
+    "options": {
+      "shader": "map"
+    }
+  },
+  {
+    "id": "bowties",
+    "type": "bowties"
   }
 ]

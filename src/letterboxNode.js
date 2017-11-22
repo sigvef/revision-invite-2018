@@ -10,8 +10,7 @@
       super.update(frame);
       this.uniforms.frame.value = frame;
       this.uniforms.tDiffuse.value = this.inputs.image.getValue();
-      const t = Math.pow(easeIn(0, 1, (frame - FRAME_FOR_BEAN(1920)) / (FRAME_FOR_BEAN(1944) - FRAME_FOR_BEAN(1920))), 4);
-      console.log(t);
+      const t = Math.pow(easeIn(0, 1, (frame - FRAME_FOR_BEAN(1824)) / (FRAME_FOR_BEAN(1848) - FRAME_FOR_BEAN(1824))), 4);
       this.uniforms.amount.value = t;
     }
   }

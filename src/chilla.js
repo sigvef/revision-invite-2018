@@ -21,10 +21,37 @@
       this.rightRail.material.uniforms.g.value = 60 / 255;
       this.rightRail.material.uniforms.b.value = 63 / 255;
       this.leftRail.material.uniforms.r.value = 55 / 255;
-      this.leftRail.material.uniforms.g.value = 50 / 255;
+      this.leftRail.material.uniforms.g.value = 60 / 255;
       this.leftRail.material.uniforms.b.value = 63 / 255;
       this.scene.add(this.leftRail);
       this.scene.add(this.rightRail);
+
+      this.kickThrob = 0;
+
+      this.train = new THREE.Object3D();
+      this.scene.add(this.train);
+
+      const cylinder = new THREE.Mesh(
+          new THREE.BoxGeometry(5, 1.2, 1.2),
+          new THREE.MeshBasicMaterial({
+            color: new THREE.Color(55 / 255, 60 / 255, 63 / 255),
+          }));
+      this.train.add(cylinder);
+      this.cyl = cylinder;
+      const caboose = new THREE.Mesh(
+          new THREE.BoxGeometry(1.5, 2.0, 2.0),
+          new THREE.MeshBasicMaterial({
+            color: new THREE.Color(55 / 255, 60 / 255, 63 / 255),
+          }));
+      this.caboose = caboose;
+      this.train.add(caboose);
+      const chimney = new THREE.Mesh(
+          new THREE.BoxGeometry(0.5, .5, 1.),
+          new THREE.MeshBasicMaterial({
+            color: new THREE.Color(55 / 255, 60 / 255, 63 / 255),
+          }));
+      this.chimney = chimney;
+      this.train.add(chimney);
 
       this.leftRail.material.uniforms.percentage.value = 1;
       this.rightRail.material.uniforms.percentage.value = 1;
@@ -59,7 +86,7 @@
 
       for(let i = 0; i < this.crossers.length; i++) {
         const crosser = this.crossers[i];
-        const scale = easeOut(0.00001, 1, (frame - FRAME_FOR_BEAN(1920) - i * 4) / 20);
+        const scale = easeOut(0.00001, 1, (frame - FRAME_FOR_BEAN(1920 - 96) - i * 4) / 20);
         crosser.visible = scale > 0.001;
         crosser.scale.y = scale;
         crosser.position.y = 2. / 2 * (1 - scale);
@@ -68,23 +95,75 @@
         }
       }
 
-      const cameraT = smoothstep(0, -Math.PI / 2 * 0.85, (this.frame - FRAME_FOR_BEAN(1968) + 30) / 30);
+      const cameraT = smoothstep(0, -Math.PI / 2 * 0.85, (this.frame - FRAME_FOR_BEAN(1968 - 96) + 30) / 30);
       this.camera.position.y = 10 * Math.sin(cameraT);
       this.camera.position.z = 10 * Math.cos(cameraT);
-      this.camera.position.y -= smoothstep(0, 20 / 2, (this.frame - FRAME_FOR_BEAN(2016)) / 500);
-      this.camera.position.z += smoothstep(0, 10 / 2, (this.frame - FRAME_FOR_BEAN(2016)) / 500);
-      const cameraY = easeIn(0, 7, (this.frame - FRAME_FOR_BEAN(1992) + 30) / 30);
+      this.camera.position.y -= smoothstep(0, 20 / 2, (this.frame - FRAME_FOR_BEAN(2016 - 96)) / 500);
+      this.camera.position.z += smoothstep(0, 10 / 2, (this.frame - FRAME_FOR_BEAN(2016 - 96)) / 500);
+      const cameraY = easeIn(0, 7, (this.frame - FRAME_FOR_BEAN(1992 - 96) + 30) / 30);
       this.camera.lookAt(new THREE.Vector3(this.camera.position.x, cameraY, 0));
 
-      const relativeFrame = frame - FRAME_FOR_BEAN(1920);
+      const relativeFrame = frame - FRAME_FOR_BEAN(1920 -96);
       const percentage = relativeFrame / 500 + easeOut(0, 0.08, relativeFrame / 50);
       this.camera.position.x = relativeFrame / 500 * 10 * 3;
       this.leftRail.material.uniforms.percentage.value = percentage;
       this.rightRail.material.uniforms.percentage.value = percentage;
+
+      this.cyl.position.x = this.camera.position.x;
+      this.cyl.position.z = 1.3;
+      this.cyl.rotation.x = Math.PI / 4;
+      this.caboose.position.x = this.camera.position.x - 2.5;
+      this.caboose.position.z = 1.6;
+      this.chimney.position.x = this.camera.position.x + 2.;
+      this.chimney.position.z = 2.25;
+
+      let scale = elasticOut(0.000001, 1, 1., (frame - FRAME_FOR_BEAN(1944)) / (FRAME_FOR_BEAN(1956) - FRAME_FOR_BEAN(1944)));
+      this.cyl.scale.set(scale, scale, scale);
+      this.caboose.scale.set(scale, scale, scale);
+      this.chimney.scale.set(scale, scale, scale);
+
+
+
+      if(BEAN >= 1992) {
+        const xOffset = 12 + (frame - FRAME_FOR_BEAN(1992)) / 50;
+        const yOffset = 9.2 + (frame - FRAME_FOR_BEAN(1992)) / 50;
+        const zOffset = -.5 + (frame - FRAME_FOR_BEAN(1992)) / 50;
+        this.camera.position.x += xOffset;
+        this.camera.position.y += yOffset;
+        this.camera.position.z -= zOffset;
+        this.camera.up = new THREE.Vector3(0, 0, 1);
+        this.camera.lookAt(new THREE.Vector3(this.camera.position.x - 5 - xOffset, cameraY - yOffset / 2, 0));
+      }
+
+      this.kickThrob *= 0.75;
+      if(BEAT && BEAN >= 1824) {
+        switch(BEAN % 96) { 
+        case 0:
+        case 42:
+        case 48:
+        case 48 + 9:
+        case 48 + 18:
+        case 48 + 24 + 6:
+        case 48 + 24 + 8:
+        case 48 + 24 + 10:
+          this.kickThrob = 1;
+        }
+      }
+
+      this.whiteoutAmount = (frame - 4757) / 80;
+      demo.nm.nodes.bloom.opacity = easeOut(10, 0.1 + this.kickThrob, this.whiteoutAmount * 2);
+
+      this.camera.rotation.x += this.kickThrob * (Math.random() - 0.5) * 0.05;
+      this.camera.rotation.y += this.kickThrob * (Math.random() - 0.5) * 0.05;
+      this.camera.rotation.z += this.kickThrob * (Math.random() - 0.5) * 0.05;
     }
 
     render(renderer) {
-      renderer.setClearColor(0x00e04f);
+      const clearColor = new THREE.Color(
+          easeOut(1, 0, this.whiteoutAmount),
+          easeOut(1, 0xe0 / 255, this.whiteoutAmount),
+          easeOut(1, 0x4f / 255, this.whiteoutAmount));
+      renderer.setClearColor(clearColor.getHex());
       return super.render(renderer);
     }
   }

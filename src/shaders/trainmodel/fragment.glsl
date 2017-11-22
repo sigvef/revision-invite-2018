@@ -1,5 +1,13 @@
 uniform float frame;
 uniform float snareThrob;
+uniform float kickThrob;
+uniform float twistAmount;
+uniform vec3 trainCameraPosition;
+uniform vec3 trainCameraRotation;
+uniform sampler2D tDiffuse;
+uniform sampler2D overlay;
+
+# define FRAME_OFFSET 200.
 
 varying vec2 vUv;
 
@@ -181,7 +189,7 @@ vec3 opTwist( vec3 p )
 //------------------------------------------------------------------
 
 float wheel(vec3 pos, float size) {
-    pos = (rotationMatrix(vec3(-1., 0., 0.), SPEED * frame / 60.) * vec4(pos, 1.)).xyz;
+    pos = (rotationMatrix(vec3(-1., 0., 0.), SPEED * (frame + FRAME_OFFSET) / 60.) * vec4(pos, 1.)).xyz;
     vec3 rotated = (rotationMatrix(vec3(0., 0., 1.), PI / 2.) * vec4(pos, 1.)).xyz;
     float res = sdCylinder(rotated, vec2(.4 * size, .05));
     res = smin(res, sdCylinder(rotated + vec3(0., .05, 0.), vec2(.44 * size, .01)), 0.05);
@@ -190,25 +198,42 @@ float wheel(vec3 pos, float size) {
     res = min(res, sdCylinder(rotated, vec2(.1 * size, 0.04)));
 
     float spokes = 1e9;
+    float width = 0.03;
     mat4 spokeRotation = rotationMatrix(vec3(0., 1., 0.), PI / 2. / 3.);
-    vec3 circleRotated = rotated;
-    for(int i = 0; i < 8; i++) {
-        circleRotated = (spokeRotation * vec4(circleRotated, 1.)).xyz;
-        spokes = min(spokes, sdBox(circleRotated, vec3(size, 0.02, 0.03 * size)));
-    }
-    spokes = max(spokes, sdCylinder(rotated, vec2(.38 * size, 0.05)));
+    spokes = smin(spokes, sdCylinder(rotated + vec3(0., width, 0.), vec2(.38 * size, 0.05  - width / 2.)), 0.04);
     res = min(res, spokes);
     return res;
 }
 
-float cabin(vec3 pos) {
-    float roof = sdBox(pos, vec3(1., .85, 1.1));
-    roof = max(roof, sdCylinder(pos - vec3(0., 0., 1.25), vec2(2., 5.)));
-    roof = max(roof, -sdCylinder(pos - vec3(0., 0., 1.35), vec2(2., 5.)));
+float cabin(vec3 pos, bool far) {
 
-    float res = sdBox(pos, vec3(0.95, .75, 1.));
-    res = max(res, sdCylinder(pos - vec3(0., 0., 1.25), vec2(2., 5.)));
-    return min(res, roof);
+    float cabinLength = 100.;
+    if(!far) {
+        cabinLength = 1.;
+    }
+
+    float roof = sdBox(pos + vec3(0., 0.75 - cabinLength, 0.), vec3(1., cabinLength + 0.1, 1.1));
+    roof = max(roof, sdCylinder(pos - vec3(0., 0., 1.25), vec2(2., cabinLength)));
+    roof = max(roof, -sdCylinder(pos - vec3(0., 0., 1.35), vec2(2., cabinLength)));
+
+    float res = sdBox(pos + vec3(0., 0.75 - cabinLength, 0.), vec3(0.95, cabinLength, 1.));
+    res = max(res, sdCylinder(pos - vec3(0., 0., 1.25), vec2(2., cabinLength)));
+    res = min(res, roof);
+
+    if(!far) {
+        return res;
+    }
+
+    float gapsBetweenCars = sdBox(opRep(pos + vec3(0., 3.75, 0.), vec3(0., 10., 0.)), vec3(10., .3, 10.));
+    res = max(res, -gapsBetweenCars);
+
+    float interior = sdBox(pos - vec3(0., 0., 0.2), vec3(0.9, cabinLength, 0.7));
+    res = max(res, -interior);
+
+    float windows = sdBox(opRep(pos - vec3(0., 1.1, 0.), vec3(0., 10.3 / 2., 0.)), vec3(2., 1.7, .3));
+    res = max(res, -windows);
+
+    return res;
 }
 
 float chimneyCone(vec3 pos) {
@@ -219,8 +244,6 @@ float chimneyCone(vec3 pos) {
 
 vec2 train(vec3 pos) {
 
-    pos.y = pos.y * (1. + 0.1 * -sin(frame * PI * 2. / 60. / 60. * 115.));
-
     float material = 1.;
     vec4 p4 = vec4(pos, 1.);
     vec3 rotated = (rotationMatrix(vec3(1., 0., 0.), PI / 2.) * p4).xyz;
@@ -228,35 +251,46 @@ vec2 train(vec3 pos) {
     vec3 lifted = rotated + lifter;
     float res = sdCylinder(lifted, vec2(.7, 2.));
 
+    /* nose */
     rotated.y = -rotated.y;
     res = smin(res, sdSphere(rotated - vec3(0., 2.02, -1.5), .01), 1.);
     rotated.y = -rotated.y;
 
+    /* rings */
     float rings = sdCylinder(opRep(lifted, vec3(0., .7, 0.)), vec2(.72, .05));
     rings = max(rings, sdBox(lifted, vec3(5., 2.15, 2.5)));
     res = smin(rings, res, .02);
 
-    res = smin(res, sdBox(lifted - vec3(0., 0.5, 0.3), vec3(.45, 2.5, .8)), .05);
+    /* cabins */
     float size = 1. - 0.4 * step(1.45, pos.z);
     vec3 mirrored = pos;
     mirrored.x = -abs(mirrored.x);
-
-    res = smin(res, cabin(lifted + vec3(0., -2.2, .3)), .01);
+    res = min(res, cabin(lifted + vec3(0., -2.2, .3), true));
+    res = smin(res, cabin(lifted + vec3(0., -2.2, .3), false), .01);
 
     rotated = (rotationMatrix(vec3(1., 0., 0.), PI / 2.) * vec4(rotated, 1.)).xyz;
     res = smin(res, chimneyCone(rotated + vec3(0., 1.9, -1.4)), .15);
     res = max(res, -chimneyCone(rotated * 0.98 + vec3(0., 1.9, 0.98 * -1.4)));
 
     float wheels = wheel(opRep(mirrored + vec3(0., -.35, 0.) + vec3(0., .15 - size / PI, 1.25), vec3(1.1, .0, size * 0.9)), size);
-    wheels = max(wheels, sdBox(lifted + vec3(0., -.45, 0.), vec3(1.2, 2.6, 2.5)));
+    wheels = max(wheels, sdBox(lifted + vec3(0., -.45, 0.), vec3(1.2, 100., 2.5)));
+    float gapsBetweenCars = sdBox(opRep(rotated + vec3(0., 0., 8.6), vec3(0., 0., 10.)), vec3(10., 10., .54));
+    wheels = max(wheels, -gapsBetweenCars);
     res = min(res, wheels);
-    vec2 final = opU(vec2(res, 10.), vec2(wheels, pos.z / 5.));
+
+    /* wheel box */
+    float wheelBox = sdBox(lifted - vec3(0., 100. - 2., 0.4 * 2.), vec3(.45, 100., .4));
+    wheelBox = max(wheelBox, sdBox(lifted + vec3(0., -.45, 0.), vec3(1.2, 100., 2.5)));
+    wheelBox = max(wheelBox, -gapsBetweenCars);
+    res = smin(res, wheelBox, .05);
+
+    vec2 final = opU(vec2(res, 2.), vec2(wheels, 1.));
 
     return final;
 }
 
 float tracks(vec3 pos) {
-    pos -= vec3(0., 0., PI / 4. * SPEED * frame / 60.);
+    pos -= vec3(0., 0., PI / 4. * SPEED * (frame + FRAME_OFFSET) / 60.);
     vec3 repped = opRep(pos, vec3(.56 * 2., .2, 0.));
     float res = sdBox(repped, vec3(.04, .01, 10000.));
     res = smin(res, sdBox(opRep(pos, vec3(.56 * 2., 0., 0.)), vec3(.01, .04, 100000.)), .1);
@@ -265,26 +299,45 @@ float tracks(vec3 pos) {
     return res;
 }
 
-vec2 map(vec3 pos) {
+vec2 twister(vec3 pos) {
+    float size = 0.2 + 0.1 * snareThrob;
+    float res = sdBox(pos, vec3(size, size, 100.));
+    res = max(res, sdBox(pos + vec3(0., 0., -105.), vec3(size, size, 100.)));
+    return vec2(res, 3.);
+}
 
+float rotationAmount(float z) {
+    return (sin((frame + FRAME_OFFSET) / 60.) + 5. * sin(1. - z / 10. + (frame + FRAME_OFFSET) / 100. + .5 * cos((frame + FRAME_OFFSET) / 100. - z / 7.)));
+}
+
+vec3 twistPosition(vec3 pos) {
+    return (rotationMatrix(vec3(0., 0., 1.), rotationAmount(pos.z)) * vec4(pos, 1.)).xyz;
+}
+
+vec2 map(vec3 pos) {
+    pos = pos * (1. - kickThrob * 0.1);
+    pos.z += -10. + ((frame + FRAME_OFFSET) - 5258.) / 20.;
     pos -= vec3(0., 1.5, 0.);
-    pos = (rotationMatrix(vec3(0., 0., 1.), sin(frame / 60.) + 5. * sin(1. - pos.z / 10. + frame / 100. + .5 * cos(frame / 100. - pos.z / 7.))) * vec4(pos, 1.)).xyz;
+    pos = (rotationMatrix(vec3(0., 0., 1.), twistAmount * (sin(frame / 60.) + 5. * sin(1. - pos.z / 10. + frame / 100. + .5 * cos(frame / 100. - pos.z / 7.)))) * vec4(pos, 1.)).xyz;
     pos += vec3(0., 1.5, 0.);
 
     vec2 res = train(pos);
 
-    res = opU(res, vec2(tracks(pos), 20.));
+    vec3 twistedPos = twistPosition(pos - vec3(0., 1.5, 0.));
+    twistedPos -= vec3(0., 0.2, 0.);
+    res = opU(res, twister(twistedPos));
+
+    res = opU(res, vec2(tracks(pos), 1.));
     return res;
 }
 
 vec2 castRay( vec3 ro, vec3 rd ) {
-    float tmin = .1;
-    float tmax = 20.0;
+    float tmin = .01;
+    float tmax = 200.0;
     
     float t = tmin;
     float m = -1.0;
-    for( int i=0; i<64; i++ )
-    {
+    for( int i=0; i<128; i++ ) {
         float precis = 0.0005*t;
         vec2 res = map( ro+rd*t );
         if( res.x<precis || t>tmax ) break;
@@ -292,7 +345,7 @@ vec2 castRay( vec3 ro, vec3 rd ) {
         m = res.y;
     }
 
-    if( t>tmax ) m=-1.0;
+    //if( t>tmax ) m=-1.0;
     return vec2( t, m );
 }
 
@@ -336,11 +389,12 @@ vec3 render( in vec3 ro, in vec3 rd ) {
     vec3 black = vec3(55. / 255., 60. / 255., 63. / 255.);
     vec3 pink = vec3(255. /255., 73. / 255., 130. / 255.);
     vec3 white = vec3(.7);
-    vec3 col = black;
+    vec3 col = white;
     col = pow( col, 1. / vec3(0.4545) );
     vec2 res = castRay(ro,rd);
     float t = res.x;
     float m = res.y;
+    float emissive = 0.;
     if( m>-0.5 )
     {
         vec3 pos = ro + t*rd;
@@ -349,23 +403,28 @@ vec3 render( in vec3 ro, in vec3 rd ) {
         
         // material        
         //col = 0.45 + 0.35*sin( vec3(0.05,0.08,0.10)*(m-1.0) );
-        if(m > 15.) {
+        if(m > 3.5) {
             col = pow(green, 1. / vec3(.4545));
-        } else if(m < 1.5) {
-            col = pow(
-                    mix(black, pink, 2. * snareThrob * max(0., sin(.5 + frame * PI * 2. / 60. / 60. * 115. / 2. - pos.z / 2.)))
-                    , 1. / vec3(.4545));
+        }
+        if(m > 2.5) {
+            float z = pos.z + -10. + ((frame + FRAME_OFFSET) - 5258.) / 20.;
+            float amount = rotationAmount(z);
+            vec2 normalizedPos = vec2(pos.x, pos.y - 1.5) / 0.3;
+            normalizedPos -= vec2(-sin(amount) * 0.2, cos(amount) * 0.2) / 0.3;
+            float angle = -amount + atan(normalizedPos.y, normalizedPos.x);
+            vec2 uv = vec2(z, 0.);
+            uv.y = mod(angle / PI * 2. + 0.5, 1.);
+            uv.x = mod(1. - uv.x, 1.);
+            col = pow(texture2D(tDiffuse, mod(uv, 1.)).rgb, 1. / vec3(.4545));
+            col *= snareThrob;
+            emissive = step(0.02, col.r);
+        } else if(m > 1.5) {
+            col = pow(white, 1./vec3(.4545));
+        } else if(m > .5) {
+            col = pow(black, 1./vec3(.4545));
         } else {
             col = pow(white, 1. / vec3(.4545));
         }
-        /*
-        if( m<1.5 )
-        {
-            
-            float f = mod( floor(5.0*pos.z) + floor(5.0*pos.x), 2.0);
-            col = 0.3 + 0.1*f*vec3(1.0);
-        }
-        */
 
         // lighitng        
         float occ = calcAO( pos, nor );
@@ -387,9 +446,9 @@ vec3 render( in vec3 ro, in vec3 rd ) {
         lin += 0.50*dom*vec3(0.40,0.60,1.00)*occ;
         lin += 0.50*bac*vec3(0.25,0.25,0.25)*occ;
         lin += 0.25*fre*vec3(1.00,1.00,1.00)*occ;
-        col = col*lin;
+        col = mix(col * lin, col, emissive);
 
-        //col = mix( col, vec3(0.8,0.9,1.0), 1.0-exp( -0.0002*t*t*t ) );
+        col = mix( col, vec3(0.8,0.9,1.0), 1.0-exp( -0.0002*t*t*t ) );
     }
 
     return vec3( clamp(col, 0.0, 1.0) );
@@ -405,18 +464,28 @@ mat3 setCamera( in vec3 ro, in vec3 ta, float cr )
 }
 
 void main() {
-    float time = 15.0 + frame / 1000. * 60.;
+    
+    float time = 15.0 + (frame + FRAME_OFFSET) / 1000. * 60.;
 
     
     vec3 tot = vec3(0.0);
     vec2 p = (vUv - 0.5) * 2.;
     p.x = p.x / 9. * 16.;
 
+    vec4 overlayColor = texture2D(overlay, vUv);
+    if(overlayColor.a > 0.9) {
+        gl_FragColor = vec4(overlayColor.rgb, 1.);
+        return;
+    }
+
     // camera   
-    vec3 ro = 3. * vec3( -0.5+3.5*cos(0.1*time), 2.0, 0.5 + 4.0*sin(0.1*time) );
-    vec3 ta = vec3( -0.5, -0.4, 0.5 );
+    float cameraTime = 0.05 * time + 1.;
+    float dist = 1.2 + 2. * smoothstep(0., 1., clamp((frame - 5227.) / (5759. - 5227.), 0., 1.));
+    vec3 ro = dist * vec3( -0.5+3.5*cos(cameraTime), 2.0, 0.5 + 4.0*sin(cameraTime) );
+    vec3 ta = vec3( -0.5, 0.8, 0.5 );
     // camera-to-world transformation
-    mat3 ca = setCamera( ro, ta, 0.0 );
+    ro = trainCameraPosition;
+    mat3 ca = setCamera(ro, ta, 0.0 );
     // ray direction
     vec3 rd = ca * normalize( vec3(p.xy,2.0) );
 
@@ -428,5 +497,5 @@ void main() {
 
     tot += col;
 
-    gl_FragColor = vec4( tot, 1.0 );
+    gl_FragColor = vec4(mix(tot, overlayColor.rgb, vec3(overlayColor.a)), 1.0);
 }

@@ -1,27 +1,82 @@
 (function(global) {
   class trainmodelNode extends NIN.ShaderNode {
     constructor(id, options) {
+      options.outputs = options.outputs || {};
+      options.inputs = options.inputs || {};
+      options.inputs.twistertex = new NIN.TextureInput();
+      options.inputs.camera = new NIN.Input();
+      options.inputs.overlay = new NIN.TextureInput();
       super(id, options);
       this.snareThrob = 0;
+      this.kickThrob = 0;
+
+      const canvas = document.createElement('canvas');
+      const ctx = canvas.getContext('2d');
+      canvas.width = 2048;
+      canvas.height = 1024;
+      ctx.fillStyle = '#00e04f';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.font = '130pt monospace';
+      ctx.fillStyle = 'white';
+      ctx.fillText('R E V I S i o N', canvas.width / 2, canvas.height / 2);
+      ctx.fillStyle = 'rgb(55, 60, 63)';
+      ctx.fillRect(0, 0, canvas.width, canvas.height / 16);
+      ctx.fillRect(0, canvas.height - canvas.height / 16, canvas.width, canvas.height / 16);
+      this.revisionTexture = new THREE.CanvasTexture(canvas);
+      this.uniforms.trainCameraPosition.value = new THREE.Vector3(0, 0, 0);
+      this.uniforms.trainCameraRotation.value = new THREE.Vector3(0, 0, 0);
     }
 
     update(frame) {
+      const camera = this.inputs.camera.getValue();
+      if(camera) {
+        this.uniforms.trainCameraPosition.value.copy(camera.position);
+        this.uniforms.trainCameraRotation.value.copy(camera.rotation);
+        this.quad.material.needsUpdate = true;
+      }
       this.uniforms.frame.value = frame;
       this.snareThrob *= 0.97;
       if(BEAT && BEAN % 48 == 24) {
         this.snareThrob = 1;
       }
       this.uniforms.snareThrob.value = this.snareThrob;
+      this.uniforms.tDiffuse.value = this.inputs.twistertex.getValue();
+      this.uniforms.tDiffuse.value = this.revisionTexture;
+
+      let twistAmount = smoothstep(0, 1, (frame - FRAME_FOR_BEAN(2028)) / (FRAME_FOR_BEAN(2040) - FRAME_FOR_BEAN(2028)));
+      twistAmount = smoothstep(twistAmount, 0, (frame - FRAME_FOR_BEAN(2112)) / (FRAME_FOR_BEAN(2136) - FRAME_FOR_BEAN(2112)));
+      this.uniforms.twistAmount.value = twistAmount;
+
+      demo.nm.nodes.bloom.opacity = easeOut(1.5, 0.5, (frame - FRAME_FOR_BEAN(2016)) / (FRAME_FOR_BEAN(2028) - FRAME_FOR_BEAN(2016)));
+
+      this.kickThrob *= 0.95;
+      if(BEAT && BEAN >= 1920) {
+        switch(BEAN % 96) { 
+        case 0:
+        case 42:
+        case 48:
+        case 48 + 9:
+        case 48 + 18:
+        case 48 + 24 + 6:
+        case 48 + 24 + 8:
+        case 48 + 24 + 10:
+          this.kickThrob = 1;
+        }
+      }
+      this.uniforms.kickThrob.value = this.kickThrob;
+      this.uniforms.overlay.value = this.inputs.overlay.getValue();
     }
 
     resize() {
       let width = 16 * GU;
       let height = 9 * GU;
-      if(width >= 1601) {
-        width /= 2;
-        height /= 2;
+      if(width >= 1280) {
+        width = 1280;
+        height = 720;
       }
-      this.renderTarget.setSize(width, height);
+      this.renderTarget.setSize(width / 1.5, height / 1.5);
     }
   }
 

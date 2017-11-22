@@ -31,35 +31,35 @@
     letterEntry: {
       R: {
         y: 1000,
-        t: FRAME_FOR_BEAN(1860),
+        t: FRAME_FOR_BEAN(1860 - 96),
       },
       E: {
         y: -1000,
-        t: FRAME_FOR_BEAN(1862),
+        t: FRAME_FOR_BEAN(1862 - 96),
       },
       V: {
         y: 1000,
-        t: FRAME_FOR_BEAN(1864),
+        t: FRAME_FOR_BEAN(1864 - 96),
       },
       I: {
         y: -1000,
-        t: FRAME_FOR_BEAN(1866),
+        t: FRAME_FOR_BEAN(1866 - 96),
       },
       S: {
         y: 1000,
-        t: FRAME_FOR_BEAN(1868),
+        t: FRAME_FOR_BEAN(1868 - 96),
       },
       i: {
         y: -1000,
-        t: FRAME_FOR_BEAN(1870),
+        t: FRAME_FOR_BEAN(1870 - 96),
       },
       O: {
         y: 1000,
-        t: FRAME_FOR_BEAN(1871),
+        t: FRAME_FOR_BEAN(1871 - 96),
       },
       N: {
         y: -1000,
-        t: FRAME_FOR_BEAN(1872),
+        t: FRAME_FOR_BEAN(1872 - 96),
       },
     },
     letters: {
@@ -170,10 +170,11 @@
     update(frame) {
       super.update(frame);
       this.frame = frame;
+      demo.nm.nodes.bloom.opacity = 0.1;
     }
 
     render() {
-      const t = (this.frame - 4930) / (4940 - 4930);
+      const t = (this.frame - 4695 + 10) / 10;
       const r = smoothstep(55, 255, t);
       const g = smoothstep(60, 73, t);
       const b = smoothstep(63, 130, t);
@@ -187,12 +188,12 @@
 
       const cameraZoomScale = 1.5;
       this.ctx.translate(1920 / 2, 1080 / 2);
-      if(this.frame >= FRAME_FOR_BEAN(1872) && this.frame < FRAME_FOR_BEAN(1882)) {
+      if(this.frame >= FRAME_FOR_BEAN(1775) && this.frame < FRAME_FOR_BEAN(1785)) {
         this.ctx.rotate(-0.1);
         this.ctx.scale(cameraZoomScale, cameraZoomScale);
         this.ctx.translate(-100, 10);
       }
-      if(this.frame >= FRAME_FOR_BEAN(1882) && this.frame < FRAME_FOR_BEAN(1888)) {
+      if(this.frame >= FRAME_FOR_BEAN(1785) && this.frame < FRAME_FOR_BEAN(1800)) {
         this.ctx.rotate(0.1);
         this.ctx.scale(0.9, 0.9);
         this.ctx.translate(-20, 0);
