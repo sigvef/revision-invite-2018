@@ -25,12 +25,12 @@ float sphere(vec3 p, float s) {
 }
 
 
-float sphereCube(vec3 p){
+float sphereCube(vec3 p, float gap){
     float d = END + EPSILON;
     for(float x = -1.0; x <= 1.0; x++){
         for(float y = -1.0; y <= 1.0; y++){
             for(float z = -1.0; z <= 1.0; z++){
-                d = uni(d, sphere((p-vec3(x, y, z)), 0.3));
+                d = uni(d, sphere((p-vec3(x*gap, y*gap, z*gap)), 0.3));
             }
         }
     }
@@ -73,31 +73,33 @@ mat4 rotateZ(float theta) {
 
 float sdf(vec3 p) {
     vec3 cubeP = p;
-    float nframe = frame + 1100.0; //quickfix to movement in time-slice
-    if(nframe < 11143.0){
+    float cubeSize = 1.0;
+    float nframe = frame - 10204.0; //quickfix to movement in time-slice
+    if(nframe < 60.0){ //60
         //Stand still
     }
-    else if(nframe < 11284.0){
-        cubeP = (rotateY((nframe - 11143.0)/45.0) * vec4(p, 1.0)).xyz;
+    else if(nframe < 201.0){ //201
+        cubeP = (rotateY((nframe - 60.0)/45.0) * vec4(p, 1.0)).xyz;
     }
-    else if(nframe < 11331.0){
+    else if(nframe < 248.0){ //248
         //Stand still
     }
-    else if(nframe < 11366.0){
-        cubeP = (rotateX((nframe - 11331.0)/45.0) * vec4(p, 1.0)).xyz;
+    else if(nframe < 283.0){ //283
+        cubeP = (rotateX((nframe - 248.0)/45.0) * vec4(p, 1.0)).xyz;
     }
-    else if(nframe < 11390.0){
+    else if(nframe < 307.0){ //307
         cubeP = (rotateX(35.7/45.0) * vec4(p, 1.0)).xyz;
     }
-    else if(nframe < 11427.0){
-        cubeP = (rotateX((nframe -11390.0 + 35.0)/45.0) * vec4(p, 1.0)).xyz;
+    else if(nframe < 344.0){ //344
+        cubeP = (rotateX((nframe - 307.0 + 35.0)/45.0) * vec4(p, 1.0)).xyz;
     }else{
-        cubeP = (rotateX((nframe - 11427.0)/45.0) * vec4(p, 1.0)).xyz;
-        cubeP = (rotateY((nframe - 11427.0)/45.0) * vec4(cubeP, 1.0)).xyz;
+        cubeP = (rotateX((nframe - 344.0)/45.0) * vec4(p, 1.0)).xyz;
+        cubeP = (rotateY((nframe - 344.0)/45.0) * vec4(cubeP, 1.0)).xyz;
+        cubeSize = 1.0 + 0.5 * sin((16.0 + nframe) * 3.1415 / 30.0);
     }
 
 
-    float d = sphereCube(cubeP);
+    float d = sphereCube(cubeP,cubeSize);
     return d;
 }
 
