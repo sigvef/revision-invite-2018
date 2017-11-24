@@ -1,4 +1,4 @@
-(function(global) {
+(function (global) {
   class bouncyGeometry extends NIN.Node {
     constructor(id, options) {
       super(id, {
@@ -9,7 +9,6 @@
 
       /*
       Author: Iver
-      TODO
       */
 
       this.scene = new THREE.Scene();
@@ -19,12 +18,27 @@
         format: THREE.RGBFormat
       });
       this.camera = new THREE.PerspectiveCamera(45, 16 / 9, 1, 10000);
-      this.cube = new THREE.Mesh(new THREE.BoxGeometry(50, 5, 5),
-                                 new THREE.MeshBasicMaterial({ color: 0x000fff }));
-      this.scene.add(this.cube);
+      this.torus = new THREE.Mesh(
+        new THREE.TorusGeometry(10, 3, 16, 100),
+        new THREE.MeshBasicMaterial({color: 0xffffff})
+      );
 
-      var light = new THREE.PointLight( 0xffffff, 1, 100 );
-      light.position.set( -50, -50, -50 );
+      const beamRandom = new Random(666);
+      this.beamMaterial = new THREE.MeshBasicMaterial({color: 0xffffff});
+      this.beamGeometry = new THREE.BoxGeometry(.05, .05, 20);
+      this.numBeams = 777;
+      this.randomBeamNumbers = [];
+      this.beams = [];
+      for (let i = 0; i < this.numBeams; i++) {
+        const beamMesh = new THREE.Mesh(this.beamGeometry, this.beamMaterial);
+        this.randomBeamNumbers.push(beamRandom());
+        this.beams.push(beamMesh);
+        this.scene.add(beamMesh);
+      }
+      this.scene.add(this.torus);
+
+      var light = new THREE.PointLight(0xffffff, 1, 100);
+      light.position.set(-50, -50, -50);
       this.scene.add(light);
 
       var pointLight = new THREE.PointLight(0xFFFFFF);
@@ -37,8 +51,16 @@
     }
 
     update(frame) {
-      this.cube.rotation.x = Math.sin(frame / 10);
-      this.cube.rotation.y = Math.cos(frame / 10);
+      this.torus.rotation.x = Math.sin(frame / 40);
+      this.torus.rotation.y = Math.cos(frame / 40);
+
+      for (let i = 0; i < this.beams.length; i++) {
+        const beam = this.beams[i];
+        const angle = this.randomBeamNumbers[i] * 2 * Math.PI;
+        beam.position.x = 8 * Math.cos(angle);
+        beam.position.y = 8 * Math.sin(angle);
+        beam.position.z = 180 + (-1.66 * frame + i) % 190;
+      }
     }
 
     render(renderer) {
