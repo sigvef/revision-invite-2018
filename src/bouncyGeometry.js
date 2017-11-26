@@ -18,11 +18,22 @@
         format: THREE.RGBFormat
       });
       this.camera = new THREE.PerspectiveCamera(45, 16 / 9, 1, 10000);
-      this.torus = new THREE.Mesh(
-        new THREE.TorusGeometry(10, 3, 16, 100),
-        new THREE.MeshBasicMaterial({color: 0xffffff})
-      );
 
+      // CYLINDER
+      this.cylinder = new THREE.Mesh(
+        new THREE.CylinderGeometry(16, 16, 80, 32, 1, true),  // TODO: update openended value. rotate. tweak size. tweak transparency.
+        new THREE.MeshBasicMaterial(
+          {
+            color: 0xffffff,
+            side: THREE.DoubleSide,
+            transparent: true,
+            opacity: 0.3
+          }
+          )
+      );
+      this.scene.add(this.cylinder);
+
+      // BEAMS
       const beamRandom = new Random(666);
       this.beamMaterial = new THREE.MeshBasicMaterial({color: 0xffffff});
       this.beamGeometry = new THREE.BoxGeometry(.05, .05, 20);
@@ -35,17 +46,13 @@
         this.beams.push(beamMesh);
         this.scene.add(beamMesh);
       }
-      this.scene.add(this.torus);
 
-      var light = new THREE.PointLight(0xffffff, 1, 100);
-      light.position.set(-50, -50, -50);
-      this.scene.add(light);
-
-      var pointLight = new THREE.PointLight(0xFFFFFF);
-      pointLight.position.x = 10;
-      pointLight.position.y = 50;
-      pointLight.position.z = 130;
-      this.scene.add(pointLight);
+      // TORUS
+      this.torus = new THREE.Mesh(
+        new THREE.TorusGeometry(10, 3, 16, 100),
+        new THREE.MeshBasicMaterial({color: 0xffffff})
+      );
+      //this.scene.add(this.torus);
 
       this.camera.position.z = 100;
     }
@@ -53,6 +60,8 @@
     update(frame) {
       this.torus.rotation.x = Math.sin(frame / 40);
       this.torus.rotation.y = Math.cos(frame / 40);
+
+      this.cylinder.rotation.x = Math.PI / 2;
 
       for (let i = 0; i < this.beams.length; i++) {
         const beam = this.beams[i];
