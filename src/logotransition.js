@@ -178,7 +178,9 @@
       const r = smoothstep(55, 255, t);
       const g = smoothstep(60, 73, t);
       const b = smoothstep(63, 130, t);
-      this.ctx.fillStyle = `rgb(${r|0}, ${g|0}, ${b|0})`;
+      const a = smoothstep(0.1, 1, t);
+      this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+      this.ctx.fillStyle = `rgba(${r|0}, ${g|0}, ${b|0}, ${a})`;
       this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
 
       this.ctx.save();
@@ -230,12 +232,13 @@
             const g = 60;
             const b = 63;
             const a = smoothstep(0, 0.5, t);
+            const bgA = smoothstep(0, 1, t);
             this.ctx.fillStyle = `rgba(0, 0, 0, ${a})`;
             const shadowOffset = 8 / scale;
             this.ctx.translate(shadowOffset, shadowOffset * 9 / 16);
             this.ctx.fill(paths.boxes[letter]);
             this.ctx.translate(-shadowOffset, -shadowOffset * 9 / 16);
-            this.ctx.fillStyle = `rgb(${r | 0}, ${g | 0}, ${b | 0})`;
+            this.ctx.fillStyle = `rgba(${r | 0}, ${g | 0}, ${b | 0}, ${bgA})`;
             this.ctx.fill(paths.boxes[letter]);
           } else if(item === 'letters') {
             this.ctx.fillStyle = 'rgba(0, 0, 0, 0.9)';
