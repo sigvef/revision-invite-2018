@@ -41,9 +41,9 @@ float smin(float a, float b, float k) {
 }
 
 float map(vec3 p) {
-    float timer = clamp((frame - 7512.) / 50., 0., 1.);
+    float timer = clamp((frame - 6573.) / 50., 0., 1.);
     float size = smoothstep(0., 0.85, timer);
-    float sminParameter = .5 - max(0., (frame - 7512.) / (7762. - 7512.) / 2.);
+    float sminParameter = .5 - max(0., (frame - 6573.) / (6761. - 6573.) / 2.);
     float zscale = -1.;
     float yscale = 1.;
     float xscale = 4.;
@@ -106,7 +106,7 @@ void main() {
     vec3 pos = rayOrigin + rayDestination * totalDistance;
     vec3 surfaceNormal = calculateNormal(pos);
     float diffusion = 1.5 * clamp(dot(surfaceNormal, light), 0.0, 1.0);
-    float timer = clamp((frame - 7512.) / 50., 0., 1.);
+    float timer = clamp((frame - 6573.) / 50., 0., 1.);
     diffusion += 1. - smoothstep(0., 0.8, timer); /* ambient */ 
     diffusion += 0.2;
 
@@ -129,7 +129,7 @@ void main() {
     if(blackColDistance > farClippingPlane) {
         color = mix(textureColor, vec4(vec3(0.1, 0., 0.1), 1.), vec4(timer));
     }
-    float visibleTimer = clamp((frame - 7512.), 0., 1.);
+    float visibleTimer = clamp((frame - 6573.), 0., 1.);
     color = mix(textureColor, color, vec4(visibleTimer));
 
     gl_FragColor = color;

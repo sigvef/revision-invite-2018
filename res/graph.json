@@ -74,7 +74,7 @@
       "shader": "triangle"
     },
     "connected": {
-      "image": "butterflies.render",
+      "image": "pyramids.render",
       "ballpositions": "butterflies.ballpositions"
     }
   },
@@ -203,6 +203,9 @@
     "type": "pyramids",
     "options": {
       "shader": "chess"
+    },
+    "connected": {
+        "butterflyContent": "butterflies.threedeecontent"
     }
   },
   {
