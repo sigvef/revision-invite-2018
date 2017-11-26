@@ -10,6 +10,7 @@
     "id": "sceneSwitcherNode",
     "type": "SceneSwitcherNode",
     "connected": {
+      "_00_silence": "ewerk.render",
       "_01_pre_intro_with_car_rev_sounds": "ewerk.render",
       "_02_intro_1": "OrthoCube.render",
       "_03_intro_2": "schmapple.render",

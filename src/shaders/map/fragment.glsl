@@ -14,14 +14,14 @@ void main() {
     vec4 colorC = texture2D(C, coordsC);
     vec2 coordsD = vec2(vUv.x * 1. - 0.03, vUv.y * 1.);
     vec4 colorD = texture2D(D, coordsD);
-    vec4 colorE = vec4(.216, .235, .247, 1.);
+    vec4 colorE = vec4(0., 0., 0., 1.);
     if (t <= 1.0) {
-        gl_FragColor = mix(colorA, colorB, t);
+        gl_FragColor = mix(colorE, colorD, t);
     } else if (t <= 2.0) {
-        gl_FragColor = mix(colorB, colorC, t - 1.);
+        gl_FragColor = mix(colorD, colorC, t - 1.);
     } else if (t <= 3.0) {
-        gl_FragColor = mix(colorC, colorD, t - 2.);
+        gl_FragColor = mix(colorC, colorB, t - 2.);
     } else {
-        gl_FragColor = mix(colorD, colorE, t - 3.);
+        gl_FragColor = mix(colorB, colorA, t - 3.);
     }
 }
