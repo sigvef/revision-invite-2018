@@ -1,0 +1,6 @@
+{
+    "logo": { "type": "t", "value": null },
+    "scene": { "type": "t", "value": null },
+    "frame": { "type": "f", "value": 0.0 },
+    "yOffset": { "type": "f", "value": 0.0 }
+}
