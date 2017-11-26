@@ -5,8 +5,13 @@
         camera: options.camera,
         outputs: {
           render: new NIN.TextureOutput()
+        },
+        inputs: {
+          butterflyContent: new NIN.Input(),
         }
       });
+
+      this.cachedButterflyContent = undefined;
 
       this.camera.near = 0.1;
 
@@ -169,6 +174,13 @@
     update(frame) {
       super.update(frame);
 
+      const newButterflyContent = this.inputs.butterflyContent.getValue();
+      if(this.cachedButterflyContent != newButterflyContent) {
+        this.scene.remove(this.cachedButterflyContent);
+        this.scene.add(newButterflyContent);
+        this.cachedButterflyContent = newButterflyContent;
+      }
+
       const startBEAN = 46 * 12 * 4;
       const t = (frame - FRAME_FOR_BEAN(startBEAN)) / (FRAME_FOR_BEAN(54 * 12 * 4) - FRAME_FOR_BEAN(startBEAN));
 
@@ -210,11 +222,18 @@
           lerp(2, 0.5, t),
           lerp(-2, 4, t)
         );
-        this.camera.lookAt(new THREE.Vector3(
+        const lookAt = new THREE.Vector3(
           lerp(0, -1.5, t),
           easeIn(0, 1, t),
           lerp(2, 8, t)
-        ));
+        );
+        if(frame >= 6510) {
+          this.camera.position.set(-0.5, 0.5, 8);
+          lookAt.x = -0.5;
+          lookAt.y = 0.5;
+          lookAt.z = 6;
+        }
+        this.camera.lookAt(lookAt);
         this.cameraLight.position.copy(this.camera.position);
       }
     }
