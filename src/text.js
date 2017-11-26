@@ -18,6 +18,8 @@
         {
           letter: 'R',
           bg: 'rgb(0, 224, 79)',
+          rotateSpeed: 1.1,
+          leaveOffset: 5,
           script: [
             {
               bean: 0,
@@ -73,6 +75,8 @@
         {
           letter: 'E',
           bg: 'rgb(255, 73, 130)',
+          rotateSpeed: 0.8,
+          leaveOffset: 10,
           script: [
             {
               bean: 0,
@@ -135,6 +139,8 @@
         {
           letter: 'V',
           bg: 'rgb(55, 60, 63)',
+          rotateSpeed: 1.2,
+          leaveOffset: 0,
           script: [
             {
               bean: 9,
@@ -176,6 +182,8 @@
         {
           letter: 'I',
           bg: 'rgb(0, 224, 79)',
+          rotateSpeed: 0.1,
+          leaveOffset: 24,
           script: [
             {
               bean: 24,
@@ -224,6 +232,8 @@
         {
           letter: 'S',
           bg: 'purple',
+          rotateSpeed: 1.7,
+          leaveOffset: 10,
           script: [
             {
               bean: 33,
@@ -265,6 +275,8 @@
         {
           letter: 'I',
           bg: 'purple',
+          rotateSpeed: 0.9,
+          leaveOffset: 9,
           script: [
             {
               bean: 42,
@@ -299,6 +311,8 @@
         {
           letter: 'O',
           bg: 'rgb(255, 73, 130)',
+          rotateSpeed: 0.3,
+          leaveOffset: 16,
           script: [
             {
               bean: 60,
@@ -326,6 +340,8 @@
         {
           letter: 'N',
           bg: 'rgb(55, 60, 63)',
+          rotateSpeed: 1.1,
+          leaveOffset: 5,
           script: [
             {
               bean: 72,
@@ -351,8 +367,7 @@
 
       const startBean = 14 * 12 * 4;
 
-      this.ctx.fillStyle = 'rgb(55, 60, 63)';
-      this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+      this.canvas.width += 0;
 
       this.ctx.save();
       this.ctx.scale(GU, GU);
@@ -371,16 +386,31 @@
         const endFrame = FRAME_FOR_BEAN(startBean + target.bean);
         const t = (frame - startFrame) / (endFrame - startFrame);
 
-        this.ctx.save();
-        const juicyT = Math.pow(easeOut(0, 1, t), 0.5) * 0.9 + lerp(0, 1, t) * 0.1;
-        this.ctx.translate(
-          lerp(previous.x, target.x, juicyT),
-          lerp(previous.y, target.y, juicyT)
-        );
-        this.ctx.scale(
-          lerp(previous.width, target.width, juicyT),
-          lerp(previous.height, target.height, juicyT)
-        );
+        if (BEAN < 16 * 12 * 4) {
+          this.ctx.save();
+          const juicyT = Math.pow(easeOut(0, 1, t), 0.5) * 0.9 + lerp(0, 1, t) * 0.1;
+          this.ctx.translate(
+            lerp(previous.x, target.x, juicyT),
+            lerp(previous.y, target.y, juicyT)
+          );
+          this.ctx.scale(
+            lerp(previous.width, target.width, juicyT),
+            lerp(previous.height, target.height, juicyT)
+          );
+        } else {
+          const startFrame = FRAME_FOR_BEAN(16 * 12 * 4) + letter.leaveOffset;
+          const endFrame = FRAME_FOR_BEAN(17 * 12 * 4) + letter.leaveOffset;
+          const t = (frame - startFrame) / (endFrame - startFrame);
+          this.ctx.save();
+          this.ctx.translate(
+            easeIn(previous.x, previous.x, t),
+            easeIn(previous.y, previous.y + 12, t)
+          );
+          this.ctx.scale(4, 4.5);
+          this.ctx.translate(.5, .5);
+          this.ctx.rotate(easeIn(0, 1, t * letter.rotateSpeed));
+          this.ctx.translate(-.5, -.5);
+        }
         this.ctx.fillStyle = letter.bg;
         this.ctx.fillRect(
           0,

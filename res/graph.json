@@ -15,8 +15,8 @@
       "_02_intro_1": "OrthoCube.render",
       "_03_intro_2": "schmapple.render",
       "_04_car_rev_interstitial": "schmapple.render",
-      "_05_first_A_theme_1": "text.render",
-      "_06_first_A_theme_2": "GridShader.render",
+      "_05_first_A_theme_1": "textout.render",
+      "_06_first_A_theme_2": "textout.render",
       "_07_first_B_theme_1": "Metatron.render",
       "_08_first_B_theme_2": "Metatron.render",
       "_09_second_A_theme_1": "chromaTransition.render",
@@ -301,8 +301,19 @@
       "shader": "logotransitionquadpass"
     },
     "connected": {
-        "logo": "logotransition.render",
-        "scene": "RevisionFezLogo.render"
+      "logo": "logotransition.render",
+      "scene": "RevisionFezLogo.render"
+    }
+  },
+  {
+    "id": "textout",
+    "type": "textoutNode",
+    "options": {
+      "shader": "textout"
+    },
+    "connected": {
+      "A": "text.render",
+      "B": "GridShader.render"
     }
   }
 ]
