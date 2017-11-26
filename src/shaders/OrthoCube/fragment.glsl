@@ -25,16 +25,24 @@ float sphere(vec3 p, float s) {
 }
 
 
-float sphereCube(vec3 p, float gap){
+vec2 sphereCube(vec3 p, float gap){
     float d = END + EPSILON;
+    float cD = 0.0;
+    float oID = 1.0;
+    float currentID = 0.0;
     for(float x = -1.0; x <= 1.0; x++){
         for(float y = -1.0; y <= 1.0; y++){
             for(float z = -1.0; z <= 1.0; z++){
-                d = uni(d, sphere((p-vec3(x*gap, y*gap, z*gap)), 0.3));
+                cD = sphere((p-vec3(x*gap, y*gap, z*gap)), 0.3);
+                if(cD < d){
+                    d = cD;
+                    currentID = oID;
+                }
+                oID = oID + 1.0;
             }
         }
     }
-    return d;
+    return vec2(d, currentID);
 }
 
 mat4 rotateX(float theta) {
@@ -71,7 +79,7 @@ mat4 rotateZ(float theta) {
             );
 }
 
-float sdf(vec3 p) {
+vec2 sdf(vec3 p) {
     vec3 cubeP = p;
     float cubeSize = 1.0;
     float nframe = frame - 625.0; //quickfix to movement in time-slice
@@ -79,7 +87,7 @@ float sdf(vec3 p) {
         //Stand still
     }
     else if(nframe < 201.0){ //201
-        cubeP = (rotateY((nframe - 60.0)/45.0) * vec4(p, 1.0)).xyz;
+        cubeP = (rotateZ((nframe - 60.0)/45.0) * vec4(p, 1.0)).xyz;
     }
     else if(nframe < 248.0){ //248
         //Stand still
@@ -99,24 +107,25 @@ float sdf(vec3 p) {
     }
 
 
-    float d = sphereCube(cubeP,cubeSize);
-    return d;
+    vec2 distoid = sphereCube(cubeP,cubeSize);
+    return distoid;
 }
 
 
-float march(vec3 eye, vec3 dir, float start, float end) {
+vec2 march(vec3 eye, vec3 dir, float start, float end) {
     float depth = start;
     for (int i = 0; i < MAX_MARCHING_STEPS; i++) {
-        float dist = sdf(eye + depth * dir);
+        vec2 distoid = sdf(eye + depth * dir);
+        float dist = distoid.x;
         if (dist < EPSILON) {
-            return depth;
+            return vec2(depth, distoid.y);
         }
         depth+=dist;
         if (depth >= end) {
-            return end;
+            return vec2(end, 0.0);;
         }
     }
-    return end;
+    return vec2(end, 0.0);
 }
 
 void main() {
@@ -131,14 +140,18 @@ void main() {
     //do not rotate the camera without fixing math
     vec3 eye = pos + vec3(propUV, 0.0);
 
-    float dist = march(eye, dir, START, END);
+    vec2  distOid = march(eye, dir, START, END);
+    float dist = distOid.x;
+    float oID = distOid.y;
 
     if (dist >= END-EPSILON) {
+        gl_FragColor = vec4(0.0666, 0.0666, 0.0666, 1.0);
         return;
     }
 
     vec3 p = eye + dir * dist;
-    vec3 color = vec3(0.00089 * dist * dist * dist, 0.2, 1.0-0.0009 * dist * dist * dist);
+    float gray = 1.0 * mod(oID, 2.0) + 0.4;
+    vec3 color = vec3(gray, gray, gray);
 
     gl_FragColor = vec4(color, 1.0);
 }
