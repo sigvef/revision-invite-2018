@@ -74,7 +74,7 @@ mat4 rotateZ(float theta) {
 float sdf(vec3 p) {
     vec3 cubeP = p;
     float cubeSize = 1.0;
-    float nframe = frame - 10204.0; //quickfix to movement in time-slice
+    float nframe = frame - 625.0; //quickfix to movement in time-slice
     if(nframe < 60.0){ //60
         //Stand still
     }
