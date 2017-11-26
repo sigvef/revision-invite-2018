@@ -76,7 +76,7 @@
       this.ctx.scale(GU, GU);
 
       for (const letter of this.textScript.slice().reverse()) {
-        const t = (frame - FRAME_FOR_BEAN(64 * 12 * 4 + letter.beanOffset)) / 40;
+        const t = (frame - FRAME_FOR_BEAN(30 * 12 * 4 + letter.beanOffset)) / 40;
 
         this.ctx.save();
         this.ctx.translate(
@@ -84,7 +84,7 @@
           easeIn(
             9 - elasticOut(0, letter.height, 1.2, t),
             9,
-            (frame - FRAME_FOR_BEAN(66 * 12 * 4)) / 40)
+            (frame - FRAME_FOR_BEAN(32 * 12 * 4)) / 40)
         );
         this.ctx.fillStyle = 'rgba(10, 100, 150, 255)';
         this.ctx.fillRect(

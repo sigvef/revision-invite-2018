@@ -8,7 +8,7 @@
     }
 
     update(frame) {
-      const t = (frame - FRAME_FOR_BEAN(4 * 12 * 64)) / 60;
+      const t = (frame - FRAME_FOR_BEAN(4 * 12 * 30)) / 60;
       this.uniforms.t.value = frame / 60;
       this.uniforms.divisions.value = 6;
       this.uniforms.foregroundColor.value = new THREE.Color(1, 73 / 255, 130 / 255);
