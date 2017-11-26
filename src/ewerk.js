@@ -58,38 +58,55 @@
 
     update(frame) {
       super.update(frame);
-      const frame1 = FRAME_FOR_BEAN(34 * 12 * 4 + 24);
-      const frame2 = FRAME_FOR_BEAN(35 * 12 * 4);
-      const frame3 = FRAME_FOR_BEAN(35 * 12 * 4 + 24);
-      const frame4 = FRAME_FOR_BEAN(36 * 12 * 4);
+      const frame1 = FRAME_FOR_BEAN(1 * 12 * 4);
+      const frame2 = FRAME_FOR_BEAN(2 * 12 * 4);
+      const frame3 = FRAME_FOR_BEAN(3 * 12 * 4);
+      const frame4 = FRAME_FOR_BEAN(3 * 12 * 4 + 24);
+      const frame5 = FRAME_FOR_BEAN(4 * 12 * 4);
       if (frame <= frame1) {
         this.camera.position.set(
-          lerp(30, 5, (frame - frame1 + 10) / 10),
-          lerp(15, 150, (frame - frame1 + 10) / 10),
-          lerp(10, 20, (frame - frame1 + 10) / 10)
+          lerp(0, 0, (frame - frame1 + 10) / 10),
+          lerp(1200, 900, (frame - frame1 + 10) / 10),
+          lerp(300, 200, (frame - frame1 + 10) / 10)
         );
         this.shader.uniforms.t.value = lerp(0, 1, (frame - frame1 + 10) / 10);
+        this.roof.visible = false;
+        this.cube.visible = false;
       } else if (frame <= frame2) {
         this.camera.position.set(
-          lerp(5, 0, (frame - frame2 + 10) / 10),
-          lerp(150, 400, (frame - frame2 + 10) / 10),
-          lerp(20, 100, (frame - frame2 + 10) / 10)
+          lerp(0, 0, (frame - frame2 + 10) / 10),
+          lerp(900, 400, (frame - frame2 + 10) / 10),
+          lerp(200, 100, (frame - frame2 + 10) / 10)
         );
         this.shader.uniforms.t.value = lerp(1, 2, (frame - frame2 + 10) / 10);
+        this.roof.visible = false;
+        this.cube.visible = false;
       } else if (frame <= frame3) {
         this.camera.position.set(
-          lerp(0, 0, (frame - frame3 + 10) / 10),
-          lerp(400, 900, (frame - frame3 + 10) / 10),
-          lerp(100, 200, (frame - frame3 + 10) / 10)
+          lerp(0, 5, (frame - frame3 + 10) / 10),
+          lerp(400, 150, (frame - frame3 + 10) / 10),
+          lerp(100, 20, (frame - frame3 + 10) / 10)
         );
         this.shader.uniforms.t.value = lerp(2, 3, (frame - frame3 + 10) / 10);
-      } else {
+        this.roof.visible = false;
+        this.cube.visible = false;
+      } else if (frame <= frame4) {
         this.camera.position.set(
-          lerp(0, 0, (frame - frame4 + 10) / 10),
-          lerp(900, 1200, (frame - frame4 + 10) / 10),
-          lerp(200, 300, (frame - frame4 + 10) / 10)
+          lerp(5, 30, (frame - frame4 + 10) / 10),
+          lerp(150, 15, (frame - frame4 + 10) / 10),
+          lerp(20, 10, (frame - frame4 + 10) / 10)
         );
         this.shader.uniforms.t.value = lerp(3, 4, (frame - frame4 + 10) / 10);
+        this.roof.visible = true;
+        this.cube.visible = true;
+      } else {
+        this.camera.position.set(
+          lerp(30, 15, (frame - frame5 + 10) / 10),
+          lerp(15, 5, (frame - frame5 + 10) / 10),
+          lerp(10, 1, (frame - frame5 + 10) / 10)
+        );
+        this.roof.visible = true;
+        this.cube.visible = true;
       }
       this.camera.lookAt(new THREE.Vector3(0, 0, 0));
     }
