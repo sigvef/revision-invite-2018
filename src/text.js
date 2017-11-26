@@ -62,7 +62,7 @@
               height: 3.33,
             },
             {
-              bean: 81,
+              bean: 81 + 12,
               x: 0,
               y: 0,
               width: 4,
@@ -124,7 +124,7 @@
               height: 1.17,
             },
             {
-              bean: 81,
+              bean: 81 + 12,
               x: 4,
               y: 0,
               width: 4,
@@ -165,7 +165,7 @@
               height: 4.5,
             },
             {
-              bean: 81,
+              bean: 81 + 12,
               x: 8,
               y: 0,
               width: 4,
@@ -213,7 +213,7 @@
               height: 4.5,
             },
             {
-              bean: 81,
+              bean: 81 + 12,
               x: 4,
               y: 4.5,
               width: 4,
@@ -254,7 +254,7 @@
               height: 4.5,
             },
             {
-              bean: 81,
+              bean: 81 + 12,
               x: 0,
               y: 4.5,
               width: 4,
@@ -288,7 +288,7 @@
               height: 4.5,
             },
             {
-              bean: 81,
+              bean: 81 + 12,
               x: 12,
               y: 0,
               width: 4,
@@ -315,7 +315,7 @@
               height: 4.5,
             },
             {
-              bean: 81,
+              bean: 81 + 12,
               x: 8,
               y: 4.5,
               width: 4,
@@ -335,7 +335,7 @@
               height: 4.5,
             },
             {
-              bean: 81,
+              bean: 81 + 12,
               x: 12,
               y: 4.5,
               width: 4,
@@ -351,8 +351,8 @@
 
       const startBean = 14 * 12 * 4;
 
-      // This clears the canvas
-      this.canvas.width += 0;
+      this.ctx.fillStyle = 'rgb(55, 60, 63)';
+      this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
 
       this.ctx.save();
       this.ctx.scale(GU, GU);
@@ -372,13 +372,14 @@
         const t = (frame - startFrame) / (endFrame - startFrame);
 
         this.ctx.save();
+        const juicyT = Math.pow(easeOut(0, 1, t), 0.5) * 0.9 + lerp(0, 1, t) * 0.1;
         this.ctx.translate(
-          lerp(previous.x, target.x, t),
-          lerp(previous.y, target.y, t)
+          lerp(previous.x, target.x, juicyT),
+          lerp(previous.y, target.y, juicyT)
         );
         this.ctx.scale(
-          lerp(previous.width, target.width, t),
-          lerp(previous.height, target.height, t)
+          lerp(previous.width, target.width, juicyT),
+          lerp(previous.height, target.height, juicyT)
         );
         this.ctx.fillStyle = letter.bg;
         this.ctx.fillRect(
@@ -389,6 +390,13 @@
         );
         this.ctx.font = 'bold 1px brandontext';
         this.ctx.textAlign = 'center';
+        this.ctx.strokeStyle = 'rgba(0, 0, 0, 0.2)';
+        this.ctx.lineWidth = .1;
+        this.ctx.strokeText(
+          letter.letter,
+          0.5,
+          0.85
+        );
         this.ctx.fillStyle = 'white';
         this.ctx.fillText(
           letter.letter,
