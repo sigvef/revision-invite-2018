@@ -13,7 +13,9 @@
 
       this.cachedButterflyContent = undefined;
 
-      this.camera.near = 0.1;
+      this.camera.near = 0.01;
+      this.camera.fov = 45;
+      this.camera.updateProjectionMatrix();
 
       this.cameraLight = new THREE.PointLight(0xffffff, 1, 100);
       this.scene.add(this.cameraLight);
@@ -162,7 +164,7 @@
       for (const pyramid of this.pyramids) {
         const ring = new THREE.Mesh(
             new THREE.TorusGeometry(pyramid.radius, .1, 4, 4),
-            new THREE.MeshStandardMaterial({color: 0xffffff})
+            new THREE.MeshBasicMaterial({color: 0xffffff})
         );
         ring.position.set(pyramid.x, 0, pyramid.z);
         ring.rotation.x = -Math.PI/2;
@@ -228,7 +230,7 @@
           lerp(2, 8, t)
         );
         if(frame >= 6510) {
-          this.camera.position.set(-0.5, 0.5, 8);
+          this.camera.position.set(-0.5, 0.5, 8.45);
           lookAt.x = -0.5;
           lookAt.y = 0.5;
           lookAt.z = 6;

@@ -10,7 +10,13 @@
         }
       });
 
+      this.ps = new ParticleSystem({
+        color: new THREE.Color(1, 73 / 255, 130 / 255),  
+      });
+
       this.random = new Random(1041);
+
+      this.kickThrobIndex = 0;
 
       this.throb = 0;
 
@@ -54,6 +60,7 @@
       this.outputs.ballpositions.setValue([]);
 
       this.outputs.threedeecontent.value = new THREE.Object3D();
+      this.outputs.threedeecontent.value.add(this.ps.particles);
       this.outputs.threedeecontent.value.rotation.y = -Math.PI / 2;
       const scale = 0.05;
       this.outputs.threedeecontent.value.scale.set(scale, scale, scale);
@@ -63,6 +70,7 @@
         var path = new CustomSinCurve(this.random() * Math.PI * 2);
         var geometry = new THREE.TubeGeometry(path, 50, 0.15, 8);
         var material = new THREE.ShaderMaterial(SHADERS.butterflylines).clone();
+        material.throb = 0;
         const color = new THREE.Color(this.colors[i]);
         material.uniforms.r.value = color.r;
         material.uniforms.g.value = color.g;
@@ -95,10 +103,30 @@
       const frameStart = 5759;
       const positionX = (frame - frameStart) / 2 / 2;
 
+      if(frame == 5759) {
+        this.kickThrobIndex = 0;
+      }
+
       this.throb *= 0.85;
       if(BEAT && BEAN % 12 == 0) {
         this.throb = 1;
       }
+
+      if(BEAT) {
+        switch(BEAN % 96) { 
+        case 0:
+        case 42:
+        case 48:
+        case 48 + 9:
+        case 48 + 18:
+        case 48 + 24 + 6:
+        case 48 + 24 + 8:
+        case 48 + 24 + 10:
+          this.lines[this.kickThrobIndex].material.throb = 1;
+          this.kickThrobIndex = (this.kickThrobIndex + 1) % this.lines.length;
+        }
+      }
+
 
       for(let i = 0; i < this.lines.length; i++) {
         const percentage = (frame - frameStart) / 500 / 2 + this.lines[i].percentageOffset;
@@ -108,10 +136,39 @@
         this.lines[i].light.position.copy(this.butterflies[i].position);
         this.outputs.ballpositions.value[i].copy(this.butterflies[i].position);
         this.outputs.ballpositions.value[i].x = this.butterflies[i].position.x - positionX;
+
+        const material = this.lines[i].material;
+        material.throb *= 0.9;
+        material.uniforms.r.value = lerp(55 / 255, 1, material.throb);
+        material.uniforms.g.value = lerp(60 / 255, 1, material.throb);
+        material.uniforms.b.value = lerp(63 / 255, 1, material.throb);
+        material.uniforms.a.value = 1;
+
+        const position = this.butterflies[i].position;
+        for(let i = 0; i < 2; i++) {
+          const angle = Math.random() * Math.PI * 2;
+          const radius = Math.random() * .5;
+          const distance = 0;
+          const velocityAngle = Math.random() * Math.PI * 2;
+          const velocityRadius = 0.005;
+          this.ps.spawn({
+            x: position.x - distance,
+            y: position.y + Math.cos(angle) * radius,
+            z: position.z + Math.sin(angle) * radius,
+          },
+            {
+              x: .5 * (0.05 -0.1 * Math.random()),
+              y: Math.sin(velocityAngle) * velocityRadius,
+              z: Math.cos(velocityAngle) * velocityRadius,
+            }, 0.0002);
+        }
       }
+
+      //this.ps.update();
     }
 
     render() {
+      //this.ps.render();
     }
   }
 
