@@ -44,6 +44,7 @@
           angle = (angle + (i ^ j) / 2) % (Math.PI * 2);
           if(angle > Math.PI) {
             angle = Math.PI * 2 - angle;
+            this.ctx.rotate(Math.PI / 2);
           }
           this.ctx.moveTo(0, 0);
           this.ctx.lineTo(r * Math.cos(-angle / 2),
