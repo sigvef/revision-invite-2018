@@ -284,6 +284,9 @@
     "type": "ewerk",
     "options": {
       "shader": "map"
+    },
+    "connected": {
+        "globeTextures": "globetextures.globeTextures"
     }
   },
   {
@@ -315,5 +318,9 @@
       "A": "text.render",
       "B": "GridShader.render"
     }
+  },
+  {
+    "id": "globetextures",
+    "type": "globetextures"
   }
 ]
