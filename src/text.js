@@ -14,10 +14,12 @@
       this.output.minFilter = THREE.LinearFilter;
       this.output.magFilter = THREE.LinearFilter;
 
+      const green = '#00e04f';
+      const pink = 'rgb(255, 73, 130)';
       this.letters = [
         {
           letter: 'R',
-          bg: 'rgb(0, 224, 79)',
+          bg: green,
           rotateSpeed: 1.1,
           leaveOffset: 5,
           script: [
@@ -74,7 +76,7 @@
         },
         {
           letter: 'E',
-          bg: 'rgb(255, 73, 130)',
+          bg: pink,
           rotateSpeed: 0.8,
           leaveOffset: 10,
           script: [
@@ -138,7 +140,7 @@
         },
         {
           letter: 'V',
-          bg: 'rgb(55, 60, 63)',
+          bg: green,
           rotateSpeed: 1.2,
           leaveOffset: 0,
           script: [
@@ -181,7 +183,7 @@
         },
         {
           letter: 'I',
-          bg: 'rgb(0, 224, 79)',
+          bg: green, 
           rotateSpeed: 0.1,
           leaveOffset: 24,
           script: [
@@ -231,7 +233,7 @@
         },
         {
           letter: 'S',
-          bg: 'purple',
+          bg: pink,
           rotateSpeed: 1.7,
           leaveOffset: 10,
           script: [
@@ -274,7 +276,7 @@
         },
         {
           letter: 'I',
-          bg: 'purple',
+          bg: pink,
           rotateSpeed: 0.9,
           leaveOffset: 9,
           script: [
@@ -310,7 +312,7 @@
         },
         {
           letter: 'O',
-          bg: 'rgb(255, 73, 130)',
+          bg: pink,
           rotateSpeed: 0.3,
           leaveOffset: 16,
           script: [
@@ -339,7 +341,7 @@
         },
         {
           letter: 'N',
-          bg: 'rgb(55, 60, 63)',
+          bg: green,
           rotateSpeed: 1.1,
           leaveOffset: 5,
           script: [
@@ -418,20 +420,20 @@
           1,
           1
         );
-        this.ctx.font = 'bold 1px brandontext';
+        this.ctx.font = 'bold 0.5pt arial';
         this.ctx.textAlign = 'center';
         this.ctx.strokeStyle = 'rgba(0, 0, 0, 0.2)';
-        this.ctx.lineWidth = .1;
+        this.ctx.lineWidth = .05;
         this.ctx.strokeText(
           letter.letter,
           0.5,
-          0.85
+          0.75
         );
         this.ctx.fillStyle = 'white';
         this.ctx.fillText(
           letter.letter,
           0.5,
-          0.85
+          0.75
         );
         this.ctx.restore();
       }

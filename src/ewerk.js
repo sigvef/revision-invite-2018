@@ -28,7 +28,7 @@
           x: (Math.random() - 0.5) * 0.01,
           y: (Math.random() - 0.5) * 0.01,
           z: (Math.random() - 0.5) * 0.01,
-        }, (2 + Math.random() * 2) * 0.01);
+        }, (2 + Math.random() * 2) * 0.005);
       }
       this.ps.update();
 
