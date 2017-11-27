@@ -1,5 +1,6 @@
 uniform float frame;
 uniform sampler2D tDiffuse;
+uniform sampler2D nextScene;
 uniform vec3 sphere1;
 uniform vec3 sphere2;
 uniform vec3 sphere3;
@@ -111,7 +112,7 @@ void main() {
     diffusion += 0.2;
 
     vec3 refracted = refract(normalize(pos - eye), surfaceNormal, 1.1);
-    vec4 refractedColor = texture2D(tDiffuse, .82 * mod(refracted.xy - 0.5, 1.));
+    vec4 refractedColor = texture2D(nextScene, .82 * mod(refracted.xy * 2. - 0.5, 1.));
 
     if(blackColDistance < farClippingPlane) {
         //color = vec4(.1, .0, .1, 1.);
@@ -119,7 +120,7 @@ void main() {
 
     if(totalDistance < farClippingPlane) {
     }
-    color = diffusion * .8 + refractedColor * 0.4;
+    color = vec4(vec3(1., 73. / 255., 130. / 255.) * diffusion * .8 + vec3(refractedColor * 0.2), 1.);
     //color = vec4(vec3(diffusion), 1.);
     //color = vec4(surfaceNormal, 1.);
     //color = vec4(vec3(refracted), 1.);

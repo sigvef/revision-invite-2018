@@ -1,5 +1,6 @@
 {
     "tDiffuse": { "type": "t", "value": null },
+    "nextScene": { "type": "t", "value": null },
     "A": { "type": "t", "value": null },
     "frame": { "type": "f", "value": 0.0 },
     "sphere1": { "type": "v3", "value": null },

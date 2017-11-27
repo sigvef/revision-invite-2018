@@ -3,6 +3,7 @@
     constructor(id, options) {
       options.inputs = {
         image: new NIN.TextureInput(),
+        nextScene: new NIN.TextureInput(),
         ballpositions: new NIN.Input(),
       };
       super(id, options);
@@ -14,9 +15,14 @@
       this.uniforms.sphere6.value = new THREE.Vector3(0, 0, 0);
     }
 
+    beforeUpdate(frame) {
+      this.inputs.nextScene.enabled = frame > 5673;
+    }
+
     update(frame) {
       this.uniforms.frame.value = frame;
       this.uniforms.tDiffuse.value = this.inputs.image.getValue();
+      this.uniforms.nextScene.value = this.inputs.nextScene.getValue();
       this.uniforms.sphere1.value = this.inputs.ballpositions.getValue()[0];
       this.uniforms.sphere2.value = this.inputs.ballpositions.getValue()[1];
       this.uniforms.sphere3.value = this.inputs.ballpositions.getValue()[2];

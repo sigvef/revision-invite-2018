@@ -76,7 +76,8 @@
     },
     "connected": {
       "image": "pyramids.render",
-      "ballpositions": "butterflies.ballpositions"
+      "ballpositions": "butterflies.ballpositions",
+      "nextScene": "GodsOrKings.render"
     }
   },
   {
