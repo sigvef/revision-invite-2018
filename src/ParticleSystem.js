@@ -17,6 +17,7 @@ function ParticleSystem(options) {
       amplitude: {value: 1.0},
       color:     {value: new THREE.Color(0xffffff)},
       texture:   {value: sprite},
+      gu:   {value: GU},
     },
     vertexShader:   ParticleSystem.vertexShader,
     fragmentShader: ParticleSystem.fragmentShader,
@@ -25,9 +26,10 @@ function ParticleSystem(options) {
     transparent:    true,
   });
   this.particles = new THREE.Points(this.particleGeometry, particleMaterial);
+  this.particleMaterial = particleMaterial;
 }
 
-ParticleSystem.prototype.spawn = function(position, velocity) {
+ParticleSystem.prototype.spawn = function(position, velocity, size) {
   this.index = (this.index + 1) % this.particleGeometry.attributes.size.array.length;
   this.particleGeometry.attributes.position.array[this.index * 3] = position.x;
   this.particleGeometry.attributes.position.array[this.index * 3 + 1] = position.y;
@@ -38,8 +40,8 @@ ParticleSystem.prototype.spawn = function(position, velocity) {
   this.velocities[this.index * 3] = velocity.x;
   this.velocities[this.index * 3 + 1] = velocity.y;
   this.velocities[this.index * 3 + 2] = velocity.z;
-  this.particleGeometry.attributes.size.array[this.index] = 20;
-}
+  this.particleGeometry.attributes.size.array[this.index] = size || 20;
+};
 
 ParticleSystem.prototype.update = function() {
   const attributes = this.particleGeometry.attributes;
@@ -50,12 +52,13 @@ ParticleSystem.prototype.update = function() {
     attributes.position.array[i * 3 + 2] += this.velocities[i * 3 + 2];
   }
   attributes.size.needsUpdate = true;
-}
+};
 
 ParticleSystem.prototype.render = function() {
   this.particleGeometry.attributes.size.needsUpdate = true;
   this.particleGeometry.attributes.position.needsUpdate = true;
   this.particleGeometry.attributes.customColor.needsUpdate = true;
+  this.particleMaterial.uniforms.gu.value = GU;
 };
 
 function generateSprite() {
@@ -75,6 +78,7 @@ function generateSprite() {
 
 ParticleSystem.vertexShader = `
 uniform float amplitude;
+uniform float gu;
 attribute float size;
 attribute vec3 customColor;
 
@@ -83,7 +87,7 @@ varying vec3 vColor;
 void main() {
   vColor = customColor;
   vec4 mvPosition = modelViewMatrix * vec4( position, 1.0 );
-  gl_PointSize = size * ( 300.0 / -mvPosition.z );
+  gl_PointSize = size * ( 300.0 / -mvPosition.z * gu);
   gl_Position = projectionMatrix * mvPosition;
 }
 `;
