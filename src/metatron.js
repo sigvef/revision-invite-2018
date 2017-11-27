@@ -16,7 +16,7 @@
 
 
       this.cube = new THREE.Mesh(new THREE.BoxGeometry(176, 99, 0.1),
-                                 new THREE.MeshBasicMaterial({ color: 0x23132 }));
+                                 new THREE.MeshBasicMaterial({ color: 0x023132 }));
       this.cube.position.set(0,0,-10);
       this.scene.add(this.cube);
 
@@ -109,6 +109,13 @@
       circle_geometry.computeLineDistances();
       this.center_circle = new THREE.Line( circle_geometry, line_material );
       this.scene.add(this.center_circle);
+
+      this.middle_center_hex = new THREE.Line( small_geometry, line_material );
+      this.outer_center_hex = new THREE.Line( small_geometry, line_material );
+      this.middle_center_hex.rotation.set(0, 0, Math.PI / 6);
+      this.outer_center_hex.rotation.set(0, 0, Math.PI / 6);
+      this.scene.add(this.middle_center_hex);
+      this.scene.add(this.outer_center_hex);
     }
 
     update(frame) {
@@ -129,6 +136,8 @@
       this.center_line2.scale.set(0, 0, 0);
       this.center_line3.scale.set(0, 0, 0);
       this.center_circle.scale.set(0, 0, 0);
+      this.middle_center_hex.position.set(100, 0, 0);
+      this.outer_center_hex.position.set(100, 0, 0);
 
       if ( frame > FRAME_FOR_BEAN(22 * 48)) {
         var scale = asmoothstep(FRAME_FOR_BEAN(22 * 48), FRAME_FOR_BEAN(48), frame)
@@ -153,6 +162,14 @@
       }
       if (frame > FRAME_FOR_BEAN(24 * 48)) {
         this.center_rotation_container.rotation.set(0, 0, Math.PI / 3 - 3 * Math.PI / 3 *asmoothstep(FRAME_FOR_BEAN(24*48), FRAME_FOR_BEAN(12), frame));
+
+
+        var scale = 1 + 0.5 * asmoothstep(FRAME_FOR_BEAN(24.25 * 48), FRAME_FOR_BEAN(12), frame);
+        this.small_center_hex.scale.set(scale, scale, scale);
+
+
+        var scale2 = 1.5 + 1.5 * asmoothstep(FRAME_FOR_BEAN(24.5 * 48), FRAME_FOR_BEAN(12), frame);
+        this.center_circle.scale.set(scale2, scale2, scale2);
       }
     }
   }
