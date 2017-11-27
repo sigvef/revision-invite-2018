@@ -7,12 +7,24 @@
         }
       });
 
+      this.cameraX = 0;
+      this.cameraY = 0;
+      this.cameraR = 0;
+      this.cameraDX = 0;
+      this.cameraDY = 0;
+      this.cameraDR = 0;
+      this.cameraDDX = 0;
+      this.cameraDDY = 0;
+      this.cameraDDR = 0;
+
       this.canvas = document.createElement('canvas');
       this.ctx = this.canvas.getContext('2d');
       this.resize();
       this.output = new THREE.VideoTexture(this.canvas);
       this.output.minFilter = THREE.LinearFilter;
       this.output.magFilter = THREE.LinearFilter;
+      this.testo = document.createElement('img');
+      Loader.load('res/testo.png', this.testo, () => {});
 
       const green = '#00e04f';
       const pink = 'rgb(255, 73, 130)';
@@ -22,6 +34,7 @@
           bg: green,
           rotateSpeed: 1.1,
           leaveOffset: 5,
+          throbAt: 0,
           script: [
             {
               bean: 0,
@@ -66,7 +79,7 @@
               height: 3.33,
             },
             {
-              bean: 81 + 12,
+              bean: 81 + 6,
               x: 0,
               y: 0,
               width: 4,
@@ -79,6 +92,7 @@
           bg: pink,
           rotateSpeed: 0.8,
           leaveOffset: 10,
+          throbAt: 9,
           script: [
             {
               bean: 0,
@@ -130,7 +144,7 @@
               height: 1.17,
             },
             {
-              bean: 81 + 12,
+              bean: 81 + 6,
               x: 4,
               y: 0,
               width: 4,
@@ -143,6 +157,7 @@
           bg: green,
           rotateSpeed: 1.2,
           leaveOffset: 0,
+          throbAt: 24,
           script: [
             {
               bean: 9,
@@ -173,7 +188,7 @@
               height: 4.5,
             },
             {
-              bean: 81 + 12,
+              bean: 81 + 6,
               x: 8,
               y: 0,
               width: 4,
@@ -183,9 +198,91 @@
         },
         {
           letter: 'I',
+          bg: pink,
+          rotateSpeed: 0.9,
+          leaveOffset: 9,
+          throbAt: 48 + 12,
+          script: [
+            {
+              bean: 42,
+              x: 10.67,
+              y: 0,
+              width: 5.33,
+              height: 0,
+            },
+            {
+              bean: 60,
+              x: 10.67,
+              y: 0,
+              width: 5.33,
+              height: 4.5,
+            },
+            {
+              bean: 72,
+              x: 10.67,
+              y: 0,
+              width: 5.33,
+              height: 4.5,
+            },
+            {
+              bean: 81 + 6,
+              x: 12,
+              y: 0,
+              width: 4,
+              height: 4.5,
+            }
+          ],
+        },
+        {
+          letter: 'S',
+          bg: pink,
+          rotateSpeed: 1.7,
+          leaveOffset: 10,
+          throbAt: 24 + 18,
+          script: [
+            {
+              bean: 33,
+              x: 16,
+              y: 4.5,
+              width: 0,
+              height: 4.5,
+            },
+            {
+              bean: 42,
+              x: 5.33,
+              y: 4.5,
+              width: 5.34,
+              height: 4.5,
+            },
+            {
+              bean: 60,
+              x: 5.33,
+              y: 4.5,
+              width: 5.34,
+              height: 4.5,
+            },
+            {
+              bean: 72,
+              x: 0,
+              y: 4.5,
+              width: 5.33,
+              height: 4.5,
+            },
+            {
+              bean: 81 + 6,
+              x: 0,
+              y: 4.5,
+              width: 4,
+              height: 4.5,
+            },
+          ],
+        },
+        {
+          letter: 'I',
           bg: green, 
           rotateSpeed: 0.1,
           leaveOffset: 24,
+          throbAt: 24 + 9,
           script: [
             {
               bean: 24,
@@ -223,7 +320,7 @@
               height: 4.5,
             },
             {
-              bean: 81 + 12,
+              bean: 81 + 6,
               x: 4,
               y: 4.5,
               width: 4,
@@ -232,89 +329,11 @@
           ],
         },
         {
-          letter: 'S',
-          bg: pink,
-          rotateSpeed: 1.7,
-          leaveOffset: 10,
-          script: [
-            {
-              bean: 33,
-              x: 16,
-              y: 4.5,
-              width: 0,
-              height: 4.5,
-            },
-            {
-              bean: 42,
-              x: 5.33,
-              y: 4.5,
-              width: 5.34,
-              height: 4.5,
-            },
-            {
-              bean: 60,
-              x: 5.33,
-              y: 4.5,
-              width: 5.34,
-              height: 4.5,
-            },
-            {
-              bean: 72,
-              x: 0,
-              y: 4.5,
-              width: 5.33,
-              height: 4.5,
-            },
-            {
-              bean: 81 + 12,
-              x: 0,
-              y: 4.5,
-              width: 4,
-              height: 4.5,
-            },
-          ],
-        },
-        {
-          letter: 'I',
-          bg: pink,
-          rotateSpeed: 0.9,
-          leaveOffset: 9,
-          script: [
-            {
-              bean: 42,
-              x: 10.67,
-              y: 0,
-              width: 5.33,
-              height: 0,
-            },
-            {
-              bean: 60,
-              x: 10.67,
-              y: 0,
-              width: 5.33,
-              height: 4.5,
-            },
-            {
-              bean: 72,
-              x: 10.67,
-              y: 0,
-              width: 5.33,
-              height: 4.5,
-            },
-            {
-              bean: 81 + 12,
-              x: 12,
-              y: 0,
-              width: 4,
-              height: 4.5,
-            }
-          ],
-        },
-        {
           letter: 'O',
           bg: pink,
           rotateSpeed: 0.3,
           leaveOffset: 16,
+          throbAt: 48 + 24,
           script: [
             {
               bean: 60,
@@ -331,7 +350,7 @@
               height: 4.5,
             },
             {
-              bean: 81 + 12,
+              bean: 81 + 6,
               x: 8,
               y: 4.5,
               width: 4,
@@ -344,6 +363,7 @@
           bg: green,
           rotateSpeed: 1.1,
           leaveOffset: 5,
+          throbAt: 48 + 24,
           script: [
             {
               bean: 72,
@@ -353,7 +373,7 @@
               height: 4.5,
             },
             {
-              bean: 81 + 12,
+              bean: 81 + 6,
               x: 12,
               y: 4.5,
               width: 4,
@@ -362,19 +382,71 @@
           ],
         }
       ];
+
+      for(let letter of this.letters) {
+        letter.throb = 0;
+      }
     }
 
     update(frame) {
       super.update(frame);
+      if(frame == 1752) {
+        for(let letter of this.letters) {
+          letter.throb = 0;
+        }
+      }
+      for(let letter of this.letters) {
+        letter.throb *= 0.999;
+      }
+
+      this.throb *= .95;
+      if(BEAT && frame < 2002) {
+        switch(BEAN % 96) {
+        case 0:
+        case 9:
+        case 24:
+        case 24 + 9:
+        case 24 + 18:
+        case 48 + 12:
+        case 48 + 24:
+          this.throb = 1;
+          this.cameraDX = (Math.random() - 0.5) * 1.0;
+          this.cameraDY = (Math.random() - 0.5) * 1.0;
+          this.cameraDR = (Math.random() - 0.5) * 0.1;
+        }
+      }
+
+      this.cameraDDX = -this.cameraX * 0.1;
+      this.cameraDDY = -this.cameraY * 0.1;
+      this.cameraDDR = -this.cameraR * 0.1;
+      this.cameraDX += this.cameraDDX;
+      this.cameraDY += this.cameraDDY;
+      this.cameraDR += this.cameraDDR;
+      this.cameraDX *= 0.75;
+      this.cameraDY *= 0.75;
+      this.cameraDR *= 0.75;
+      this.cameraX += this.cameraDX;
+      this.cameraY += this.cameraDY;
+      this.cameraR += this.cameraDR;
 
       const startBean = 14 * 12 * 4;
 
       this.canvas.width += 0;
+      if(frame < 2002) {
+        this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+      }
 
       this.ctx.save();
       this.ctx.scale(GU, GU);
 
+      this.ctx.translate(8, 4.5);
+      this.ctx.rotate(this.cameraR);
+      this.ctx.translate(-8, -4.5);
+      this.ctx.translate(this.cameraX, this.cameraY);
+
+      let letterIndex = -1;
       for (const letter of this.letters) {
+        letterIndex++;
         let previous = letter.script[0];
         let target = letter.script[0];
         for (const scriptEntry of letter.script) {
@@ -414,16 +486,19 @@
           this.ctx.translate(-.5, -.5);
         }
         this.ctx.fillStyle = letter.bg;
+        /*
         this.ctx.fillRect(
           0,
           0,
           1,
           1
         );
+        */
         this.ctx.font = 'bold 0.5pt arial';
         this.ctx.textAlign = 'center';
         this.ctx.strokeStyle = 'rgba(0, 0, 0, 0.2)';
         this.ctx.lineWidth = .05;
+        /*
         this.ctx.strokeText(
           letter.letter,
           0.5,
@@ -435,6 +510,21 @@
           0.5,
           0.75
         );
+        */
+        const scale = 1 / 640 * 4;
+        this.ctx.scale(scale, scale);
+        if(BEAT && BEAN - startBean == letter.throbAt) {
+          letter.throb = 1; 
+        }
+        this.ctx.globalAlpha = 0.2 + 0.8 * letter.throb;
+        if(frame >= 1940) {
+          this.ctx.globalAlpha = 1;
+        }
+        this.ctx.drawImage(this.testo,
+            (letterIndex % 4) * 640 / 4,
+            (letterIndex / 4 | 0) * 360 / 2,
+            640 / 4, 360 / 2,
+            0, 0, 640 / 4, 640 / 4);
         this.ctx.restore();
       }
 
