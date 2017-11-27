@@ -12,7 +12,7 @@
 
     update(frame) {
       const t = lerp(
-        0.25,
+        0,
         2,
         (frame - FRAME_FOR_BEAN(16 * 12 * 4)) / (FRAME_FOR_BEAN(17 * 12 * 4) - FRAME_FOR_BEAN(16 * 12 * 4))
       );

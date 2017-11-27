@@ -473,7 +473,7 @@
           );
         } else {
           const startFrame = FRAME_FOR_BEAN(16 * 12 * 4) + letter.leaveOffset;
-          const endFrame = FRAME_FOR_BEAN(17 * 12 * 4) + letter.leaveOffset;
+          const endFrame = FRAME_FOR_BEAN(16 * 12 * 4 + 12) + letter.leaveOffset;
           const t = (frame - startFrame) / (endFrame - startFrame);
           this.ctx.save();
           this.ctx.translate(
@@ -517,6 +517,7 @@
           letter.throb = 1; 
         }
         this.ctx.globalAlpha = 0.2 + 0.8 * letter.throb;
+        this.ctx.globalAlpha = 1;
         if(frame >= 1940) {
           this.ctx.globalAlpha = 1;
         }
