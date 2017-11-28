@@ -11,6 +11,8 @@
       Author: Iver
       */
 
+      this.random = new Random(666);
+
       this.scene = new THREE.Scene();
       this.renderTarget = new THREE.WebGLRenderTarget(640, 360, {
         minFilter: THREE.LinearFilter,
@@ -19,9 +21,21 @@
       });
       this.camera = new THREE.PerspectiveCamera(45, 16 / 9, 1, 10000);
 
+      // BALL
+      this.ballGeometry = new THREE.SphereGeometry(1, 32, 32);
+      this.ballMaterial = new THREE.MeshBasicMaterial({color: 0xffffff});
+      this.ball = new THREE.Mesh(this.ballGeometry, this.ballMaterial);
+      const ballSpeedFactor = 1;
+      this.ball.userData = {
+        dx: ballSpeedFactor * this.random(),
+        dy: ballSpeedFactor * this.random(),
+        dz: ballSpeedFactor * this.random()
+      };
+      this.scene.add(this.ball);
+
       // CYLINDER
       this.cylinder = new THREE.Mesh(
-        new THREE.CylinderGeometry(16, 16, 80, 32, 1, true),  // TODO: update openended value. rotate. tweak size. tweak transparency.
+        new THREE.CylinderGeometry(16, 16, 80, 32, 1, true),
         new THREE.MeshBasicMaterial(
           {
             color: 0xffffff,
@@ -29,12 +43,11 @@
             transparent: true,
             opacity: 0.3
           }
-          )
+        )
       );
       this.scene.add(this.cylinder);
 
       // BEAMS
-      const beamRandom = new Random(666);
       this.beamMaterial = new THREE.MeshBasicMaterial({color: 0xffffff});
       this.beamGeometry = new THREE.BoxGeometry(.05, .05, 20);
       this.numBeams = 777;
@@ -42,7 +55,7 @@
       this.beams = [];
       for (let i = 0; i < this.numBeams; i++) {
         const beamMesh = new THREE.Mesh(this.beamGeometry, this.beamMaterial);
-        this.randomBeamNumbers.push(beamRandom());
+        this.randomBeamNumbers.push(this.random());
         this.beams.push(beamMesh);
         this.scene.add(beamMesh);
       }
@@ -70,6 +83,13 @@
         beam.position.y = 8 * Math.sin(angle);
         beam.position.z = 180 + (-1.66 * frame + i) % 190;
       }
+
+      this.ball.position.x += this.ball.userData.dx;
+      this.ball.position.y += this.ball.userData.dy;
+      this.ball.position.z += this.ball.userData.dz;
+
+      this.camera.position.x = 2 * Math.sin(frame / 55);
+      this.camera.position.y = 2 * Math.cos(frame / 55);
     }
 
     render(renderer) {
