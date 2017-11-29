@@ -11,8 +11,10 @@
       Author: Iver
       */
 
+      // MISC
       this.random = new Random(666);
 
+      // SCENE, CAMERA
       this.scene = new THREE.Scene();
       this.renderTarget = new THREE.WebGLRenderTarget(640, 360, {
         minFilter: THREE.LinearFilter,
@@ -20,6 +22,18 @@
         format: THREE.RGBFormat
       });
       this.camera = new THREE.PerspectiveCamera(45, 16 / 9, 1, 10000);
+
+      // TEXT
+      this.textCanvas = document.createElement('canvas');
+      this.textCtx = this.textCanvas.getContext('2d');
+      this.textTexture = new THREE.Texture(this.textCanvas);
+      this.textPlane = new THREE.Mesh(
+        new THREE.PlaneGeometry(16, 9),
+        new THREE.MeshBasicMaterial({
+          map: this.texture,
+        })
+      );
+      this.scene.add(this.textPlane);
 
       // BALL
       this.ballGeometry = new THREE.SphereGeometry(1, 32, 32);
@@ -71,11 +85,14 @@
     }
 
     update(frame) {
+      // TORUS
       this.torus.rotation.x = Math.sin(frame / 40);
       this.torus.rotation.y = Math.cos(frame / 40);
 
+      // CYLINDER
       this.cylinder.rotation.x = Math.PI / 2;
 
+      // BEAMS
       for (let i = 0; i < this.beams.length; i++) {
         const beam = this.beams[i];
         const angle = this.randomBeamNumbers[i] * 2 * Math.PI;
@@ -84,12 +101,25 @@
         beam.position.z = 180 + (-1.66 * frame + i) % 190;
       }
 
+      // BALL
       this.ball.position.x += this.ball.userData.dx;
       this.ball.position.y += this.ball.userData.dy;
       this.ball.position.z += this.ball.userData.dz;
 
+      // CAMERA
       this.camera.position.x = 2 * Math.sin(frame / 55);
       this.camera.position.y = 2 * Math.cos(frame / 55);
+
+      // TEXT
+      this.textCanvas.width = this.textCanvas.width;
+      this.textCtx.fillStyle = 'black';
+      this.textCtx.fillRect(0, 0, this.textCanvas.width, this.textCanvas.height);
+      this.textCtx.font = '199px Arial';
+      this.textCtx.fillStyle = 'white';
+      this.textCtx.fillText('yo', 200, 200)
+
+      this.textPlane.rotation.x += 0.01;
+      this.textTexture.needsUpdate = true;
     }
 
     render(renderer) {
@@ -99,6 +129,8 @@
 
     resize() {
       this.renderTarget.setSize(16 * GU, 9 * GU);
+      this.textCanvas.width = 16 * GU;
+      this.textCanvas.height = 9 * GU;
     }
   }
 
