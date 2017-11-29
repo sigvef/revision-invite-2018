@@ -16,7 +16,7 @@
         new THREE.MeshBasicMaterial({
           map: topTexture,
           transparent: true,
-        }),
+        })
       );
       this.scene.add(this.topRevisionTitle);
 
@@ -28,7 +28,7 @@
         new THREE.MeshBasicMaterial({
           map: bottomTexture,
           transparent: true,
-        }),
+        })
       );
       this.scene.add(this.bottomRevisionTitle);
 
@@ -66,7 +66,7 @@
         new THREE.BoxBufferGeometry(1920, 1080, 1),
         new THREE.MeshBasicMaterial({
           map: new THREE.CanvasTexture(canvas),
-        }),
+        })
       );
 
       this.scene.add(this.starfield);
@@ -90,7 +90,7 @@
       this.bottomRevisionTitle.position.x = easeOut(-startPosX, 0, (frame - startFrame) / duration) + driftX;
       this.bottomRevisionTitle.position.y = easeOut(-startPosY, 0, (frame - startFrame) / duration) + driftY;
 
-      Math.max(1780 - frame, 0)
+      Math.max(1780 - frame, 0);
     }
   }
 

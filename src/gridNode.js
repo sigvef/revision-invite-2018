@@ -16,7 +16,7 @@
         new THREE.BoxBufferGeometry(1920, 1080, 1),
         new THREE.MeshBasicMaterial({
           map: splashScreenTexture,
-        }),
+        })
       );
 
       this.scene.add(this.revisionTitle);

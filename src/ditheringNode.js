@@ -1,9 +1,7 @@
 (function(global) {
   class ditheringNode extends NIN.ShaderNode {
     constructor(id, options) {
-      const optionsClone = {
-        ...options,
-      }
+      const optionsClone = Object.assign({}, options);
       optionsClone.inputs = {};
       optionsClone.inputs.tDiffuse = new NIN.TextureInput();
       super(id, optionsClone);
