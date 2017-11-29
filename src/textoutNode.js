@@ -18,6 +18,7 @@
       );
       this.uniforms.t.value = t;
       demo.nm.nodes.bloom.opacity = t * 2;
+      demo.nm.nodes.bloom.opacity = 0.1;
 
       this.throb *= .95;
       if(BEAT) {
