@@ -11,6 +11,25 @@
         }
       });
 
+      const objLoader = new THREE.OBJLoader();
+      this.ewerkModel = new THREE.Object3D();
+      this.ewerkModel.rotation.y = Math.PI;
+      Loader.loadAjax('res/ewerk.obj', text => {
+        const obj = objLoader.parse(text);
+        obj.traverse(mesh => {
+          mesh.material = new THREE.MeshStandardMaterial({
+            color: new THREE.Color(55 / 255, 60 / 255, 63 / 255),  
+            roughness: 1,
+            metalness: 0,
+            side: THREE.DoubleSide,
+          });
+        });
+        this.ewerkModel.add(obj);
+      });
+      this.scene.add(this.ewerkModel);
+
+      this.scene.add(new THREE.PointLight());
+
       this.ps = new ParticleSystem({
         color: new THREE.Color(1, 1, 1),  
       });
@@ -38,7 +57,7 @@
       );
       this.cube.rotation.y = Math.PI / 2;
       this.cube.position.y = 2.5;
-      this.scene.add(this.cube);
+      //this.scene.add(this.cube);
 
       this.globeContainer = new THREE.Object3D();
       this.globeContainer.add(this.ps.particles);
@@ -90,9 +109,9 @@
       );
       this.roof.rotation.z = Math.PI/2;
       this.roof.rotation.y = Math.PI / 2;
-      this.scene.add(this.cube);
+      //this.scene.add(this.cube);
       this.roof.position.set(-10, 5, -5);
-      this.scene.add(this.roof);
+      //this.scene.add(this.roof);
 
       this.shader = SHADERS[options.shader];
       this.shader.uniforms.B.value = Loader.loadTexture('res/ewerk_zoom_1.png');
@@ -123,7 +142,7 @@
     update(frame) {
       super.update(frame);
       this.ps.update();
-      demo.nm.nodes.bloom.opacity = 0.5;
+      demo.nm.nodes.bloom.opacity = 0;
       this.globeContainer.rotation.y = 5 -frame / 1000;
       const globeTextures = this.inputs.globeTextures.getValue();
       if(globeTextures) {

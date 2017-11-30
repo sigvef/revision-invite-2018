@@ -26,6 +26,9 @@
       this.testo = document.createElement('img');
       Loader.load('res/testo.png', this.testo, () => {});
 
+      this.greybg = document.createElement('img');
+      Loader.load('res/greybg.png', this.greybg, () => {});
+
       const green = '#00e04f';
       const pink = 'rgb(255, 73, 130)';
       this.letters = [
@@ -434,6 +437,8 @@
       this.canvas.width += 0;
       if(frame < 2002) {
         this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+      } else if(frame < 2253) {
+        this.ctx.drawImage(this.greybg, 0, 0);
       }
 
       this.ctx.save();
@@ -522,10 +527,10 @@
           this.ctx.globalAlpha = 1;
         }
         this.ctx.drawImage(this.testo,
-            (letterIndex % 4) * 640 / 4,
-            (letterIndex / 4 | 0) * 360 / 2,
-            640 / 4, 360 / 2,
-            0, 0, 640 / 4, 640 / 4);
+            (letterIndex % 4) * 1920 / 4,
+            (letterIndex / 4 | 0) * 1080 / 2,
+            1920 / 4, 1080 / 2,
+            0, 0, 1920 / 12, 1920 / 12);
         this.ctx.restore();
       }
 
