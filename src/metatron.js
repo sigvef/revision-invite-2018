@@ -16,7 +16,7 @@
 
 
       this.cube = new THREE.Mesh(new THREE.BoxGeometry(176, 99, 0.1),
-                                 new THREE.MeshBasicMaterial({ color: 0x023132 }));
+                                 new THREE.MeshBasicMaterial({ color: 0x070809 }));
       this.cube.position.set(0,0,-10);
       this.scene.add(this.cube);
 
@@ -29,7 +29,7 @@
       geometry.vertices.shift();
       geometry.computeLineDistances();
 
-      this.scene.add( new THREE.Line( geometry, material ) );
+      //this.scene.add( new THREE.Line( geometry, material ) );
 
       var radius2  = 36,
       segments2 = 6,
@@ -39,7 +39,7 @@
       geometry2.vertices.shift();
       geometry2.computeLineDistances();
 
-      this.scene.add( new THREE.Line( geometry2, material2 ) );
+      //this.scene.add( new THREE.Line( geometry2, material2 ) );
 
       var radius3  = 10,
       segments3 = 6,
@@ -59,10 +59,10 @@
       hex3.position.set(0,12,0);
       hex4.position.set(0,-12,0);
 
-      this.scene.add( hex1 );
+      /*this.scene.add( hex1 );
       this.scene.add( hex2 );
       this.scene.add( hex3 );
-      this.scene.add( hex4 );
+      this.scene.add( hex4 );*/
 
  
       var line_material = new THREE.LineBasicMaterial( { color: 0x999999 } );
@@ -134,7 +134,24 @@
       this.three_point_star = new THREE.Line( line_geometry, line_material );
       this.scene.add(this.three_point_star);
 
-      console.log(this.three_point_star);
+      var darker_line_material = new THREE.LineBasicMaterial( { color: 0x444444 } );
+
+      var horizontal_distance1 = 15;
+      var horizontal_distance2 = 15;
+      var horizontal_distance3 = 15;
+
+      var small_claw_geometry = new THREE.Geometry();
+      small_claw_geometry.vertices.push(new THREE.Vector3(0, horizontal_distance1, 0));
+      small_claw_geometry.vertices.push(new THREE.Vector3(-horizontal_distance1 * r32, outer_distance / 2, 0));
+      small_claw_geometry.vertices.push(new THREE.Vector3(-horizontal_distance1 * r32, -outer_distance / 2, 0));
+      small_claw_geometry.vertices.push(new THREE.Vector3(horizontal_distance2, -outer_distance, 0));
+      small_claw_geometry.vertices.push(new THREE.Vector3(outer_distance * r32, -outer_distance / 2, 0));
+      small_claw_geometry.vertices.push(new THREE.Vector3(outer_distance * r32, outer_distance / 2, 0));
+      small_claw_geometry.vertices.push(new THREE.Vector3(0, outer_distance, 0));
+
+      this.small_claw = new THREE.Line( small_claw_geometry, darker_line_material );
+      this.small_claw.position.set(30 * r32, 0, 0);
+      this.scene.add(this.small_claw);
     }
 
     update(frame) {
@@ -169,6 +186,7 @@
       this.three_point_star.geometry.vertices[5].x = 0;
       this.three_point_star.geometry.vertices[5].y = 0;
       this.three_point_star.rotation.set(0, 0, 0);
+      this.three_point_star.position.set(200, 0, 0);
 
       if ( frame > FRAME_FOR_BEAN(22 * 48)) {
         var scale = asmoothstep(FRAME_FOR_BEAN(22 * 48), FRAME_FOR_BEAN(48), frame)
@@ -226,13 +244,15 @@
         this.level1_hex2.position.set(-distance2 * r32, distance2 / 2, 0);
         this.level1_hex3.position.set(0, -distance3, 0);
 
+        this.three_point_star.position.set(0, 0, 0);
+
         this.three_point_star.geometry.vertices[1].x = -(distance3 - 10) * r32;
         this.three_point_star.geometry.vertices[1].y = (distance3 - 10) / 2;
         this.three_point_star.geometry.vertices[3].y = -(distance2 - 10);
         this.three_point_star.geometry.vertices[5].x = (distance1 - 10) * r32;
         this.three_point_star.geometry.vertices[5].y = (distance1 - 10) / 2;
 
-        this.three_point_star.rotation.set(0, 0, asmoothstep(FRAME_FOR_BEAN(25.25 * 48), FRAME_FOR_BEAN(12), frame));
+        this.three_point_star.rotation.set(0, 0, - 3 * Math.PI / 3 * asmoothstep(FRAME_FOR_BEAN(25.25 * 48), FRAME_FOR_BEAN(12), frame));
 
         // Scale of the level 1 hexes.
         var scale3 = 1 + 0.5 * asmoothstep(FRAME_FOR_BEAN(25.375 * 48), FRAME_FOR_BEAN(12), frame);
@@ -241,6 +261,9 @@
         this.level1_hex1.scale.set(scale1, scale1, scale1);
         this.level1_hex2.scale.set(scale2, scale2, scale2);
         this.level1_hex3.scale.set(scale3, scale3, scale3);
+      }
+      if (frame > FRAME_FOR_BEAN(26.75)) {
+        this.three_point_star.scale.set();
       }
 
       this.three_point_star.geometry.verticesNeedUpdate = true;
