@@ -10,13 +10,13 @@
 
 
 
-      var zoom = 5;
+      var zoom = 5.8;
       this.camera = new THREE.OrthographicCamera( -zoom * 16, zoom * 16 , zoom * 9, -zoom * 9, 1, 100000 );
       this.camera.position.z = 100;
 
 
-      this.cube = new THREE.Mesh(new THREE.BoxGeometry(176, 99, 0.1),
-                                 new THREE.MeshBasicMaterial({ color: 0x023132 }));
+      this.cube = new THREE.Mesh(new THREE.BoxGeometry(196, 109, 0.1),
+                                 new THREE.MeshBasicMaterial({ color: 0x070809 }));
       this.cube.position.set(0,0,-10);
       this.scene.add(this.cube);
 
@@ -29,7 +29,7 @@
       geometry.vertices.shift();
       geometry.computeLineDistances();
 
-      this.scene.add( new THREE.Line( geometry, material ) );
+      //this.scene.add( new THREE.Line( geometry, material ) );
 
       var radius2  = 36,
       segments2 = 6,
@@ -39,7 +39,7 @@
       geometry2.vertices.shift();
       geometry2.computeLineDistances();
 
-      this.scene.add( new THREE.Line( geometry2, material2 ) );
+      //this.scene.add( new THREE.Line( geometry2, material2 ) );
 
       var radius3  = 10,
       segments3 = 6,
@@ -59,10 +59,10 @@
       hex3.position.set(0,12,0);
       hex4.position.set(0,-12,0);
 
-      this.scene.add( hex1 );
+      /*this.scene.add( hex1 );
       this.scene.add( hex2 );
       this.scene.add( hex3 );
-      this.scene.add( hex4 );
+      this.scene.add( hex4 );*/
 
  
       var line_material = new THREE.LineBasicMaterial( { color: 0x999999 } );
@@ -134,7 +134,52 @@
       this.three_point_star = new THREE.Line( line_geometry, line_material );
       this.scene.add(this.three_point_star);
 
-      console.log(this.three_point_star);
+      var darker_line_material = new THREE.LineBasicMaterial( { color: 0x444444 } );
+      var darker_line_material2 = new THREE.LineBasicMaterial( { color: 0x444444 } );
+      var darker_line_material3 = new THREE.LineBasicMaterial( { color: 0x444444 } );
+      var darker_line_material4 = new THREE.LineBasicMaterial( { color: 0x444444 } );
+
+      var horizontal_distance1 = 15;
+      var horizontal_distance2 = 10;
+      var horizontal_distance3 = 15;
+
+      var small_claw_geometry = new THREE.Geometry();
+      small_claw_geometry.vertices.push(new THREE.Vector3(horizontal_distance1 * r32 + horizontal_distance3, horizontal_distance1 / 2, 0));
+      small_claw_geometry.vertices.push(new THREE.Vector3(horizontal_distance2 * r32, horizontal_distance1 + horizontal_distance2 / 2, 0));
+      small_claw_geometry.vertices.push(new THREE.Vector3(-horizontal_distance1 * r32, horizontal_distance1 / 2, 0));
+      small_claw_geometry.vertices.push(new THREE.Vector3(-horizontal_distance1 * r32, -horizontal_distance1 / 2, 0));
+      small_claw_geometry.vertices.push(new THREE.Vector3(horizontal_distance2 * r32, -(horizontal_distance1 + horizontal_distance2 / 2), 0));
+      small_claw_geometry.vertices.push(new THREE.Vector3(horizontal_distance1 * r32 + horizontal_distance3, -horizontal_distance1 / 2, 0));
+
+      this.small_claw_r = new THREE.Line( small_claw_geometry, darker_line_material );
+      this.small_claw_l = new THREE.Line( small_claw_geometry, darker_line_material2 );
+      this.small_claw_r.position.set(30 * r32, 0, -1);
+      this.small_claw_l.position.set(-30 * r32, 0, -1);
+      this.small_claw_l.scale.set(-1, 1, 1);
+      this.scene.add(this.small_claw_r);
+      this.scene.add(this.small_claw_l);
+
+      var claw_inner_distance = 5;
+      var claw_outer_distance = 50;
+
+      var large_claw_geometry = new THREE.Geometry();
+      large_claw_geometry.vertices.push(new THREE.Vector3(claw_outer_distance * r32, claw_outer_distance / 2, 0));
+      large_claw_geometry.vertices.push(new THREE.Vector3(0, claw_outer_distance, 0));
+      large_claw_geometry.vertices.push(new THREE.Vector3(-claw_outer_distance * r32, claw_outer_distance / 2, 0));
+      large_claw_geometry.vertices.push(new THREE.Vector3(-claw_outer_distance * r32, -claw_outer_distance / 2, 0));
+      large_claw_geometry.vertices.push(new THREE.Vector3(0, -claw_outer_distance, 0));
+      large_claw_geometry.vertices.push(new THREE.Vector3(claw_outer_distance * r32, -claw_outer_distance / 2, 0));
+      
+
+      this.large_claw_r = new THREE.Line( large_claw_geometry, darker_line_material3 );
+      this.large_claw_l = new THREE.Line( large_claw_geometry, darker_line_material4 );
+      this.large_claw_r.position.set(claw_outer_distance * r32, 0, -1);
+      this.large_claw_l.position.set(-claw_outer_distance * r32, 0, -1);
+      this.large_claw_l.scale.set(-1, 1, 1);
+      this.scene.add(this.large_claw_r);
+      this.scene.add(this.large_claw_l);
+
+      console.log(this.large_claw_l);
     }
 
     update(frame) {
@@ -169,6 +214,7 @@
       this.three_point_star.geometry.vertices[5].x = 0;
       this.three_point_star.geometry.vertices[5].y = 0;
       this.three_point_star.rotation.set(0, 0, 0);
+      this.three_point_star.position.set(200, 0, 0);
 
       if ( frame > FRAME_FOR_BEAN(22 * 48)) {
         var scale = asmoothstep(FRAME_FOR_BEAN(22 * 48), FRAME_FOR_BEAN(48), frame)
@@ -226,13 +272,15 @@
         this.level1_hex2.position.set(-distance2 * r32, distance2 / 2, 0);
         this.level1_hex3.position.set(0, -distance3, 0);
 
+        this.three_point_star.position.set(0, 0, 0);
+
         this.three_point_star.geometry.vertices[1].x = -(distance3 - 10) * r32;
         this.three_point_star.geometry.vertices[1].y = (distance3 - 10) / 2;
         this.three_point_star.geometry.vertices[3].y = -(distance2 - 10);
         this.three_point_star.geometry.vertices[5].x = (distance1 - 10) * r32;
         this.three_point_star.geometry.vertices[5].y = (distance1 - 10) / 2;
 
-        this.three_point_star.rotation.set(0, 0, asmoothstep(FRAME_FOR_BEAN(25.25 * 48), FRAME_FOR_BEAN(12), frame));
+        this.three_point_star.rotation.set(0, 0, - 3 * Math.PI / 3 * asmoothstep(FRAME_FOR_BEAN(25.25 * 48), FRAME_FOR_BEAN(12), frame));
 
         // Scale of the level 1 hexes.
         var scale3 = 1 + 0.5 * asmoothstep(FRAME_FOR_BEAN(25.375 * 48), FRAME_FOR_BEAN(12), frame);
@@ -242,6 +290,37 @@
         this.level1_hex2.scale.set(scale2, scale2, scale2);
         this.level1_hex3.scale.set(scale3, scale3, scale3);
       }
+      if (frame > FRAME_FOR_BEAN(25.75)) {
+        var scale = 1 + 0.67 * asmoothstep(FRAME_FOR_BEAN(25.75 * 48), FRAME_FOR_BEAN(36), frame);        
+        this.three_point_star.scale.set(scale, scale, scale);
+
+        var claw_progress1 = asmoothstep(FRAME_FOR_BEAN(25.75 * 48), FRAME_FOR_BEAN(12), frame);
+        var claw_progress2 = asmoothstep(FRAME_FOR_BEAN(25.875 * 48), FRAME_FOR_BEAN(12), frame);
+        var claw_progress3 = asmoothstep(FRAME_FOR_BEAN(26 * 48), FRAME_FOR_BEAN(12), frame);
+        var claw_progress4 = asmoothstep(FRAME_FOR_BEAN(26.125 * 48), FRAME_FOR_BEAN(12), frame);
+
+        this.small_claw_r.material.color.r = this.cube.material.color.r + 0.15 * claw_progress1;
+        this.small_claw_r.material.color.g = this.cube.material.color.r + 0.15 * claw_progress1;
+        this.small_claw_r.material.color.b = this.cube.material.color.r + 0.15 * claw_progress1;
+
+        this.small_claw_l.material.color.r = this.cube.material.color.r + 0.15 * claw_progress2;
+        this.small_claw_l.material.color.g = this.cube.material.color.r + 0.15 * claw_progress2;
+        this.small_claw_l.material.color.b = this.cube.material.color.r + 0.15 * claw_progress2;
+
+        this.large_claw_r.material.color.r = this.cube.material.color.r + 0.15 * claw_progress3;
+        this.large_claw_r.material.color.g = this.cube.material.color.r + 0.15 * claw_progress3;
+        this.large_claw_r.material.color.b = this.cube.material.color.r + 0.15 * claw_progress3;
+
+        this.large_claw_l.material.color.r = this.cube.material.color.r + 0.15 * claw_progress4;
+        this.large_claw_l.material.color.g = this.cube.material.color.r + 0.15 * claw_progress4;
+        this.large_claw_l.material.color.b = this.cube.material.color.r + 0.15 * claw_progress4;
+        
+        this.small_claw_r.position.set(30 * r32 - 8 * (1 - claw_progress1), 0, -1);
+        this.small_claw_l.position.set(-30 * r32 + 8 * (1 - claw_progress2), 0, -1);
+        this.large_claw_r.position.set(50 * r32 - 8 * (1 - claw_progress3), 0, -1);
+        this.large_claw_l.position.set(-50 * r32 + 8 * (1 - claw_progress4), 0, -1);
+      }
+
 
       this.three_point_star.geometry.verticesNeedUpdate = true;
     }
