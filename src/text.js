@@ -527,10 +527,10 @@
           this.ctx.globalAlpha = 1;
         }
         this.ctx.drawImage(this.testo,
-            (letterIndex % 4) * 640 / 4,
-            (letterIndex / 4 | 0) * 360 / 2,
-            640 / 4, 360 / 2,
-            0, 0, 640 / 4, 640 / 4);
+            (letterIndex % 4) * 1920 / 4,
+            (letterIndex / 4 | 0) * 1080 / 2,
+            1920 / 4, 1080 / 2,
+            0, 0, 1920 / 12, 1920 / 12);
         this.ctx.restore();
       }
 
