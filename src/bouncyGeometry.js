@@ -39,7 +39,12 @@
 
       // BALL
       this.ballGeometry = new THREE.SphereGeometry(1, 8, 8);
-      this.ballMaterial = new THREE.MeshBasicMaterial({color: 0xffffff});
+      this.ballTexture = Loader.loadTexture('res/checkers.png');
+      this.ballTexture.minFilter = THREE.LinearFilter;
+      this.ballTexture.magFilter = THREE.LinearFilter;
+      this.ballMaterial = new THREE.MeshBasicMaterial(
+        {map: this.ballTexture}
+      );
       this.ball = new THREE.Mesh(this.ballGeometry, this.ballMaterial);
       const ballSpeedFactor = 1;
       this.ball.userData = {
