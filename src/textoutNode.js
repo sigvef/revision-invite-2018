@@ -14,11 +14,8 @@
       const t = lerp(
         0,
         2,
-        (frame - FRAME_FOR_BEAN(16 * 12 * 4)) / (FRAME_FOR_BEAN(17 * 12 * 4) - FRAME_FOR_BEAN(16 * 12 * 4))
+        (frame - FRAME_FOR_BEAN(23 * 12 * 4)) / (FRAME_FOR_BEAN(24 * 12 * 4) - FRAME_FOR_BEAN(23 * 12 * 4))
       );
-      this.uniforms.t.value = t;
-      demo.nm.nodes.bloom.opacity = t * 2;
-      demo.nm.nodes.bloom.opacity = 0.1;
 
       this.throb *= .95;
       if(BEAT) {

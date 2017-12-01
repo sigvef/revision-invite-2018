@@ -36,7 +36,7 @@
           letter: 'R',
           bg: green,
           rotateSpeed: 1.1,
-          leaveOffset: 5,
+          leaveOffset: 48 * 15 + 5,
           throbAt: 0,
           script: [
             {
@@ -94,7 +94,7 @@
           letter: 'E',
           bg: pink,
           rotateSpeed: 0.8,
-          leaveOffset: 10,
+          leaveOffset: 48 * 15 + 10,
           throbAt: 9,
           script: [
             {
@@ -159,7 +159,7 @@
           letter: 'V',
           bg: green,
           rotateSpeed: 1.2,
-          leaveOffset: 0,
+          leaveOffset: 48 * 15 + 0,
           throbAt: 24,
           script: [
             {
@@ -203,7 +203,7 @@
           letter: 'I',
           bg: pink,
           rotateSpeed: 0.9,
-          leaveOffset: 9,
+          leaveOffset: 48 * 15 + 9,
           throbAt: 48 + 12,
           script: [
             {
@@ -240,7 +240,7 @@
           letter: 'S',
           bg: pink,
           rotateSpeed: 1.7,
-          leaveOffset: 10,
+          leaveOffset: 48 * 15 + 10,
           throbAt: 24 + 18,
           script: [
             {
@@ -284,7 +284,7 @@
           letter: 'I',
           bg: green, 
           rotateSpeed: 0.1,
-          leaveOffset: 24,
+          leaveOffset: 48 * 15 + 24,
           throbAt: 24 + 9,
           script: [
             {
@@ -335,7 +335,7 @@
           letter: 'O',
           bg: pink,
           rotateSpeed: 0.3,
-          leaveOffset: 16,
+          leaveOffset: 48 * 15 + 16,
           throbAt: 48 + 24,
           script: [
             {
@@ -365,7 +365,7 @@
           letter: 'N',
           bg: green,
           rotateSpeed: 1.1,
-          leaveOffset: 5,
+          leaveOffset: 48 * 15 + 5,
           throbAt: 48 + 24,
           script: [
             {
@@ -419,6 +419,8 @@
         }
       }
 
+      demo.nm.nodes.bloom.opacity = this.throb * 0.25;
+
       this.cameraDDX = -this.cameraX * 0.1;
       this.cameraDDY = -this.cameraY * 0.1;
       this.cameraDDR = -this.cameraR * 0.1;
@@ -436,6 +438,7 @@
 
       this.canvas.width += 0;
       if(frame < 2002) {
+        this.ctx.fillStyle = 'rgb(55, 60, 63)';
         this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
       } else if(frame < 2253) {
         this.ctx.drawImage(this.greybg, 0, 0);

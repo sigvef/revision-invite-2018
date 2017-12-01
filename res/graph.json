@@ -16,7 +16,9 @@
       "_03_intro_2": "schmapple.render",
       "_04_car_rev_interstitial": "schmapple.render",
       "_05_first_A_theme_1": "textout.render",
-      "_06_first_A_theme_2": "textout.render",
+      "_05_first_A_theme_1_2": "cubes.render",
+      "_06_first_A_theme_2": "GridShader.render",
+      "_06_first_A_theme_2_2": "textout.render",
       "_07_first_B_theme_1": "Metatron.render",
       "_08_first_B_theme_2": "Metatron.render",
       "_09_second_A_theme_1": "chromaTransition.render",
@@ -287,7 +289,7 @@
       "shader": "map"
     },
     "connected": {
-        "globeTextures": "globetextures.globeTextures"
+      "globeTextures": "globetextures.globeTextures"
     }
   },
   {
@@ -323,5 +325,9 @@
   {
     "id": "globetextures",
     "type": "globetextures"
+  },
+  {
+    "id": "cubes",
+    "type": "cubes"
   }
 ]
