@@ -24,20 +24,15 @@
       "_09_second_A_theme_1": "chromaTransition.render",
       "_10_second_A_theme_2": "RevisionFezLogo.render",
       "_11_illuminati_confirmed": "logotransitionquadpass.render",
-      "_12_first_C_theme_1": "letterbox.render",
-      "_13_first_C_theme_2": "trainmodel.render",
+      "_12_first_C_theme_1": "lulle.render",
+      "_13_first_C_theme_2": "lulle.render",
       "_14_second_C_theme_1": "pyramids.render",
       "_15_second_C_theme_2": "metaballs.render",
       "_16_low_down_B_theme_1": "GodsOrKings.render",
       "_17_low_down_B_theme_piano_snippet": "GodsOrKings.render",
       "_18_low_down_B_theme_2": "GodsOrKings.render",
       "_19_groovy_B_theme": "bouncyGeometry.render",
-      "_20_A_theme_breakdown": "lulle.render",
-      "_21_third_B_theme_1": "patterns.render",
-      "_22_third_B_theme_2": "triangalons.render",
-      "_22_third_B_theme_3": "bowties.render",
-      "_22_third_B_theme_4": "barndoors.render",
-      "_22_third_B_theme_5": "jaws.render",
+      "_20_A_theme_breakdown": "breakdown.render",
       "_23_final_A_theme_rolldown": "diamondillium.render",
       "_24_outro": "ewerk.render",
       "_25_outro_2": "ewerk.render"
@@ -329,5 +324,9 @@
   {
     "id": "cubes",
     "type": "cubes"
+  },
+  {
+    "id": "breakdown",
+    "type": "breakdown"
   }
 ]
