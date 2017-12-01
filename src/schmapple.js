@@ -110,11 +110,11 @@
 
           const canvas = document.createElement('canvas');
           const ctx = canvas.getContext('2d');
-          ctx.font = '40pt Arial';
+          ctx.font = '40pt brandontext';
           const measurement = ctx.measureText(sentence.text);
           canvas.width = measurement.width;
           canvas.height = TEXT_IMAGE_HEIGHT;
-          ctx.font = '40pt Arial';
+          ctx.font = '40pt brandontext';
           ctx.textBaseline = 'middle';
           ctx.textAlign = 'center';
           ctx.clearRect(0, 0, canvas.width, canvas.height);
