@@ -25,7 +25,7 @@
           letter: 'E',
           x: 1,
           height: 4.5,
-          beanOffset: 8,
+          beanOffset: 9,
         },
         {
           letter: 'V',
@@ -37,13 +37,13 @@
           letter: 'I',
           x: 3,
           height: 3.5,
-          beanOffset: 32,
+          beanOffset: 33,
         },
         {
           letter: 'S',
           x: 4,
           height: 4,
-          beanOffset: 40,
+          beanOffset: 42,
         },
         {
           letter: 'i',
@@ -61,7 +61,7 @@
           letter: 'N',
           x: 7,
           height: 3,
-          beanOffset: 72,
+          beanOffset: 74,
         },
       ];
     }
@@ -75,65 +75,41 @@
       this.ctx.save();
       this.ctx.scale(GU, GU);
 
+      let i = 0;
       for (const letter of this.textScript.slice().reverse()) {
         const t = (frame - FRAME_FOR_BEAN(30 * 12 * 4 + letter.beanOffset)) / 40;
+        i++;
 
         this.ctx.save();
         this.ctx.translate(
           0,
           easeIn(
-            9 - elasticOut(0, letter.height, 1.2, t),
+            9 - elasticOut(0, 0.5 + i, 1.2, t),
             9,
             (frame - FRAME_FOR_BEAN(32 * 12 * 4)) / 40)
         );
         this.ctx.fillStyle = 'rgba(10, 100, 150, 255)';
-        this.ctx.fillRect(
-          letter.x - 0.1,
-          0,
-          0.1,
-          letter.height + 1.1
-        );
         this.ctx.beginPath();
-        this.ctx.arc(
-          letter.x,
-          1.1,
-          1.1,
-          -Math.PI / 2,
-          Math.PI / 2
-        );
+        this.ctx.moveTo(letter.x, 0);
+        this.ctx.lineTo(letter.x + 1, -1);
+        this.ctx.lineTo(letter.x + 1, 11);
+        this.ctx.lineTo(letter.x, 11);
         this.ctx.fill();
-        this.ctx.fillRect(
-          letter.x,
-          1,
-          1.1,
-          letter.height + 0.1
-        );
-
-        this.ctx.fillStyle = 'rgba(50, 200, 255, 255)';
         this.ctx.beginPath();
-        this.ctx.arc(
-          letter.x,
-          1.1,
-          1,
-          -Math.PI / 2,
-          Math.PI / 2
-        );
+        this.ctx.fillStyle = 'rgba(0, 0, 0, 0.2)';
+        this.ctx.moveTo(letter.x + 1, 1);
+        this.ctx.lineTo(letter.x, 2);
+        this.ctx.lineTo(letter.x, 10);
+        this.ctx.lineTo(letter.x + 1, 10);
         this.ctx.fill();
-        this.ctx.fillRect(
-          letter.x,
-          1.1,
-          1,
-          letter.height
-        );
 
-        this.ctx.font = 'bold 1px brandontext';
+        this.ctx.font = 'bold 0.6pt brandontext';
         this.ctx.textAlign = 'center';
+        this.ctx.textBaseline = 'middle';
         this.ctx.fillStyle = 'white';
-        this.ctx.fillText(
-          letter.letter,
-          letter.x + 0.5,
-          1.6
-        );
+        this.ctx.lineWidth = 0.2;
+        this.ctx.translate(letter.x + 0.5, 0.35);
+        this.ctx.fillText(letter.letter, 0, 0);
         this.ctx.restore();
       }
 
