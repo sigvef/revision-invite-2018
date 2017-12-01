@@ -17,6 +17,16 @@
       this.spikeAmount = 0;
 
       this.textThrob = 0;
+
+      this.cameraX = 0;
+      this.cameraY = 0;
+      this.cameraR = 0;
+      this.cameraDX = 0;
+      this.cameraDY = 0;
+      this.cameraDR = 0;
+      this.cameraDDX = 0;
+      this.cameraDDY = 0;
+      this.cameraDDR = 0;
     }
 
     update(frame) {
@@ -33,8 +43,24 @@
         case 3546:
         case 3570:
           this.textThrob = 1;
+          this.cameraDX = (Math.random() - 0.5) * 1.0;
+          this.cameraDY = (Math.random() - 0.5) * 1.0;
+          this.cameraDR = (Math.random() - 0.5) * 0.1;
         }
       }
+
+      this.cameraDDX = -this.cameraX * 0.95;
+      this.cameraDDY = -this.cameraY * 0.95;
+      this.cameraDDR = -this.cameraR * 0.95;
+      this.cameraDX += this.cameraDDX;
+      this.cameraDY += this.cameraDDY;
+      this.cameraDR += this.cameraDDR;
+      this.cameraDX *= 0.7;
+      this.cameraDY *= 0.7;
+      this.cameraDR *= 0.7;
+      this.cameraX += this.cameraDX;
+      this.cameraY += this.cameraDY;
+      this.cameraR += this.cameraDR;
 
       if(BEAT) {
         switch(BEAN % 24) {
@@ -200,6 +226,8 @@
       this.ctx.save();
       this.ctx.scale(GU, GU);
       this.ctx.translate(8, 4.5);
+      //this.ctx.rotate(this.cameraR);
+      this.ctx.translate(this.cameraX, this.cameraY);
 
 
       const offset = 3480;
