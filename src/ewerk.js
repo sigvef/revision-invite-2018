@@ -146,17 +146,15 @@
       //this.scene.add(this.cube);
       this.roof.position.set(-10, 5, -5);
       //this.scene.add(this.roof);
-
-      this.shader = SHADERS[options.shader];
-      this.shader.uniforms.B.value = Loader.loadTexture('res/ewerk_zoom_1.png');
-      this.shader.uniforms.C.value = Loader.loadTexture('res/ewerk_zoom_2.png');
-      this.shader.uniforms.D.value = Loader.loadTexture('res/ewerk_zoom_3.png');
       this.map = new THREE.Mesh(
-        new THREE.PlaneGeometry(2000, 2000),
-        new THREE.ShaderMaterial(this.shader)
+        new THREE.PlaneGeometry(700, 700),
+        new THREE.MeshBasicMaterial({map: Loader.loadTexture('res/map_saarbrucken.gif')})
       );
       this.map.rotation.x = -Math.PI/2;
+      this.map.rotation.z = 0.11;
       this.map.position.y = -0.02;
+      this.map.position.x = 15;
+      this.map.position.z = 16;
       this.scene.add(this.map);
 
       var light = new THREE.PointLight(0xffffff, 1, 100);
@@ -199,7 +197,7 @@
       this.cloudGlobe.rotation.y -= 0.0002;
       this.ps.particles.rotation.y += 0.0005;
 
-      if(frame < frame3) {
+      if(frame < frame2) {
         this.map.visible = false;
       } else {
         this.map.visible = true;
@@ -225,7 +223,6 @@
         const scale = easeOut(0.00001, 1, t);
         this.globeContainer.scale.set(scale, scale, scale);
 
-        this.shader.uniforms.t.value = lerp(0, 1, (frame - frame1 + 10) / 10);
         this.roof.visible = false;
         this.cube.visible = false;
         this.globeContainer.rotation.x = -Math.PI / 2 + .8;
@@ -243,7 +240,6 @@
         const scale = lerp(1, 1.7, (frame - frame2 + 10) / 10);
         this.globeContainer.scale.set(scale, scale, scale);
 
-        this.shader.uniforms.t.value = lerp(1, 2, (frame - frame2 + 10) / 10);
         this.roof.visible = false;
         this.cube.visible = false;
         this.camera.lookAt(new THREE.Vector3(0, 0, 0));
@@ -255,7 +251,6 @@
         );
         const scale = easeIn(1.7, 2.2, (frame - frame3 + 40) / 40);
         this.globeContainer.scale.set(scale, scale, scale);
-        this.shader.uniforms.t.value = lerp(2, 3, (frame - frame3 + 10) / 10);
         this.roof.visible = false;
         this.cube.visible = false;
         this.camera.lookAt(new THREE.Vector3(0, 0, 0));
@@ -265,7 +260,6 @@
           lerp(150, 15, (frame - frame4 + 10) / 10),
           lerp(20, 10, (frame - frame4 + 10) / 10)
         );
-        this.shader.uniforms.t.value = lerp(3, 4, (frame - frame4 + 10) / 10);
         this.roof.visible = true;
         this.cube.visible = true;
         this.camera.lookAt(new THREE.Vector3(0, 0, 0));
