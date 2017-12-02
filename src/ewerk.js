@@ -193,14 +193,20 @@
       const frame5 = FRAME_FOR_BEAN(4 * 12 * 4);
       const frame6 = FRAME_FOR_BEAN(4 * 12 * 4 + 24);
       const frame7 = FRAME_FOR_BEAN(4 * 12 * 4 + 24 + 24);
+      const frame8 = FRAME_FOR_BEAN(88 * 12 * 4 + 24);
+      const frame9 = FRAME_FOR_BEAN(89 * 12 * 4);
+      const frame10 = FRAME_FOR_BEAN(89 * 12 * 4 + 24);
+      const frame11 = FRAME_FOR_BEAN(90 * 12 * 4);
+      const frame12 = FRAME_FOR_BEAN(90 * 12 * 4 + 9);
+      const frame13 = FRAME_FOR_BEAN(90 * 12 * 4 + 9 + 9);
 
       this.cloudGlobe.rotation.y -= 0.0002;
       this.ps.particles.rotation.y += 0.0005;
 
-      if(frame < frame2) {
-        this.map.visible = false;
-      } else {
+      if(frame > frame2 && frame < frame13) {
         this.map.visible = true;
+      } else {
+        this.map.visible = false;
       }
 
       if (frame <= frame1) {
@@ -279,7 +285,7 @@
           lerp(1, 1, (frame - frame6 + 10) / 10));
         this.camera.lookAt(
             new THREE.Vector3(-4, 1., 0));
-      } else {
+      } else if (frame <= frame8) {
         const x = -1.75;
         const y = 0.75;
         const z = 0.32;
@@ -289,6 +295,55 @@
           lerp(1, z, (frame - frame7 + 10) / 10));
         this.camera.lookAt(
             new THREE.Vector3(x - 2, y, z));
+      } else if (frame <= frame9) {
+        const x = -1.75;
+        const y = 0.75;
+        const z = 0.32;
+        this.camera.position.set(
+          lerp(x, 0, (frame - frame9 + 10) / 10),
+          lerp(y, 0.5, (frame - frame9 + 10) / 10),
+          lerp(z, 1, (frame - frame9 + 10) / 10));
+        this.camera.lookAt(
+            new THREE.Vector3(x - 2, y, z));
+      } else if (frame <= frame10) {
+        this.camera.position.set(
+          lerp(0, 15, (frame - frame10 + 10) / 10),
+          lerp(0.5, 5, (frame - frame10 + 10) / 10),
+          lerp(1, 1, (frame - frame10 + 10) / 10));
+        this.camera.lookAt(new THREE.Vector3(
+          lerp(-3.75, 0, (frame - frame10 + 10) / 10),
+          lerp(0.75, 0, (frame - frame10 + 10) / 10),
+          lerp(0.32, 0, (frame - frame10 + 10) / 10)
+        ));
+      } else if (frame <= frame11) {
+        this.camera.position.set(
+          lerp(15, 30, (frame - frame11 + 10) / 10),
+          lerp(5, 15, (frame - frame11 + 10) / 10),
+          lerp(1, 10, (frame - frame11 + 10) / 10)
+        );
+        this.camera.lookAt(new THREE.Vector3(0, 0, 0));
+      } else if (frame <= frame12) {
+        this.roof.visible = false;
+        this.cube.visible = false;
+        this.camera.position.set(
+          lerp(30, 5, (frame - frame12 + 10) / 10),
+          lerp(15, 150, (frame - frame12 + 10) / 10),
+          lerp(10, 20, (frame - frame12 + 10) / 10)
+        );
+        this.camera.lookAt(new THREE.Vector3(0, 0, 0));
+      } else {
+        const localT = (frame - frame13 + 10) / 10;
+        this.camera.position.set(
+          lerp(lerp(5, 0, localT), -5, localT / 60),
+          lerp(lerp(150, 400, localT), 800, localT / 60),
+          lerp(lerp(20, 10, localT), 8, localT / 60)
+        );
+        const scale = easeIn(2.2, 1.7, (frame - frame13 + 40) / 40);
+        this.globeContainer.scale.set(scale, scale, scale);
+        this.globeContainer.rotation.y = 3.4 - frame / 1000;
+        this.roof.visible = false;
+        this.cube.visible = false;
+        this.camera.lookAt(new THREE.Vector3(0, 0, 0));
       }
       this.ps.render();
     }
