@@ -8,10 +8,79 @@
         },
         inputs: {
           butterflyContent: new NIN.Input(),
+          griddymid: new NIN.Input(),
         }
       });
 
       this.cachedButterflyContent = undefined;
+
+      const ambientLight = new THREE.AmbientLight(0xffffff);
+      ambientLight.intensity = 0.1;
+      this.scene.add(ambientLight);
+
+      this.coords = [
+        /* R */
+        {x: 121, y: 669},
+        {x: 121, y: 539},
+        {x: 121, y: 410},
+        {x: 255, y: 410},
+        {x: 303, y: 460},
+        {x: 303, y: 512},
+        {x: 254, y: 540},
+        {x: 303, y: 659},
+
+        /* E */
+        {x: 386, y: 659},
+        {x: 572, y: 659},
+        {x: 386, y: 539},
+        {x: 496, y: 539},
+        {x: 386, y: 410},
+        {x: 582, y: 410},
+
+        /* V */
+        {x: 622, y: 410},
+        {x: 712, y: 659},
+        {x: 808, y: 410},
+
+        /* I */
+        {x: 874, y: 410},
+        {x: 874, y: 659},
+
+        /* S */
+        {x: 959, y: 610},
+        {x: 1003, y: 659},
+        {x: 1092, y: 659},
+        {x: 1133, y: 610},
+        {x: 1133, y: 558},
+        {x: 1091, y: 539},
+        {x: 1003, y: 539},
+        {x: 1003, y: 539},
+        {x: 959, y: 512},
+        {x: 959, y: 460},
+        {x: 1003, y: 410},
+        {x: 1091, y: 410},
+        {x: 1133, y: 460},
+
+        /* I */
+        {x: 1216, y: 410},
+        {x: 1216, y: 659},
+
+        /* O */
+        {x: 1298, y: 460},
+        {x: 1343, y: 410},
+        {x: 1435, y: 410},
+        {x: 1481, y: 460},
+        {x: 1481, y: 610},
+        {x: 1425, y: 659},
+        {x: 1343, y: 659},
+        {x: 1298, y: 610},
+
+        /* N */
+        {x: 1565, y: 659},
+        {x: 1565, y: 410},
+        {x: 1748, y: 659},
+        {x: 1748, y: 410},
+      ];
 
       this.camera.near = 0.01;
       this.camera.fov = 45;
@@ -31,7 +100,7 @@
       mirrorMesh.add(this.groundMirror);
       mirrorMesh.rotateX(-Math.PI / 2);
       //mirrorMesh.material.transparent = true;
-      this.scene.add(mirrorMesh);
+      //this.scene.add(mirrorMesh);
 
       this.mirrorOverlayMesh = new THREE.Mesh(
         planeGeo,
@@ -52,7 +121,7 @@
         0.8
       );
       this.mirrorOverlayMesh.material.transparent = true;
-      this.scene.add(this.mirrorOverlayMesh);
+      //this.scene.add(this.mirrorOverlayMesh);
 
       this.pyramids = [
         {
@@ -138,24 +207,42 @@
       ];
 
       this.pyramidMeshes = [];
-      for (const pyramid of this.pyramids) {
+      const roughnessMap = Loader.loadTexture('res/bg.jpg');
+      for (let i = 0; i < this.coords.length; i++) {
+        const pyramid = this.pyramids[i];
+        const coords = this.coords[i];
         const pyramidMesh = new THREE.Mesh(
-          new THREE.ConeGeometry(pyramid.radius, pyramid.height, 4),
-          new THREE.MeshStandardMaterial({color: pyramid.color})
+          new THREE.ConeGeometry(1, 1, 4),
+          new THREE.MeshStandardMaterial({
+            color: 0,
+            emissive: 0xffffff,
+            roughnessMap: roughnessMap,
+            metalness: 0,
+            transparent: true,
+            side: THREE.DoubleSide,
+          })
         );
-        pyramidMesh.position.set(pyramid.x, pyramid.height / 2, pyramid.z);
+        pyramidMesh.position.set(
+            coords.x / 10,
+            0.5,
+            coords.y / 10);
         this.scene.add(pyramidMesh);
         this.pyramidMeshes.push(pyramidMesh);
       }
 
+      const directionalLight = new THREE.DirectionalLight();
+      directionalLight.position.set(1, 1, 1);
+      this.scene.add(directionalLight);
+
       this.lasers = [];
-      for (const pyramid of this.pyramids) {
+      for (let i = 0; i < this.coords.length; i++) {
+        const coords = this.coords[i];
         const laserBeam = new global.Laser();
         this.scene.add(laserBeam.object3d);
         const object3d = laserBeam.object3d;
-        object3d.position.x = pyramid.x;
+        object3d.position.x = coords.x / 10;
         object3d.position.y = 11;
-        object3d.position.z = pyramid.z;
+        object3d.position.z = coords.z / 10;
         object3d.rotation.z = -Math.PI / 2;
         this.lasers.push(laserBeam);
       }
@@ -176,6 +263,8 @@
     update(frame) {
       super.update(frame);
 
+      demo.nm.nodes.bloom.opacity = 3;
+
       const newButterflyContent = this.inputs.butterflyContent.getValue();
       if(this.cachedButterflyContent != newButterflyContent) {
         this.scene.remove(this.cachedButterflyContent);
@@ -186,48 +275,23 @@
       const startBEAN = 46 * 12 * 4;
       const t = (frame - FRAME_FOR_BEAN(startBEAN)) / (FRAME_FOR_BEAN(54 * 12 * 4) - FRAME_FOR_BEAN(startBEAN));
 
-      for (const [index, pyramid] of this.pyramids.entries()) {
-        if (BEAN >= startBEAN + pyramid.bean) {
-          const localT = (frame - FRAME_FOR_BEAN(startBEAN + pyramid.bean)) / 120;
-          const scale = elasticOut(0.0001, 1, 1.0, localT);
-          this.pyramidMeshes[index].scale.set(scale, scale, scale);
-          this.pyramidMeshes[index].position.y = elasticOut(
-            0,
-            pyramid.height / 2,
-            1.0,
-            localT
-          );
-
-          const size = lerp(lerp(0, 1, localT * 2),
-                            0,
-                            localT * 2 - 1);
-          this.rings[index].scale.set(size, size, size);
-          this.rings[index].position.y = lerp(0, pyramid.height, localT * 2- .9);
-
-          this.lasers[index].object3d.scale.x = lerp(0, 10, localT - 1);
-          this.lasers[index].object3d.position.y = lerp(
-            pyramid.height,
-            pyramid.height + 10,
-            localT - 1
-          );
-        } else {
-          this.pyramidMeshes[index].scale.set(0, 0, 0);
-          this.rings[index].scale.set(0, 0, 0);
-          this.lasers[index].object3d.scale.x = 0;
-          this.lasers[index].object3d.position.y = 0;
-        }
+      for (const [index, coord] of this.coords.entries()) {
+        const pyramid = this.pyramids[index];
+        this.pyramidMeshes[index].material.map = this.inputs.griddymid.getValue();
+        this.pyramidMeshes[index].material.emissiveMap = this.inputs.griddymid.getValue();
+        this.pyramidMeshes[index].material.needsUpdate = true;
       }
 
       if (!this.camera.isOverriddenByFlyControls) {
         this.camera.position.set(
-          lerp(0.5, 0, t),
-          lerp(2, 0.5, t),
-          lerp(-2, 4, t)
+          easeIn(10.82, 0, t),
+          easeIn(0.58, 0.5, t),
+          easeIn(69.06, 4, t)
         );
         const lookAt = new THREE.Vector3(
-          lerp(0, -1.5, t),
-          easeIn(0, 1, t),
-          lerp(2, 8, t)
+          easeIn(11.61, -1.5, t),
+          easeIn(0.35, 1, t),
+          easeIn(67.06, 8, t)
         );
         if(frame >= 6510) {
           this.camera.position.set(-0.5, 0.5, 8.45);
@@ -241,8 +305,7 @@
     }
 
     render(renderer) {
-      const clearColor = new THREE.Color(55 / 255, 60 / 255, 63 / 255);
-      renderer.setClearColor(clearColor, 1);
+      renderer.setClearColor(0, 1);
       this.groundMirror.render();
       super.render(renderer);
     }

@@ -91,7 +91,8 @@
           }));
         this.butterflies.push(butterflyMesh);
         this.outputs.threedeecontent.value.add(butterflyMesh);
-        mesh.light = new THREE.PointLight(new THREE.Color(1, 73 / 255, 130 / 255), 0.1);
+        mesh.light = new THREE.PointLight();
+        mesh.light.intensity = 0.1;
         this.outputs.threedeecontent.value.add(mesh.light);
         this.outputs.ballpositions.getValue().push(butterflyMesh.position.clone());
       }

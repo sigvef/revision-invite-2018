@@ -178,6 +178,7 @@
       super.update(frame);
       this.ps.update();
       this.beamer.material.emissiveMap = this.inputs.beamer.getValue();
+      this.beamer.material.needsUpdate = true;
       demo.nm.nodes.bloom.opacity = 0;
       this.globeContainer.rotation.y = 5 -frame / 1000;
       const globeTextures = this.inputs.globeTextures.getValue();
