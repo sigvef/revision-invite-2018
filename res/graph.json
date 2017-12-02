@@ -35,7 +35,7 @@
       "_20_A_theme_breakdown": "breakdown.render",
       "_23_final_A_theme_rolldown": "diamondillium.render",
       "_24_outro": "ewerk.render",
-      "_25_outro_2": "ewerk.render"
+      "_25_outro_2": "fadeout.render"
     }
   },
   {
@@ -340,6 +340,16 @@
     "type": "griddymidNode",
     "options": {
       "shader": "griddymid"
+    }
+  },
+  {
+    "id": "fadeout",
+    "type": "fadeoutNode",
+    "options": {
+      "shader": "fadeout"
+    },
+    "connected": {
+      "A": "ewerk.render"
     }
   }
 ]
