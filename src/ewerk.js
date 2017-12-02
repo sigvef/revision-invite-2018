@@ -8,6 +8,7 @@
         },
         inputs: {
           globeTextures: new NIN.Input(),
+          beamer: new NIN.TextureInput(),
         }
       });
 
@@ -27,6 +28,39 @@
         this.ewerkModel.add(obj);
       });
       this.scene.add(this.ewerkModel);
+
+      Loader.loadAjax('res/REVISIONSTAGE.obj', text => {
+        const obj = objLoader.parse(text);
+        obj.scale.set(0.06, 0.06, 0.06);
+        obj.rotation.y = -Math.PI / 2;
+        obj.position.x = 3;
+        obj.position.y = 0.05;
+        obj.position.z = -0.3;
+        obj.traverse(mesh => {
+          mesh.material = new THREE.MeshStandardMaterial({
+            color: new THREE.Color(55 / 255, 60 / 255, 63 / 255),  
+            roughness: 1,
+            metalness: 0,
+            side: THREE.DoubleSide,
+          });
+        });
+        this.ewerkModel.add(obj);
+      });
+
+      this.beamer = new THREE.Mesh(
+        new THREE.BoxGeometry(0.01, 9, 16),
+        new THREE.MeshStandardMaterial({
+          emissive: 0xffffff,
+          roughness: 1,
+          metalness: 1,
+          emissiveIntensity: 1,
+          color: new THREE.Color(55 / 255, 60 / 255, 63 / 255),  
+        }));
+      this.scene.add(this.beamer);
+      this.beamer.scale.set(0.115, 0.115, 0.115);
+      this.beamer.position.x = -3.0;
+      this.beamer.position.y = 0.75;
+      this.beamer.position.z = 0.32;
 
       this.scene.add(new THREE.PointLight());
 
@@ -122,6 +156,7 @@
         new THREE.ShaderMaterial(this.shader)
       );
       this.map.rotation.x = -Math.PI/2;
+      this.map.position.y = -0.02;
       this.scene.add(this.map);
 
       var light = new THREE.PointLight(0xffffff, 1, 100);
@@ -142,6 +177,7 @@
     update(frame) {
       super.update(frame);
       this.ps.update();
+      this.beamer.material.emissiveMap = this.inputs.beamer.getValue();
       demo.nm.nodes.bloom.opacity = 0;
       this.globeContainer.rotation.y = 5 -frame / 1000;
       const globeTextures = this.inputs.globeTextures.getValue();
@@ -156,6 +192,8 @@
       const frame3 = FRAME_FOR_BEAN(3 * 12 * 4);
       const frame4 = FRAME_FOR_BEAN(3 * 12 * 4 + 24);
       const frame5 = FRAME_FOR_BEAN(4 * 12 * 4);
+      const frame6 = FRAME_FOR_BEAN(4 * 12 * 4 + 24);
+      const frame7 = FRAME_FOR_BEAN(4 * 12 * 4 + 24 + 24);
 
       this.cloudGlobe.rotation.y -= 0.0002;
       this.ps.particles.rotation.y += 0.0005;
@@ -190,6 +228,7 @@
         this.roof.visible = false;
         this.cube.visible = false;
         this.globeContainer.rotation.x = -Math.PI / 2 + .8;
+        this.camera.lookAt(new THREE.Vector3(0, 0, 0));
       } else if (frame <= frame2) {
         this.camera.position.set(
           lerp(0, 0, (frame - frame2 + 10) / 10),
@@ -197,6 +236,7 @@
           lerp(200, 100, (frame - frame2 + 10) / 10)
         );
 
+        this.camera.lookAt(new THREE.Vector3(0, 0, 0));
         this.globeContainer.rotation.x = -Math.PI / 2 + .8;
         this.globeContainer.rotation.x += lerp(0, .3, (frame - frame2 + 10) / 10);
         const scale = lerp(1, 1.7, (frame - frame2 + 10) / 10);
@@ -205,6 +245,7 @@
         this.shader.uniforms.t.value = lerp(1, 2, (frame - frame2 + 10) / 10);
         this.roof.visible = false;
         this.cube.visible = false;
+        this.camera.lookAt(new THREE.Vector3(0, 0, 0));
       } else if (frame <= frame3) {
         this.camera.position.set(
           lerp(0, 5, (frame - frame3 + 10) / 10),
@@ -216,6 +257,7 @@
         this.shader.uniforms.t.value = lerp(2, 3, (frame - frame3 + 10) / 10);
         this.roof.visible = false;
         this.cube.visible = false;
+        this.camera.lookAt(new THREE.Vector3(0, 0, 0));
       } else if (frame <= frame4) {
         this.camera.position.set(
           lerp(5, 30, (frame - frame4 + 10) / 10),
@@ -225,7 +267,8 @@
         this.shader.uniforms.t.value = lerp(3, 4, (frame - frame4 + 10) / 10);
         this.roof.visible = true;
         this.cube.visible = true;
-      } else {
+        this.camera.lookAt(new THREE.Vector3(0, 0, 0));
+      } else if( frame <= frame5) {
         this.camera.position.set(
           lerp(30, 15, (frame - frame5 + 10) / 10),
           lerp(15, 5, (frame - frame5 + 10) / 10),
@@ -233,8 +276,25 @@
         );
         this.roof.visible = true;
         this.cube.visible = true;
+        this.camera.lookAt(new THREE.Vector3(0, 0, 0));
+      } else if( frame <= frame6) {
+        this.camera.position.set(
+          lerp(15, 0, (frame - frame6 + 10) / 10),
+          lerp(5, 0.5, (frame - frame6 + 10) / 10),
+          lerp(1, 1, (frame - frame6 + 10) / 10));
+        this.camera.lookAt(
+            new THREE.Vector3(-4, 1., 0));
+      } else {
+        const x = -1.75;
+        const y = 0.75;
+        const z = 0.32;
+        this.camera.position.set(
+          lerp(0, x, (frame - frame7 + 10) / 10),
+          lerp(0.5, y, (frame - frame7 + 10) / 10),
+          lerp(1, z, (frame - frame7 + 10) / 10));
+        this.camera.lookAt(
+            new THREE.Vector3(x - 2, y, z));
       }
-      this.camera.lookAt(new THREE.Vector3(0, 0, 0));
       this.ps.render();
     }
   }
