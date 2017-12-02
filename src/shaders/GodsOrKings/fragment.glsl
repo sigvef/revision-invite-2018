@@ -41,13 +41,19 @@ float opS(float d1, float d2) {
     return max(-d2, d1);
 }
 
-// translate/scale
-/*
-vec3 opTx(vec3 p, mat4 m) {
-    vec3 q = inverse(m) * p;
-    return primitive(q);
+// Rotation
+mat4 rotationMatrix(vec3 axis, float angle)
+{
+    axis = normalize(axis);
+    float s = sin(angle);
+    float c = cos(angle);
+    float oc = 1.0 - c;
+
+    return mat4(oc * axis.x * axis.x + c,           oc * axis.x * axis.y - axis.z * s,  oc * axis.z * axis.x + axis.y * s,  0.0,
+                oc * axis.x * axis.y + axis.z * s,  oc * axis.y * axis.y + c,           oc * axis.y * axis.z - axis.x * s,  0.0,
+                oc * axis.z * axis.x - axis.y * s,  oc * axis.y * axis.z + axis.x * s,  oc * axis.z * axis.z + c,           0.0,
+                0.0,                                0.0,                                0.0,                                1.0);
 }
-*/
 
 
 // framework
@@ -64,10 +70,15 @@ vec2 map(in vec3 pos) {
     // bumps on crown
     int numOfBumps = 8;
     for(int i = 0; i < 8; ++i) {
+        //pos = (rotationMatrix(vec3(0., 1., 0.), PI/2.) * vec4(pos, 1.)).xyz;
+        vec3 bumpPos = vec3((sin(float(i) / float(numOfBumps)*2.0*PI)),
+                            1.25,
+                            cos(float(i) / float(numOfBumps)*2.0*PI));
         res = opU(res,
-                  vec2(sdTriPrism(pos-vec3((sin(float(i) / float(numOfBumps)*2.0*PI)),
-                                           1.25,
-                                           cos(float(i) / float(numOfBumps)*2.0*PI)),
+                  vec2(sdTriPrism((rotationMatrix(vec3(0., 1., 0.), (
+                    PI * 2. * float(i) / float(numOfBumps)
+                  )) *
+                                       vec4(pos-bumpPos, 1.)).xyz,
                                   vec2(.5, .1)),
                       88.0)
                   );
