@@ -160,7 +160,7 @@
     "id": "GodsOrKings",
     "type": "GodsOrKingsNode",
     "connected": {
-        "A": "CrownBG.render"
+      "A": "CrownBG.render"
     },
     "options": {
       "shader": "GodsOrKings"
@@ -207,7 +207,8 @@
       "shader": "chess"
     },
     "connected": {
-      "butterflyContent": "butterflies.threedeecontent"
+      "butterflyContent": "butterflies.threedeecontent",
+      "griddymid": "griddymid.render"
     }
   },
   {
@@ -336,5 +337,12 @@
   {
     "id": "CrownBG",
     "type": "crownBG"
+  },
+  {
+    "id": "griddymid",
+    "type": "griddymidNode",
+    "options": {
+      "shader": "griddymid"
+    }
   }
 ]
