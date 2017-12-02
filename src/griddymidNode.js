@@ -1,6 +1,7 @@
 (function(global) {
   class griddymidNode extends NIN.ShaderNode {
     constructor(id, options) {
+      options.shader = 'griddymid';
       super(id, options);
 
       this.renderTarget = new THREE.WebGLRenderTarget(640, 360, {
@@ -9,6 +10,10 @@
         format: THREE.RGBAFormat
       });
       this.resize();
+    }
+
+    resize() {
+      this.renderTarget.setSize(640 / 2, 360 / 2);
     }
 
     update(frame) {
