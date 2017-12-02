@@ -75,11 +75,11 @@ vec2 map(in vec3 pos) {
                             1.25,
                             cos(float(i) / float(numOfBumps)*2.0*PI));
         res = opU(res,
-                  vec2(sdTriPrism((rotationMatrix(vec3(0., 1., 0.), (
-                    PI * 2. * float(i) / float(numOfBumps)
-                  )) *
-                                       vec4(pos-bumpPos, 1.)).xyz,
-                                  vec2(.5, .1)),
+                  vec2(sdTriPrism(
+                          (rotationMatrix(vec3(0., 1., 0.), (
+                            PI * 2. * float(i) / float(numOfBumps)
+                            )) *  vec4(pos-bumpPos, 1.)).xyz,
+                          vec2(.5, .1)),
                       88.0)
                   );
     }
