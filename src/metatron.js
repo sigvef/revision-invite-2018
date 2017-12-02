@@ -12,12 +12,12 @@
 
       var zoom = 5.8;
       this.camera = new THREE.OrthographicCamera( -zoom * 16, zoom * 16 , zoom * 9, -zoom * 9, 1, 100000 );
-      this.camera.position.z = 100;
+      this.camera.position.z = 10000;
 
 
       this.cube = new THREE.Mesh(new THREE.BoxGeometry(196, 109, 0.1),
-                                 new THREE.MeshBasicMaterial({ color: 0x070809 }));
-      this.cube.position.set(0,0,-10);
+                                 new THREE.MeshBasicMaterial({ color: 0x373c3f }));
+      this.cube.position.set(0,0,-100);
       this.scene.add(this.cube);
 
       var radius   = 30,
@@ -134,10 +134,10 @@
       this.three_point_star = new THREE.Line( line_geometry, line_material );
       this.scene.add(this.three_point_star);
 
-      var darker_line_material = new THREE.LineBasicMaterial( { color: 0x444444 } );
-      var darker_line_material2 = new THREE.LineBasicMaterial( { color: 0x444444 } );
-      var darker_line_material3 = new THREE.LineBasicMaterial( { color: 0x444444 } );
-      var darker_line_material4 = new THREE.LineBasicMaterial( { color: 0x444444 } );
+      var darker_line_material = new THREE.LineBasicMaterial( { color: 0x373c3f } );
+      var darker_line_material2 = new THREE.LineBasicMaterial( { color: 0x373c3f } );
+      var darker_line_material3 = new THREE.LineBasicMaterial( { color: 0x373c3f } );
+      var darker_line_material4 = new THREE.LineBasicMaterial( { color: 0x373c3f } );
 
       var horizontal_distance1 = 15;
       var horizontal_distance2 = 10;
@@ -179,7 +179,50 @@
       this.scene.add(this.large_claw_r);
       this.scene.add(this.large_claw_l);
 
-      console.log(this.large_claw_l);
+
+      var cube_geometry = new THREE.Geometry();
+      cube_geometry.vertices.push(new THREE.Vector3(-1, -1, -1));
+      cube_geometry.vertices.push(new THREE.Vector3(1, -1, -1));
+      cube_geometry.vertices.push(new THREE.Vector3(1, 1, -1));
+      cube_geometry.vertices.push(new THREE.Vector3(-1, 1, -1));
+      cube_geometry.vertices.push(new THREE.Vector3(-1, -1, -1));
+      cube_geometry.vertices.push(new THREE.Vector3(-1, -1, 1));
+      cube_geometry.vertices.push(new THREE.Vector3(1, -1, 1));
+      cube_geometry.vertices.push(new THREE.Vector3(1, -1, -1));
+      cube_geometry.vertices.push(new THREE.Vector3(1, -1, 1));
+      cube_geometry.vertices.push(new THREE.Vector3(1, 1, 1));
+      cube_geometry.vertices.push(new THREE.Vector3(1, 1, -1));
+      cube_geometry.vertices.push(new THREE.Vector3(1, 1, 1));
+      cube_geometry.vertices.push(new THREE.Vector3(-1, 1, 1));
+      cube_geometry.vertices.push(new THREE.Vector3(-1, 1, -1));
+      cube_geometry.vertices.push(new THREE.Vector3(-1, 1, 1));
+      cube_geometry.vertices.push(new THREE.Vector3(-1, -1, 1));
+      
+      this.spin_cube = new THREE.Object3D();
+
+      var cube_line_material = new THREE.LineBasicMaterial( { color: 0x999999 } );
+
+      this.inner_cube = new THREE.Line(cube_geometry, cube_line_material);
+      this.middle_cube = new THREE.Line(cube_geometry, cube_line_material);
+      this.outer_cube = new THREE.Line(cube_geometry, cube_line_material);
+
+      var inner_size = 9.2;
+      var middle_size = 15.3;
+      var outer_size = 24.5;
+
+      this.inner_cube.scale.set(inner_size, inner_size, inner_size);
+      this.middle_cube.scale.set(middle_size, middle_size, middle_size);
+      this.outer_cube.scale.set(outer_size, outer_size, outer_size);
+
+      this.spin_cube.add(this.inner_cube);
+      this.spin_cube.add(this.middle_cube);
+      this.spin_cube.add(this.outer_cube);
+      this.spin_cube.position.set(0,0,0);
+      this.scene.add(this.spin_cube);
+
+      var spin = Math.PI / 4
+
+      this.spin_cube.rotation.set(spin * 0.7837 , spin , 0);
     }
 
     update(frame) {
@@ -192,6 +235,7 @@
       // Square root of three divided by two. For a hex of diameter 1 this is the distance from the center to the edge.
       var r32 = 0.86602540378;
 
+      this.small_center_hex.position.set(0, 0, 0);
       this.level1_hex1.position.set(200, 0, 0);
       this.level1_hex2.position.set(200, 0, 0);
       this.level1_hex3.position.set(200, 0, 0);
@@ -215,6 +259,8 @@
       this.three_point_star.geometry.vertices[5].y = 0;
       this.three_point_star.rotation.set(0, 0, 0);
       this.three_point_star.position.set(200, 0, 0);
+      this.spin_cube.position.set(200, 0, 0);
+      this.spin_cube.rotation.set(Math.PI / 4 * 0.7837 , Math.PI / 4 , 0);
 
       if ( frame > FRAME_FOR_BEAN(22 * 48)) {
         var scale = asmoothstep(FRAME_FOR_BEAN(22 * 48), FRAME_FOR_BEAN(48), frame)
@@ -263,11 +309,36 @@
         this.center_line2.scale.set(scale, scale, scale);
         this.center_line3.scale.set(scale, scale, scale);
       }
-      if (frame > FRAME_FOR_BEAN(24.5 * 48)) {
+      if (frame > FRAME_FOR_BEAN(24.75 * 48)) {
+        this.spin_cube.position.set(0, 0, 0);
+        this.small_center_hex.position.set(200, 0, 0);
+        this.middle_center_hex.position.set(200, 0, 0);
+        this.outer_center_hex.position.set(200, 0, 0);
+        this.center_line1.position.set(200, 0, 0);
+        this.center_line2.position.set(200, 0, 0);
+        this.center_line3.position.set(200, 0, 0);
+        var progress = asmoothstep(FRAME_FOR_BEAN(24.75*48), FRAME_FOR_BEAN(36), frame);
+        var spin = Math.PI / 4 + 2 * Math.PI * progress;
+        this.spin_cube.rotation.set(spin -0.1698 , spin , 0);
+
+        this.level1_hex1.rotation.set(2 * Math.PI * progress, 2 * Math.PI * progress , Math.PI/6);
+        this.level1_hex2.rotation.set(2 * Math.PI * progress, 2 * Math.PI * progress , Math.PI/6);
+        this.level1_hex3.rotation.set(2 * Math.PI * progress, 2 * Math.PI * progress , Math.PI/6);
+      }
+      if (frame > FRAME_FOR_BEAN(25.5 * 48)) {
+        this.spin_cube.position.set(200, 0, 0);
+        this.small_center_hex.position.set(0, 0, 0);
+        this.middle_center_hex.position.set(0, 0, 0);
+        this.outer_center_hex.position.set(0, 0, 0);
+        this.center_line1.position.set(0, 0, 0);
+        this.center_line2.position.set(0, 0, 0);
+        this.center_line3.position.set(0, 0, 0);
+      }
+      if (frame > FRAME_FOR_BEAN(25.5 * 48)) {
         // Distance from main center to center of the level 1 hexes.
-        var distance3 = 10 + 5 * asmoothstep(FRAME_FOR_BEAN(24.75 * 48), FRAME_FOR_BEAN(12), frame); 
-        var distance2 = 10 + 5 * asmoothstep(FRAME_FOR_BEAN(24.875 * 48), FRAME_FOR_BEAN(12), frame); 
-        var distance1 = 10 + 5 * asmoothstep(FRAME_FOR_BEAN(25 * 48), FRAME_FOR_BEAN(12), frame); 
+        var distance3 = 10 + 5 * asmoothstep(FRAME_FOR_BEAN(25.75 * 48), FRAME_FOR_BEAN(12), frame); 
+        var distance2 = 10 + 5 * asmoothstep(FRAME_FOR_BEAN(25.875 * 48), FRAME_FOR_BEAN(12), frame); 
+        var distance1 = 10 + 5 * asmoothstep(FRAME_FOR_BEAN(26 * 48), FRAME_FOR_BEAN(12), frame); 
         this.level1_hex1.position.set(distance1 * r32, distance1 / 2, 0);
         this.level1_hex2.position.set(-distance2 * r32, distance2 / 2, 0);
         this.level1_hex3.position.set(0, -distance3, 0);
@@ -280,24 +351,24 @@
         this.three_point_star.geometry.vertices[5].x = (distance1 - 10) * r32;
         this.three_point_star.geometry.vertices[5].y = (distance1 - 10) / 2;
 
-        this.three_point_star.rotation.set(0, 0, - 3 * Math.PI / 3 * asmoothstep(FRAME_FOR_BEAN(25.25 * 48), FRAME_FOR_BEAN(12), frame));
+        this.three_point_star.rotation.set(0, 0, - 3 * Math.PI / 3 * asmoothstep(FRAME_FOR_BEAN(26.25 * 48), FRAME_FOR_BEAN(12), frame));
 
         // Scale of the level 1 hexes.
-        var scale3 = 1 + 0.5 * asmoothstep(FRAME_FOR_BEAN(25.375 * 48), FRAME_FOR_BEAN(12), frame);
-        var scale2 = 1 + 0.5 * asmoothstep(FRAME_FOR_BEAN(25.5 * 48), FRAME_FOR_BEAN(12), frame);
-        var scale1 = 1 + 0.5 * asmoothstep(FRAME_FOR_BEAN(25.625 * 48), FRAME_FOR_BEAN(12), frame); 
+        var scale3 = 1 + 0.5 * asmoothstep(FRAME_FOR_BEAN(26.375 * 48), FRAME_FOR_BEAN(12), frame);
+        var scale2 = 1 + 0.5 * asmoothstep(FRAME_FOR_BEAN(26.5 * 48), FRAME_FOR_BEAN(12), frame);
+        var scale1 = 1 + 0.5 * asmoothstep(FRAME_FOR_BEAN(26.625 * 48), FRAME_FOR_BEAN(12), frame); 
         this.level1_hex1.scale.set(scale1, scale1, scale1);
         this.level1_hex2.scale.set(scale2, scale2, scale2);
         this.level1_hex3.scale.set(scale3, scale3, scale3);
       }
-      if (frame > FRAME_FOR_BEAN(25.75)) {
-        var scale = 1 + 0.67 * asmoothstep(FRAME_FOR_BEAN(25.75 * 48), FRAME_FOR_BEAN(36), frame);        
+      if (frame > FRAME_FOR_BEAN(26.75)) {
+        var scale = 1 + 0.67 * asmoothstep(FRAME_FOR_BEAN(26.75 * 48), FRAME_FOR_BEAN(36), frame);        
         this.three_point_star.scale.set(scale, scale, scale);
 
-        var claw_progress1 = asmoothstep(FRAME_FOR_BEAN(25.75 * 48), FRAME_FOR_BEAN(12), frame);
-        var claw_progress2 = asmoothstep(FRAME_FOR_BEAN(25.875 * 48), FRAME_FOR_BEAN(12), frame);
-        var claw_progress3 = asmoothstep(FRAME_FOR_BEAN(26 * 48), FRAME_FOR_BEAN(12), frame);
-        var claw_progress4 = asmoothstep(FRAME_FOR_BEAN(26.125 * 48), FRAME_FOR_BEAN(12), frame);
+        var claw_progress1 = asmoothstep(FRAME_FOR_BEAN(26.75 * 48), FRAME_FOR_BEAN(12), frame);
+        var claw_progress2 = asmoothstep(FRAME_FOR_BEAN(26.875 * 48), FRAME_FOR_BEAN(12), frame);
+        var claw_progress3 = asmoothstep(FRAME_FOR_BEAN(27 * 48), FRAME_FOR_BEAN(12), frame);
+        var claw_progress4 = asmoothstep(FRAME_FOR_BEAN(27.125 * 48), FRAME_FOR_BEAN(12), frame);
 
         this.small_claw_r.material.color.r = this.cube.material.color.r + 0.15 * claw_progress1;
         this.small_claw_r.material.color.g = this.cube.material.color.r + 0.15 * claw_progress1;
@@ -320,6 +391,7 @@
         this.large_claw_r.position.set(50 * r32 - 8 * (1 - claw_progress3), 0, -1);
         this.large_claw_l.position.set(-50 * r32 + 8 * (1 - claw_progress4), 0, -1);
       }
+      //this.spin_cube.rotation.set(Math.sin(frame/100), Math.sin(frame/120), Math.sin(frame/140))
 
 
       this.three_point_star.geometry.verticesNeedUpdate = true;
