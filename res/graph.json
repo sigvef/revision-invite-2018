@@ -284,7 +284,8 @@
       "shader": "map"
     },
     "connected": {
-      "globeTextures": "globetextures.globeTextures"
+      "globeTextures": "globetextures.globeTextures",
+      "beamer": "OrthoCube.render"
     }
   },
   {
