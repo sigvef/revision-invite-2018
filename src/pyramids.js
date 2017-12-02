@@ -13,15 +13,13 @@
         }
       });
 
-      this.cachedButterflyContent = undefined;
-
       this.skybox = new THREE.Mesh(
           new THREE.BoxGeometry(500, 500, 500),
           new THREE.MeshBasicMaterial({
             color: 0xffffff,
             side: THREE.DoubleSide,
           }));
-      this.scene.add(this.skybox);
+      //this.scene.add(this.skybox);
 
       this.cameraPreviousPosition = new THREE.Vector3(0, 0, 0);
       this.cameraShakePosition = new THREE.Vector3(0, 0, 0);
@@ -39,6 +37,7 @@
       /* R */
         upperFromBean: 2208, 
         upperToBean: 2208 + 24, 
+        spinBean: 2208 + 24,
         lowerFromBean: 0, 
         lowerToBean: 0, 
       }, {
@@ -396,6 +395,7 @@
       });
       const planeGeo = new THREE.PlaneBufferGeometry(500, 500);
       const mirrorMesh = new THREE.Mesh(planeGeo, this.groundMirror.material);
+      mirrorMesh.position.y = -0.375;
       mirrorMesh.add(this.groundMirror);
       mirrorMesh.rotateX(-Math.PI / 2);
       mirrorMesh.material.transparent = true;
@@ -406,7 +406,7 @@
         new THREE.ShaderMaterial(SHADERS[options.shader])
       );
       this.mirrorOverlayMesh.rotateX(-Math.PI / 2);
-      this.mirrorOverlayMesh.position.y = 0.2;
+      this.mirrorOverlayMesh.position.y = -0.5;
       this.mirrorOverlayMesh.material.uniforms.foregroundColor.value = new THREE.Vector4(
         0.02,
         0.00,
@@ -425,13 +425,14 @@
       this.scene.add(new THREE.AmbientLight(0xffffff));
 
       this.pyramidMeshes = [];
-      const pyramidGeometry = new THREE.ConeBufferGeometry(1, 1, 4, 1, true);
+      const pyramidGeometry = new THREE.ConeBufferGeometry(1, 1.2, 4, 1, true);
       const griddyMaterial = new THREE.ShaderMaterial(SHADERS.griddymid);
       griddyMaterial.transparent = true;
       griddyMaterial.side = THREE.DoubleSide;
       griddyMaterial.depthTest = false;
       griddyMaterial.blending = THREE.AdditiveBlending;
       const ballGeometry = new THREE.SphereBufferGeometry(0.075, 32, 32);
+      const baseGeometry = new THREE.BoxBufferGeometry(1.8, 0.1, 1.8);
       for (let i = 0; i < this.coords.length; i++) {
         const coords = this.coords[i];
         const pyramidMesh = new THREE.Mesh(
@@ -448,6 +449,14 @@
         pyramidMesh.add(ball);
         ball.position.y = 0.5;
         pyramidMesh.ball = ball;
+        const base = new THREE.Mesh(
+            baseGeometry, new THREE.ShaderMaterial(SHADERS.griddymidbox));
+        base.material.uniforms.upper.value = 1;
+        base.material.uniforms.lower.value = 0;
+        base.rotation.y = Math.PI / 4;
+        pyramidMesh.base = base;
+        pyramidMesh.add(base);
+        base.position.y = -.65;
       }
 
       const directionalLight = new THREE.DirectionalLight();
@@ -483,13 +492,6 @@
       const globeTextures = this.inputs.globeTextures.getValue();
       if(globeTextures) {
         this.skybox.material = globeTextures.skyboxMaterial;
-      }
-
-      const newButterflyContent = this.inputs.butterflyContent.getValue();
-      if(this.cachedButterflyContent != newButterflyContent) {
-        this.scene.remove(this.cachedButterflyContent);
-        this.scene.add(newButterflyContent);
-        this.cachedButterflyContent = newButterflyContent;
       }
 
       if(BEAT) {
@@ -537,15 +539,23 @@
           pyramid =  this.pyramids[this.pyramids.length - 1];
         }
         const scale = 1 + (Math.random() - 0.5) * 0.5;
-        this.pyramidMeshes[index].ball.scale.set(scale, scale, scale);
-        this.pyramidMeshes[index].material.uniforms.lower.value = lerp(
+        const mesh = this.pyramidMeshes[index];
+        mesh.ball.scale.set(scale, scale, scale);
+        mesh.material.uniforms.lower.value = lerp(
             1, 0, (frame - FRAME_FOR_BEAN(pyramid.lowerFromBean)) / (
                 FRAME_FOR_BEAN(pyramid.lowerToBean) - FRAME_FOR_BEAN(pyramid.lowerFromBean)));
         let t = (frame - FRAME_FOR_BEAN(pyramid.upperFromBean)) / (
                 FRAME_FOR_BEAN(pyramid.upperToBean) - FRAME_FOR_BEAN(pyramid.upperFromBean));
-        this.pyramidMeshes[index].material.uniforms.upper.value = lerp(0, 1, t);
-        this.pyramidMeshes[index].material.uniforms.frame.value = frame;
-        this.pyramidMeshes[index].ball.visible = t > 0.999 && this.pyramidMeshes[index].material.uniforms.lower.value < 0.99;
+        mesh.material.uniforms.upper.value = lerp(0, 1, t);
+        mesh.material.uniforms.frame.value = frame;
+        mesh.ball.visible = t > 0.999 && mesh.material.uniforms.lower.value < 0.99;
+
+        mesh.base.visible = mesh.material.uniforms.lower.value < t;
+
+        if(mesh.material.uniforms.lower.value < 0.999 && t > 0.999) {
+          mesh.rotation.y = frame / 20;
+        }
+        mesh.rotation.y += easeOut(0, Math.PI, (frame - FRAME_FOR_BEAN(pyramid.spinBean || pyramid.lowerFromBean)) / 35);
       }
 
       for (let i = 0; i < this.lasers.length; i++) {
@@ -668,11 +678,18 @@
         this.camera.rotation.z += this.cameraShakeRotation.z;
         this.cameraLight.position.copy(this.camera.position);
       }
+      demo.nm.nodes.bloom.opacity = 2;
     }
 
     render(renderer) {
-      renderer.setClearColor(0, 1);
+      renderer.setClearColor(new THREE.Color(0x120b13));
+      for(let i = 0; i < this.pyramidMeshes.length; i++) {
+        this.pyramidMeshes[i].material.depthTest = true;
+      }
       this.groundMirror.render();
+      for(let i = 0; i < this.pyramidMeshes.length; i++) {
+        this.pyramidMeshes[i].material.depthTest = false;
+      }
       super.render(renderer);
     }
   }
