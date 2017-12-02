@@ -7,7 +7,7 @@ varying vec2 vUv;
 
 void main() {
     vec2 uv = vUv;
-    vec3 orange = vec3(255., 73. / 255., 130. / 255.);
+    vec3 orange = vec3(227. / 255., 82. / 255., 175. / 255.);
     vec4 color = vec4(0.);
 
     if(sin(uv.y * 70. - frame / 5.) > 0.95) {
@@ -41,6 +41,10 @@ void main() {
         color = vec4(orange, 1.);
     }
     if(uv.x > 0.75 && ((uv.x - 0.75) * 4.) < uv.y + lineWidth * 4.) {
+        color = vec4(orange, 1.);
+    }
+
+    if(uv.y > 0.85) {
         color = vec4(orange, 1.);
     }
 

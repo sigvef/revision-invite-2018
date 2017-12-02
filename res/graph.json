@@ -26,8 +26,8 @@
       "_11_illuminati_confirmed": "logotransitionquadpass.render",
       "_12_first_C_theme_1": "lulle.render",
       "_13_first_C_theme_2": "lulle.render",
-      "_14_second_C_theme_1": "pyramids.render",
-      "_15_second_C_theme_2": "pyramids.render",
+      "_14_second_C_theme_1": "pyramidfx.render",
+      "_15_second_C_theme_2": "pyramidfx.render",
       "_16_low_down_B_theme_1": "GodsOrKings.render",
       "_17_low_down_B_theme_piano_snippet": "GodsOrKings.render",
       "_18_low_down_B_theme_2": "GodsOrKings.render",
@@ -351,6 +351,16 @@
     },
     "connected": {
       "A": "ewerk.render"
+    }
+  },
+  {
+    "id": "pyramidfx",
+    "type": "pyramidfxNode",
+    "options": {
+      "shader": "pyramidfx"
+    },
+    "connected": {
+        "tDiffuse": "pyramids.render"
     }
   }
 ]
