@@ -8,7 +8,9 @@
     }
 
     update(frame) {
+      demo.nm.nodes.bloom.opacity = .25;
       this.uniforms.frame.value = frame;
+      this.uniforms.A.value = this.inputs.A.getValue();
     }
   }
 

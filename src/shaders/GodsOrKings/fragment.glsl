@@ -166,8 +166,8 @@ float calcAO(in vec3 pos, in vec3 nor) {
     return clamp(1.0 - 3.0 * occ, 0.0, 1.0);
 }
 
-vec3 render(in vec3 ro, in vec3 rd) {
-    vec3 col = texture2D(A, vUv).xyz;
+vec4 render(in vec3 ro, in vec3 rd) {
+    vec3 col = vec3(0., 0., 0.);
     vec2 res = castRay(ro, rd);
     float t = res.x;
     float m = res.y;
@@ -204,9 +204,11 @@ vec3 render(in vec3 ro, in vec3 rd) {
 
         // mix
         col = mix(col, vec3(0.8, 0.9, 1.0), 1.0 - exp(-0.0002 * t * t * t));
+    } else {
+        return texture2D(A, vUv);
     }
 
-    return vec3(clamp(col, 0.0, 1.0));
+    return vec4(vec3(clamp(col, 0.0, 1.0)), 1.);
 }
 
 mat3 setCamera(in vec3 ro, in vec3 ta, float cr) {
@@ -220,7 +222,7 @@ mat3 setCamera(in vec3 ro, in vec3 ta, float cr) {
 
 void main() {
     float time = 15.0 + frame / 1000. * 60.;
-    vec3 tot = vec3(0.0);
+    vec4 tot = vec4(0.0);
 
     vec2 p = (vUv - 0.5) * 2.;
 
@@ -239,12 +241,12 @@ void main() {
     vec3 rd = ca * normalize(vec3(p.xy, 2.0));
 
     // render
-    vec3 col = render(ro, rd);
+    vec4 col = render(ro, rd);
 
     // gamma
-    col = pow(col, vec3(0.4545));
+    col = pow(col, vec4(0.4545));
 
     tot = col;
 
-    gl_FragColor = vec4(tot, 1.0);
+    gl_FragColor = tot;
 }
