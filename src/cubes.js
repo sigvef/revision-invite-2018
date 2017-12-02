@@ -14,7 +14,6 @@
       const cubeGeometry = new THREE.BoxGeometry(this.cubeWidth,
           this.cubeHeight,
           2);
-      const map = Loader.loadTexture('res/testo.png');
       for(let i = 0; i < 8; i++) {
         const mapClone = Loader.loadTexture('res/testo.png');
         const cube = new THREE.Mesh(
@@ -70,14 +69,20 @@
           (frame - 2026) / 40);
       const D = easeOut(0, 1 * Math.PI * 2 / 2,
           (frame - 2049) / 10);
-      const E = easeOut(0, 1 * Math.PI * 2 / 2,
+      const E = easeOut(1, 1.15,
           (frame - 2065) / 10);
+      const F = easeOut(1, 1.15,
+          (frame - 2076) / 10);
       this.cubes[4].rotation.y = A;
       this.cubes[0].rotation.y = A;
       this.cubes[5].rotation.y = B;
       this.cubes[1].rotation.x = B;
       this.cubes[6].rotation.z = D;
       this.cubes[2].rotation.z = D;
+      this.cubes[3].scale.set(E, E, E);
+      this.cubes[3].position.y += (E - 1) * 15;
+      this.cubes[7].scale.set(F, F, F);
+      this.cubes[7].position.y -= (F - 1) * 15;
 
       const C = easeIn(1, 0.3, (frame - 2002) / (2096 - 2002));
       this.cubes[2].scale.set(C, C, C);
@@ -114,12 +119,12 @@
 
         const t = (frame - 2143 + 10) / 10;
         this.camera.position.x = easeIn(10.5, 34, t);
-        this.camera.position.y = easeIn(10.5, 11, t);
+        this.camera.position.y = easeIn(10.5, 13, t);
         this.camera.position.z = easeIn(10, 25, t);
       }
       if(frame >= 2143) {
         this.camera.position.x = 34;
-        this.camera.position.y = 11;
+        this.camera.position.y = 13;
         this.camera.position.z = 25;
       }
       if(frame >= 2159) {
@@ -136,6 +141,16 @@
         this.camera.position.x = -12;
         this.camera.position.y = -11;
         this.camera.position.z = 20;
+
+        const t = (frame - 2186 + 10) / 10;
+        this.camera.position.x = easeIn(-12, 0, t);
+        this.camera.position.y = easeIn(-11, 0, t);
+        this.camera.position.z = easeIn(20, 100, t);
+
+        for(let i = 0; i < this.cubes.length; i++) {
+          this.cubes[i].scale.x = easeIn(this.cubes[i].scale.x, 1, t);
+          this.cubes[i].scale.y = easeIn(this.cubes[i].scale.y, 1, t);
+        }
       }
       if(frame >= 2186) {
         this.camera.position.x = 0;
