@@ -108,6 +108,7 @@
     }
 
     update(frame) {
+      demo.nm.nodes.bloom.opacity = 0.35;
       if (BEAN >= 2976 && BEAN < 3024) {
         return this.updatePart1(frame);
       } else if (BEAN >= 3024 && BEAN < 3072) {
@@ -259,6 +260,7 @@
       this.scene.remove(this.ball);
       this.ps.particles.visible = false;
 
+      // TODO: Replace placeholder text
       const text1 = "Here's some text";
       const text2 = "Even more text";
 
@@ -289,7 +291,7 @@
       this.textCanvas.width = this.textCanvas.width;
       this.textCtx.fillStyle = backgroundColor;
       this.textCtx.fillRect(0, 0, this.textCanvas.width, this.textCanvas.height);
-      this.textCtx.font = '50px Monospace';
+      this.textCtx.font = '50px Monospace';  // TODO: Tweak font
       this.textCtx.textAlign = 'center';
       this.textCtx.fillStyle = foregroundColor;
       this.textCtx.fillText(currentText, GU * 8, GU * 4.5);
@@ -298,7 +300,7 @@
 
       this.camera.position.x = 0;
       this.camera.position.y = 0;
-      this.camera.position.z = 10;
+      this.camera.position.z = 9;
       this.camera.lookAt(new THREE.Vector3(0, 0, 0));
     }
 
