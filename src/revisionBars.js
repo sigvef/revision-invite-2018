@@ -103,12 +103,12 @@
         this.ctx.lineTo(letter.x + 1, 10);
         this.ctx.fill();
 
-        this.ctx.font = 'bold 0.6pt brandontext';
+        this.ctx.font = 'bold 0.6pt calibre';
         this.ctx.textAlign = 'center';
         this.ctx.textBaseline = 'middle';
         this.ctx.fillStyle = 'white';
         this.ctx.lineWidth = 0.2;
-        this.ctx.translate(letter.x + 0.5, 0.35);
+        this.ctx.translate(letter.x + 0.5, 0.55);
         this.ctx.fillText(letter.letter, 0, 0);
         this.ctx.restore();
       }
