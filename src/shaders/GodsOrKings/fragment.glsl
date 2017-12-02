@@ -85,14 +85,22 @@ vec2 map(in vec3 pos) {
                             cos(float(i) / float(numOfBumps)*2.0*PI)*0.9
                             );
         res = opU(res,
-                  vec2(sdTriPrism(opCheapBend(
+                  vec2(sdTriPrism(/*opCheapBend*/(
                           (rotationMatrix(vec3(0., 1., 0.), (
                             PI * 2. * float(i) / float(numOfBumps)
                             )) *  vec4(pos-bumpPos, 1.)).xyz),
                           vec2(.5, .1)),
                       88.0)
                   );
+
+        // spheres on top of bumps
+        res = opU(res,
+                  vec2(sdSphere(pos-bumpPos+vec3(0., -.5, 0.), .15),
+                       120.0)
+                  );
     }
+
+
     // crown end
 
     return res;
