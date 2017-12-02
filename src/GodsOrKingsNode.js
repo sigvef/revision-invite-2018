@@ -9,6 +9,7 @@
 
     update(frame) {
       this.uniforms.frame.value = frame;
+      this.uniforms.A.value = this.inputs.A.getValue();
     }
   }
 
