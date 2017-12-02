@@ -159,6 +159,9 @@
   {
     "id": "GodsOrKings",
     "type": "GodsOrKingsNode",
+    "connected": {
+        "A": "CrownBG.render"
+    },
     "options": {
       "shader": "GodsOrKings"
     }
@@ -329,5 +332,9 @@
   {
     "id": "breakdown",
     "type": "breakdown"
+  },
+  {
+    "id": "CrownBG",
+    "type": "crownBG"
   }
 ]

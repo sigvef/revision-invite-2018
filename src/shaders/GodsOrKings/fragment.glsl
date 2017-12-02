@@ -2,6 +2,7 @@
 
 uniform float frame;
 uniform sampler2D tDiffuse;
+uniform sampler2D A;
 
 varying vec2 vUv;
 
@@ -166,22 +167,18 @@ float calcAO(in vec3 pos, in vec3 nor) {
 }
 
 vec3 render(in vec3 ro, in vec3 rd) {
-    vec3 col = vec3(0.7, 0.9, 1.0) + (rd.y * 0.8);
+    vec3 col = texture2D(A, vUv).xyz;
     vec2 res = castRay(ro, rd);
     float t = res.x;
     float m = res.y;
 
-    if(m>-.5) {
+    if(m > 1.5) {
         vec3 pos = ro + rd*t;
         vec3 nor = calcNormal(pos);
         vec3 ref = reflect(rd, nor);
 
         // material
         col = 0.45 + 0.35 * sin(vec3(0.05, 0.08, 0.10) * (m - 1.0));
-        if(m < 1.5) {
-            float f = mod(floor(5.0*pos.z) + floor(5.0*pos.x), 2.0);
-            col = 0.3 + 0.1*f*vec3(1.0);
-        }
 
         // lighitng
         float occ = calcAO(pos, nor);
