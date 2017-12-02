@@ -392,7 +392,7 @@
     }
 
     update(frame) {
-      super.update(frame);
+      this.frame = frame;
       if(frame == 1752) {
         for(let letter of this.letters) {
           letter.throb = 0;
@@ -433,9 +433,11 @@
       this.cameraX += this.cameraDX;
       this.cameraY += this.cameraDY;
       this.cameraR += this.cameraDR;
+    }
 
+    render() {
       const startBean = 14 * 12 * 4;
-
+      const frame = this.frame;
       this.canvas.width += 0;
       if(frame < 2002) {
         this.ctx.fillStyle = 'rgb(55, 60, 63)';
@@ -538,16 +540,14 @@
       }
 
       this.ctx.restore();
+
+      this.output.needsUpdate = true;
+      this.outputs.render.setValue(this.output);
     }
 
     resize() {
       this.canvas.width = 16 * GU;
       this.canvas.height = 9 * GU;
-    }
-
-    render() {
-      this.output.needsUpdate = true;
-      this.outputs.render.setValue(this.output);
     }
   }
 
