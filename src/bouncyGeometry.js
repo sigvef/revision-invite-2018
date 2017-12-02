@@ -88,7 +88,23 @@
       );
       //this.scene.add(this.torus);
 
-      this.camera.position.z = 100;
+      // PARTICLES
+      this.ps = new ParticleSystem({
+        color: new THREE.Color(0xffffff),
+        amount: 3000
+      });
+      this.ps.particles.position.x = 0;
+      this.ps.particles.position.y = 0;
+      this.ps.particles.position.z = 0;
+      this.ps.particles.visible = true;
+      this.scene.add(this.ps.particles);
+    }
+
+    setBeamsVisibility(visible) {
+      for (let i = 0; i < this.beams.length; i++) {
+        const beam = this.beams[i];
+        beam.visible = visible;
+      }
     }
 
     update(frame) {
@@ -96,49 +112,30 @@
         return this.updatePart1(frame);
       } else if (BEAN >= 3024 && BEAN < 3072) {
         return this.updatePart2(frame);
+      } else if (BEAN >= 3072 && BEAN < 3120) {
+        return this.updatePart3(frame);
+      } else if (BEAN >= 3120 && BEAN < 3312) {
+        return this.updatePart4(frame);
       } else if (BEAN >= 3312) {
         return this.updateLastTextPart(frame);
-      } else {
-        // TORUS
-        this.torus.rotation.x = Math.sin(frame / 40);
-        this.torus.rotation.y = Math.cos(frame / 40);
-
-        // CYLINDER
-        this.cylinder.rotation.x = Math.PI / 2;
-
-        // BEAMS
-        for (let i = 0; i < this.beams.length; i++) {
-          const beam = this.beams[i];
-          const angle = this.randomBeamNumbers[i] * 2 * Math.PI;
-          beam.position.x = 8 * Math.cos(angle);
-          beam.position.y = 8 * Math.sin(angle);
-          beam.position.z = 180 + (-1.66 * frame + i) % 190;
-        }
-
-        // BALL
-        this.ball.position.x += this.ball.userData.dx;
-        this.ball.position.y += this.ball.userData.dy;
-        this.ball.position.z += this.ball.userData.dz;
-
-        // CAMERA
-        this.camera.position.x = 2 * Math.sin(frame / 55);
-        this.camera.position.y = 2 * Math.cos(frame / 55);
-
       }
-
     }
 
     updatePart1(frame) {
       this.scene.remove(this.textPlane);
       this.scene.remove(this.cylinder);
       this.scene.add(this.ball);
+      this.setBeamsVisibility(false);
+      this.ps.particles.visible = false;
 
+      // BALL
       this.ball.position.x = 0;
       this.ball.position.y = 0;
       this.ball.position.z = 0;
       this.ball.rotation.x = frame / 40;
       this.ball.rotation.y = frame / 45;
 
+      // CAMERA
       this.camera.position.x = 0;
       this.camera.position.y = 0;
       this.camera.position.z = 6;
@@ -149,27 +146,118 @@
       this.scene.remove(this.textPlane);
       this.scene.remove(this.cylinder);
       this.scene.add(this.ball);
+      this.ps.particles.visible = true;
+      this.setBeamsVisibility(true);
 
       const startFrame = FRAME_FOR_BEAN(3024);
       const endFrame = FRAME_FOR_BEAN(3072);
       const progress = (frame - startFrame) / (endFrame - startFrame);
 
-      this.ball.position.x = lerp(-60, 60, progress);
+      // BALL
+      this.ball.position.x = 0;
+      this.ball.position.y = 0;
+      this.ball.position.z = lerp(60, -60, progress);
+      this.ball.rotation.x = frame / 40;
+      this.ball.rotation.y = frame / 45;
+
+      // BEAMS
+      for (let i = 0; i < this.beams.length; i++) {
+        const beam = this.beams[i];
+        const angle = this.randomBeamNumbers[i] * 2 * Math.PI;
+        beam.position.x = 8 * Math.cos(angle);
+        beam.position.y = 8 * Math.sin(angle);
+        beam.position.z = -190 / 2 + i % 190;
+      }
+
+      // PARTICLES
+      for(let i = 0; i < 30; i++) {
+        const angle = Math.random() * Math.PI * 2;
+        const angle2 = Math.random() * Math.PI * 2;
+        const radius = 1;
+        const velocityAngle = Math.random() * Math.PI * 2;
+        const velocityAngle2 = Math.random() * Math.PI * 2;
+        const velocityRadius = 0.03;
+        this.ps.spawn(
+          {
+            x: this.ball.position.x + Math.sin(angle) * radius,
+            y: this.ball.position.y + Math.cos(angle) * radius,
+            z: this.ball.position.z + Math.sin(angle2) * radius,
+          },
+          {
+            x: Math.sin(velocityAngle2) * velocityRadius,
+            y: Math.sin(velocityAngle) * velocityRadius,
+            z: Math.cos(velocityAngle) * velocityRadius,
+          },
+          0.008
+        );
+      }
+      this.ps.update();
+
+      // CAMERA
+      this.camera.position.x = 6;
+      this.camera.position.y = 0;
+      this.camera.position.z = 0;
+      this.camera.lookAt(this.ball.position);
+    }
+
+    updatePart3(frame) {
+      this.scene.remove(this.textPlane);
+      this.scene.add(this.cylinder);
+      this.scene.add(this.ball);
+      this.ps.particles.visible = false;
+
+      const startFrame = FRAME_FOR_BEAN(3072);
+      const endFrame = FRAME_FOR_BEAN(3120);
+      const progress = (frame - startFrame) / (endFrame - startFrame);
+
+      // BALL
+      this.ball.position.x = 0;
       this.ball.position.y = 0;
       this.ball.position.z = 0;
       this.ball.rotation.x = frame / 40;
       this.ball.rotation.y = frame / 45;
 
+      // BEAMS
+      for (let i = 0; i < this.beams.length; i++) {
+        const beam = this.beams[i];
+        const angle = this.randomBeamNumbers[i] * 2 * Math.PI;
+        beam.position.x = 8 * Math.cos(angle);
+        beam.position.y = 8 * Math.sin(angle);
+        beam.position.z = -180 + (1.66 * frame + i) % 190;
+      }
+
+      // CAMERA
       this.camera.position.x = 0;
       this.camera.position.y = 0;
       this.camera.position.z = 6;
       this.camera.lookAt(this.ball.position);
     }
 
+    updatePart4(frame) {
+      // TODO
+
+      // TORUS
+      this.torus.rotation.x = Math.sin(frame / 40);
+      this.torus.rotation.y = Math.cos(frame / 40);
+
+      // CYLINDER
+      this.cylinder.rotation.x = Math.PI / 2;
+
+      // BALL
+      this.ball.position.x += this.ball.userData.dx;
+      this.ball.position.y += this.ball.userData.dy;
+      this.ball.position.z += this.ball.userData.dz;
+
+      // CAMERA
+      this.camera.position.x = 2 * Math.sin(frame / 55);
+      this.camera.position.y = 2 * Math.cos(frame / 55);
+    }
+
     updateLastTextPart(frame) {
       this.scene.add(this.textPlane);
       this.scene.remove(this.cylinder);
       this.scene.remove(this.ball);
+      this.ps.particles.visible = false;
 
       const text1 = "Here's some text";
       const text2 = "Even more text";
@@ -215,6 +303,7 @@
     }
 
     render(renderer) {
+      this.ps.render();
       renderer.render(this.scene, this.camera, this.renderTarget, true);
       this.outputs.render.setValue(this.renderTarget.texture);
     }

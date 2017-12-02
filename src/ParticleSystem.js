@@ -1,6 +1,6 @@
 function ParticleSystem(options) {
   this.options = options;
-  var amount = 10000;
+  var amount = options.amount || 10000;
   var positions = new Float32Array(amount * 3);
   this.velocities = new Float32Array(amount * 3);
   var colors = new Float32Array(amount * 3);
@@ -22,10 +22,11 @@ function ParticleSystem(options) {
     vertexShader:   ParticleSystem.vertexShader,
     fragmentShader: ParticleSystem.fragmentShader,
     blending:       THREE.AdditiveBlending,
-    depthTest:      true,
+    depthTest:      false,
     transparent:    true,
   });
   this.particles = new THREE.Points(this.particleGeometry, particleMaterial);
+  this.particles.frustumCulled = false;
   this.particleMaterial = particleMaterial;
 }
 
