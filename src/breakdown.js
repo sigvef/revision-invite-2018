@@ -347,7 +347,7 @@
         this.renderCirclePanner();
       }
 
-      this.ctx.font = 'bold 1.25pt calibre';
+      this.ctx.font = '1.25pt calibre';
       this.ctx.textBaseline = 'middle';
       this.ctx.textAlign = 'center';
       const shadowOffset = 0.08;
