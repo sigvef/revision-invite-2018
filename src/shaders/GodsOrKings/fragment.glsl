@@ -79,10 +79,9 @@ vec2 map(in vec3 pos) {
     // bumps on crown
     int numOfBumps = 8;
     for(int i = 0; i < 8; ++i) {
-        //pos = (rotationMatrix(vec3(0., 1., 0.), PI/2.) * vec4(pos, 1.)).xyz;
-        vec3 bumpPos = vec3(sin(float(i) / float(numOfBumps)*2.0*PI)*0.9,
+        vec3 bumpPos = vec3(sin(float(i) / float(numOfBumps)*2.0*PI)*0.88,
                             1.25,
-                            cos(float(i) / float(numOfBumps)*2.0*PI)*0.9
+                            cos(float(i) / float(numOfBumps)*2.0*PI)*0.88
                             );
         res = opU(res,
                   vec2(sdTriPrism(/*opCheapBend*/(
