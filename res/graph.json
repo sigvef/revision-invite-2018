@@ -284,9 +284,6 @@
   {
     "id": "ewerk",
     "type": "ewerk",
-    "options": {
-      "shader": "map"
-    },
     "connected": {
       "globeTextures": "globetextures.globeTextures",
       "beamer": "OrthoCube.render"
