@@ -19,9 +19,9 @@
       "_05_first_A_theme_1_2": "cubes.render",
       "_06_first_A_theme_2": "GridShader.render",
       "_06_first_A_theme_2_2": "textout.render",
-      "_07_first_B_theme_1": "Metatron.render",
-      "_08_first_B_theme_2": "Metatron.render",
-      "_09_second_A_theme_1": "chromaTransition.render",
+      "_07_first_B_theme_1": "clockTransition.render",
+      "_08_first_B_theme_2": "clockTransition.render",
+      "_09_second_A_theme_1": "clockTransition.render",
       "_10_second_A_theme_2": "RevisionFezLogo.render",
       "_11_illuminati_confirmed": "logotransitionquadpass.render",
       "_12_first_C_theme_1": "lulle.render",
@@ -361,7 +361,18 @@
       "shader": "pyramidfx"
     },
     "connected": {
-        "tDiffuse": "pyramids.render"
+      "tDiffuse": "pyramids.render"
+    }
+  },
+  {
+    "id": "clockTransition",
+    "type": "clockTransitionNode",
+    "options": {
+      "shader": "clockTransition"
+    },
+    "connected": {
+      "A": "Metatron.render",
+      "B": "chromaTransition.render"
     }
   },
   {
