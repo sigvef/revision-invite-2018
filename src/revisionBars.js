@@ -103,7 +103,7 @@
         this.ctx.lineTo(letter.x + 1, 10);
         this.ctx.fill();
 
-        this.ctx.font = '0.6pt calibre';
+        this.ctx.font = '0.6pt schmalibre';
         this.ctx.textAlign = 'center';
         this.ctx.textBaseline = 'middle';
         this.ctx.fillStyle = 'white';
