@@ -1,6 +1,7 @@
 function ParticleSystem(options) {
   this.options = options;
   var amount = options.amount || 10000;
+  this.decayFactor = options.decayFactor || 0.95;
   var positions = new Float32Array(amount * 3);
   this.velocities = new Float32Array(amount * 3);
   var colors = new Float32Array(amount * 3);
@@ -47,7 +48,7 @@ ParticleSystem.prototype.spawn = function(position, velocity, size) {
 ParticleSystem.prototype.update = function() {
   const attributes = this.particleGeometry.attributes;
   for(var i = 0; i < attributes.size.array.length; i++) {
-    attributes.size.array[i] *= 0.95;
+    attributes.size.array[i] *= this.decayFactor;
     this.velocities[i * 3 + 1] -= .001;
     attributes.position.array[i * 3] += this.velocities[i * 3];
     attributes.position.array[i * 3 + 1] += this.velocities[i * 3 + 1];
