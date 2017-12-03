@@ -56,7 +56,7 @@
 
       // CYLINDER
       this.cylinder = new THREE.Mesh(
-        new THREE.CylinderGeometry(16, 16, 80, 32, 1, true),
+        new THREE.CylinderGeometry(16, 16, 180, 32, 1, true),
         new THREE.MeshBasicMaterial(
           {
             color: 0xffffff,
@@ -88,10 +88,14 @@
       );
       //this.scene.add(this.torus);
 
+      // CENTER FRACTURE
+      // TODO
+
       // PARTICLES
       this.ps = new ParticleSystem({
         color: new THREE.Color(0xffffff),
-        amount: 3000
+        amount: 3000,
+        decayFactor: 0.98
       });
       this.ps.particles.position.x = 0;
       this.ps.particles.position.y = 0;
@@ -108,16 +112,17 @@
     }
 
     update(frame) {
-      demo.nm.nodes.bloom.opacity = 0.35;
+      demo.nm.nodes.bloom.opacity = 0.99;
       if (BEAN >= 2976 && BEAN < 3024) {
         return this.updatePart1(frame);
       } else if (BEAN >= 3024 && BEAN < 3072) {
         return this.updatePart2(frame);
       } else if (BEAN >= 3072 && BEAN < 3120) {
-        return this.updatePart3(frame);
+        // TODO
       } else if (BEAN >= 3120 && BEAN < 3312) {
         return this.updatePart4(frame);
       } else if (BEAN >= 3312) {
+        demo.nm.nodes.bloom.opacity = 0.35;
         return this.updateLastTextPart(frame);
       }
     }
@@ -126,8 +131,11 @@
       this.scene.remove(this.textPlane);
       this.scene.remove(this.cylinder);
       this.scene.add(this.ball);
-      this.setBeamsVisibility(false);
       this.ps.particles.visible = false;
+
+      const startFrame = FRAME_FOR_BEAN(2976);
+      const endFrame = FRAME_FOR_BEAN(3072);
+      const progress = (frame - startFrame) / (endFrame - startFrame);
 
       // BALL
       this.ball.position.x = 0;
@@ -135,6 +143,16 @@
       this.ball.position.z = 0;
       this.ball.rotation.x = frame / 40;
       this.ball.rotation.y = frame / 45;
+
+      // BEAMS
+      for (let i = 0; i < this.beams.length; i++) {
+        const beam = this.beams[i];
+        const angle = this.randomBeamNumbers[i] * 2 * Math.PI;
+        beam.position.x = 8 * Math.cos(angle);
+        beam.position.y = 8 * Math.sin(angle);
+        beam.position.z = -180 + (1.66 * frame + i) % 190;
+        beam.scale.z = 1;
+      }
 
       // CAMERA
       this.camera.position.x = 0;
@@ -161,20 +179,29 @@
       this.ball.rotation.x = frame / 40;
       this.ball.rotation.y = frame / 45;
 
+      // CAMERA
+      const cameraRotationBefore = this.camera.rotation.y;
+      this.camera.position.x = 6;
+      this.camera.position.y = 0;
+      this.camera.position.z = 0;
+      this.camera.lookAt(this.ball.position);
+      let cameraRotationDelta = Math.abs(this.camera.rotation.y - cameraRotationBefore) || 0.2;
+
       // BEAMS
       for (let i = 0; i < this.beams.length; i++) {
         const beam = this.beams[i];
         const angle = this.randomBeamNumbers[i] * 2 * Math.PI;
         beam.position.x = 8 * Math.cos(angle);
         beam.position.y = 8 * Math.sin(angle);
-        beam.position.z = -190 / 2 + i % 190;
+        beam.scale.z = cameraRotationDelta * 5;
+        beam.position.z = (-190 / 2 + i % 190) + 20 * beam.scale.z / 2;
       }
 
       // PARTICLES
-      for(let i = 0; i < 30; i++) {
+      for(let i = 0; i < 50; i++) {
         const angle = Math.random() * Math.PI * 2;
-        const angle2 = Math.random() * Math.PI * 2;
-        const radius = 1;
+        const angle2 = Math.random() * Math.PI;
+        const radius = 0.8;
         const velocityAngle = Math.random() * Math.PI * 2;
         const velocityAngle2 = Math.random() * Math.PI * 2;
         const velocityRadius = 0.03;
@@ -182,56 +209,17 @@
           {
             x: this.ball.position.x + Math.sin(angle) * radius,
             y: this.ball.position.y + Math.cos(angle) * radius,
-            z: this.ball.position.z + Math.sin(angle2) * radius,
+            z: this.ball.position.z + Math.sin(angle2) * radius + 2 * (1 - progress),
           },
           {
             x: Math.sin(velocityAngle2) * velocityRadius,
             y: Math.sin(velocityAngle) * velocityRadius,
-            z: Math.cos(velocityAngle) * velocityRadius,
+            z: 0,
           },
-          0.008
+          0.012
         );
       }
       this.ps.update();
-
-      // CAMERA
-      this.camera.position.x = 6;
-      this.camera.position.y = 0;
-      this.camera.position.z = 0;
-      this.camera.lookAt(this.ball.position);
-    }
-
-    updatePart3(frame) {
-      this.scene.remove(this.textPlane);
-      this.scene.add(this.cylinder);
-      this.scene.add(this.ball);
-      this.ps.particles.visible = false;
-
-      const startFrame = FRAME_FOR_BEAN(3072);
-      const endFrame = FRAME_FOR_BEAN(3120);
-      const progress = (frame - startFrame) / (endFrame - startFrame);
-
-      // BALL
-      this.ball.position.x = 0;
-      this.ball.position.y = 0;
-      this.ball.position.z = 0;
-      this.ball.rotation.x = frame / 40;
-      this.ball.rotation.y = frame / 45;
-
-      // BEAMS
-      for (let i = 0; i < this.beams.length; i++) {
-        const beam = this.beams[i];
-        const angle = this.randomBeamNumbers[i] * 2 * Math.PI;
-        beam.position.x = 8 * Math.cos(angle);
-        beam.position.y = 8 * Math.sin(angle);
-        beam.position.z = -180 + (1.66 * frame + i) % 190;
-      }
-
-      // CAMERA
-      this.camera.position.x = 0;
-      this.camera.position.y = 0;
-      this.camera.position.z = 6;
-      this.camera.lookAt(this.ball.position);
     }
 
     updatePart4(frame) {
