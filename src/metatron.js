@@ -246,9 +246,13 @@
       this.center_line1.scale.set(0, 0, 0);
       this.center_line2.scale.set(0, 0, 0);
       this.center_line3.scale.set(0, 0, 0);
+      this.center_line1.rotation.set(0, 0, 0);
+      this.center_line2.rotation.set(0, 0, 0);
+      this.center_line3.rotation.set(0, 0, 0);
       this.center_circle.scale.set(0, 0, 0);
       this.middle_center_hex.position.set(200, 0, 0);
       this.outer_center_hex.position.set(200, 0, 0);
+      this.outer_center_hex.rotation.set(0, 0, Math.PI / 6);
       this.level1_hex1.scale.set(1, 1, 1);
       this.level1_hex2.scale.set(1, 1, 1);
       this.level1_hex3.scale.set(1, 1, 1);
@@ -393,6 +397,17 @@
       }
       //this.spin_cube.rotation.set(Math.sin(frame/100), Math.sin(frame/120), Math.sin(frame/140))
 
+
+      var start_clock = 3677;
+      var start_expand = 3726;
+      if (frame > start_clock) {
+        var rotation = (frame - start_clock) / (start_expand - start_clock) * Math.PI * 3;
+        this.center_line1.rotation.set(0, 0, rotation);
+        this.center_line2.rotation.set(0, 0, rotation + 2 * Math.PI / 3);
+        this.center_line3.rotation.set(0, 0, rotation - 2 * Math.PI / 3);
+        this.outer_center_hex.rotation.set(0, 0, rotation + Math.PI / 6);
+
+      }
 
       this.three_point_star.geometry.verticesNeedUpdate = true;
     }
