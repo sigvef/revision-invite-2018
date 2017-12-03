@@ -181,11 +181,14 @@
 
       // CAMERA
       const cameraRotationBefore = this.camera.rotation.y;
+      const cameraMovement = Math.pow(progress + 0.1, 3);
       this.camera.position.x = 6;
       this.camera.position.y = 0;
-      this.camera.position.z = 0;
+      this.camera.position.z = 12  - 32 * cameraMovement;
       this.camera.lookAt(this.ball.position);
-      let cameraRotationDelta = Math.abs(this.camera.rotation.y - cameraRotationBefore) || 0.2;
+      const cameraRotationDelta = Math.abs(this.camera.rotation.y - cameraRotationBefore) || 0.2;
+
+      const beamScale = 0.3 * progress * progress + cameraRotationDelta * 2.2;
 
       // BEAMS
       for (let i = 0; i < this.beams.length; i++) {
@@ -193,7 +196,7 @@
         const angle = this.randomBeamNumbers[i] * 2 * Math.PI;
         beam.position.x = 8 * Math.cos(angle);
         beam.position.y = 8 * Math.sin(angle);
-        beam.scale.z = cameraRotationDelta * 5;
+        beam.scale.z = 0.02 + beamScale * 5;
         beam.position.z = (-190 / 2 + i % 190) + 20 * beam.scale.z / 2;
       }
 
@@ -204,7 +207,7 @@
         const radius = 0.8;
         const velocityAngle = Math.random() * Math.PI * 2;
         const velocityAngle2 = Math.random() * Math.PI * 2;
-        const velocityRadius = 0.03;
+        const velocityRadius = 0.05;
         this.ps.spawn(
           {
             x: this.ball.position.x + Math.sin(angle) * radius,
