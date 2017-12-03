@@ -368,6 +368,39 @@
       this.ctx.fillStyle = textColor;
       this.ctx.fillText(text, 0, 0);
       this.ctx.restore();
+      this.ctx.restore();
+
+      this.ctx.save();
+      this.ctx.scale(GU, GU);
+
+      const t = (this.frame - FRAME_FOR_BEAN(3660 + 6)) / (
+          FRAME_FOR_BEAN(3672) - FRAME_FOR_BEAN(3660 + 6));
+
+      this.ctx.save();
+      this.ctx.translate(
+        easeIn(-16, 0, t),
+        easeIn(-9 / 3 / 2, 0, t));
+      this.ctx.fillStyle = '#82052c';
+      this.ctx.beginPath();
+      this.ctx.moveTo(0, 0);
+      this.ctx.lineTo(16, 0);
+      this.ctx.lineTo(16 + (9 / 3 / 2) * 16 / 9, 0);
+      this.ctx.lineTo(16 / 3 / 2, 9);
+      this.ctx.lineTo(0, 9);
+      this.ctx.lineTo(0, 0);
+      this.ctx.fill();
+      this.ctx.restore();
+
+      this.ctx.translate(
+        easeIn(16, 0, t),
+        0);
+      this.ctx.fillStyle = '#500019';
+      this.ctx.beginPath();
+      this.ctx.moveTo(16, 9 / 3 / 2);
+      this.ctx.lineTo(16, 9);
+      this.ctx.lineTo(16 / 3 / 2, 9);
+      this.ctx.lineTo(16, 9 / 3 / 2);
+      this.ctx.fill();
 
       this.ctx.restore();
 
