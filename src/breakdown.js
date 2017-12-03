@@ -290,6 +290,8 @@
         cameraX = easeIn(8, 0, t);
         cameraZoom = easeIn(3, 1, t);
         cameraRotate = easeIn(0.1, 0, t);
+      } else if(BEAN >=  offset + 48 + 9 + 9 + 12) {
+        text = '';
       } else if(BEAN >=  offset + 48 + 9 + 9) {
         text = 'NO MUSIC';
       } else if(BEAN >=  offset + 48 + 9) {
@@ -301,6 +303,8 @@
         cameraX = easeIn(7.5, 0, t);
         cameraZoom = easeIn(3, 1, t);
         cameraRotate = easeIn(-0.1, 0, t);
+      } else if(BEAN >=  offset + 24 + 9 + 9 + 12) {
+        text = '';
       } else if(BEAN >=  offset + 24 + 9 + 9) {
         text = 'NO VISITORS';
       } else if(BEAN >=  offset + 24 + 9) {
@@ -312,6 +316,8 @@
         cameraX = easeIn(10.5, 0, t);
         cameraZoom = easeIn(3, 1, t);
         cameraRotate = easeIn(0.1, 0, t);
+      } else if(BEAN >= offset + 9 + 9 + 12) {
+        text = '';
       } else if(BEAN >= offset + 9 + 9) {
         text = 'NO DEMOS';
       } else if(BEAN >= offset + 9) {
@@ -347,11 +353,11 @@
         this.renderCirclePanner();
       }
 
-      this.ctx.font = 'bold 1.25pt calibre';
+      this.ctx.font = 'bold 1.25pt schmalibre';
       this.ctx.textBaseline = 'middle';
       this.ctx.textAlign = 'center';
       const shadowOffset = 0.08;
-      const fontYOffset = 0.265;
+      const fontYOffset = 0.5123;
       this.ctx.save();
       this.ctx.translate(textOffset, fontYOffset);
       this.ctx.globalAlpha = textOpacity;
