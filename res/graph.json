@@ -32,7 +32,8 @@
       "_17_low_down_B_theme_piano_snippet": "GodsOrKings.render",
       "_18_low_down_B_theme_2": "GodsOrKings.render",
       "_19_groovy_B_theme": "bouncyGeometry.render",
-      "_20_A_theme_breakdown": "breakdown.render",
+      "_20_A_theme_breakdown_1": "tree.render",
+      "_20_A_theme_breakdown_2": "breakdown.render",
       "_23_final_A_theme_rolldown": "diamondillium.render",
       "_24_outro": "ewerk.render",
       "_25_outro_2": "fadeout.render"
@@ -362,5 +363,9 @@
     "connected": {
         "tDiffuse": "pyramids.render"
     }
+  },
+  {
+    "id": "tree",
+    "type": "tree"
   }
 ]
