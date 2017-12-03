@@ -47,7 +47,8 @@ ParticleSystem.prototype.spawn = function(position, velocity, size) {
 ParticleSystem.prototype.update = function() {
   const attributes = this.particleGeometry.attributes;
   for(var i = 0; i < attributes.size.array.length; i++) {
-    //attributes.size.array[i] *= 0.95;
+    attributes.size.array[i] *= 0.95;
+    this.velocities[i * 3 + 1] -= .001;
     attributes.position.array[i * 3] += this.velocities[i * 3];
     attributes.position.array[i * 3 + 1] += this.velocities[i * 3 + 1];
     attributes.position.array[i * 3 + 2] += this.velocities[i * 3 + 2];
@@ -80,6 +81,7 @@ function generateSprite() {
 ParticleSystem.vertexShader = `
 uniform float amplitude;
 uniform float gu;
+varying float vSize;
 attribute float size;
 attribute vec3 customColor;
 
@@ -87,6 +89,7 @@ varying vec3 vColor;
 
 void main() {
   vColor = customColor;
+  vSize = size;
   vec4 mvPosition = modelViewMatrix * vec4( position, 1.0 );
   gl_PointSize = size * ( 300.0 / -mvPosition.z * gu);
   gl_Position = projectionMatrix * mvPosition;
@@ -99,9 +102,13 @@ uniform vec3 color;
 uniform sampler2D texture;
 
 varying vec3 vColor;
+varying float vSize;
 
 void main() {
-  gl_FragColor = vec4(color * vColor, 1.0);
+  if(vSize < 0.0005) {
+    discard;
+  }
+  gl_FragColor = vec4(color * vColor, 0.5);
   gl_FragColor = gl_FragColor * texture2D(texture, gl_PointCoord);
 }
 `;

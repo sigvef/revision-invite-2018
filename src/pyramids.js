@@ -13,6 +13,9 @@
         }
       });
 
+      this.ps = new ParticleSystem({color: new THREE.Color(1, 1, 1)});
+      this.scene.add(this.ps.particles);
+
       this.skybox = new THREE.Mesh(
           new THREE.BoxGeometry(500, 500, 500),
           new THREE.MeshBasicMaterial({
@@ -431,7 +434,7 @@
       griddyMaterial.side = THREE.DoubleSide;
       griddyMaterial.depthTest = false;
       griddyMaterial.blending = THREE.AdditiveBlending;
-      const ballGeometry = new THREE.SphereBufferGeometry(0.075, 32, 32);
+      const ballGeometry = new THREE.SphereBufferGeometry(0.12, 32, 32);
       const baseGeometry = new THREE.BoxBufferGeometry(1.8, 0.1, 1.8);
       for (let i = 0; i < this.coords.length; i++) {
         const coords = this.coords[i];
@@ -486,6 +489,8 @@
 
     update(frame) {
       super.update(frame);
+
+      this.ps.update(frame);
 
       demo.nm.nodes.bloom.opacity = 1.5;
 
@@ -572,6 +577,22 @@
         laser.object3d.scale.x = lerp(0.001, length, localT);
         laser.sprite.visible = localT > 0.05 && localT < 0.9999;
         laser.object3d.visible = localT > 0.0001;
+
+        if(localT > 0.001) {
+          for(let i = 0; i < 2; i++) {
+            const spawnLocation = new THREE.Vector3(0, 1, 0);
+            const random = Math.random();
+            spawnLocation.x = lerp(coords.x / 10, next.x / 10, localT * random);
+            spawnLocation.z = lerp(coords.z / 10, next.z / 10, localT * random);
+            const angle = Math.PI * 2 * Math.random();
+            const amplitude = Math.random() * 0.02;
+            this.ps.spawn(spawnLocation, {
+              x: Math.sin(angle) * amplitude,
+              y: Math.cos(angle) * amplitude,
+              z: (Math.random() - 0.5) * amplitude,
+            }, 0.002);
+          }
+        }
       }
 
       if (!this.camera.isOverriddenByFlyControls) {
@@ -597,16 +618,16 @@
             t * t),
           easeIn(position.y,
             1.9522453302794827,
-            t * t * t),
+            t * t * t) + smoothstep(0, -0.7, t) + easeIn(0, 0.7, t * t),
           easeIn(position.z,
             54.948434201311095,
             t)
         );
         quaternion.set(
-          easeIn(quaternion.x, -0.13938890236880308, t),
-          easeIn(quaternion.y, -0.48807642028165527, t),
-          easeIn(quaternion.z, -0.12374866545972402, t),
-          easeIn(quaternion.w, 0.852665473476206, t)
+          easeIn(quaternion.x, -0.13938890236880308, t * t),
+          easeIn(quaternion.y, -0.48807642028165527, t * t),
+          easeIn(quaternion.z, -0.12374866545972402, t * t),
+          easeIn(quaternion.w, 0.852665473476206, t * t)
         );
 
         t = clamp(0, (frame - 5947) / (6072 - 5947), 1);
@@ -690,6 +711,8 @@
       for(let i = 0; i < this.pyramidMeshes.length; i++) {
         this.pyramidMeshes[i].material.depthTest = false;
       }
+
+      this.ps.render();
       super.render(renderer);
     }
   }
