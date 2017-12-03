@@ -38,6 +38,13 @@
 
       if(BEAT) {
         switch(BEAN) {
+        case 3360:
+        case 3360 + 9:
+        case 3408:
+        case 3408 + 9:
+        case 3408 + 9 + 9:
+        case 3456:
+        case 3456 + 9:
         case 3498:
         case 3522:
         case 3546:
@@ -78,6 +85,68 @@
     resize() {
       this.canvas.width = 16 * GU;
       this.canvas.height = 9 * GU;
+    }
+
+    renderZoomer() {
+      const fontYOffset = 0.3223;
+      this.ctx.save();
+      this.ctx.fillStyle = '#ffeb0c';
+      this.ctx.fillRect(-8, -4.5, 16, 9);
+      this.ctx.font = 'bold 2pt schmalibre';
+      this.ctx.textBaseline = 'middle';
+      this.ctx.textAlign = 'right';
+      this.ctx.fillStyle = 'white';
+      this.ctx.lineWidth = 0.2;
+      this.ctx.strokeStyle = 'black';
+      this.ctx.strokeText('NO', -8 / 3 - 0.25, fontYOffset);
+      this.ctx.fillText('NO', -8 / 3 - 0.25, fontYOffset);
+
+      this.ctx.fillStyle = 'black';
+      this.ctx.textAlign = 'left';
+
+      let t = (this.frame - FRAME_FOR_BEAN(3408 - 6)) / (
+          FRAME_FOR_BEAN(3408) - FRAME_FOR_BEAN(3408 - 6));
+      t = Math.pow(lerp(0, 1, t), 2);
+
+      let t2 = (this.frame - FRAME_FOR_BEAN(3408 - 6 + 9)) / (
+          FRAME_FOR_BEAN(3408 + 9) - FRAME_FOR_BEAN(3408 - 6 + 9));
+      t2 = Math.pow(lerp(0, 1, t2), 2);
+
+      let t3 = (this.frame - FRAME_FOR_BEAN(3408 - 6 + 9 + 9)) / (
+          FRAME_FOR_BEAN(3408 + 9 + 9) - FRAME_FOR_BEAN(3408 - 6 + 9 + 9));
+      t3 = Math.pow(lerp(0, 1, t3), 2);
+
+      let t4 = (this.frame - FRAME_FOR_BEAN(3456 - 6)) / (
+          FRAME_FOR_BEAN(3456) - FRAME_FOR_BEAN(3456 - 6));
+      t4 = Math.pow(lerp(0, 1, t4), 2);
+
+      const scale = easeIn(1, 100, t4);
+      this.ctx.translate(easeIn(0, 5, t4), 0);
+      this.ctx.scale(scale, scale);
+
+      if(BEAN >= 3360 + 9) {
+        this.ctx.fillText(
+            'THEME',
+            - 8 / 3 + 0.25,
+            fontYOffset + easeIn(0, 10, t));
+      }
+
+      this.ctx.fillText(
+          'FOOD',
+          - 8 / 3 + 0.25,
+          fontYOffset + easeIn(-10, 0, t) + easeIn(0, 10, t2));
+
+      this.ctx.fillText(
+          'BOOZE',
+          - 8 / 3 + 0.25,
+          fontYOffset + easeIn(-10, 0, t2) + easeIn(0, 10, t3));
+
+      this.ctx.fillText(
+          'MORE',
+          - 8 / 3 + 0.25,
+          fontYOffset + easeIn(-10, 0, t3));
+
+      this.ctx.restore();
     }
 
     renderBowties() {
@@ -351,6 +420,8 @@
         this.renderSpikes();
       } else if(BEAN >= offset) {
         this.renderCirclePanner();
+      } else {
+        this.renderZoomer();
       }
 
       this.ctx.font = 'bold 1.25pt schmalibre';
