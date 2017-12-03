@@ -383,7 +383,7 @@
         {from: 44, to: 45, startBean: 2400 + 48 * 2, endBean: 2400 + 48 * 3},
       ];
 
-      this.camera.near = 0.01;
+      this.camera.near = 0.1;
       this.camera.fov = 45;
       this.camera.updateProjectionMatrix();
 

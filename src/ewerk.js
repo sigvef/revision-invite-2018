@@ -19,11 +19,12 @@
         const obj = objLoader.parse(text);
         obj.traverse(mesh => {
           mesh.material = new THREE.MeshStandardMaterial({
-            color: new THREE.Color(55 / 255, 60 / 255, 63 / 255),  
+            color: 0xffffff,
             roughness: 1,
             metalness: 0,
             side: THREE.DoubleSide,
           });
+          mesh.castShadow = true;
         });
         this.ewerkModel.add(obj);
       });
@@ -49,20 +50,14 @@
 
       this.beamer = new THREE.Mesh(
         new THREE.BoxGeometry(0.01, 9, 16),
-        new THREE.MeshStandardMaterial({
-          emissive: 0xffffff,
-          roughness: 1,
-          metalness: 1,
-          emissiveIntensity: 1,
-          color: new THREE.Color(55 / 255, 60 / 255, 63 / 255),  
+        new THREE.MeshBasicMaterial({
+          color: 0xffffff,
         }));
       this.scene.add(this.beamer);
       this.beamer.scale.set(0.115, 0.115, 0.115);
       this.beamer.position.x = -3.0;
       this.beamer.position.y = 0.75;
       this.beamer.position.z = 0.32;
-
-      this.scene.add(new THREE.PointLight());
 
       this.ps = new ParticleSystem({
         color: new THREE.Color(1, 1, 1),  
@@ -118,11 +113,33 @@
       this.globeContainer.rotation.x = -Math.PI / 2 + .8;
 
       this.globeLight = new THREE.DirectionalLight();
-      this.globeLight.position.set(-0.9, 1, -0.3);
+      this.globeLight.position.set(0.9, 1, 1.3);
       this.globeLight.intensity = 0.9;
       this.globeLight.color = new THREE.Color(255 / 255, 250 / 255, 244 / 255);
       this.scene.add(this.globeLight);
       this.scene.add(new THREE.AmbientLight(0xffffff, 0.075));
+
+      this.spotLight = new THREE.SpotLight(0xffffff);
+      this.spotLight.castShadow = true;
+      this.spotLight.lookAt(new THREE.Vector3(0, 0, 0));
+      this.scene.add(this.spotLight);
+      this.spotLight.shadow.mapSize.width = 512 * 8;
+      this.spotLight.shadow.mapSize.height = 512 * 8;
+      this.spotLight.shadow.camera.near = 5;
+      this.spotLight.shadow.camera.far = 30;
+      this.spotLight.position.x = 20;
+      this.spotLight.position.y = 90;
+      this.spotLight.position.z = 10;
+
+      const width = 16 * 0.1;
+      const height = 9 * 0.1;
+      const rectLight = new THREE.RectAreaLight( 0xffffff, undefined,  width, height );
+      rectLight.intensity = 0.5;
+      rectLight.position.x = -3;
+      rectLight.position.y = 0.75;
+      rectLight.position.z = 0.32;
+      rectLight.rotation.y = Math.PI / 2;
+      //this.scene.add(rectLight);
 
       this.scene.add(this.globeContainer);
 
@@ -148,8 +165,13 @@
       //this.scene.add(this.roof);
       this.map = new THREE.Mesh(
         new THREE.PlaneGeometry(700, 700),
-        new THREE.MeshBasicMaterial({map: Loader.loadTexture('res/map_saarbrucken.gif')})
+        new THREE.MeshStandardMaterial({
+          map: Loader.loadTexture('res/map_saarbrucken.gif'),
+          roughness: 1,
+          metalness: 0,
+        })
       );
+      this.map.receiveShadow = true;
       this.map.rotation.x = -Math.PI/2;
       this.map.rotation.z = 0.11;
       this.map.position.y = -0.02;
@@ -157,10 +179,8 @@
       this.map.position.z = 16;
       this.scene.add(this.map);
 
-      var light = new THREE.PointLight(0xffffff, 1, 100);
-      light.position.set(10, 10, 15);
-      this.scene.add(light);
-
+      this.camera.near = 0.1;
+      this.camera.updateProjectionMatrix();
       this.camera.position.z = 50;
       this.camera.lookAt(new THREE.Vector3(0, 0, 0));
 
@@ -175,7 +195,12 @@
     update(frame) {
       super.update(frame);
       this.ps.update();
-      this.beamer.material.emissiveMap = this.inputs.beamer.getValue();
+      if(frame < 366) {
+        this.scene.add(this.globeLight);
+      } else {
+        this.scene.remove(this.globeLight);
+      }
+      this.beamer.material.map = this.inputs.beamer.getValue();
       this.beamer.material.needsUpdate = true;
       demo.nm.nodes.bloom.opacity = 0;
       this.globeContainer.rotation.y = 5 -frame / 1000;
@@ -272,19 +297,24 @@
       } else if( frame <= frame5) {
         this.camera.position.set(
           lerp(30, 15, (frame - frame5 + 10) / 10),
-          lerp(15, 5, (frame - frame5 + 10) / 10),
+          lerp(15, 4, (frame - frame5 + 10) / 10),
           lerp(10, 1, (frame - frame5 + 10) / 10)
         );
         this.roof.visible = true;
         this.cube.visible = true;
         this.camera.lookAt(new THREE.Vector3(0, 0, 0));
       } else if( frame <= frame6) {
+        const t = (frame - 531) / (563 - 531);
         this.camera.position.set(
-          lerp(15, 0, (frame - frame6 + 10) / 10),
-          lerp(5, 0.5, (frame - frame6 + 10) / 10),
-          lerp(1, 1, (frame - frame6 + 10) / 10));
+          lerp(15, 0, t),
+          lerp(4, 0.5, t) + easeOut(0, -3.5, t * 2) + lerp(0, 3.5, t),
+          lerp(1, 1, t) + easeOut(0, 1.6, t) + easeIn(0, -1.6, t));
         this.camera.lookAt(
-            new THREE.Vector3(-4, 1., 0));
+            new THREE.Vector3(
+              lerp(-4, -1.75 - 2, t),
+              lerp(-1.5, 0.75, t),
+              lerp(0, 0.32, t)
+              ));
       } else if (frame <= frame8) {
         const x = -1.75;
         const y = 0.75;
@@ -345,7 +375,12 @@
         this.cube.visible = false;
         this.camera.lookAt(new THREE.Vector3(0, 0, 0));
       }
+    }
+
+    render(renderer) {
       this.ps.render();
+      renderer.shadowMap.enabled = true;
+      super.render(renderer);
     }
   }
 
