@@ -34,8 +34,8 @@
         [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
       ];
 
-      const redMaterial = new THREE.MeshBasicMaterial({ color: 0xdd2222 });
-      const whiteMaterial = new THREE.MeshBasicMaterial({ color: 0xcccccc, wireframe: true });
+      const redMaterial = new THREE.MeshBasicMaterial({ color: 0xdd2222, wireframe: true });
+      const whiteMaterial = new THREE.MeshBasicMaterial({ color: 0xcccccc });
       this.boxes = new THREE.Object3D();
       for (let x = 0; x < 28; x++) {
         for (let y = 0; y < 23; y++) {
@@ -108,7 +108,7 @@
       for (let box of this.boxes.children) {
         //box.rotation.x = frame / 40;
         //box.rotation.y = frame / 30;
-        //box.rotation.z = frame / 60;
+        box.rotation.z = frame / 60;
       }
     }
 
