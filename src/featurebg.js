@@ -26,17 +26,27 @@
       this.ctx.save();
       this.ctx.scale(GU, GU);
 
-      const fudge = 0.01;
+      let t = (this.frame - FRAME_FOR_BEAN(3720)) / (
+          FRAME_FOR_BEAN(3720 + 6) - FRAME_FOR_BEAN(3720));
+
+      this.ctx.save();
+      this.ctx.translate(
+        easeIn(0, -16, t),
+        easeIn(0, -9 / 3 / 2, t));
       this.ctx.fillStyle = '#82052c';
       this.ctx.beginPath();
       this.ctx.moveTo(0, 0);
       this.ctx.lineTo(16, 0);
-      this.ctx.lineTo(16, 9 / 3 / 2 + fudge);
-      this.ctx.lineTo(16 / 3 / 2 + fudge, 9);
+      this.ctx.lineTo(16 + (9 / 3 / 2) * 16 / 9, 0);
+      this.ctx.lineTo(16 / 3 / 2, 9);
       this.ctx.lineTo(0, 9);
       this.ctx.lineTo(0, 0);
       this.ctx.fill();
+      this.ctx.restore();
 
+      this.ctx.translate(
+        easeIn(0, 16, t),
+        0);
       this.ctx.fillStyle = '#500019';
       this.ctx.beginPath();
       this.ctx.moveTo(16, 9 / 3 / 2);
@@ -45,10 +55,24 @@
       this.ctx.lineTo(16, 9 / 3 / 2);
       this.ctx.fill();
 
+      t = (this.frame - FRAME_FOR_BEAN(3672)) / (
+          FRAME_FOR_BEAN(3672 + 6) - FRAME_FOR_BEAN(3672));
+
       this.ctx.fillStyle = 'white';
       this.ctx.font = 'bold 1pt schmalibre';
       this.ctx.textBaseline = 'middle';
-      this.ctx.fillText('JUST', 2.7, 4.5);
+      this.ctx.textAlign = 'center';
+      this.ctx.translate(easeIn(-4, 4.22, t), 4.5);
+      const scaleT = (this.frame - FRAME_FOR_BEAN(3672 + 6)) /
+        (FRAME_FOR_BEAN(3672 + 12) - FRAME_FOR_BEAN(3672 + 6));
+      let scaleX = easeIn(1.5, 1, t * t);
+      let scaleY = easeIn(0.5, 1, t * t * t);
+      if(BEAN >= 3672 + 6) {
+        scaleX *= easeOut(1.2, 1, scaleT);
+        scaleY *= easeOut(1.2, 1, scaleT);
+      }
+      this.ctx.scale(scaleX, scaleY);
+      this.ctx.fillText('JUST', 0, 0);
 
       this.ctx.restore();
 

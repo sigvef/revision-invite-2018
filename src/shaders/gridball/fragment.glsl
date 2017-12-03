@@ -3,6 +3,7 @@ uniform sampler2D tDiffuse;
 uniform float gridMode;
 uniform float lineWidth;
 uniform float ballRadius;
+uniform float ambientLightIntensity;
 
 varying vec2 vUv;
 varying vec4 globalPosition;
@@ -46,9 +47,11 @@ void main() {
         light = clamp(dot(vNormal, directionalLight), 0., 1.);
         float specular = pow(light, 16.);
         light = clamp(light, 0., 1.);
-        light *= 1. - gridAmount * 0.5;
+        light *= 0.5 + (1. - gridAmount) * 0.5;
         light = clamp(light, 0., 1.);
-        light += 0.2;
+        light -= gridAmount * ambientLightIntensity * 0.25;
+        light += ambientLightIntensity;
+        light = clamp(light, 0., 1.);
         color = vec4(diffuseColor * light, 1.);
         color += specular * 0.1;
     }
