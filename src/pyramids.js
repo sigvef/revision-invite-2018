@@ -189,8 +189,8 @@
       }, {
         upperFromBean: 0, 
         upperToBean: 0,
-        lowerFromBean: 2256 + 48 * 5.25, 
-        lowerToBean: 2256 + 48 * 5.25 + 6,
+        lowerFromBean: 2256 + 48 * 5.25 - 2,
+        lowerToBean: 2256 + 48 * 5.25 + 6 - 2,
       }, {
         upperFromBean: 0, 
         upperToBean: 0,
@@ -199,8 +199,8 @@
       }, {
         upperFromBean: 0, 
         upperToBean: 0,
-        lowerFromBean: 2256 + 48 * 5.75, 
-        lowerToBean: 2256 + 48 * 5.75 + 6,
+        lowerFromBean: 2256 + 48 * 5.75 - 2, 
+        lowerToBean: 2256 + 48 * 5.75 + 6 - 2,
       }, {
         upperFromBean: 0, 
         upperToBean: 0,
@@ -360,10 +360,10 @@
         {from: 24, to: 25, startBean: 2400 + 12 * 5, endBean: 2400 + 12 * 6},
         {from: 25, to: 26, startBean: 2400 + 12 * 6, endBean: 2400 + 12 * 7},
         {from: 26, to: 27, startBean: 2400 + 12 * 7, endBean: 2400 + 12 * 8},
-        {from: 27, to: 28, startBean: 2400 + 12 * 8, endBean: 2400 + 12 * 9},
-        {from: 28, to: 29, startBean: 2400 + 12 * 9, endBean: 2400 + 12 * 10},
-        {from: 29, to: 30, startBean: 2400 + 12 * 10, endBean: 2400 + 12 * 11},
-        {from: 30, to: 31, startBean: 2400 + 12 * 11, endBean: 2400 + 12 * 12},
+        {from: 27, to: 28, startBean: 2496, endBean: 2496 + 10},
+        {from: 28, to: 29, startBean: 2496 + 10, endBean: 2400 + 12 * 10},
+        {from: 29, to: 30, startBean: 2400 + 12 * 10, endBean: 2400 + 12 * 10 + 10},
+        {from: 30, to: 31, startBean: 2400 + 12 * 10 + 10, endBean: 2400 + 12 * 12},
 
         /* I */
         {from: 32, to: 33, startBean: 2400, endBean: 2400 + 48},
