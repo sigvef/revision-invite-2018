@@ -22,7 +22,7 @@
       "_07_first_B_theme_1": "clockTransition.render",
       "_08_first_B_theme_2": "clockTransition.render",
       "_09_second_A_theme_1": "clockTransition.render",
-      "_10_second_A_theme_2": "RevisionFezLogo.render",
+      "_10_second_A_theme_2": "fez2.render",
       "_11_illuminati_confirmed": "logotransitionquadpass.render",
       "_12_first_C_theme_1": "lulle.render",
       "_13_first_C_theme_2": "lulle.render",
@@ -312,7 +312,7 @@
     },
     "connected": {
       "logo": "logotransition.render",
-      "scene": "RevisionFezLogo.render"
+      "scene": "fez2.render"
     }
   },
   {
@@ -402,5 +402,9 @@
   {
     "id": "featurebg",
     "type": "featurebg"
+  },
+  {
+    "id": "fez2",
+    "type": "fez2"
   }
 ]
