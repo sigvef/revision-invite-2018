@@ -260,9 +260,9 @@
       this.scene.remove(this.ball);
       this.ps.particles.visible = false;
 
-      // TODO: Replace placeholder text
-      const text1 = "Here's some text";
-      const text2 = "Even more text";
+      // TODO: Feel free to replace this with anything. I was just bored by the sample text and wrote something.
+      const text1 = "Under a smoking sun";
+      const text2 = "There is just Revision";
 
       let currentText = null;
       if (BEAN >= 3312 && BEAN < 3336) {
