@@ -1,6 +1,7 @@
 uniform float frame;
 uniform sampler2D tDiffuse;
 uniform float gridMode;
+uniform float smoothPercentage;
 uniform float lineWidth;
 uniform float ballRadius;
 uniform float ambientLightIntensity;
@@ -21,24 +22,26 @@ void main() {
     float gridAmount = 0.;
 
     if(uv.y < lineWidth) {
-        gridAmount = clamp(1. - uv.y / lineWidth, 0., 1.);
+        gridAmount = clamp(1. - (uv.y - lineWidth * (1. - smoothPercentage)) / lineWidth / smoothPercentage, 0., 1.);
     }
     if(uv.x > 1. - lineWidth) {
-        gridAmount = clamp((uv.x - 1. + lineWidth) / lineWidth, 0., 1.);
+        gridAmount = clamp((uv.x - 1. + lineWidth) / lineWidth / smoothPercentage, 0., 1.);
     }
     if(uv.x < uv.y + lineWidth) {
-        gridAmount = clamp(1. - (uv.x - uv.y) / lineWidth, 0., 1.);
+        gridAmount = clamp(1. - (uv.x - uv.y - lineWidth * (1. - smoothPercentage)) / lineWidth / smoothPercentage, 0., 1.);
     }
 
+    float ballSmoothPercentage = .25 * smoothPercentage;
     if(uv.x < ballRadius) {
-        gridAmount = 1.;
+        gridAmount += clamp(1. - (uv.x - ballRadius * (1. - ballSmoothPercentage)) / ballRadius / ballSmoothPercentage, 0., 1.);
     }
     if(uv.y > 1. - ballRadius) {
-        gridAmount = 1.;
+        gridAmount += clamp(1. - (1. - uv.y - ballRadius * (1. - ballSmoothPercentage)) / ballRadius / ballSmoothPercentage, 0., 1.);
     }
     if(uv.x > uv.y + 1. - ballRadius) {
-        gridAmount = 1.;
+        gridAmount += clamp(1. - (1. - uv.x + uv.y - ballRadius * (1. - ballSmoothPercentage)) / ballRadius / ballSmoothPercentage, 0., 1.);
     }
+    gridAmount = clamp(gridAmount, 0., 1.);
 
     if(gridMode > 0.5) {
         color = vec4(vec3(.5), gridAmount);

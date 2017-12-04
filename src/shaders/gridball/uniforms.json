@@ -4,5 +4,6 @@
     "ambientLightIntensity": { "type": "f", "value": 0.0 },
     "lineWidth": { "type": "f", "value": 0.0 },
     "ballRadius": { "type": "f", "value": 0.0 },
+    "smoothPercentage": { "type": "f", "value": 0.0 },
     "gridMode": { "type": "f", "value": 0.0 }
 }

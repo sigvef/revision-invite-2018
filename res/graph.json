@@ -293,7 +293,8 @@
     "type": "ewerk",
     "connected": {
       "globeTextures": "globetextures.globeTextures",
-      "beamer": "OrthoCube.render"
+      "beamer": "OrthoCube.render",
+      "beamer2": "tree.render"
     }
   },
   {
@@ -382,7 +383,10 @@
   },
   {
     "id": "tree",
-    "type": "tree"
+    "type": "tree",
+    "connected": {
+        "globeTextures": "globetextures.globeTextures"
+    }
   },
   {
     "id": "features",

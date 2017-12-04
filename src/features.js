@@ -117,6 +117,7 @@
       this.camera.fov = 18;
       this.camera.updateProjectionMatrix();
 
+
       this.tunnelLights = [];
       const torusGeometry = new THREE.TorusGeometry(15, 1, 8, 8);
       for(let i = 0; i < 10; i++) {
@@ -186,18 +187,20 @@
         }
       }
 
-      if(BEAT && BEAN == 3672) {
-        /*
-          this.cameraShakeVelocity.x = this.camera.position.x -
-            this.cameraPreviousPosition.x;
-          this.cameraShakeVelocity.y = this.camera.position.y -
-            this.cameraPreviousPosition.y;
-          this.cameraShakeVelocity.z = this.camera.position.z -
-            this.cameraPreviousPosition.z;
-            */
-        this.cameraShakeAngularVelocity.x = (Math.random() - 0.5) * 0.05;
-        this.cameraShakeAngularVelocity.y = (Math.random() - 0.5) * 0.05;
-        this.cameraShakeAngularVelocity.z = (Math.random() - 0.5) * 0.05;
+      if(BEAT) {
+        switch(BEAN) {
+        case 3816.1:
+          this.cameraShakeVelocity.x = (this.camera.position.x -
+            this.cameraPreviousPosition.x) * 0.01;
+          this.cameraShakeVelocity.y = (this.camera.position.y -
+            this.cameraPreviousPosition.y) * 0.01;
+          this.cameraShakeVelocity.z = (this.camera.position.z -
+            this.cameraPreviousPosition.z) * 0.01;
+        case 3672:
+          this.cameraShakeAngularVelocity.x = (Math.random() - 0.5) * 0.05;
+          this.cameraShakeAngularVelocity.y = (Math.random() - 0.5) * 0.05;
+          this.cameraShakeAngularVelocity.z = (Math.random() - 0.5) * 0.05;
+        }
       }
 
       this.cameraShakeAcceleration.x = -this.cameraShakePosition.x * 0.05;
@@ -224,7 +227,7 @@
       this.textball.scale.set(scale, scale, scale);
       let oldscale = scale;
       if(BEAN >= 3816) {
-        scale = 0.85 + this.stabThrob * 0.2;
+        scale = 1.08;
       } else {
         scale = 1;
       }
@@ -234,12 +237,14 @@
 
       this.gridball.material.uniforms.lineWidth.value = 0.03;
       this.gridball.material.uniforms.ballRadius.value = 0.15;
+      this.gridball.material.uniforms.smoothPercentage.value = 0.1;
 
       const scalediff = Math.abs(oldscale - scale);
-      this.ball.material.uniforms.lineWidth.value = (0.03 + scalediff * scalediff) * 0.9;
+      this.ball.material.uniforms.lineWidth.value = (0.03 + scalediff * scalediff) * 0.9 * 2;
       this.ball.material.uniforms.ballRadius.value = (0.15 + scalediff * scalediff) * 0.9;
+      this.ball.material.uniforms.smoothPercentage.value = scalediff * 10;
 
-      if(BEAN < 3720) {
+      if(BEAN <= 3720) {
         this.bg.position.z = this.camera.position.z - 284;
         this.bg.position.x = this.camera.position.x;
         this.bg.position.y = this.camera.position.y;
@@ -265,17 +270,62 @@
           -8.5, 0, 95);
       this.camera.rotation.set(0, 0, 0);
       this.ball.position.set(0, 0, 0);
-      this.bg.visible = BEAN < 3720 + 12;
-      if(BEAN >= 3720) {
-        let t = (frame - FRAME_FOR_BEAN(3720)) / (
-            FRAME_FOR_BEAN(3816) - FRAME_FOR_BEAN(3720));
-        t *= 2;
-        t %= 2;
+      this.bg.visible = BEAN <= 3720;
+
+      this.tunnel.visible = BEAN >= 3768;
+      for(let i = 0; i < this.tunnelLights.length; i++) {
+        const light = this.tunnelLights[i];
+        light.visible = BEAN >= 3768 && BEAN < 3816;
+        light.mesh.visible = BEAN >= 3768 && BEAN < 3816;
+      }
+      this.tunnel.visible = BEAN >= 3768 && BEAN < 3816;
+
+      this.gridball.rotation.x = 1.5 + frame / 170;
+      this.gridball.rotation.y = 1.7 + frame / 100;
+      this.textball.visible = true;
+      if(BEAN >= 3840) {
+        this.textball.visible = false;
+        this.ball.position.set(0, 0, 0);
+        position.set(1.1, .75, 13.);
+        this.gridball.rotation.x = 1.5 + 9954 / 170;
+        this.gridball.rotation.y = 1.7 + 9954 / 100;
+        this.ball.scale.set(1, 1, 1);
+        this.textball.scale.set(1, 1, 1);
+        this.ball.material.uniforms.lineWidth.value = 0;
+        this.ball.material.uniforms.ballRadius.value = 0;
+        this.ball.material.uniforms.smoothPercentage.value = 0.01;
+        this.gridball.material.uniforms.smoothPercentage.value = 0.02;
+      } else if(BEAN >= 3816) {
+        this.textball.visible = true;
+        this.ball.position.set(0, 0, 0);
+
+        if(this.textball.material.map) {
+          this.textball.material.map.offset.set(-0.5, -2.5);
+          this.textball.material.map.repeat.set(4, 6);
+        }
+
+        let t = (frame - FRAME_FOR_BEAN(3816 + 12 + 6)) / (
+            FRAME_FOR_BEAN(3840) - FRAME_FOR_BEAN(3816 + 12 + 6));
+        position.set(
+            1.1,
+            easeIn(0, .75, t),
+            easeIn(25, 13, t));
+        this.gridball.rotation.x = 1.5 + 9954 / 170;
+        this.gridball.rotation.y = 1.7 + 9954 / 100;
+        this.ball.scale.set(1, 1, 1);
+        this.textball.scale.set(1, 1, 1);
+        this.ball.material.uniforms.lineWidth.value = easeIn(0.03, 1, t * t * t);
+        this.ball.material.uniforms.ballRadius.value = easeIn(0.18, 1, t * t *t);
+        this.ball.material.uniforms.smoothPercentage.value = easeIn(0.1, 100, t * t * t);
+        this.gridball.material.uniforms.smoothPercentage.value = easeIn(0.1, .02, t);
+      } else if(BEAN >= 3768) {
+        let t = (frame - FRAME_FOR_BEAN(3768)) / (
+            FRAME_FOR_BEAN(3816) - FRAME_FOR_BEAN(3768));
         const point = this.tunnelPath.getPoint(1 - t);
         this.ball.position.copy(point);
-        const cameraPoint = this.tunnelPath.getPoint(1 - (t - 0.15));
+        const cameraDistance = easeIn(0.15, 0.01, t * t);
+        const cameraPoint = this.tunnelPath.getPoint(1 - (t - cameraDistance));
         position.copy(cameraPoint);
-        position.x += -3;
 
         const cameraLookatPoint = this.tunnelPath.getPoint(1 - (t + 0.15));
         this.camera.lookAt(cameraLookatPoint);
@@ -297,8 +347,6 @@
         this.ball.material.uniforms.ambientLightIntensity.value = this.stabThrob;
       }
 
-      this.gridball.rotation.x = frame / 170;
-      this.gridball.rotation.y = frame / 100;
       this.gridball.material.uniforms.frame.value = frame;
       this.ball.material.uniforms.frame.value = frame;
       this.ball.rotation.copy(this.gridball.rotation);
