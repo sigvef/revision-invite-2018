@@ -36,9 +36,9 @@
       "_20_A_theme_breakdown_2": "breakdown.render",
       "_21_third_B_theme_1": "features.render",
       "_22_third_B_theme_2": "features.render",
-      "_22_third_B_theme_3": "features.render",
-      "_22_third_B_theme_4": "features.render",
-      "_22_third_B_theme_5": "features.render",
+      "_22_third_B_theme_3": "rotataroon.render",
+      "_22_third_B_theme_4": "rotataroon.render",
+      "_22_third_B_theme_5": "rotataroon.render",
       "_23_final_A_theme_rolldown": "tree.render",
       "_24_outro": "ewerk.render",
       "_25_outro_2": "fadeout.render"
@@ -385,7 +385,7 @@
     "id": "tree",
     "type": "tree",
     "connected": {
-        "globeTextures": "globetextures.globeTextures"
+      "globeTextures": "globetextures.globeTextures"
     }
   },
   {
@@ -410,5 +410,15 @@
   {
     "id": "fez2",
     "type": "fez2"
+  },
+  {
+    "id": "rotataroon",
+    "type": "rotataroon",
+    "options": {
+        "shader": "linycuba"
+    },
+    "connected": {
+        "background": "features.render"
+    }
   }
 ]
