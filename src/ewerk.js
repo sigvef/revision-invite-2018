@@ -9,6 +9,7 @@
         inputs: {
           globeTextures: new NIN.Input(),
           beamer: new NIN.TextureInput(),
+          beamer2: new NIN.TextureInput(),
         }
       });
 
@@ -192,6 +193,11 @@
       this.scene.add(this.skybox);
     }
 
+    beforeUpdate(frame) {
+      this.inputs.beamer.enabled = BEAN <  672;
+      this.inputs.beamer2.enabled = BEAN >  3672;
+    }
+
     update(frame) {
       super.update(frame);
       this.ps.update();
@@ -200,7 +206,11 @@
       } else {
         this.scene.remove(this.globeLight);
       }
-      this.beamer.material.map = this.inputs.beamer.getValue();
+      if(BEAN > 1000) {
+        this.beamer.material.map = this.inputs.beamer2.getValue();
+      } else {
+        this.beamer.material.map = this.inputs.beamer.getValue();
+      }
       this.beamer.material.needsUpdate = true;
       demo.nm.nodes.bloom.opacity = 0;
       this.globeContainer.rotation.y = 5 -frame / 1000;
@@ -315,7 +325,7 @@
               lerp(-1.5, 0.75, t),
               lerp(0, 0.32, t)
               ));
-      } else if (frame <= frame8) {
+      } else if (frame <= frame8 - 20) {
         const x = -1.75;
         const y = 0.75;
         const z = 0.32;
@@ -329,36 +339,37 @@
         const x = -1.75;
         const y = 0.75;
         const z = 0.32;
+        const t = (frame - frame8 + 10) / 10;
         this.camera.position.set(
-          lerp(x, 0, (frame - frame9 + 10) / 10),
-          lerp(y, 0.5, (frame - frame9 + 10) / 10),
-          lerp(z, 1, (frame - frame9 + 10) / 10));
+          easeIn(x, 0, t * t * t),
+          easeIn(y, 0.5, t * t * t),
+          easeIn(z, 1, t * t * t));
         this.camera.lookAt(
             new THREE.Vector3(x - 2, y, z));
+      } else if (frame <= frame9) {
+        this.camera.position.set(
+          lerp(0, 15, (frame - frame8 + 10) / 10),
+          lerp(0.5, 5, (frame - frame8 + 10) / 10),
+          lerp(1, 1, (frame - frame8 + 10) / 10));
+        this.camera.lookAt(new THREE.Vector3(
+          lerp(-3.75, 0, (frame - frame8 + 10) / 10),
+          lerp(0.75, 0, (frame - frame8 + 10) / 10),
+          lerp(0.32, 0, (frame - frame8 + 10) / 10)
+        ));
       } else if (frame <= frame10) {
         this.camera.position.set(
-          lerp(0, 15, (frame - frame10 + 10) / 10),
-          lerp(0.5, 5, (frame - frame10 + 10) / 10),
-          lerp(1, 1, (frame - frame10 + 10) / 10));
-        this.camera.lookAt(new THREE.Vector3(
-          lerp(-3.75, 0, (frame - frame10 + 10) / 10),
-          lerp(0.75, 0, (frame - frame10 + 10) / 10),
-          lerp(0.32, 0, (frame - frame10 + 10) / 10)
-        ));
-      } else if (frame <= frame11) {
-        this.camera.position.set(
-          lerp(15, 30, (frame - frame11 + 10) / 10),
-          lerp(5, 15, (frame - frame11 + 10) / 10),
-          lerp(1, 10, (frame - frame11 + 10) / 10)
+          lerp(15, 30, (frame - frame10 + 10) / 10),
+          lerp(5, 15, (frame - frame10 + 10) / 10),
+          lerp(1, 10, (frame - frame10 + 10) / 10)
         );
         this.camera.lookAt(new THREE.Vector3(0, 0, 0));
-      } else if (frame <= frame12) {
+      } else if (frame <= frame11) {
         this.roof.visible = false;
         this.cube.visible = false;
         this.camera.position.set(
-          lerp(30, 5, (frame - frame12 + 10) / 10),
-          lerp(15, 150, (frame - frame12 + 10) / 10),
-          lerp(10, 20, (frame - frame12 + 10) / 10)
+          lerp(30, 5, (frame - frame11 + 10) / 10),
+          lerp(15, 150, (frame - frame11 + 10) / 10),
+          lerp(10, 20, (frame - frame11 + 10) / 10)
         );
         this.camera.lookAt(new THREE.Vector3(0, 0, 0));
       } else {

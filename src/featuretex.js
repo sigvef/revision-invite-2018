@@ -17,28 +17,7 @@
         '4K',
         '8K',
         '64K',
-        'PC DEMO',
-        'AMIGA AGA',
-        'AMIGA ECS/OCS',
-        'AMIGA DEMO',
-        'AMIGA INTRO',
-        'OLDSKOOL DEMO',
-        'OLDSKOOL 4K INTRO',
-        'OLDSKOOL GRAPHICS',
-        'OLDSKOOL MUSIC',
-        'STREAMING MUSIC',
-        'EXECUTABLE MUSIC',
-        'TRACKED MUSIC',
-        'MODERN GRAPHICS',
-        'PHOTO',
-        'PAINTOVER',
-        'ANIMATED GIF',
-        '4K EXECUTABLE GRAPHICS',
-        'OLDSCHOOL GRAPHICS',
-        'GAME',
-        'ANIMATION/VIDEO',
-        'ASCII/ANSI',
-        'MEDIA FACADE',
+        'DEMO',
       ];
     }
 
@@ -58,7 +37,91 @@
       this.ctx.textBaseline = 'middle';
       this.ctx.textAlign = 'center';
       const index = (BEAN - 3672) / 24 | 0;
-      this.ctx.fillText(this.texts[index], 0, 2.3);
+      if(this.texts[index]) {
+        this.ctx.fillText(this.texts[index], 0, 2.3);
+      }
+
+      const rotation = -0.41;
+      if(BEAN >= 3816) {
+        this.ctx.save();
+        this.ctx.font = '1.1pt schmalibre';
+        this.ctx.rotate(rotation);
+        this.ctx.translate(-12, -6);
+        this.ctx.fillText('AMIGA', 0, 2.3);
+        this.ctx.restore();
+      }
+      if(BEAN >= 3816 + 3) {
+        this.ctx.save();
+        this.ctx.font = '1.1pt schmalibre';
+        this.ctx.rotate(rotation);
+        this.ctx.translate(-6, -9);
+        this.ctx.fillText('AGA', 0, 2.3);
+        this.ctx.restore();
+      }
+      if(BEAN >= 3816 + 6) {
+        this.ctx.save();
+        this.ctx.font = '1.1pt schmalibre';
+        this.ctx.rotate(rotation);
+        this.ctx.translate(0, -6);
+        this.ctx.fillText('OCS', 0, 2.3);
+        this.ctx.restore();
+      }
+      if(BEAN >= 3816 + 9) {
+        this.ctx.save();
+        this.ctx.font = '1.1pt schmalibre';
+        this.ctx.rotate(rotation);
+        this.ctx.translate(6, -9);
+        this.ctx.fillText('DEMO', 0, 2.3);
+        this.ctx.restore();
+      }
+      if(BEAN >= 3816 + 18) {
+        this.ctx.save();
+        this.ctx.font = '1.1pt schmalibre';
+        this.ctx.rotate(rotation);
+        this.ctx.translate(12, -6);
+        this.ctx.fillText('INTRO', 0, 2.3);
+        this.ctx.restore();
+      }
+      if(BEAN >= 3816) {
+        this.ctx.save();
+        this.ctx.font = '1.1pt schmalibre';
+        this.ctx.rotate(rotation);
+        this.ctx.translate(-12, 1);
+        this.ctx.fillText('OLDSKOOL', 0, 2.3);
+        this.ctx.restore();
+      }
+      if(BEAN >= 3816 + 3) {
+        this.ctx.save();
+        this.ctx.font = '1.1pt schmalibre';
+        this.ctx.rotate(rotation);
+        this.ctx.translate(-6, 5);
+        this.ctx.fillText('DEMO', 0, 2.3);
+        this.ctx.restore();
+      }
+      if(BEAN >= 3816 + 6) {
+        this.ctx.save();
+        this.ctx.font = '1.1pt schmalibre';
+        this.ctx.rotate(rotation);
+        this.ctx.translate(0, 1);
+        this.ctx.fillText('4K INTRO', 0, 2.3);
+        this.ctx.restore();
+      }
+      if(BEAN >= 3816 + 9) {
+        this.ctx.save();
+        this.ctx.font = '1.1pt schmalibre';
+        this.ctx.rotate(rotation);
+        this.ctx.translate(6, 5);
+        this.ctx.fillText('GRAPHICS', 0, 2.3);
+        this.ctx.restore();
+      }
+      if(BEAN >= 3816 + 18) {
+        this.ctx.save();
+        this.ctx.font = '1.1pt schmalibre';
+        this.ctx.rotate(rotation);
+        this.ctx.translate(12, 1);
+        this.ctx.fillText('MUSIC', 0, 2.3);
+        this.ctx.restore();
+      }
 
       this.ctx.restore();
 
