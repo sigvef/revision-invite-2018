@@ -84,9 +84,8 @@
         this.ctx.translate(
           0,
           easeIn(
-            9 - elasticOut(0, 0.5 + i, 1.2, t),
-            9,
-            (frame - FRAME_FOR_BEAN(32 * 12 * 4)) / 40)
+            10 - elasticOut(0, 1.5 + i * 1, 1.2, t), 10,
+            (frame - FRAME_FOR_BEAN(32 * 12 * 4)) / 20)
         );
         this.ctx.fillStyle = 'rgba(10, 100, 150, 255)';
         this.ctx.beginPath();

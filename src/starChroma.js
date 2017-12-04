@@ -18,8 +18,8 @@
     update(frame) {
       super.update(frame);
 
-      const startFrame = FRAME_FOR_BEAN(66 * 12 * 4);
-      const endFrame = FRAME_FOR_BEAN(67 * 12 * 4);
+      const startFrame = FRAME_FOR_BEAN(33.5 * 12 * 4);
+      const endFrame = FRAME_FOR_BEAN(34 * 12 * 4);
       const t = lerp(0, 1, (frame - startFrame) / (endFrame - startFrame));
 
       // This clears the canvas

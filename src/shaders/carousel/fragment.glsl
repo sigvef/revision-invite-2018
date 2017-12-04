@@ -1,9 +1,12 @@
 uniform float t;
-uniform sampler2D tDiffuse;
 uniform sampler2D overlay;
+uniform sampler2D overlay2;
+uniform sampler2D nextScene;
 uniform float divisions;
 uniform vec3 foregroundColor;
 uniform vec3 backgroundColor;
+uniform vec3 thirdColor;
+uniform float thirdColorRadius;
 uniform float radiusMultiplier;
 uniform vec2 origo;
 
@@ -17,10 +20,20 @@ void main() {
     float radius = length(coords);
     float angle = atan(coords.y / coords.x) + t + radius * radiusMultiplier;
     float mod_angle = mod(angle, M_PI / divisions);
+    vec3 colorOne = foregroundColor;
+    if (radius < thirdColorRadius) {
+        colorOne = thirdColor;
+    }
     vec4 color = vec4(
-            mix(foregroundColor,
+            mix(colorOne,
                 backgroundColor,
                 step(mod_angle, M_PI / (divisions * 2.))), 1.);
     vec4 overlayColor = texture2D(overlay, vUv);
-    gl_FragColor = mix(color, overlayColor, overlayColor.a);
+    vec4 overlay2Color = texture2D(overlay2, vec2(vUv.x, 1. - vUv.y));
+    vec4 layer2Color = mix(color, overlayColor, overlayColor.a);
+    gl_FragColor = mix(layer2Color, overlay2Color, overlay2Color.a);
+
+    if (overlay2Color.rgb == vec3(0., 0., 1.)) {
+        gl_FragColor = texture2D(nextScene, vUv);
+    }
 }

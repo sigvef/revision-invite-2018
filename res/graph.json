@@ -90,7 +90,9 @@
       "shader": "carousel"
     },
     "connected": {
-      "overlay": "revisionBars.render"
+      "overlay": "revisionBars.render",
+      "overlay2": "jaws.render",
+      "nextScene": "fez2.render"
     }
   },
   {
@@ -198,7 +200,7 @@
     },
     "connected": {
       "A": "carousel.render",
-      "B": "jaws.render",
+      "B": "fez2.render",
       "chroma": "starChroma.render"
     }
   },
@@ -378,7 +380,7 @@
     },
     "connected": {
       "A": "Metatron.render",
-      "B": "chromaTransition.render"
+      "B": "carousel.render"
     }
   },
   {
