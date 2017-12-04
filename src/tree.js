@@ -50,19 +50,19 @@
         },
         {
           letter: 'V',
-          bean: 48,
+          bean: 24,
           x: -4,
           y: 1.5,
         },
         {
           letter: 'I',
-          bean: 57,
+          bean: 33,
           x: 0,
           y: 1.5,
         },
         {
           letter: 'S',
-          bean: 66,
+          bean: 42,
           x: 4,
           y: 1.5,
         },
@@ -80,7 +80,7 @@
         },
         {
           letter: 'N',
-          bean: 101,
+          bean: 140,
           x: 0,
           y: -4.5,
         },
@@ -150,7 +150,7 @@
       super.update(frame);
 
       for (const [index, ball] of this.balls.entries()) {
-        const startBEAN = 70 * 48 + ball.bean;
+        const startBEAN = 84.5 * 48 + ball.bean;
         const t = (frame - FRAME_FOR_BEAN(startBEAN)) / 8;
         this.ballMeshes[index].position.set(
           lerp(0, ball.x, t),
@@ -175,41 +175,53 @@
         );
       }
 
-      if (BEAN < 71 * 48) {
-        const t = (frame - FRAME_FOR_BEAN(70 * 48)) / (FRAME_FOR_BEAN(71 * 48) - FRAME_FOR_BEAN(70 * 48));
+      if (BEAN < 85 * 48) {
+        const t = (frame - FRAME_FOR_BEAN(84.5 * 48)) / (FRAME_FOR_BEAN(85 * 48) - FRAME_FOR_BEAN(84.5 * 48));
         this.camera.position.set(
           0,
           lerp(0, 3, t),
-          lerp(15, 8, t)
+          lerp(13, 9, t)
         );
         this.camera.lookAt(new THREE.Vector3(
           0,
           lerp(0, 3, t),
-          lerp(15, 8, t)
+          lerp(0, 0, t)
         ));
-      } else if (BEAN < 72 * 48) {
-        const t = (frame - FRAME_FOR_BEAN(71 * 48)) / (FRAME_FOR_BEAN(72 * 48) - FRAME_FOR_BEAN(71 * 48));
+      } else if (BEAN < 86.25 * 48) {
+        const t = (frame - FRAME_FOR_BEAN(85 * 48)) / (FRAME_FOR_BEAN(86.25 * 48) - FRAME_FOR_BEAN(85 * 48));
         this.camera.position.set(
-          lerp(-2, 1, t),
-          2,
-          lerp(6, 5, t)
+          lerp(2, 5, t),
+          lerp(2, 1, t),
+          lerp(4, 9, t)
         );
         this.camera.lookAt(new THREE.Vector3(
-          lerp(-3, 4, t),
+          lerp(-1, 1.5, t),
           lerp(1.5, 1.5, t),
           lerp(0, 0, t)
         ));
-      } else if (BEAN < 72.5 * 48) {
-        const t = (frame - FRAME_FOR_BEAN(72 * 48)) / (FRAME_FOR_BEAN(72.5 * 48) - FRAME_FOR_BEAN(72 * 48));
+      } else if (BEAN < 87.25 * 48) {
+        const t = (frame - FRAME_FOR_BEAN(86.25 * 48)) / (FRAME_FOR_BEAN(87.25 * 48) - FRAME_FOR_BEAN(86.25 * 48));
         this.camera.position.set(
           0,
-          lerp(-2, 3, t),
-          lerp(6, 16, t)
+          lerp(-2, -3, t),
+          lerp(5, 6, t)
         );
         this.camera.lookAt(new THREE.Vector3(
           0,
-          lerp(-2, 0, t),
+          lerp(-2, -1, t),
           0
+        ));
+      } else {
+        const t = (frame - FRAME_FOR_BEAN(87.25 * 48)) / (FRAME_FOR_BEAN(88.5 * 48) - FRAME_FOR_BEAN(87.25 * 48));
+        this.camera.position.set(
+          0,
+          lerp(7, 2, t),
+          lerp(10, 17, t)
+        );
+        this.camera.lookAt(new THREE.Vector3(
+          0,
+          lerp(-4, 0, t),
+          lerp(0, 0, t)
         ));
       }
     }
