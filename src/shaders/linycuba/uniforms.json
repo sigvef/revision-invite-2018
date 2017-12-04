@@ -1,5 +1,6 @@
 {
     "tDiffuse": { "type": "t", "value": null },
     "frame": { "type": "f", "value": 0.0 },
-    "lineAmount": { "type": "f", "value": 0.0 }
+    "lineAmount": { "type": "f", "value": 0.0 },
+    "lightAmount": { "type": "f", "value": 0.0 }
 }

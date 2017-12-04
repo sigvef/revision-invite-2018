@@ -272,13 +272,15 @@
       this.ball.position.set(0, 0, 0);
       this.bg.visible = BEAN <= 3720;
 
-      this.tunnel.visible = BEAN >= 3768;
+      const tunnelStartBean = 3768 - 48;
+
+      this.tunnel.visible = BEAN >= tunnelStartBean;
       for(let i = 0; i < this.tunnelLights.length; i++) {
         const light = this.tunnelLights[i];
-        light.visible = BEAN >= 3768 && BEAN < 3816;
-        light.mesh.visible = BEAN >= 3768 && BEAN < 3816;
+        light.visible = BEAN >= tunnelStartBean && BEAN < 3816;
+        light.mesh.visible = BEAN >= tunnelStartBean && BEAN < 3816;
       }
-      this.tunnel.visible = BEAN >= 3768 && BEAN < 3816;
+      this.tunnel.visible = BEAN >= tunnelStartBean && BEAN < 3816;
 
       this.gridball.rotation.x = 1.5 + frame / 170;
       this.gridball.rotation.y = 1.7 + frame / 100;
@@ -318,9 +320,9 @@
         this.ball.material.uniforms.ballRadius.value = easeIn(0.18, 1, t * t *t);
         this.ball.material.uniforms.smoothPercentage.value = easeIn(0.1, 100, t * t * t);
         this.gridball.material.uniforms.smoothPercentage.value = easeIn(0.1, .02, t);
-      } else if(BEAN >= 3768) {
-        let t = (frame - FRAME_FOR_BEAN(3768)) / (
-            FRAME_FOR_BEAN(3816) - FRAME_FOR_BEAN(3768));
+      } else if(BEAN >= tunnelStartBean) {
+        let t = (frame - FRAME_FOR_BEAN(tunnelStartBean)) / (
+            FRAME_FOR_BEAN(3816) - FRAME_FOR_BEAN(tunnelStartBean));
         const point = this.tunnelPath.getPoint(1 - t);
         this.ball.position.copy(point);
         const cameraDistance = easeIn(0.15, 0.01, t * t);
