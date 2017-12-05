@@ -29,41 +29,33 @@
     render() {
       this.ctx.fillStyle = 'rgb(55, 60, 63)';
       this.ctx.strokeStyle = 'rgb(55, 60, 63)';
-      this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+      this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
       this.ctx.save();
       this.ctx.scale(GU, GU);
 
-      this.ctx.translate(8, 4.5);
-      const t = smoothstep(0, 1, (this.frame - FRAME_FOR_BEAN(68 * 12 * 4) + 20) / 20);
-      const angle = lerp(0, Math.PI, t);
-      this.ctx.rotate(angle);
-      const scale = 1 + (t * (1 - t)) * 8;
-      this.ctx.scale(scale, scale);
-      this.ctx.translate(-8, -3 - (1 - t) * 1.5);
-
       this.ctx.lineWidth = 0.2;
 
+      const startBEAN = 32 * 48;
       const timings = {
-        0: FRAME_FOR_BEAN(66 * 12 * 4),
-        2: FRAME_FOR_BEAN(66 * 12 * 4 + 9),
-        4: FRAME_FOR_BEAN(66 * 12 * 4 + 24),
-        6: FRAME_FOR_BEAN(66 * 12 * 4 + 34),
-        8: FRAME_FOR_BEAN(67 * 12 * 4),
-        10: FRAME_FOR_BEAN(67 * 12 * 4 + 10),
-        12: FRAME_FOR_BEAN(67 * 12 * 4 + 24),
-        14: FRAME_FOR_BEAN(67 * 12 * 4 + 35),
-
-        16: FRAME_FOR_BEAN(66 * 12 * 4 + 48 * 2),
-        18: FRAME_FOR_BEAN(66 * 12 * 4 + 9 + 48 * 2),
-        20: FRAME_FOR_BEAN(66 * 12 * 4 + 24 + 48 * 2),
-        22: FRAME_FOR_BEAN(66 * 12 * 4 + 34 + 48 * 2),
-        24: FRAME_FOR_BEAN(67 * 12 * 4 + 48 * 2),
-        26: FRAME_FOR_BEAN(67 * 12 * 4 + 10 + 48 * 2),
-        28: FRAME_FOR_BEAN(67 * 12 * 4 + 24 + 48 * 2),
-        30: FRAME_FOR_BEAN(67 * 12 * 4 + 35 + 48 * 2),
+        0: FRAME_FOR_BEAN(startBEAN),
+        2: FRAME_FOR_BEAN(startBEAN+ 9),
+        4: FRAME_FOR_BEAN(startBEAN + 18),
+        6: FRAME_FOR_BEAN(startBEAN + 24),
+        8: FRAME_FOR_BEAN(startBEAN + 28),
+        10: FRAME_FOR_BEAN(startBEAN + 34),
+        12: FRAME_FOR_BEAN(startBEAN + 36),
+        14: FRAME_FOR_BEAN(startBEAN + 40),
+        16: FRAME_FOR_BEAN(startBEAN + 41),
+        18: FRAME_FOR_BEAN(startBEAN + 42),
+        20: FRAME_FOR_BEAN(startBEAN + 46),
+        22: FRAME_FOR_BEAN(startBEAN + 48),
+        24: FRAME_FOR_BEAN(startBEAN + 54),
+        26: FRAME_FOR_BEAN(startBEAN + 60),
+        28: FRAME_FOR_BEAN(startBEAN + 64),
+        30: FRAME_FOR_BEAN(startBEAN + 70),
       };
 
-      for(let i = 0; i < 32; i+=2) {
+      for(let i = 0; i < 30; i+=2) {
         if(i % 4 != 0) {
           this.ctx.fillStyle = 'rgb(255, 73, 130)';
         } else {
@@ -71,16 +63,35 @@
         }
         const t = easeOut(1, 0, (this.frame - timings[i]) / 15);
         this.ctx.save();
-        this.ctx.translate(-(this.frame - 8270) / 30, (this.frame - 8270) / 100 + 6 * t +  i / 4 * t);
+        this.ctx.translate(
+          -(this.frame - 4070) / 7,
+          (this.frame - 4000) / 50 + 6 * t + i / 4 * t
+        );
         this.ctx.beginPath();
         this.ctx.moveTo(i, 9);
-        this.ctx.lineTo(i + 2, 9 - (5 + i / 4));
+        this.ctx.lineTo(i + 2, 9 - (5 + i / 8));
         this.ctx.lineTo(i + 4, 9);
         this.ctx.lineTo(i, 9);
         this.ctx.fill();
         this.ctx.stroke();
         this.ctx.restore();
       }
+
+      this.ctx.fillStyle = 'rgb(0, 0, 255)';
+      const t = easeOut(1, -5, (this.frame - timings[30]) / 160);
+      this.ctx.save();
+      this.ctx.translate(
+        -(this.frame - 4070) / 7,
+        (this.frame - 4000) / 50 + 6 * t + 30 / 4 * t
+      );
+      this.ctx.beginPath();
+      this.ctx.moveTo(0, 135);
+      this.ctx.lineTo(32, 9 - (5 + 30 / 8));
+      this.ctx.lineTo(64, 135);
+      this.ctx.lineTo(0, 135);
+      this.ctx.fill();
+      this.ctx.stroke();
+      this.ctx.restore();
       this.ctx.restore();
 
       this.output.needsUpdate = true;
