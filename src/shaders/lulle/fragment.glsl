@@ -1,4 +1,6 @@
 uniform float frame;
+uniform float BEAN;
+uniform float BEAT;
 uniform sampler2D tDiffuse;
 
 varying vec2 vUv;
@@ -23,32 +25,22 @@ float displace(vec3 p, float d1) {
 float sphere(vec3 p, float s) {
     return length(p)-s;
 }
-
-float boxy(vec3 p, vec3 b) {
-    return length(max(abs(p)-b, .0));
-}
-
-float repBox(vec3 p, vec3 c) {
-    vec3 q = mod(p, c)-.5*c;
-    vec3 boxCoord = floor(p / vec3(4.0, 4.0, 6.0));
-    float box = boxy(q, vec3(1.5, 1.5, 1.5));
-    return box;
-}
-
-float twist(vec3 p) {
-    float c = cos(20.0*p.y);
-    float s = sin(20.0*p.y);
-    mat2 m = mat2(c, -s, s, c);
-    vec3 q = vec3(m*p.xz, p.y);
-    return sphere(q, 1.5);
-}
-
 vec2 sdf(in vec3 p) {
-    float sphere1 = sphere(p-vec3(sin(frame/60.),cos(frame/60.), 0.0), 1.5);
-    float sphere3 = twist(p-vec3(sin(frame/60.),cos(frame/60.), 0.0));
-    float sphere2 = displace(p*0.6, sphere3);
-    float reps = repBox(p*sin(frame/10.), vec3(7.));
-    return minmin(vec2(sphere2, 1.), vec2(reps, 2.));
+    vec2 a = vec2(sphere(p-vec3(cos(frame/15.)*2., sin(frame/15.)*2., 1.5), 0.6), 1.);
+    vec2 b = vec2(sphere(p-vec3(cos(frame/40.), sin(frame/15.), 2.), 0.4), 1.);
+
+    vec2 c = vec2(sphere(p-vec3(sin(frame/40.), cos(frame/10.), 0.5), 0.3), 2.);
+    vec2 d = vec2(sphere(p-vec3(sin(frame/20.)*2.5, cos(frame/60.)*2.5, 0.), 0.8), 2.);
+
+    vec2 e = vec2(sphere(p-vec3(sin(frame/30.), tan(frame/30.), 0.2), 0.7), 3.);
+    vec2 f = vec2(sphere(p-vec3(tan(frame/20.), sin(frame/10.), 1.7), 0.2), 3.);
+
+    vec2 aa = minmin(a, b);
+    vec2 bb = minmin(c, d);
+    vec2 cc = minmin(e, f);
+    vec2 dd = minmin(aa, bb);
+
+    return minmin(cc, dd);
 }
 
 vec2 march(vec3 eye, vec3 dir, float s, float e) {
@@ -139,8 +131,10 @@ void main() {
     vec3 p = eye + dir * res.x;
 
     vec3 color = vec3(.0);
-    if (res.y > 1.5) {
+    if (res.y == 2.) {
         color = vec3(.0, 224./255., 79./255.);
+    } else if (res.y == 3.) {
+        color = vec3(255., 255., 0.);
     } else {
         color = vec3(255./255., 73./255., 130./255.);
     }

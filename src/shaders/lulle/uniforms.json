@@ -1,4 +1,6 @@
 {
     "tDiffuse": { "type": "t", "value": null },
-    "frame": { "type": "f", "value": 0.0 }
+    "frame": { "type": "f", "value": 0.0 },
+    "BEAT": { "type": "f", "value": 0.0 },
+    "BEAN": { "type": "f", "value": 0.0 }
 }
