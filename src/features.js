@@ -8,16 +8,31 @@
           featurebg: new NIN.TextureInput(),
         },
         outputs: {
-          render: new NIN.TextureOutput()
+          render: new NIN.TextureOutput(),
+          renderTunnel: new NIN.TextureOutput()
         }
       });
 
       this.kickThrob = 0;
       this.stabThrob = 0;
 
+      this.renderTarget1 = new THREE.WebGLRenderTarget(640, 360, {
+        minFilter: THREE.LinearFilter,
+        magFilter: THREE.LinearFilter,
+        format: THREE.RGBAFormat
+      });
+      this.renderTarget2 = new THREE.WebGLRenderTarget(640, 360, {
+        minFilter: THREE.LinearFilter,
+        magFilter: THREE.LinearFilter,
+        format: THREE.RGBAFormat
+      });
+
+      this.tunnelScene = new THREE.Scene();
+
       this.bg = new THREE.Mesh(
           new THREE.BoxGeometry(160, 90, 1), 
           new THREE.MeshBasicMaterial());
+      this.bg.material.transparent = true;
       this.scene.add(this.bg);
 
       this.directionalLight = new THREE.DirectionalLight();
@@ -63,7 +78,7 @@
       tunnelMaterial.normalMap.repeat.set(64, 16);
       */
       this.tunnel = new THREE.Mesh(tunnelGeometry, tunnelMaterial);
-      this.scene.add(this.tunnel);
+      this.tunnelScene.add(this.tunnel);
 
 
       const gridGeometry = new THREE.IcosahedronGeometry(9, 2);
@@ -112,7 +127,7 @@
       this.ballLight.intensity = 1;
       //this.scene.add(this.ballLight);
 
-      this.scene.add(new THREE.AmbientLight(0xffffff, 0.1));
+      this.tunnelScene.add(new THREE.AmbientLight(0xffffff, 0.1));
 
       this.camera.fov = 18;
       this.camera.updateProjectionMatrix();
@@ -140,9 +155,9 @@
             blending: THREE.AdditiveBlending,
           }));
         this.tunnelLights[i] = light;
-        this.scene.add(light);
+        this.tunnelScene.add(light);
         //this.scene.add(light.helper);
-        this.scene.add(light.mesh);
+        this.tunnelScene.add(light.mesh);
       }
 
       this.cameraPreviousPosition = new THREE.Vector3(0, 0, 0);
@@ -152,6 +167,11 @@
       this.cameraShakeRotation = new THREE.Vector3(0, 0, 0);
       this.cameraShakeAngularVelocity = new THREE.Vector3(0, 0, 0);
       this.cameraShakeAngularAcceleration = new THREE.Vector3(0, 0, 0);
+    }
+
+    resize() {
+      this.renderTarget1.setSize(16 * GU, 9 * GU);
+      this.renderTarget2.setSize(16 * GU, 9 * GU);
     }
 
     update(frame) {
@@ -189,13 +209,14 @@
 
       if(BEAT) {
         switch(BEAN) {
-        case 3816.1:
+        case 3816:
           this.cameraShakeVelocity.x = (this.camera.position.x -
             this.cameraPreviousPosition.x) * 0.01;
           this.cameraShakeVelocity.y = (this.camera.position.y -
             this.cameraPreviousPosition.y) * 0.01;
           this.cameraShakeVelocity.z = (this.camera.position.z -
             this.cameraPreviousPosition.z) * 0.01;
+          break;
         case 3672:
           this.cameraShakeAngularVelocity.x = (Math.random() - 0.5) * 0.05;
           this.cameraShakeAngularVelocity.y = (Math.random() - 0.5) * 0.05;
@@ -244,13 +265,6 @@
       this.ball.material.uniforms.ballRadius.value = (0.15 + scalediff * scalediff) * 0.9;
       this.ball.material.uniforms.smoothPercentage.value = scalediff * 10;
 
-      if(BEAN <= 3720) {
-        this.bg.position.z = this.camera.position.z - 284;
-        this.bg.position.x = this.camera.position.x;
-        this.bg.position.y = this.camera.position.y;
-        this.bg.lookAt(this.camera.position);
-      }
-
       this.textball.material.map = this.inputs.featuretex.getValue();
       if(this.textball.material.map) {
         this.textball.material.map.wrapT = THREE.ClampToEdgeWrapping;
@@ -272,18 +286,14 @@
       this.ball.position.set(0, 0, 0);
       this.bg.visible = BEAN <= 3720;
 
-      const tunnelStartBean = 3768 - 48;
-
-      this.tunnel.visible = BEAN >= tunnelStartBean;
-      for(let i = 0; i < this.tunnelLights.length; i++) {
-        const light = this.tunnelLights[i];
-        light.visible = BEAN >= tunnelStartBean && BEAN < 3816;
-        light.mesh.visible = BEAN >= tunnelStartBean && BEAN < 3816;
-      }
-      this.tunnel.visible = BEAN >= tunnelStartBean && BEAN < 3816;
+      const tunnelStartBean = 3768 - 48 - 48;
 
       this.gridball.rotation.x = 1.5 + frame / 170;
       this.gridball.rotation.y = 1.7 + frame / 100;
+      if(BEAN >= 3720) {
+        this.gridball.rotation.x = 1.5 + frame / 7;
+        this.gridball.rotation.y = 1.7 + frame / 100;
+      }
       this.textball.visible = true;
       if(BEAN >= 3840) {
         this.textball.visible = false;
@@ -323,14 +333,48 @@
       } else if(BEAN >= tunnelStartBean) {
         let t = (frame - FRAME_FOR_BEAN(tunnelStartBean)) / (
             FRAME_FOR_BEAN(3816) - FRAME_FOR_BEAN(tunnelStartBean));
+        t *= 2;
+        t -= 0.25;
+        let cameraT =  (frame - FRAME_FOR_BEAN(tunnelStartBean)) / (
+            FRAME_FOR_BEAN(3816) - FRAME_FOR_BEAN(tunnelStartBean));
         const point = this.tunnelPath.getPoint(1 - t);
-        this.ball.position.copy(point);
-        const cameraDistance = easeIn(0.15, 0.01, t * t);
+        const cameraDistance = easeIn(0.15, 0.01, cameraT * cameraT);
         const cameraPoint = this.tunnelPath.getPoint(1 - (t - cameraDistance));
-        position.copy(cameraPoint);
-
         const cameraLookatPoint = this.tunnelPath.getPoint(1 - (t + 0.15));
+        this.ball.position.copy(point);
+        position.copy(cameraPoint);
         this.camera.lookAt(cameraLookatPoint);
+
+
+        if(BEAN <= 3720) {
+          let ballT =  clamp(0, (frame - FRAME_FOR_BEAN(3720 - 6)) / (
+              FRAME_FOR_BEAN(3720) - FRAME_FOR_BEAN(3720 - 6)), 1);
+          this.bg.position.z = cameraLookatPoint.z;
+          this.bg.position.x = cameraLookatPoint.x;
+          this.bg.position.y = cameraLookatPoint.y;
+          const scale = easeIn(1.2, 1, ballT);
+          this.bg.scale.set(scale, scale, scale);
+          this.bg.lookAt(this.camera.position);
+          this.ball.position.x =
+              easeIn(
+                8 + lerp(this.camera.position.x, cameraLookatPoint.x, 0.31),
+                0,
+                ballT) +
+              easeIn(0, point.x, ballT);
+          this.ball.position.y =
+              easeIn(
+                lerp(this.camera.position.y, cameraLookatPoint.y, 0.31),
+                0,
+                ballT) +
+              easeIn(0, point.y, ballT);
+          this.ball.position.z  =
+              easeIn(
+                lerp(this.camera.position.z, cameraLookatPoint.z, 0.31),
+                0,
+                ballT) +
+              easeIn(0, point.z, ballT);
+        }
+
 
         const lightsInTunnel = 16;
         const wrapDistance = 0.1;
@@ -365,11 +409,15 @@
       this.camera.rotation.x += this.cameraShakeRotation.x;
       this.camera.rotation.y += this.cameraShakeRotation.y;
       this.camera.rotation.z += this.cameraShakeRotation.z;
+
     }
 
     render(renderer) {
-      renderer.setClearColor(new THREE.Color(0x500019));
-      super.render(renderer);
+      renderer.setClearColor(new THREE.Color(0), 0);
+      renderer.render(this.scene, this.camera, this.renderTarget1, true);
+      this.outputs.render.value = this.renderTarget1;
+      renderer.render(this.tunnelScene, this.camera, this.renderTarget2, true);
+      this.outputs.renderTunnel.value = this.renderTarget2;
     }
   }
 
