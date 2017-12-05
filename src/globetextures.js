@@ -24,9 +24,19 @@
             }));
       }
 
+      const mapDetail = Loader.loadTexture('res/earth-map-detail.jpg');
+      mapDetail.repeat.set(4, 4);
+      mapDetail.offset.set(-1.5, -2.5);
+
+      const cloudMapDetail = Loader.loadTexture('res/earth-cloud-map-detail.jpg');
+      cloudMapDetail.repeat.set(4, 4);
+      cloudMapDetail.offset.set(-1.5, -2.5);
+
       this.outputs.globeTextures.value = {
         map: Loader.loadTexture('res/earth-map.jpg'),
         cloudMap: Loader.loadTexture('res/earth-cloud-map.jpg'),
+        mapDetail,
+        cloudMapDetail,
         skyboxMaterial: new THREE.MeshFaceMaterial(materialArray),
       };
     }

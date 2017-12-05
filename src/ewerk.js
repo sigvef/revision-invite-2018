@@ -40,7 +40,7 @@
         obj.position.z = -0.3;
         obj.traverse(mesh => {
           mesh.material = new THREE.MeshStandardMaterial({
-            color: new THREE.Color(55 / 255, 60 / 255, 63 / 255),  
+            color: new THREE.Color(55 / 255, 60 / 255, 63 / 255),
             roughness: 1,
             metalness: 0,
             side: THREE.DoubleSide,
@@ -61,7 +61,7 @@
       this.beamer.position.z = 0.32;
 
       this.ps = new ParticleSystem({
-        color: new THREE.Color(1, 1, 1),  
+        color: new THREE.Color(1, 1, 1),
       });
       const lowerRadius = 205;
       const upperRadius = 400;
@@ -99,6 +99,13 @@
             metalness: 0,
           }));
 
+      this.globeDetail = new THREE.Mesh(
+          new THREE.SphereBufferGeometry(200.1, 64, 64),
+          new THREE.MeshStandardMaterial({
+            roughness: 1,
+            metalness: 0,
+          }));
+
       this.cloudGlobe = new THREE.Mesh(
           new THREE.SphereGeometry(201, 40, 40),
           new THREE.MeshStandardMaterial({
@@ -108,8 +115,19 @@
             transparent: true,
           }));
 
+      this.cloudGlobeDetail = new THREE.Mesh(
+          new THREE.SphereGeometry(201.1, 40, 40),
+          new THREE.MeshStandardMaterial({
+            color: 0xffffff,
+            roughness: 1,
+            metalness: 0,
+            transparent: true,
+          }));
+
       this.globeContainer.add(this.globe);
       this.globeContainer.add(this.cloudGlobe);
+      this.globeContainer.add(this.globeDetail);
+      this.globeContainer.add(this.cloudGlobeDetail);
 
       this.globeContainer.rotation.x = -Math.PI / 2 + .8;
 
@@ -214,11 +232,17 @@
       this.beamer.material.needsUpdate = true;
       demo.nm.nodes.bloom.opacity = 0;
       this.globeContainer.rotation.y = 5 -frame / 1000;
+      this.globeDetail.visible = frame >= 248;
+      this.cloudGlobeDetail.visible = frame >= 248;
+      this.cloudGlobe.visible = frame < 248;
       const globeTextures = this.inputs.globeTextures.getValue();
       if(globeTextures) {
         this.globe.material.map = globeTextures.map;
         this.cloudGlobe.material.alphaMap = globeTextures.cloudMap;
         this.cloudGlobe.material.roughnessMap = globeTextures.cloudMap;
+        this.globeDetail.material.map = globeTextures.mapDetail;
+        this.cloudGlobeDetail.material.alphaMap = globeTextures.cloudMapDetail;
+        this.cloudGlobeDetail.material.roughnessMap = globeTextures.cloudMapDetail;
         this.skybox.material = globeTextures.skyboxMaterial;
       }
       const frame1 = FRAME_FOR_BEAN(1 * 12 * 4);
@@ -236,6 +260,7 @@
       const frame13 = FRAME_FOR_BEAN(90 * 12 * 4 + 9 + 9);
 
       this.cloudGlobe.rotation.y -= 0.0002;
+      this.cloudGlobeDetail.rotation.y -= 0.0002;
       this.ps.particles.rotation.y += 0.0005;
 
       if(frame > frame2 && frame < frame13) {
