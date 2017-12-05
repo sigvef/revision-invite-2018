@@ -14,14 +14,23 @@
       // MISC
       this.random = new Random(666);
 
-      // SCENE, CAMERA
+      // SCENE
       this.scene = new THREE.Scene();
       this.renderTarget = new THREE.WebGLRenderTarget(640, 360, {
         minFilter: THREE.LinearFilter,
         magFilter: THREE.LinearFilter,
         format: THREE.RGBFormat
       });
+
+      // CAMERA
       this.camera = new THREE.PerspectiveCamera(45, 16 / 9, 1, 10000);
+      this.cameraPreviousPosition = new THREE.Vector3(0, 0, 0);
+      this.cameraShakePosition = new THREE.Vector3(0, 0, 0);
+      this.cameraShakeVelocity = new THREE.Vector3(0, 0, 0);
+      this.cameraShakeAcceleration = new THREE.Vector3(0, 0, 0);
+      this.cameraShakeRotation = new THREE.Vector3(0, 0, 0);
+      this.cameraShakeAngularVelocity = new THREE.Vector3(0, 0, 0);
+      this.cameraShakeAngularAcceleration = new THREE.Vector3(0, 0, 0);
 
       // TEXT
       this.textCanvas = document.createElement('canvas');
@@ -88,8 +97,31 @@
       );
       //this.scene.add(this.torus);
 
-      // CENTER FRACTURE
-      // TODO
+      // FRACTURE
+      this.fractureMaterial = new THREE.MeshBasicMaterial({color: 0xffffff});
+      this.fractureSize = 0.3;
+      this.fractureGeometry = new THREE.BoxGeometry(this.fractureSize, this.fractureSize, this.fractureSize);
+      this.numfractureParts = 225;
+      this.fractureParts = [];
+      for (let i = 0; i < this.numfractureParts; i++) {
+        const fractureMesh = new THREE.Mesh(this.fractureGeometry, this.fractureMaterial);
+        this.fractureParts.push(fractureMesh);
+        this.scene.add(fractureMesh);
+      }
+
+      // REVISION LOGO
+      this.revisionLogoSegments = [
+        [],
+        [[0, 360]],
+        [[-158, -101]],
+        [[48, 87], [161, 177], [-71, -27]],
+        [[31, 122], [137, 166], [-95, 18]],
+        [[0, 360]],
+        [[62,73], [91, 115], [173, -126], [-99, -72], [-46, -34], [-17, 1]],
+        [[0, 360]],
+        [[2, 61], [-135, -127]]
+      ];
+
 
       // PARTICLES
       this.ps = new ParticleSystem({
@@ -118,15 +150,15 @@
       } else if (BEAN >= 3024 && BEAN < 3072) {
         return this.updatePart2(frame);
       } else if (BEAN >= 3072 && BEAN < 3120) {
-        // TODO
+        return this.updatePart3(frame);
       } else if (BEAN >= 3120 && BEAN < 3312) {
         return this.updatePart4(frame);
       } else if (BEAN >= 3312) {
-        demo.nm.nodes.bloom.opacity = 0.35;
         return this.updateLastTextPart(frame);
       }
     }
 
+    // 11111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111
     updatePart1(frame) {
       this.scene.remove(this.textPlane);
       this.scene.remove(this.cylinder);
@@ -161,6 +193,7 @@
       this.camera.lookAt(this.ball.position);
     }
 
+    // 22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
     updatePart2(frame) {
       this.scene.remove(this.textPlane);
       this.scene.remove(this.cylinder);
@@ -202,11 +235,11 @@
 
       // PARTICLES
       for(let i = 0; i < 50; i++) {
-        const angle = Math.random() * Math.PI * 2;
-        const angle2 = Math.random() * Math.PI;
+        const angle = this.random() * Math.PI * 2;
+        const angle2 = this.random() * Math.PI;
         const radius = 0.8;
-        const velocityAngle = Math.random() * Math.PI * 2;
-        const velocityAngle2 = Math.random() * Math.PI * 2;
+        const velocityAngle = this.random() * Math.PI * 2;
+        const velocityAngle2 = this.random() * Math.PI * 2;
         const velocityRadius = 0.05;
         this.ps.spawn(
           {
@@ -223,29 +256,175 @@
         );
       }
       this.ps.update();
+
+      // FRACTURE PARTS
+      for (let i = 0; i < this.fractureParts.length; i++) {
+        const fracturePart = this.fractureParts[i];
+        fracturePart.position.x = this.fractureSize * (i % 15) - 7.5 * this.fractureSize;
+        fracturePart.position.y = this.fractureSize * ((i / 15) | 0)  - 7.5 * this.fractureSize;
+        fracturePart.position.z = -80;
+        fracturePart.rotation.x = 0;
+        fracturePart.rotation.y = 0;
+        fracturePart.rotation.z = 0;
+      }
     }
 
-    updatePart4(frame) {
-      // TODO
+    // 33333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333
+    updatePart3(frame) {
+      demo.nm.nodes.bloom.opacity = 0.1;
 
-      // TORUS
-      this.torus.rotation.x = Math.sin(frame / 40);
-      this.torus.rotation.y = Math.cos(frame / 40);
+      this.scene.remove(this.textPlane);
+      this.scene.remove(this.cylinder);
+      this.scene.add(this.ball);
+      this.ps.particles.visible = true;
+      this.setBeamsVisibility(true);
 
-      // CYLINDER
-      this.cylinder.rotation.x = Math.PI / 2;
+      const startFrame = FRAME_FOR_BEAN(3072);
+      const endFrame = FRAME_FOR_BEAN(3120);
+      const progress = (frame - startFrame) / (endFrame - startFrame);
+
+      this.camera.position.x = 6;
+      this.camera.position.y = 0;
+      this.camera.position.z = -70;
+
+      // PARTICLES
+      for(let i = 0; i < 10; i++) {
+        const angle = this.random() * Math.PI * 2;
+        const angle2 = this.random() * Math.PI;
+        const radius = 0.8;
+        const velocityAngle = this.random() * Math.PI * 2;
+        const velocityAngle2 = this.random() * Math.PI * 2;
+        const velocityRadius = 0.01;
+        this.ps.spawn(
+          {
+            x: this.ball.position.x + Math.sin(angle) * radius,
+            y: this.ball.position.y + Math.cos(angle) * radius,
+            z: this.ball.position.z + Math.sin(angle2) * radius + 2 * (1 - progress),
+          },
+          {
+            x: Math.sin(velocityAngle2) * velocityRadius,
+            y: Math.sin(velocityAngle) * velocityRadius,
+            z: 0,
+          },
+          0.012
+        );
+      }
+      this.ps.update();
 
       // BALL
-      this.ball.position.x += this.ball.userData.dx;
-      this.ball.position.y += this.ball.userData.dy;
-      this.ball.position.z += this.ball.userData.dz;
+      this.ball.position.x = 0;
+      this.ball.position.y = 0;
+      this.ball.position.z = lerp(-70, -79, progress);
+      this.ball.rotation.x = frame / 40;
+      this.ball.rotation.y = frame / 45;
 
-      // CAMERA
-      this.camera.position.x = 2 * Math.sin(frame / 55);
-      this.camera.position.y = 2 * Math.cos(frame / 55);
+      this.camera.lookAt(new THREE.Vector3(0, 0, -80));
+
+      // FRACTURE PARTS
+      for (let i = 0; i < this.fractureParts.length; i++) {
+        const fracturePart = this.fractureParts[i];
+        fracturePart.position.x = this.fractureSize * (i % 15) - 7.5 * this.fractureSize;
+        fracturePart.position.y = this.fractureSize * ((i / 15) | 0)  - 7.5 * this.fractureSize;
+        fracturePart.position.z = -80;
+        fracturePart.rotation.x = 0;
+        fracturePart.rotation.y = 0;
+        fracturePart.rotation.z = 0;
+      }
     }
 
+    // 44444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444
+    updatePart4(frame) {
+      const startFrame = FRAME_FOR_BEAN(3120);
+      const endFrame = FRAME_FOR_BEAN(3168);
+      const progress = (frame - startFrame) / (endFrame - startFrame);
+
+      if (BEAN === 3120) {
+        this.cameraShakeAngularVelocity.x = (this.random() - 0.5) * 0.05;
+        this.cameraShakeAngularVelocity.y = (this.random() - 0.5) * 0.05;
+        this.cameraShakeAngularVelocity.z = (this.random() - 0.5) * 0.05;
+      }
+
+      this.camera.lookAt(new THREE.Vector3(0, 0, -80));
+
+      this.cameraShakeAcceleration.x = -this.cameraShakePosition.x * 0.05;
+      this.cameraShakeAcceleration.y = -this.cameraShakePosition.y * 0.05;
+      this.cameraShakeAcceleration.z = -this.cameraShakePosition.z * 0.05;
+      this.cameraShakeAngularAcceleration.x = -this.cameraShakeRotation.x * 0.05;
+      this.cameraShakeAngularAcceleration.y = -this.cameraShakeRotation.y * 0.05;
+      this.cameraShakeAngularAcceleration.z = -this.cameraShakeRotation.z * 0.05;
+      this.cameraShakeVelocity.add(this.cameraShakeAcceleration);
+      this.cameraShakeAngularVelocity.add(this.cameraShakeAngularAcceleration);
+      this.cameraShakeVelocity.multiplyScalar(0.85);
+      this.cameraShakeAngularVelocity.multiplyScalar(0.85);
+      this.cameraShakePosition.add(this.cameraShakeVelocity);
+      this.cameraShakeRotation.add(this.cameraShakeAngularVelocity);
+
+      this.camera.position.x = 6;
+      this.camera.position.y = 0;
+      this.camera.position.z = -70;
+
+      this.cameraPreviousPosition.copy(this.camera.position);
+      this.camera.position.add(this.cameraShakePosition);
+      this.camera.rotation.x += this.cameraShakeRotation.x;
+      this.camera.rotation.y += this.cameraShakeRotation.y;
+      this.camera.rotation.z += this.cameraShakeRotation.z;
+
+      // BALL
+      this.ball.position.x = 0;
+      this.ball.position.y = 0;
+      this.ball.position.z = lerp(-79, -74, progress);
+      this.ball.rotation.x = frame / 40;
+      this.ball.rotation.y = frame / 45;
+
+      // FRACTURE PARTS
+      for (let i = 0; i < this.fractureParts.length; i++) {
+        const fracturePart = this.fractureParts[i];
+        let x = this.fractureSize * (i % 15) - 7.5 * this.fractureSize;
+        let y = this.fractureSize * ((i / 15) | 0)  - 7.5 * this.fractureSize;
+        const distanceToCenter = Math.sqrt(x * x + y * y);
+        const impact = 1 / (distanceToCenter +   1);
+        fracturePart.position.x = x + 1 * progress * x * impact;
+        fracturePart.position.y = y + 1 * progress * y * impact;
+        fracturePart.position.z = -80 - 20 * progress * impact;
+        fracturePart.rotation.x = 0;
+        fracturePart.rotation.y = 0;
+        fracturePart.rotation.z = 0;
+
+        // PARTICLES
+        if (BEAN >= 3120) {
+          const beanDiff = BEAN - 3120;
+          const factor = 0 | (5 * impact / (beanDiff / 2 + 1));
+          for (let i = 0; i < factor; i++) {
+            const angle = this.random() * Math.PI * 2;
+            const angle2 = this.random() * Math.PI;
+            const radius = 0.8;
+            const velocityAngle = this.random() * Math.PI * 2;
+            const velocityAngle2 = this.random() * Math.PI * 2;
+            const velocityRadius = 0.01;
+            this.ps.spawn(
+              {
+                x: fracturePart.position.x + Math.sin(angle) * radius,
+                y: fracturePart.position.y + Math.cos(angle) * radius,
+                z: fracturePart.position.z + Math.sin(angle2) * radius,
+              },
+              {
+                x: Math.sin(velocityAngle2) * velocityRadius,
+                y: Math.sin(velocityAngle) * velocityRadius,
+                z: -0.1 * this.random(),
+              },
+              0.012
+            );
+          }
+        }
+      }
+
+
+      this.ps.update();
+    }
+
+    // ttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttt
     updateLastTextPart(frame) {
+      demo.nm.nodes.bloom.opacity = 0.35;
       this.scene.add(this.textPlane);
       this.scene.remove(this.cylinder);
       this.scene.remove(this.ball);
