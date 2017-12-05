@@ -4,8 +4,10 @@
       super(id, options);
     }
 
-    update(frame) {
+    update(frame) { 
       this.uniforms.frame.value = frame;
+      this.uniforms.BEAN.value = BEAN;
+      this.uniforms.BEAT.value = BEAT ? 1 : 0;
     }
   }
 
