@@ -1,5 +1,5 @@
 (function(global) {
-  class featurebg extends NIN.THREENode {
+  class featurebg extends NIN.Node {
     constructor(id) {
       super(id, {
         outputs: {
@@ -10,7 +10,7 @@
       this.canvas = document.createElement('canvas');
       this.ctx = this.canvas.getContext('2d');
       this.resize();
-      this.output = new THREE.VideoTexture(this.canvas);
+      this.output = new THREE.CanvasTexture(this.canvas);
       this.output.minFilter = THREE.LinearFilter;
       this.output.magFilter = THREE.LinearFilter;
     }
@@ -20,8 +20,7 @@
     }
 
     render() {
-      // This clears the canvas
-      this.canvas.width += 0;
+      this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
       this.ctx.save();
       this.ctx.scale(GU, GU);

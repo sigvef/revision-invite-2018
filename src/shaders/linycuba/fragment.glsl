@@ -1,6 +1,7 @@
 uniform float frame;
 uniform sampler2D tDiffuse;
 uniform float lineAmount;
+uniform float lightAmount;
 
 varying vec2 vUv;
 varying vec4 globalPosition;
@@ -11,7 +12,7 @@ void main() {
     vec2 uv = vUv;
     vec3 white = vec3(1.);
     vec3 pink = vec3(255., 73., 130.) / 255.;
-    vec4 color = vec4(white, 1.);
+    vec4 color = vec4(white * lightAmount, 1.);
 
     float lineWidth = 0.1;
 

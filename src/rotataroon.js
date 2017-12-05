@@ -12,6 +12,7 @@
       });
 
       this.throb = 0;
+      this.lightThrob = 0;
 
       this.directionalLight = new THREE.DirectionalLight(1, 1, 1);
       this.scene.add(this.directionalLight);
@@ -69,6 +70,7 @@
 
     update(frame) {
       this.throb *= 0.95;
+      this.lightThrob *= 0.95;
       if(BEAN < 3864) {
         this.bg.material.map = this.inputs.background.getValue();
         this.bg.material.needsUpdate = true;
@@ -106,7 +108,49 @@
         this.throb = 3;
       }
 
-      demo.nm.nodes.bloom.opacity = this.throb;
+      if(BEAT) {
+        switch((BEAN - 24) % (96 * 2)) {
+        case 0:
+        case 9:
+        case 16:
+        case 18:
+        case 20:
+        case 22:
+        case 24:
+        case 33:
+        case 42:
+        case 52:
+        case 54:
+        case 58:
+        case 72:
+        case 76:
+        case 78:
+        case 82:
+        case 90:
+        case 94:
+        case 96:
+        case 102:
+        case 106:
+        case 114:
+        case 124:
+        case 126:
+        case 138:
+        case 148:
+        case 150:
+        case 162:
+        case 166:
+        case 172:
+        case 174:
+        case 178:
+        case 184:
+        case 190:
+          this.lightThrob = 1;
+        }
+      }
+
+      this.cube.material.uniforms.lightAmount.value = this.lightThrob;
+
+      demo.nm.nodes.bloom.opacity = 0.25 + this.throb;
 
       this.frame = frame;
     }

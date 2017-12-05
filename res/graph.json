@@ -34,8 +34,8 @@
       "_19_groovy_B_theme": "bouncyGeometry.render",
       "_20_A_theme_breakdown_1": "breakdown.render",
       "_20_A_theme_breakdown_2": "breakdown.render",
-      "_21_third_B_theme_1": "features.render",
-      "_22_third_B_theme_2": "features.render",
+      "_21_third_B_theme_1": "featureblend.render",
+      "_22_third_B_theme_2": "featureblend.render",
       "_22_third_B_theme_3": "rotataroon.render",
       "_22_third_B_theme_4": "rotataroon.render",
       "_22_third_B_theme_5": "rotataroon.render",
@@ -415,10 +415,21 @@
     "id": "rotataroon",
     "type": "rotataroon",
     "options": {
-        "shader": "linycuba"
+      "shader": "linycuba"
     },
     "connected": {
-        "background": "features.render"
+      "background": "features.render"
+    }
+  },
+  {
+    "id": "featureblend",
+    "type": "AlphaBlendNode",
+    "options": {
+      "shader": "AlphaBlend"
+    },
+    "connected": {
+        "under": "features.renderTunnel",
+        "over": "features.render"
     }
   }
 ]
