@@ -16,16 +16,29 @@
       const objLoader = new THREE.OBJLoader();
       this.ewerkModel = new THREE.Object3D();
       this.ewerkModel.rotation.y = Math.PI;
+      const maps = {
+        'ewerk_Cylinder.002_Cylinder.003':
+          Loader.loadTexture('res/ewerk_lightmap.png'),
+        'ground_Plane':
+          Loader.loadTexture('res/ground_lightmap.png'),
+        'tree_Cylinder':
+          Loader.loadTexture('res/tree_lightmap.png'),
+        'tree2_Cylinder.001':
+          Loader.loadTexture('res/tree2_lightmap.png'),
+        'tree3_Cylinder.002':
+          Loader.loadTexture('res/tree3_lightmap.png'),
+      };
       Loader.loadAjax('res/ewerk.obj', text => {
         const obj = objLoader.parse(text);
+        obj.rotation.y += Math.PI;
+        console.log(obj);
+        obj.scale.set(10, 10, 10);
         obj.traverse(mesh => {
-          mesh.material = new THREE.MeshStandardMaterial({
+          mesh.material = new THREE.MeshBasicMaterial({
             color: 0xffffff,
-            roughness: 1,
-            metalness: 0,
             side: THREE.DoubleSide,
+            map: maps[mesh.name],
           });
-          mesh.castShadow = true;
         });
         this.ewerkModel.add(obj);
       });
@@ -118,29 +131,7 @@
       this.globeLight.intensity = 0.9;
       this.globeLight.color = new THREE.Color(255 / 255, 250 / 255, 244 / 255);
       this.scene.add(this.globeLight);
-      this.scene.add(new THREE.AmbientLight(0xffffff, 0.075));
-
-      this.spotLight = new THREE.SpotLight(0xffffff);
-      this.spotLight.castShadow = true;
-      this.spotLight.lookAt(new THREE.Vector3(0, 0, 0));
-      this.scene.add(this.spotLight);
-      this.spotLight.shadow.mapSize.width = 512 * 8;
-      this.spotLight.shadow.mapSize.height = 512 * 8;
-      this.spotLight.shadow.camera.near = 5;
-      this.spotLight.shadow.camera.far = 30;
-      this.spotLight.position.x = 20;
-      this.spotLight.position.y = 90;
-      this.spotLight.position.z = 10;
-
-      const width = 16 * 0.1;
-      const height = 9 * 0.1;
-      const rectLight = new THREE.RectAreaLight( 0xffffff, undefined,  width, height );
-      rectLight.intensity = 0.5;
-      rectLight.position.x = -3;
-      rectLight.position.y = 0.75;
-      rectLight.position.z = 0.32;
-      rectLight.rotation.y = Math.PI / 2;
-      //this.scene.add(rectLight);
+      this.scene.add(new THREE.AmbientLight(0xffffff, 1));
 
       this.scene.add(this.globeContainer);
 
@@ -172,13 +163,12 @@
           metalness: 0,
         })
       );
-      this.map.receiveShadow = true;
       this.map.rotation.x = -Math.PI/2;
       this.map.rotation.z = 0.11;
       this.map.position.y = -0.02;
       this.map.position.x = 15;
       this.map.position.z = 16;
-      this.scene.add(this.map);
+      //this.scene.add(this.map);
 
       this.camera.near = 0.1;
       this.camera.updateProjectionMatrix();
@@ -390,7 +380,6 @@
 
     render(renderer) {
       this.ps.render();
-      renderer.shadowMap.enabled = true;
       super.render(renderer);
     }
   }
