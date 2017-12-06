@@ -89,6 +89,29 @@
         this.beams.push(beamMesh);
         this.scene.add(beamMesh);
       }
+      this.beamThicknessScalers = [1, 1, 1, 1, 1, 1];
+      this.chordStabBeans = [
+        0, 4, 10, 22, 24, 28, 34, 40, 42, 44, 46,
+        48, 52, 58, 72, 76, 82, 96, 100, 106, 118,
+        120, 124, 130, 136, 138, 130, 142, 144,
+        148, 154, 168, 172, 178,
+
+        192, 4 + 192, 10 + 192, 22 + 192, 24 + 192, 28 + 192, 34 + 192, 40 + 192, 42 + 192, 44 + 192, 46 + 192,
+        48 + 192, 52 + 192, 58 + 192, 72 + 192, 76 + 192, 82 + 192, 96 + 192, 100 + 192, 106 + 192, 118 + 192,
+        120 + 192, 124 + 192, 130 + 192, 136 + 192, 138 + 192, 130 + 192, 142 + 192,
+        148 + 192, 154 + 192, 168 + 192, 172 + 192, 178 + 192,
+      ];  // + 2976
+      this.updateChordStabBeans = function(frame) {
+        for (let i = 0; i < this.beamThicknessScalers.length; i++) {
+          this.beamThicknessScalers[i] = Math.max(0.8, this.beamThicknessScalers[i] * 0.95);
+        }
+        const idx = this.chordStabBeans.indexOf(BEAN - 2976);
+        if (idx !== -1) {
+          let scalerIdx = idx % this.beamThicknessScalers.length;
+          this.beamThicknessScalers[scalerIdx] = 4;
+        }
+        const startFrame = FRAME_FOR_BEAN(2976);
+      };
 
       // TORUS
       this.torus = new THREE.Mesh(
@@ -149,6 +172,7 @@
     }
 
     update(frame) {
+      this.updateChordStabBeans(frame);
       if (BEAN >= 2976 && BEAN < 3024) {
         return this.updatePart1(frame);
       } else if (BEAN >= 3024 && BEAN < 3072) {
@@ -192,6 +216,7 @@
         beam.position.y = 8 * Math.sin(angle);
         beam.position.z = -180 + (1.66 * frame + i) % 190;
         beam.scale.z = 1;
+        beam.scale.x = beam.scale.y = this.beamThicknessScalers[i % this.beamThicknessScalers.length];
       }
 
       // CAMERA
@@ -243,6 +268,7 @@
         beam.position.y = 8 * Math.sin(angle);
         beam.scale.z = 0.02 + beamScale * 5;
         beam.position.z = (-190 / 2 +  (1 * frame + i) % 190) + 20 * beam.scale.z / 2;
+        beam.scale.x = beam.scale.y = this.beamThicknessScalers[i % this.beamThicknessScalers.length];
       }
 
       // PARTICLES
@@ -333,6 +359,7 @@
         beam.position.y = 8 * Math.sin(angle);
         beam.position.z = -190 + (0.09 * frame + i) % 190;
         beam.scale.z = 1;
+        beam.scale.x = beam.scale.y = this.beamThicknessScalers[i % this.beamThicknessScalers.length];
       }
 
       // BALL
@@ -454,6 +481,7 @@
         beam.position.y = 8 * Math.sin(angle);
         beam.position.z = -190 + (0.09 * frame + i) % 190;
         beam.scale.z = 1;
+        beam.scale.x = beam.scale.y = this.beamThicknessScalers[i % this.beamThicknessScalers.length];
       }
 
       this.ps.update();
