@@ -185,7 +185,7 @@
       this.map = new THREE.Mesh(
         new THREE.PlaneGeometry(700, 700),
         new THREE.MeshStandardMaterial({
-          map: Loader.loadTexture('res/map_saarbrucken.gif'),
+          color: 0x006600,
           roughness: 1,
           metalness: 0,
         })
