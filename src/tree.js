@@ -127,7 +127,7 @@
         ctx.shadowBlur = GU * 5;
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
-        ctx.font = 'bold 4pt calibre';
+        ctx.font = 'bold 4pt schmalibre';
         ctx.fillStyle = 'white';
         ctx.fillText(
           ball.letter,
