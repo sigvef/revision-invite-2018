@@ -48,7 +48,7 @@
 
       // BALL
       this.ballGeometry = new THREE.SphereGeometry(1, 8, 8);
-      this.ballTexture = Loader.loadTexture('res/checkers.png');
+      this.ballTexture = Loader.loadTexture('res/checkers_color.png');
       this.ballTexture.minFilter = THREE.LinearFilter;
       this.ballTexture.magFilter = THREE.LinearFilter;
       this.ballMaterial = new THREE.MeshBasicMaterial(
@@ -105,6 +105,10 @@
       this.fractureParts = [];
       for (let i = 0; i < this.numfractureParts; i++) {
         const fractureMesh = new THREE.Mesh(this.fractureGeometry, this.fractureMaterial);
+        fractureMesh.userData = {
+          dx: this.random(),
+          dy: this.random()
+        };
         this.fractureParts.push(fractureMesh);
         this.scene.add(fractureMesh);
       }
@@ -145,7 +149,6 @@
     }
 
     update(frame) {
-      demo.nm.nodes.bloom.opacity = 0.99;
       if (BEAN >= 2976 && BEAN < 3024) {
         return this.updatePart1(frame);
       } else if (BEAN >= 3024 && BEAN < 3072) {
@@ -161,6 +164,8 @@
 
     // 11111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111
     updatePart1(frame) {
+      demo.nm.nodes.bloom.opacity = 0.1;
+
       this.scene.remove(this.textPlane);
       this.scene.remove(this.cylinder);
       this.scene.add(this.ball);
@@ -198,6 +203,8 @@
 
     // 22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
     updatePart2(frame) {
+      demo.nm.nodes.bloom.opacity = 0.1;
+
       this.scene.remove(this.textPlane);
       this.scene.remove(this.cylinder);
       this.scene.add(this.ball);
@@ -235,7 +242,7 @@
         beam.position.x = 8 * Math.cos(angle);
         beam.position.y = 8 * Math.sin(angle);
         beam.scale.z = 0.02 + beamScale * 5;
-        beam.position.z = (-190 / 2 + i % 190) + 20 * beam.scale.z / 2;
+        beam.position.z = (-190 / 2 +  (1 * frame + i) % 190) + 20 * beam.scale.z / 2;
       }
 
       // PARTICLES
@@ -290,8 +297,8 @@
       const endFrame = FRAME_FOR_BEAN(3120);
       const progress = (frame - startFrame) / (endFrame - startFrame);
 
-      this.camera.position.x = 6;
-      this.camera.position.y = 0;
+      this.camera.position.x = 6 * Math.cos(frame / 85 - 2);
+      this.camera.position.y = 6 * Math.sin(frame / 85 - 1);
       this.camera.position.z = -70;
 
       // PARTICLES
@@ -318,12 +325,22 @@
       }
       this.ps.update();
 
+      // BEAMS
+      for (let i = 0; i < this.beams.length; i++) {
+        const beam = this.beams[i];
+        const angle = this.randomBeamNumbers[i] * 2 * Math.PI;
+        beam.position.x = 8 * Math.cos(angle);
+        beam.position.y = 8 * Math.sin(angle);
+        beam.position.z = -190 + (0.09 * frame + i) % 190;
+        beam.scale.z = 1;
+      }
+
       // BALL
       this.ball.position.x = 0;
       this.ball.position.y = 0;
       this.ball.position.z = lerp(-70, -79, progress);
-      this.ball.rotation.x = frame / 40;
-      this.ball.rotation.y = frame / 45;
+      this.ball.rotation.x = lerp(2, 0, progress);
+      this.ball.rotation.y = lerp(2, 0, progress);
 
       this.camera.lookAt(new THREE.Vector3(0, 0, -80));
 
@@ -345,15 +362,17 @@
       const endFrame = FRAME_FOR_BEAN(3168);
       const progress = (frame - startFrame) / (endFrame - startFrame);
 
-      this.ps.decayFactor = 0.999;
+      this.ps.decayFactor = 0.99999;
 
+      demo.nm.nodes.bloom.opacity = Math.max(0.1, demo.nm.nodes.bloom.opacity - 0.03);
       if (BEAN === 3120) {
         this.cameraShakeAngularVelocity.x = (this.random() - 0.5) * 0.05;
         this.cameraShakeAngularVelocity.y = (this.random() - 0.5) * 0.05;
         this.cameraShakeAngularVelocity.z = (this.random() - 0.5) * 0.05;
+        demo.nm.nodes.bloom.opacity = 1.99;
       }
 
-      this.camera.lookAt(new THREE.Vector3(0, 0, -80));
+      this.camera.lookAt(new THREE.Vector3(0, 0, lerp(-80, -90, progress)));
 
       this.cameraShakeAcceleration.x = -this.cameraShakePosition.x * 0.05;
       this.cameraShakeAcceleration.y = -this.cameraShakePosition.y * 0.05;
@@ -363,13 +382,13 @@
       this.cameraShakeAngularAcceleration.z = -this.cameraShakeRotation.z * 0.05;
       this.cameraShakeVelocity.add(this.cameraShakeAcceleration);
       this.cameraShakeAngularVelocity.add(this.cameraShakeAngularAcceleration);
-      this.cameraShakeVelocity.multiplyScalar(0.85);
-      this.cameraShakeAngularVelocity.multiplyScalar(0.85);
+      this.cameraShakeVelocity.multiplyScalar(0.95);
+      this.cameraShakeAngularVelocity.multiplyScalar(0.95);
       this.cameraShakePosition.add(this.cameraShakeVelocity);
       this.cameraShakeRotation.add(this.cameraShakeAngularVelocity);
 
-      this.camera.position.x = 6;
-      this.camera.position.y = 0;
+      this.camera.position.x = 6 * Math.cos(frame / 85 - 2);
+      this.camera.position.y = 6 * Math.sin(frame / 85 - lerp(1, 2, progress));
       this.camera.position.z = -70;
 
       this.cameraPreviousPosition.copy(this.camera.position);
@@ -381,9 +400,9 @@
       // BALL
       this.ball.position.x = 0;
       this.ball.position.y = 0;
-      this.ball.position.z = lerp(-79, -74, progress);
-      this.ball.rotation.x = frame / 40;
-      this.ball.rotation.y = frame / 45;
+      this.ball.position.z = -79 + 5 * progress;
+      this.ball.rotation.x = lerp(0, 2, progress);
+      this.ball.rotation.y = lerp(0, 2, progress);
 
       // FRACTURE PARTS
       for (let i = 0; i < this.fractureParts.length; i++) {
@@ -392,8 +411,8 @@
         let y = this.fractureSize * ((i / 15) | 0)  - 7.5 * this.fractureSize;
         const distanceToCenter = Math.sqrt(x * x + y * y);
         const impact = 1 / (distanceToCenter +   1);
-        fracturePart.position.x = x + 1 * progress * x * impact;
-        fracturePart.position.y = y + 1 * progress * y * impact;
+        fracturePart.position.x = x + 2.2 * progress * x * impact;
+        fracturePart.position.y = y + 2.2 * progress * y * impact;
         fracturePart.position.z = -80 - 20 * progress * impact;
         fracturePart.rotation.x = 0;
         fracturePart.rotation.y = 0;
@@ -421,19 +440,28 @@
                 y: Math.sin(velocityAngle) * velocityRadius,
                 z: -0.1 * this.random(),
               },
-              0.012
+              0.014
             );
           }
         }
       }
 
+      // BEAMS
+      for (let i = 0; i < this.beams.length; i++) {
+        const beam = this.beams[i];
+        const angle = this.randomBeamNumbers[i] * 2 * Math.PI;
+        beam.position.x = 8 * Math.cos(angle);
+        beam.position.y = 8 * Math.sin(angle);
+        beam.position.z = -190 + (0.09 * frame + i) % 190;
+        beam.scale.z = 1;
+      }
 
       this.ps.update();
     }
 
     // ttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttt
     updateLastTextPart(frame) {
-      demo.nm.nodes.bloom.opacity = 0.35;
+      demo.nm.nodes.bloom.opacity = 0.1;
       this.scene.add(this.textPlane);
       this.scene.remove(this.cylinder);
       this.scene.remove(this.ball);
@@ -452,19 +480,19 @@
 
       let foregroundColor = 'white';
       if (BEAN >= 3312 && BEAN < 3316) {
-        foregroundColor = 'black';
+        foregroundColor = '#373C3F';
       } else if (BEAN >= 3316 && BEAN < 3322) {
         foregroundColor = 'white';
       } else if (BEAN >= 3322 && BEAN < 3336) {
-        foregroundColor = 'black';
+        foregroundColor = '#373C3F';
       } else if (BEAN >= 3336 && BEAN < 3340) {
         foregroundColor = 'white';
       } else if (BEAN >= 3340 && BEAN < 3346) {
-        foregroundColor = 'black';
+        foregroundColor = '#373C3F';
       } else if (BEAN >= 3346) {
         foregroundColor = 'white';
       }
-      const backgroundColor = foregroundColor === 'white' ? 'black': 'white';
+      const backgroundColor = foregroundColor === 'white' ? '#373C3F': 'white';
 
       // TEXT
       this.textCanvas.width = this.textCanvas.width;
