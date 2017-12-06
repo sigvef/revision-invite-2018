@@ -127,7 +127,8 @@
       this.ps = new ParticleSystem({
         color: new THREE.Color(0xffffff),
         amount: 3000,
-        decayFactor: 0.98
+        decayFactor: 0.98,
+        gravity: 0
       });
       this.ps.particles.position.x = 0;
       this.ps.particles.position.y = 0;
@@ -165,6 +166,8 @@
       this.scene.add(this.ball);
       this.ps.particles.visible = false;
 
+      this.ps.decayFactor = 0.98;
+
       const startFrame = FRAME_FOR_BEAN(2976);
       const endFrame = FRAME_FOR_BEAN(3072);
       const progress = (frame - startFrame) / (endFrame - startFrame);
@@ -200,6 +203,8 @@
       this.scene.add(this.ball);
       this.ps.particles.visible = true;
       this.setBeamsVisibility(true);
+
+      this.ps.decayFactor = 0.98;
 
       const startFrame = FRAME_FOR_BEAN(3024);
       const endFrame = FRAME_FOR_BEAN(3072);
@@ -279,6 +284,8 @@
       this.ps.particles.visible = true;
       this.setBeamsVisibility(true);
 
+      this.ps.decayFactor = 0.98;
+
       const startFrame = FRAME_FOR_BEAN(3072);
       const endFrame = FRAME_FOR_BEAN(3120);
       const progress = (frame - startFrame) / (endFrame - startFrame);
@@ -337,6 +344,8 @@
       const startFrame = FRAME_FOR_BEAN(3120);
       const endFrame = FRAME_FOR_BEAN(3168);
       const progress = (frame - startFrame) / (endFrame - startFrame);
+
+      this.ps.decayFactor = 0.999;
 
       if (BEAN === 3120) {
         this.cameraShakeAngularVelocity.x = (this.random() - 0.5) * 0.05;
