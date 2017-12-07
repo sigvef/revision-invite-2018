@@ -19,7 +19,7 @@
       const maps = {
         'ewerk_Cylinder.002_Cylinder.003':
           Loader.loadTexture('res/ewerk_lightmap.png'),
-        'ground_Plane':
+        'newground_Plane.001':
           Loader.loadTexture('res/ground_lightmap.png'),
         'tree_Cylinder':
           Loader.loadTexture('res/tree_lightmap.png'),
@@ -31,7 +31,6 @@
       Loader.loadAjax('res/ewerk.obj', text => {
         const obj = objLoader.parse(text);
         obj.rotation.y += Math.PI;
-        console.log(obj);
         obj.scale.set(10, 10, 10);
         obj.traverse(mesh => {
           mesh.material = new THREE.MeshBasicMaterial({
