@@ -13,7 +13,8 @@ function ParticleSystem(options) {
   this.particleGeometry.addAttribute('position', new THREE.BufferAttribute(positions, 3));
   this.particleGeometry.addAttribute('customColor', new THREE.BufferAttribute(colors, 3));
   this.particleGeometry.addAttribute('size', new THREE.BufferAttribute(sizes, 1));
-  const sprite = new THREE.CanvasTexture(generateSprite());
+  this.generateSprite = options.generateSprite || generateSprite;
+  const sprite = new THREE.CanvasTexture(this.generateSprite());
   const particleMaterial = new THREE.ShaderMaterial({
     uniforms: {
       amplitude: {value: 1.0},
