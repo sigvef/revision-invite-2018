@@ -22,7 +22,7 @@
       "_07_first_B_theme_1": "clockTransition.render",
       "_08_first_B_theme_2": "clockTransition.render",
       "_09_second_A_theme_1": "clockTransition.render",
-      "_10_second_A_theme_2": "fez2.render",
+      "_10_second_A_theme_2": "hexafont.render",
       "_11_illuminati_confirmed": "logotransitionquadpass.render",
       "_12_first_C_theme_1": "lulle.render",
       "_13_first_C_theme_2": "lulle.render",
@@ -92,7 +92,7 @@
     "connected": {
       "overlay": "revisionBars.render",
       "overlay2": "jaws.render",
-      "nextScene": "fez2.render",
+      "nextScene": "hexafont.render",
       "cameraValues": "revisionBars.cameraValues"
     }
   },
@@ -190,10 +190,6 @@
     }
   },
   {
-    "id": "RevisionFezLogo",
-    "type": "revisionFezLogo"
-  },
-  {
     "id": "chromaTransition",
     "type": "chromaTransitionNode",
     "options": {
@@ -201,7 +197,7 @@
     },
     "connected": {
       "A": "carousel.render",
-      "B": "fez2.render",
+      "B": "hexafont.render",
       "chroma": "starChroma.render"
     }
   },
@@ -316,7 +312,7 @@
     },
     "connected": {
       "logo": "logotransition.render",
-      "scene": "fez2.render"
+      "scene": "hexafont.render"
     }
   },
   {
@@ -411,8 +407,8 @@
     "type": "featurebg"
   },
   {
-    "id": "fez2",
-    "type": "fez2"
+    "id": "hexafont",
+    "type": "hexafont"
   },
   {
     "id": "rotataroon",
@@ -431,8 +427,8 @@
       "shader": "AlphaBlend"
     },
     "connected": {
-        "under": "features.renderTunnel",
-        "over": "features.render"
+      "under": "features.renderTunnel",
+      "over": "features.render"
     }
   }
 ]
