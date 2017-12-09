@@ -11,22 +11,17 @@
         }
       });
 
-      var light = new THREE.PointLight(0xaaaaaa, 0.3, 100);
-      light.position.set(0, 5, 10);
-      this.scene.add(light);
-
       const ambient = new THREE.AmbientLight(0xffffff);
-      ambient.intensity = 0.1;
       this.scene.add(ambient);
 
+      var light = new THREE.PointLight(0xffffff, 1, 100);
+      light.position.set(0, 0, 20);
+      this.scene.add(light);
+
       const backlight = new THREE.PointLight(0x555555, 1, 100);
-      backlight.intensity = 100000;
+      backlight.intensity = 10;
       backlight.position.set(0, -5, -20);
       this.scene.add(backlight);
-
-      const frontlight = new THREE.DirectionalLight();
-      frontlight.position.set(0, 1, 0);
-      this.scene.add(frontlight);
 
       this.cameraPreviousPosition = new THREE.Vector3(0, 0, 0);
       this.cameraShakePosition = new THREE.Vector3(0, 0, 0);
@@ -39,9 +34,9 @@
       this.root = new THREE.Mesh(
         new THREE.SphereGeometry(.5, 32, 32),
         new THREE.MeshStandardMaterial({
-          color: 0xccaaff,
+          color: 0x373c3f,
           roughness: 0,
-          metalness: 1,
+          metalness: 0,
         })
       );
       this.root.position.z = -2;
@@ -49,12 +44,8 @@
 
       this.background = new THREE.Mesh(
         new THREE.PlaneGeometry(80, 80, 1),
-        new THREE.MeshStandardMaterial({
+        new THREE.MeshBasicMaterial({
           color: new THREE.Color(1, 73 / 255, 130 / 255),
-          emissive: 0xffffff,
-          emissiveIntensity: 0,
-          roughness: 1,
-          metalness: 0,
         })
       );
       this.background.position.z = -5;
@@ -141,11 +132,11 @@
         const ballMesh = new THREE.Mesh(
           new THREE.CylinderGeometry(1, 1, 0.5, 6),
           new THREE.MeshStandardMaterial({
-            color: 0x00e04f,
+            color: 0x77e15d,
             bumpMap: output,
             bumpScale: -0.01,
             metalness: 1,
-            roughness: 0.3,
+            roughness: 0.9,
             emissive: 0xffffff,
             emissiveIntensity: 1,
             emissiveMap: output,
@@ -181,7 +172,7 @@
         const cylinder = new THREE.Mesh(
           new THREE.CylinderGeometry(.2, .2, direction.length(), 6),
           new THREE.MeshStandardMaterial({
-            color: 0xccaacc,
+            color: 0x373c3f,
             shading: THREE.FlatShading,
           })
         );
