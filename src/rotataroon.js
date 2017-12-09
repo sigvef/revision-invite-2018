@@ -24,7 +24,10 @@
         lineMaterial);
       this.scene.add(this.cube);
 
-
+      this.cube2 = new THREE.Mesh(
+        new THREE.BoxGeometry(2, 2, 2),
+        lineMaterial);
+      this.scene.add(this.cube2);
 
       this.cube.rotation.x = Math.PI / 4 - 0.15;
       this.cube.rotation.y = Math.PI / 4 - 0.1;
@@ -69,6 +72,8 @@
     }
 
     update(frame) {
+      this.cube.material.uniforms.lineAmount.value = 1;
+      this.cube2.material.uniforms.lineAmount.value = 1;
       this.throb *= 0.95;
       this.lightThrob *= 0.95;
       if(BEAN < 3864) {
@@ -91,17 +96,75 @@
         this.camera.updateProjectionMatrix();
         this.camera.position.z = easeOut(516, 300, Math.pow(t, 1.5));
 
-        this.cube.rotation.x = Math.PI / 4 - 0.15 + Math.max(
-            0, (frame - FRAME_FOR_BEAN(3864 + 9)) / 31);
-        this.cube.rotation.y = Math.PI / 4 - 0.1;
-        this.cube.rotation.z = -0.08 + Math.max(
-            0, (frame - FRAME_FOR_BEAN(3864 + 9)) / 23);
+        if(BEAN < 3936) {
+          this.cube.rotation.x = Math.PI / 4 - 0.15 + Math.max(
+              0, (frame - FRAME_FOR_BEAN(3864 + 9)) / 31);
+          this.cube.rotation.y = Math.PI / 4 - 0.1;
+          this.cube.rotation.z = -0.08 + Math.max(
+              0, (frame - FRAME_FOR_BEAN(3864 + 9)) / 23);
+          const t4 = lerp(0, 1, (this.frame - FRAME_FOR_BEAN(3936 - 12)) / (
+              FRAME_FOR_BEAN(3936) - FRAME_FOR_BEAN(3936 - 12)));
+          const xdiff = 10.099571462148532 % (Math.PI / 2);
+          const ydiff = 0.6853981633974483 % (Math.PI / 2);
+          const zdiff = 11.583331784024576 % (Math.PI / 2);
+          this.cube.rotation.x += easeIn(0, xdiff, t4);
+          this.cube.rotation.y += easeIn(0, ydiff, t4);
+          this.cube.rotation.z += easeIn(0, zdiff, t4);
+        } else {
+          this.cube.rotation.set(0, 0, 0);
+        }
+
 
         const t2 = lerp(0, 1, (this.frame - FRAME_FOR_BEAN(3864 + 9)) / (
             FRAME_FOR_BEAN(3864 + 24) - FRAME_FOR_BEAN(3864 + 9)));
         this.cube.rotation.x += easeOut(0, Math.PI, t2);
         this.cube.rotation.z += easeOut(0, Math.PI, t2);
 
+      }
+
+      this.cube.scale.set(1, 1, 1);
+
+      if(BEAN >= 3936) {
+        const t = lerp(0, 1, (this.frame - FRAME_FOR_BEAN(3936)) / (
+            FRAME_FOR_BEAN(3936 + 12) - FRAME_FOR_BEAN(3936)));
+        this.cube.scale.x = easeOut(1, 5, t);
+        this.cube.scale.y = easeOut(1, 5, t);
+        this.cube.material.uniforms.lineAmount.value = easeOut(
+          1, 0, t * 4);
+        this.cube2.material.uniforms.lineAmount.value = easeOut(
+          1, 0, t * 4);
+      }
+
+      const t3 = lerp(0, 1, (this.frame - FRAME_FOR_BEAN(3912 - 6)) / (
+          FRAME_FOR_BEAN(3912) - FRAME_FOR_BEAN(3912 - 6)));
+      this.cube.position.x = easeIn(.9, -2.3, t3);
+      this.cube.position.y = easeIn(.18, 0, t3);
+      const scaleX = this.cube.scale.x * easeIn(1, 0.75, clamp(0, t3, 1));
+      const scaleY = this.cube.scale.y * easeIn(1, 0.75, clamp(0, t3, 1));
+      const scaleZ = this.cube.scale.z * easeIn(1, 0.75, clamp(0, t3, 1));
+      this.cube.scale.set(scaleX, scaleY, scaleZ);
+      this.cube2.scale.copy(this.cube.scale);
+      this.cube2.position.copy(this.cube.position);
+      this.cube2.rotation.copy(this.cube.rotation);
+      this.cube2.position.x = -this.cube.position.x;
+      this.cube2.visible = frame >= 10200;
+
+      if(BEAN >= 3960) {
+        const scale = 1 + this.lightThrob * 0.25;
+        this.cube.scale.set(scale, scale, scale);
+        this.cube2.visible = false;
+        this.cube.material.uniforms.lineAmount.value = 1;
+
+        this.cube.rotation.x = Math.PI / 4 - 0.15 + Math.max(
+            0, (frame - FRAME_FOR_BEAN(3864 + 9)) / 31);
+        this.cube.rotation.y = Math.PI / 4 - 0.1;
+        this.cube.rotation.z = -0.08 + Math.max(
+            0, (frame - FRAME_FOR_BEAN(3864 + 9)) / 23);
+
+        const t = lerp(0, 1, (this.frame - FRAME_FOR_BEAN(3960 + 9)) / (
+            FRAME_FOR_BEAN(3960 + 24) - FRAME_FOR_BEAN(3960 + 9)));
+        this.cube.rotation.x += easeOut(0, Math.PI, t);
+        this.cube.rotation.z += easeOut(0, Math.PI, t);
       }
 
       if(BEAT && BEAN == 3864) {
@@ -149,6 +212,7 @@
       }
 
       this.cube.material.uniforms.lightAmount.value = this.lightThrob;
+      this.cube.material.uniforms.frame.value = frame;
 
       demo.nm.nodes.bloom.opacity = 0.25 + this.throb;
 
@@ -229,6 +293,13 @@
         this.ctx.restore();
         this.bgOverdraw.material.map.needsUpdate = true;
       }
+
+      if(BEAN < 3960) {
+        renderer.setClearColor(new THREE.Color(0xff4982));
+      } else {
+        renderer.setClearColor(new THREE.Color(0x77e15d));
+      }
+
       super.render(renderer);
     }
 

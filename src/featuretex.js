@@ -14,10 +14,12 @@
       this.output.minFilter = THREE.LinearFilter;
       this.output.magFilter = THREE.LinearFilter;
       this.texts = [
-        '4K',
-        '8K',
-        '64K',
-        'DEMO',
+        'PARTY',
+        'MUSIC',
+        'VISITORS',
+        'DEMOS',
+        'some',
+        'thing',
       ];
     }
 
