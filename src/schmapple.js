@@ -174,9 +174,9 @@
       this.ctx.fillStyle = '#111';
       this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
       this.ctx.save();
-      const alphaMultiplier = (this.frame - 1126) / (1627 - 1126);
-      if(BEAN < 612) {
-        for(let i = 0; i < this.texts.length; i++) {
+      const alphaMultiplier = Math.max(0.0, Math.min(1.0, (this.frame - 1126) / (1627 - 1126)));
+      if (BEAN < 612) {
+        for (let i = 0; i < this.texts.length; i++) {
           const row = this.texts[i];
           this.ctx.save();
           this.ctx.translate(-row.offset, 0);
