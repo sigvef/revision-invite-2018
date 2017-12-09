@@ -118,6 +118,7 @@
           new THREE.MeshStandardMaterial({
             roughness: 1,
             metalness: 0,
+            transparent: true,
           }));
 
       this.globeDetail = new THREE.Mesh(
@@ -207,6 +208,17 @@
             color: 0,
           }));
       this.scene.add(this.skybox);
+
+      this.revisionLogo = new THREE.Mesh(
+        new THREE.PlaneGeometry(545, 545, 1, 1),
+        new THREE.MeshBasicMaterial({
+          map: Loader.loadTexture('res/revision_o.png'),
+          transparent: true,
+        })
+      );
+      this.revisionLogo.rotation.x = -Math.PI / 2;
+      this.revisionLogo.position.set(0, 350, 55);
+      this.scene.add(this.revisionLogo);
     }
 
     beforeUpdate(frame) {
@@ -236,7 +248,9 @@
       this.globeContainer.rotation.y = 5 -frame / 1000;
       this.globeDetail.visible = frame >= 248 && frame <= 11317;
       this.cloudGlobeDetail.visible = frame >= 248 && frame <= 11317;
+      this.globe.visible = frame < 248 || frame > 11317;
       this.cloudGlobe.visible = frame < 248 || frame > 11317;
+      this.revisionLogo.visible = frame > 11317;
       const globeTextures = this.inputs.globeTextures.getValue();
       if(globeTextures) {
         this.globe.material.map = globeTextures.map;
@@ -434,7 +448,12 @@
         this.globeContainer.rotation.y = 3.4 - frame / 1000;
         this.roof.visible = false;
         this.cube.visible = false;
+        this.ewerkModel.visible = false;
         this.camera.lookAt(new THREE.Vector3(0, 0, 0));
+
+        this.globe.material.opacity = easeIn(1, 0, (frame - 11350) / 100);
+        this.cloudGlobe.material.opacity = easeIn(1, 0, (frame - 11350) / 100);
+        this.revisionLogo.material.opacity = easeIn(0, 1, (frame - 11350) / 100);
       }
     }
 
