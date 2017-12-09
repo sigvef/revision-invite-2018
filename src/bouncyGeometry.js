@@ -524,32 +524,29 @@
       this.scene.remove(this.ball);
       this.ps.particles.visible = false;
 
-      // TODO: Feel free to replace this with anything. I was just bored by the sample text and wrote something.
-      const text1 = "Under a smoking sun";
-      const text2 = "There is just Revision";
-
-      let currentText = null;
-      if (BEAN >= 3312 && BEAN < 3336) {
-        currentText = text1;
-      } else {
-        currentText = text2;
-      }
-
-      let foregroundColor = 'white';
+      const white = 'white';
+      let text = '';
+      let foregroundColor = white;
       if (BEAN >= 3312 && BEAN < 3316) {
         foregroundColor = '#373C3F';
+        text = 'At';
       } else if (BEAN >= 3316 && BEAN < 3322) {
-        foregroundColor = 'white';
+        foregroundColor = white;
+        text = 'At Easter'
       } else if (BEAN >= 3322 && BEAN < 3336) {
         foregroundColor = '#373C3F';
+        text = 'At Easter 2018';
       } else if (BEAN >= 3336 && BEAN < 3340) {
-        foregroundColor = 'white';
+        text = 'things';
+        foregroundColor = white;
       } else if (BEAN >= 3340 && BEAN < 3346) {
+        text = 'things will be';
         foregroundColor = '#373C3F';
       } else if (BEAN >= 3346) {
-        foregroundColor = 'white';
+        text = 'things will be different';
+        foregroundColor = white;
       }
-      const backgroundColor = foregroundColor === 'white' ? '#373C3F': 'white';
+      const backgroundColor = foregroundColor === white ? '#373C3F': white;
 
       // TEXT
       this.textCanvas.width = this.textCanvas.width;
@@ -558,7 +555,7 @@
       this.textCtx.font = `${GU}px Monospace`;  // TODO: Tweak font
       this.textCtx.textAlign = 'center';
       this.textCtx.fillStyle = foregroundColor;
-      this.textCtx.fillText(currentText, GU * 8, GU * 4.5);
+      this.textCtx.fillText(text, GU * 8, GU * 4.5);
 
       this.textTexture.needsUpdate = true;
 
