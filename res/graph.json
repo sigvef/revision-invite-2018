@@ -92,7 +92,8 @@
     "connected": {
       "overlay": "revisionBars.render",
       "overlay2": "jaws.render",
-      "nextScene": "fez2.render"
+      "nextScene": "fez2.render",
+      "cameraValues": "revisionBars.cameraValues"
     }
   },
   {

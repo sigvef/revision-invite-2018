@@ -4,12 +4,18 @@
     "overlay2": { "type": "t", "value": null },
     "nextScene": { "type": "t", "value": null },
     "t": { "type": "f", "value": 0.0 },
+    "frame": { "type": "f", "value": 0.0 },
     "divisions": { "type": "f", "value": 3.0},
     "radiusMultiplier": { "type": "f", "value": 0.0},
+    "cameraX": { "type": "f", "value": 0.0},
+    "cameraY": { "type": "f", "value": 0.0},
+    "cameraZoom": { "type": "f", "value": 0.0},
+    "cameraRotate": { "type": "f", "value": 0.0},
     "foregroundColor": { "type": "v3", "value": null },
     "foregroundColor2": { "type": "v3", "value": null },
     "backgroundColor": { "type": "v3", "value": null },
     "thirdColor": { "type": "v3", "value": null },
     "thirdColorRadius": { "type": "f", "value": 0.0 },
+    "width": { "type": "f", "value": 0.0 },
     "origo": { "type": "v2", "value": null }
 }
