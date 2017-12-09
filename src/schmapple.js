@@ -119,7 +119,12 @@
           ctx.textAlign = 'center';
           ctx.clearRect(0, 0, canvas.width, canvas.height);
           ctx.translate(canvas.width / 2, canvas.height / 2);
-          ctx.fillStyle = 'white';
+          // For future reference
+          // const whiteColor = 0xffffff;
+          // const grayColor = 0x373c3f;
+          // const greenColor = 0x77e15d;
+          // const pinkColor = 0xff4982;
+          ctx.fillStyle = '#ff4982';
           ctx.fillText(sentence.text, 0, 0);
           sentence.canvas = canvas;
           accumulatedWidth += canvas.width;
