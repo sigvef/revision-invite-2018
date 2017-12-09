@@ -218,6 +218,7 @@
             this.cameraPreviousPosition.z) * 0.01;
           break;
         case 3672:
+        case 3768:
           this.cameraShakeAngularVelocity.x = (Math.random() - 0.5) * 0.05;
           this.cameraShakeAngularVelocity.y = (Math.random() - 0.5) * 0.05;
           this.cameraShakeAngularVelocity.z = (Math.random() - 0.5) * 0.05;
@@ -284,7 +285,7 @@
           -8.5, 0, 95);
       this.camera.rotation.set(0, 0, 0);
       this.ball.position.set(0, 0, 0);
-      this.bg.visible = BEAN <= 3720;
+      //this.bg.visible = BEAN <= 3720;
 
       const tunnelStartBean = 3768 - 48 - 48;
 
@@ -334,7 +335,7 @@
         let t = (frame - FRAME_FOR_BEAN(tunnelStartBean)) / (
             FRAME_FOR_BEAN(3816) - FRAME_FOR_BEAN(tunnelStartBean));
         t *= 2;
-        t -= 0.25;
+        t -= 0.5;
         let cameraT =  (frame - FRAME_FOR_BEAN(tunnelStartBean)) / (
             FRAME_FOR_BEAN(3816) - FRAME_FOR_BEAN(tunnelStartBean));
         const point = this.tunnelPath.getPoint(1 - t);
@@ -342,6 +343,8 @@
         const cameraPoint = this.tunnelPath.getPoint(1 - (t - cameraDistance));
         const cameraLookatPoint = this.tunnelPath.getPoint(1 - (t + 0.15));
         this.ball.position.copy(point);
+        this.bg.position.copy(point);
+        this.bg.position.z -= 100;
         position.copy(cameraPoint);
         this.camera.lookAt(cameraLookatPoint);
 
@@ -410,6 +413,7 @@
       this.camera.rotation.y += this.cameraShakeRotation.y;
       this.camera.rotation.z += this.cameraShakeRotation.z;
 
+      demo.nm.nodes.bloom.opacity = 0;
     }
 
     render(renderer) {
