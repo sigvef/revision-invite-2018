@@ -569,6 +569,7 @@
     }
 
     render(renderer) {
+      renderer.setClearColor(new THREE.Color(0x373C3F));
       this.ps.render();
       renderer.render(this.scene, this.camera, this.renderTarget, true);
       this.outputs.render.setValue(this.renderTarget.texture);
