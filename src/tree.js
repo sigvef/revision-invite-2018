@@ -196,6 +196,7 @@
       demo.nm.nodes.bloom.opacity = 0.5;
 
       const cameraPosition = new THREE.Vector3(0, 0, 0);
+      const cameraLookAt = new THREE.Vector3(0, 0, 0);
 
       for (const [index, ball] of this.balls.entries()) {
         const startBEAN = 84.5 * 48 + ball.bean;
@@ -230,11 +231,11 @@
           lerp(0, 3, t),
           lerp(13, 9, t)
         );
-        this.camera.lookAt(new THREE.Vector3(
+        cameraLookAt.set(
           0,
           lerp(0, 3, t),
           lerp(0, 0, t)
-        ));
+        );
       } else if (BEAN < 86.25 * 48) {
         const t = (frame - FRAME_FOR_BEAN(85 * 48)) / (FRAME_FOR_BEAN(86.25 * 48) - FRAME_FOR_BEAN(85 * 48));
         cameraPosition.set(
@@ -242,11 +243,11 @@
           lerp(2, 1, t),
           lerp(4, 9, t)
         );
-        this.camera.lookAt(new THREE.Vector3(
+        cameraLookAt.set(
           lerp(-1, 1.5, t),
           lerp(1.5, 1.5, t),
           lerp(0, 0, t)
-        ));
+        );
       } else if (BEAN < 87.25 * 48) {
         const t = (frame - FRAME_FOR_BEAN(86.25 * 48)) / (FRAME_FOR_BEAN(87.25 * 48) - FRAME_FOR_BEAN(86.25 * 48));
         cameraPosition.set(
@@ -254,11 +255,11 @@
           lerp(-2, -3, t),
           lerp(5, 6, t)
         );
-        this.camera.lookAt(new THREE.Vector3(
+        cameraLookAt.set(
           0,
           lerp(-2, -1, t),
           0
-        ));
+        );
       } else {
         const t = (frame - FRAME_FOR_BEAN(87.25 * 48)) / (FRAME_FOR_BEAN(88.5 * 48) - FRAME_FOR_BEAN(87.25 * 48));
         cameraPosition.set(
@@ -266,11 +267,11 @@
           lerp(7, 2, t),
           lerp(10, 17, t)
         );
-        this.camera.lookAt(new THREE.Vector3(
+        cameraLookAt.set(
           0,
           lerp(-4, 0, t),
           lerp(0, 0, t)
-        ));
+        );
       }
 
       const spinnerT = lerp(0, 1, (frame - FRAME_FOR_BEAN(4056 + 24 + 9 + 9)) / 100);
@@ -320,6 +321,7 @@
       this.cameraPreviousPosition.copy(this.camera.position);
       this.camera.position.copy(cameraPosition);
       this.camera.position.add(this.cameraShakePosition);
+      this.camera.lookAt(cameraLookAt);
       this.camera.rotation.x += this.cameraShakeRotation.x;
       this.camera.rotation.y += this.cameraShakeRotation.y;
       this.camera.rotation.z += this.cameraShakeRotation.z;
