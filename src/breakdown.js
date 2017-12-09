@@ -121,7 +121,7 @@
       t4 = Math.pow(lerp(0, 1, t4), 2);
 
       const scale = easeIn(1, 100, t4);
-      this.ctx.translate(easeIn(0, 5, t4), 0);
+      this.ctx.translate(easeIn(0, 80, t4), 0);
       this.ctx.scale(scale, scale);
 
       if(BEAN >= 3360 + 9) {
@@ -132,17 +132,17 @@
       }
 
       this.ctx.fillText(
-          'FOOD',
+          'BOOZE',
           - 8 / 3 + 0.25,
           fontYOffset + easeIn(-10, 0, t) + easeIn(0, 10, t2));
 
       this.ctx.fillText(
-          'BOOZE',
+          'FOOD',
           - 8 / 3 + 0.25,
           fontYOffset + easeIn(-10, 0, t2) + easeIn(0, 10, t3));
 
       this.ctx.fillText(
-          'MORE',
+          'FUN',
           - 8 / 3 + 0.25,
           fontYOffset + easeIn(-10, 0, t3));
 
