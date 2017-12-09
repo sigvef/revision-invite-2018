@@ -16,6 +16,15 @@
       const objLoader = new THREE.OBJLoader();
       this.ewerkModel = new THREE.Object3D();
       this.ewerkModel.rotation.y = Math.PI;
+
+      this.lowpolySkybox = new THREE.Mesh(
+          new THREE.BoxGeometry(500, 500, 500),
+          new THREE.MeshBasicMaterial({
+            color: 0xadccff,
+            side: THREE.DoubleSide,
+          }));
+      this.scene.add(this.lowpolySkybox);
+
       const maps = {
         'ewerk_Cylinder.002_Cylinder.003':
           Loader.loadTexture('res/ewerk_lightmap.png'),
@@ -207,6 +216,9 @@
 
     update(frame) {
       super.update(frame);
+      
+      this.skybox.visible = frame < 250;
+      
       this.ps.update();
       if(frame < 366) {
         this.scene.add(this.globeLight);
