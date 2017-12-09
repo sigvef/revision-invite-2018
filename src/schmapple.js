@@ -3,7 +3,7 @@
   const TEXT_IMAGE_HEIGHT = 64;
   const CANVAS_SCALER = 0.05;
 
-    const beanOffset = 48 * 4;
+  const beanOffset = 48 * 4;
 
   class schmapple extends NIN.Node {
     constructor(id) {
@@ -23,81 +23,81 @@
       this.revisionLogoInner = document.createElement('img');
       this.revisionLogoOuter = document.createElement('img');
       this.revisionLogoMiddle = document.createElement('img');
-      Loader.load('res/revision_logo_inner.png', this.revisionLogoInner, () => {});
-      Loader.load('res/revision_logo_outer.png', this.revisionLogoOuter, () => {});
-      Loader.load('res/revision_logo_middle.png', this.revisionLogoMiddle, () => {});
+      Loader.load('res/revision_logo_inner.png', this.revisionLogoInner, () => { });
+      Loader.load('res/revision_logo_outer.png', this.revisionLogoOuter, () => { });
+      Loader.load('res/revision_logo_middle.png', this.revisionLogoMiddle, () => { });
 
       this.kickThrob = 0;
 
       this.texts = [[
-          {text: 'Even longer toilet tunnel'},
-          {text: 'Dangerously hot campfire'},
-          {text: 'Pretzelbuz'},
-          {text: 'Rave parties'},
-          {text: 'Free coffee!'},
-          {text: 'Just revision.'},
-        ], [
-          {text: 'Even longer toilet tunnel'},
-          {text: 'Dangerously hot campfire'},
-          {text: 'Pretzelbuz'},
-          {text: 'Rave parties'},
-          {text: 'Free coffee!'},
-          {text: 'Just revision.'},
-        ], [
-          {text: 'Even longer toilet tunnel'},
-          {text: 'Dangerously hot campfire'},
-          {text: 'Pretzelbuz'},
-          {text: 'Rave parties'},
-          {text: 'Free coffee!'},
-          {text: 'Just revision.'},
-        ], [
-          {text: 'Even longer toilet tunnel'},
-          {text: 'Dangerously hot campfire'},
-          {text: 'Pretzelbuz'},
-          {text: 'Rave parties'},
-          {text: 'Free coffee!'},
-          {text: 'Just revision.'},
-        ], [
-          {text: 'Even longer toilet tunnel'},
-          {text: 'Dangerously hot campfire'},
-          {text: 'Pretzelbuz'},
-          {text: 'Rave parties'},
-          {text: 'Free coffee!'},
-          {text: 'Just revision.'},
-        ], [
-          {text: 'Even longer toilet tunnel'},
-          {text: 'Dangerously hot campfire'},
-          {text: 'Pretzelbuz'},
-          {text: 'Rave parties'},
-          {text: 'Free coffee!'},
-          {text: 'Just revision.'},
-        ], [
-          {text: 'Even longer toilet tunnel'},
-          {text: 'Dangerously hot campfire'},
-          {text: 'Pretzelbuz'},
-          {text: 'Rave parties'},
-          {text: 'Free coffee!'},
-          {text: 'Just revision.'},
-        ], [
-          {text: 'Even longer toilet tunnel'},
-          {text: 'Dangerously hot campfire'},
-          {text: 'Pretzelbuz'},
-          {text: 'Rave parties'},
-          {text: 'Free coffee!'},
-          {text: 'Just revision.'},
-        ], [
-          {text: 'Even longer toilet tunnel'},
-          {text: 'Dangerously hot campfire'},
-          {text: 'Pretzelbuz'},
-          {text: 'Rave parties'},
-          {text: 'Free coffee!'},
-          {text: 'Just revision.'},
-        ],
+        { text: 'Even longer toilet tunnel' },
+        { text: 'Dangerously hot campfire' },
+        { text: 'Pretzelbuz' },
+        { text: 'Rave parties' },
+        { text: 'Free coffee!' },
+        { text: 'Just revision.' },
+      ], [
+        { text: 'Even longer toilet tunnel' },
+        { text: 'Dangerously hot campfire' },
+        { text: 'Pretzelbuz' },
+        { text: 'Rave parties' },
+        { text: 'Free coffee!' },
+        { text: 'Just revision.' },
+      ], [
+        { text: 'Even longer toilet tunnel' },
+        { text: 'Dangerously hot campfire' },
+        { text: 'Pretzelbuz' },
+        { text: 'Rave parties' },
+        { text: 'Free coffee!' },
+        { text: 'Just revision.' },
+      ], [
+        { text: 'Even longer toilet tunnel' },
+        { text: 'Dangerously hot campfire' },
+        { text: 'Pretzelbuz' },
+        { text: 'Rave parties' },
+        { text: 'Free coffee!' },
+        { text: 'Just revision.' },
+      ], [
+        { text: 'Even longer toilet tunnel' },
+        { text: 'Dangerously hot campfire' },
+        { text: 'Pretzelbuz' },
+        { text: 'Rave parties' },
+        { text: 'Free coffee!' },
+        { text: 'Just revision.' },
+      ], [
+        { text: 'Even longer toilet tunnel' },
+        { text: 'Dangerously hot campfire' },
+        { text: 'Pretzelbuz' },
+        { text: 'Rave parties' },
+        { text: 'Free coffee!' },
+        { text: 'Just revision.' },
+      ], [
+        { text: 'Even longer toilet tunnel' },
+        { text: 'Dangerously hot campfire' },
+        { text: 'Pretzelbuz' },
+        { text: 'Rave parties' },
+        { text: 'Free coffee!' },
+        { text: 'Just revision.' },
+      ], [
+        { text: 'Even longer toilet tunnel' },
+        { text: 'Dangerously hot campfire' },
+        { text: 'Pretzelbuz' },
+        { text: 'Rave parties' },
+        { text: 'Free coffee!' },
+        { text: 'Just revision.' },
+      ], [
+        { text: 'Even longer toilet tunnel' },
+        { text: 'Dangerously hot campfire' },
+        { text: 'Pretzelbuz' },
+        { text: 'Rave parties' },
+        { text: 'Free coffee!' },
+        { text: 'Just revision.' },
+      ],
       ];
 
       this.random = new Random(1337);
 
-      for(let i = 0; i < this.texts.length; i++) {
+      for (let i = 0; i < this.texts.length; i++) {
         const row = this.texts[i];
         row.offset = this.random() * 20;
         row.speed = 0.1 + Math.pow(this.random(), 4) * 2;
@@ -105,7 +105,7 @@
         row.blinkOffset = i;
 
         let accumulatedWidth = 0;
-        for(let sentence of row) {
+        for (let sentence of row) {
           sentence.throb = 0;
 
           const canvas = document.createElement('canvas');
@@ -119,7 +119,12 @@
           ctx.textAlign = 'center';
           ctx.clearRect(0, 0, canvas.width, canvas.height);
           ctx.translate(canvas.width / 2, canvas.height / 2);
-          ctx.fillStyle = 'white';
+          // For future reference
+          // const whiteColor = 0xffffff;
+          // const grayColor = 0x373c3f;
+          // const greenColor = 0x77e15d;
+          // const pinkColor = 0xff4982;
+          ctx.fillStyle = '#ff4982';
           ctx.fillText(sentence.text, 0, 0);
           sentence.canvas = canvas;
           accumulatedWidth += canvas.width;
@@ -134,22 +139,22 @@
     update(frame) {
       this.frame = frame;
 
-      for(let row of this.texts) {
+      for (let row of this.texts) {
         row.offset = (row.offset + row.speed) % row.width;
-        for(let sentence of row) {
+        for (let sentence of row) {
           sentence.throb *= 0.98;
         }
       }
       this.kickThrob *= 0.95;
-      if(BEAT && BEAN % 12 == 0) {
+      if (BEAT && BEAN % 12 == 0) {
         this.kickThrob = 1;
       }
 
-      if(BEAT && BEAN % 24 == 12) {
-        for(let row of this.texts) {
+      if (BEAT && BEAN % 24 == 12) {
+        for (let row of this.texts) {
           row.blinkOffset++;
-          for(let i = 0; i < row.length; i++) {
-            if((i + row.blinkOffset) % 3 == 0) {
+          for (let i = 0; i < row.length; i++) {
+            if ((i + row.blinkOffset) % 3 == 0) {
               const sentence = row[i];
               sentence.throb = 1;
             }
@@ -169,14 +174,14 @@
       this.ctx.fillStyle = '#111';
       this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
       this.ctx.save();
-      const alphaMultiplier = (this.frame - 1126) / (1627 - 1126);
-      if(BEAN < 612) {
-        for(let i = 0; i < this.texts.length; i++) {
+      const alphaMultiplier = Math.max(0.0, Math.min(1.0, (this.frame - 1126) / (1627 - 1126)));
+      if (BEAN < 612) {
+        for (let i = 0; i < this.texts.length; i++) {
           const row = this.texts[i];
           this.ctx.save();
           this.ctx.translate(-row.offset, 0);
           let sentenceOffset = 0;
-          for(let j = 0; j < row.length * 2; j++) {
+          for (let j = 0; j < row.length * 2; j++) {
             this.ctx.save();
             const sentence = row[j % row.length];
             this.ctx.globalAlpha = alphaMultiplier * (0.2 + sentence.throb * 0.8);
@@ -198,7 +203,7 @@
       }
 
 
-      if(BEAN >= 420 + beanOffset) {
+      if (BEAN >= 420 + beanOffset) {
         this.ctx.save();
         let scaler = 65 / this.revisionLogoOuter.width;
         this.ctx.translate(160 / 2, 90 / 2);
@@ -227,7 +232,7 @@
       this.ctx.fillStyle = 'white';
       this.ctx.beginPath();
 
-      const widthT = (this.frame - FRAME_FOR_BEAN(420 + beanOffset)) / (FRAME_FOR_BEAN(420+ 24 + beanOffset) - FRAME_FOR_BEAN(420 + beanOffset));
+      const widthT = (this.frame - FRAME_FOR_BEAN(420 + beanOffset)) / (FRAME_FOR_BEAN(420 + 24 + beanOffset) - FRAME_FOR_BEAN(420 + beanOffset));
       let outerWidth = easeOut(31, 26, widthT);
       let innerWidth = easeOut(21, 26, widthT);
       let secondSmallestWidth = easeOut(17.6, 5, widthT);
@@ -242,15 +247,15 @@
 
       const smallThrobT = (this.frame - FRAME_FOR_BEAN(240 + beanOffset)) / (FRAME_FOR_BEAN(240 + 48 + beanOffset) - FRAME_FOR_BEAN(240 + 24 + beanOffset));
 
-      if(BEAN < 612) {
+      if (BEAN < 612) {
         secondSmallestWidth = easeOut(secondSmallestWidth * 2, 8, smallThrobT);
       }
 
-      if(BEAN >= 240 + 24 + beanOffset && BEAN < 612) {
+      if (BEAN >= 240 + 24 + beanOffset && BEAN < 612) {
         secondSmallestWidth += this.kickThrob * 8;
       }
 
-      if(BEAN < 624) {
+      if (BEAN < 624) {
         this.ctx.translate(160 / 2, 90 / 2);
         this.ctx.moveTo(outerWidth, 0);
         this.ctx.arc(0, 0, outerWidth, 0, Math.PI * 2);
