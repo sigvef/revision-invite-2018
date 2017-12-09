@@ -7,6 +7,7 @@
     "divisions": { "type": "f", "value": 3.0},
     "radiusMultiplier": { "type": "f", "value": 0.0},
     "foregroundColor": { "type": "v3", "value": null },
+    "foregroundColor2": { "type": "v3", "value": null },
     "backgroundColor": { "type": "v3", "value": null },
     "thirdColor": { "type": "v3", "value": null },
     "thirdColorRadius": { "type": "f", "value": 0.0 },

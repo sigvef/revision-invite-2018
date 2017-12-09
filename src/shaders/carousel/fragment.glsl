@@ -4,6 +4,7 @@ uniform sampler2D overlay2;
 uniform sampler2D nextScene;
 uniform float divisions;
 uniform vec3 foregroundColor;
+uniform vec3 foregroundColor2;
 uniform vec3 backgroundColor;
 uniform vec3 thirdColor;
 uniform float thirdColorRadius;
@@ -25,7 +26,10 @@ void main() {
         colorOne = thirdColor;
     }
     vec4 color = vec4(
-            mix(colorOne,
+            mix(mix(colorOne,
+                    foregroundColor2,
+                    step(mod(angle - 0.05, M_PI / divisions), M_PI / (divisions * 2.))
+                   ),
                 backgroundColor,
                 step(mod_angle, M_PI / (divisions * 2.))), 1.);
     vec4 overlayColor = texture2D(overlay, vUv);
