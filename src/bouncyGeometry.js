@@ -552,7 +552,7 @@
       this.textCanvas.width = this.textCanvas.width;
       this.textCtx.fillStyle = backgroundColor;
       this.textCtx.fillRect(0, 0, this.textCanvas.width, this.textCanvas.height);
-      this.textCtx.font = `${GU}px Monospace`;  // TODO: Tweak font
+      this.textCtx.font = `bold ${GU}px schmalibre`;
       this.textCtx.textAlign = 'center';
       this.textCtx.fillStyle = foregroundColor;
       this.textCtx.fillText(text, GU * 8, GU * 4.5);
