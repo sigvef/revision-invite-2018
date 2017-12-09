@@ -87,7 +87,7 @@
             10 - elasticOut(0, 1.5 + i * 1, 1.2, t), 10,
             (frame - FRAME_FOR_BEAN(32 * 12 * 4)) / 20)
         );
-        this.ctx.fillStyle = 'rgba(10, 100, 150, 255)';
+        this.ctx.fillStyle = 'rgba(119, 225, 93, 255)';
         this.ctx.beginPath();
         this.ctx.moveTo(letter.x, 0);
         this.ctx.lineTo(letter.x + 1, -1);
@@ -95,11 +95,18 @@
         this.ctx.lineTo(letter.x, 11);
         this.ctx.fill();
         this.ctx.beginPath();
-        this.ctx.fillStyle = 'rgba(0, 0, 0, 0.2)';
+        this.ctx.fillStyle = 'rgba(0, 0, 0, 0.1)';
         this.ctx.moveTo(letter.x + 1, 1);
         this.ctx.lineTo(letter.x, 2);
         this.ctx.lineTo(letter.x, 10);
         this.ctx.lineTo(letter.x + 1, 10);
+        this.ctx.fill();
+        this.ctx.beginPath();
+        this.ctx.fillStyle = 'rgba(0, 0, 0, 0.1)';
+        this.ctx.moveTo(letter.x + 0.9, -0.9);
+        this.ctx.lineTo(letter.x + 1, -1);
+        this.ctx.lineTo(letter.x + 1, 10);
+        this.ctx.lineTo(letter.x + 0.9, 10);
         this.ctx.fill();
 
         this.ctx.font = '0.6pt schmalibre';
