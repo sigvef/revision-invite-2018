@@ -48,7 +48,11 @@ void main() {
     float mod_angle = mod(angle, M_PI / divisions);
     vec3 colorOne = foregroundColor;
     if (radius < thirdColorRadius) {
-        colorOne = backgroundColor;
+        if(frame < 4006.) {
+            colorOne = backgroundColor;
+        } else {
+            colorOne = thirdColor;
+        }
     }
     vec4 color = vec4(
             mix(mix(colorOne,

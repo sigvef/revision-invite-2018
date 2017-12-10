@@ -25,6 +25,7 @@
           }));
       this.scene.add(this.lowpolySkybox);
 
+
       const maps = {
         'ewerk_Cylinder.002_Cylinder.003':
           Loader.loadTexture('res/ewerk_lightmap.png'),
@@ -36,9 +37,14 @@
           Loader.loadTexture('res/tree2_lightmap.png'),
         'tree3_Cylinder.002':
           Loader.loadTexture('res/tree3_lightmap.png'),
+        'inside_Cube.002':
+          Loader.loadTexture('res/inside_map.png'),
+        'stage_Cube_Cube.000':
+          Loader.loadTexture('res/stage_map.png'),
       };
       Loader.loadAjax('res/ewerk.obj', text => {
         const obj = objLoader.parse(text);
+        console.log(obj);
         obj.rotation.y += Math.PI;
         obj.scale.set(10, 10, 10);
         obj.traverse(mesh => {
@@ -52,33 +58,15 @@
       });
       this.scene.add(this.ewerkModel);
 
-      Loader.loadAjax('res/REVISIONSTAGE.obj', text => {
-        const obj = objLoader.parse(text);
-        obj.scale.set(0.06, 0.06, 0.06);
-        obj.rotation.y = -Math.PI / 2;
-        obj.position.x = 3;
-        obj.position.y = 0.05;
-        obj.position.z = -0.3;
-        obj.traverse(mesh => {
-          mesh.material = new THREE.MeshStandardMaterial({
-            color: new THREE.Color(55 / 255, 60 / 255, 63 / 255),
-            roughness: 1,
-            metalness: 0,
-            side: THREE.DoubleSide,
-          });
-        });
-        this.ewerkModel.add(obj);
-      });
-
       this.beamer = new THREE.Mesh(
         new THREE.BoxGeometry(0.01, 9, 16),
         new THREE.MeshBasicMaterial({
           color: 0xffffff,
         }));
       this.scene.add(this.beamer);
-      this.beamer.scale.set(0.115, 0.115, 0.115);
-      this.beamer.position.x = -3.0;
-      this.beamer.position.y = 0.75;
+      this.beamer.scale.set(0.185, 0.185, 0.185);
+      this.beamer.position.x = -5.3;
+      this.beamer.position.y = 1.10;
       this.beamer.position.z = 0.32;
 
       this.ps = new ParticleSystem({
@@ -116,6 +104,7 @@
       this.globe = new THREE.Mesh(
           new THREE.SphereBufferGeometry(200, 64, 64),
           new THREE.MeshStandardMaterial({
+            color: 0x888888,
             roughness: 1,
             metalness: 0,
             transparent: true,
@@ -124,6 +113,7 @@
       this.globeDetail = new THREE.Mesh(
           new THREE.SphereBufferGeometry(200.1, 64, 64),
           new THREE.MeshStandardMaterial({
+            color: 0x888888,
             roughness: 1,
             metalness: 0,
           }));
@@ -327,9 +317,18 @@
         this.camera.lookAt(new THREE.Vector3(0, 0, 0));
       } else if (frame <= frame3) {
         this.camera.position.set(
-          lerp(0, 5, (frame - frame3 + 10) / 10),
-          lerp(400, 150, (frame - frame3 + 10) / 10),
-          lerp(100, 20, (frame - frame3 + 10) / 10)
+          lerp(
+            88.90093644126857,
+            5,
+            (frame - frame3 + 10) / 10),
+          lerp(
+            400,
+            19.8482663014278,
+            (frame - frame3 + 10) / 10),
+          lerp(
+            100,
+            65.95537649497442,
+            (frame - frame3 + 10) / 10)
         );
         const scale = easeIn(1.7, 2.2, (frame - frame3 + 40) / 40);
         this.globeContainer.scale.set(scale, scale, scale);
@@ -338,13 +337,26 @@
         this.camera.lookAt(new THREE.Vector3(0, 0, 0));
       } else if (frame <= frame4) {
         this.camera.position.set(
-          lerp(5, 30, (frame - frame4 + 10) / 10),
-          lerp(150, 15, (frame - frame4 + 10) / 10),
-          lerp(20, 10, (frame - frame4 + 10) / 10)
+          lerp(
+            88.90093644126857,
+            30,
+            (frame - frame4 + 10) / 10),
+          lerp(
+            19.8482663014278,
+            15,
+            (frame - frame4 + 10) / 10),
+          lerp(
+            65.95537649497442,
+            10,
+            (frame - frame4 + 10) / 10)
         );
         this.roof.visible = true;
         this.cube.visible = true;
-        this.camera.lookAt(new THREE.Vector3(0, 0, 0));
+        this.camera.quaternion.x = -0.140091609651937;
+        this.camera.quaternion.y = 0.44517986075305527;
+        this.camera.quaternion.z = 0.053863896036775064;
+        this.camera.quaternion.w = 0.8827728548096384;
+        //this.camera.lookAt(new THREE.Vector3(0, 0, 0));
       } else if( frame <= frame5) {
         this.camera.position.set(
           lerp(30, 15, (frame - frame5 + 10) / 10),

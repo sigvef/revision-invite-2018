@@ -28,7 +28,7 @@
           (FRAME_FOR_BEAN(1536) - FRAME_FOR_BEAN(1536 - 24)));
       this.uniforms.foregroundColor.value = new THREE.Color(0xff4982);
       this.uniforms.foregroundColor2.value = new THREE.Color(204 / 255, 38 / 255, 90 / 255);
-      this.uniforms.backgroundColor.value = new THREE.Color(0x373c3f);
+      this.uniforms.backgroundColor.value = new THREE.Color(0xffffff);
       this.uniforms.radiusMultiplier.value = easeIn(0, 50, t * 0.05);
       //this.uniforms.thirdColor.value = new THREE.Color(171 / 255, 12 / 255, 62 / 255);
       this.uniforms.thirdColor.value = new THREE.Color(204 / 255, 38 / 255, 90 / 255);

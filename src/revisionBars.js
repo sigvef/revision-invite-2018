@@ -225,8 +225,8 @@
       this.cameraY += this.cameraDY;
       this.cameraR += this.cameraDR;
 
-      this.cameraX = (Math.random() - 0.5) * this.throb * 1.5;
-      this.cameraY = (Math.random() - 0.5) * this.throb * 1.5;
+      this.cameraX = (Math.random() - 0.5) * this.throb * 2;
+      this.cameraY = (Math.random() - 0.5) * this.throb * 2;
 
       const cameraX = this.getPoint(this.cameraXPath, frame);
       const cameraY = this.getPoint(this.cameraYPath, frame);
@@ -265,8 +265,9 @@
             10 - elasticOut(0, 1.5 + i * 1, 1.2, t), 10,
             (frame - FRAME_FOR_BEAN(32 * 12 * 4)) / 20) - 4.5
         );
-        this.ctx.fillStyle = 'rgb(255, 73, 130)';
         this.ctx.fillStyle = 'rgba(119, 225, 93, 255)';
+        this.ctx.fillStyle = 'rgb(255, 73, 130)';
+        this.ctx.fillStyle = 'rgb(55, 60, 63)';
         this.ctx.beginPath();
         this.ctx.moveTo(letter.x, 0);
         this.ctx.lineTo(letter.x + 1, -1);
@@ -282,10 +283,11 @@
         this.ctx.fill();
         this.ctx.beginPath();
         this.ctx.fillStyle = 'rgb(55, 60, 63)';
-        this.ctx.moveTo(letter.x + 0.9, -0.9);
+        this.ctx.fillStyle = 'rgba(255, 255, 255, 0.2)';
+        this.ctx.moveTo(letter.x + 0.85, -0.85);
         this.ctx.lineTo(letter.x + 1, -1);
         this.ctx.lineTo(letter.x + 1, 10);
-        this.ctx.lineTo(letter.x + 0.9, 10);
+        this.ctx.lineTo(letter.x + 0.85, 10);
         this.ctx.fill();
 
         this.ctx.font = '0.6pt schmalibre';
@@ -294,9 +296,7 @@
         this.ctx.fillStyle = 'white';
         this.ctx.lineWidth = 0.2;
         this.ctx.translate(letter.x + 0.45, 0.25);
-        this.ctx.fillStyle = 'rgb(55, 60, 63)';
-        this.ctx.fillText(letter.letter, 0.06, 0.06);
-        this.ctx.fillStyle = 'white';
+        this.ctx.fillStyle = 'rgba(119, 225, 93, 255)';
         this.ctx.fillText(letter.letter, 0, 0);
         this.ctx.restore();
       }
