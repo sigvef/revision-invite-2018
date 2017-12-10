@@ -241,6 +241,12 @@
       this.globe.visible = frame < 248 || frame > 11317;
       this.cloudGlobe.visible = frame < 248 || frame > 11317;
       this.revisionLogo.visible = frame > 11317;
+      this.ewerkModel.visible = frame >= 248 && frame <= 11317;
+
+      this.globe.material.opacity = 1;
+      this.cloudGlobe.material.opacity = 1;
+      this.revisionLogo.material.opacity = 0;
+
       const globeTextures = this.inputs.globeTextures.getValue();
       if(globeTextures) {
         this.globe.material.map = globeTextures.map;
@@ -460,7 +466,6 @@
         this.globeContainer.rotation.y = 3.4 - frame / 1000;
         this.roof.visible = false;
         this.cube.visible = false;
-        this.ewerkModel.visible = false;
         this.camera.lookAt(new THREE.Vector3(0, 0, 0));
 
         this.globe.material.opacity = easeIn(1, 0, (frame - 11350) / 100);
