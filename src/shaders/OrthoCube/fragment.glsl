@@ -1,4 +1,5 @@
 precision mediump float; // or lowp
+#define M_PI 3.1415926535897932384626433832795
 
 uniform float frame;
 uniform float BEAN;
@@ -88,29 +89,49 @@ mat4 rotateZ(float theta) {
 vec2 sdf(vec3 p) {
     vec3 cubeP = p;
     float cubeSize = 1.0;
-    float nframe = frame - 425.0; //quickfix to movement in time-slice
-    if(nframe < 60.0){ //60
-        //Stand still
+
+    float nframe  = frame;
+
+    if(BEAN < 240.0){ //Pre-scene (begins at 208)
+    }else if(BEAN <= 252.0){
+        float rotZ = 0.5 * M_PI * mix(0.0, 1.0, (BEAN - 240.0)/(252.0-240.0));
+        cubeP = (rotateZ(rotZ) * vec4(p, 1.0)).xyz;
+    }else if(BEAN <= 264.0){
+    }else if(BEAN <= 276.0){
+        float rotZ = 0.5 * M_PI * mix(0.0, 1.0, (BEAN - 264.0)/(276.0-264.0));
+        cubeP = (rotateZ(rotZ) * vec4(p, 1.0)).xyz;
     }
-    else if(nframe < 201.0){ //201
-        cubeP = (rotateZ((nframe - 60.0)/45.0) * vec4(p, 1.0)).xyz;
+    else if(BEAN <= 288.0){}
+    else if(BEAN <= 300.0){
+        float rotY = 0.5 * M_PI * mix(0.0, 1.0, (BEAN - 264.0)/(276.0-264.0));
+        cubeP = (rotateY(rotY) * vec4(p, 1.0)).xyz;
     }
-    else if(nframe < 248.0){ //248
-        //Stand still
+    else if(BEAN <= 312.0){ 
     }
-    else if(nframe < 283.0){ //283
-        cubeP = (rotateX((nframe - 248.0)/45.0) * vec4(p, 1.0)).xyz;
+    else if(BEAN <= 324.0){ 
+        float rotY = 0.5 * M_PI * mix(0.0, 1.0, (BEAN - 264.0)/(276.0-264.0));
+        cubeP = (rotateY(rotY) * vec4(p, 1.0)).xyz;
     }
-    else if(nframe < 307.0){ //307
-        cubeP = (rotateX(35.7/45.0) * vec4(p, 1.0)).xyz;
+    else if(BEAN <= 336.0){ //248
     }
-    else if(nframe < 344.0){ //344
-        cubeP = (rotateX((nframe - 307.0 + 35.0)/45.0) * vec4(p, 1.0)).xyz;
-    }else if(BEAN < 420.0) {
-        cubeP = (rotateX((nframe - 344.0)/45.0) * vec4(p, 1.0)).xyz;
-        cubeP = (rotateY((nframe - 344.0)/45.0) * vec4(cubeP, 1.0)).xyz;
-        cubeSize = 1.0 + 0.5 * sin((16.0 + nframe) * 3.1415 / 30.0);
-    }else{
+    else if(BEAN <= 348.0){ 
+        float rotX = 0.5 * M_PI * mix(0.0, 1.0, (BEAN - 264.0)/(276.0-264.0));
+        cubeP = (rotateX(rotX) * vec4(p, 1.0)).xyz;
+    }
+    else if(BEAN <= 360.0){ 
+    }
+    else if(BEAN <= 372.0){ 
+        float rotX = 0.5 * M_PI * mix(0.0, 1.0, (BEAN - 264.0)/(276.0-264.0));
+        float rotY = 0.5 * M_PI * mix(0.0, 1.0, (BEAN - 264.0)/(276.0-264.0));
+        cubeP = (rotateX(rotX) * rotateY(rotY) * vec4(p, 1.0)).xyz;
+    }
+    else if(BEAN <= 384.0){ 
+        float rotX = 0.5 * M_PI;
+        float rotY = 0.5 * M_PI;
+        cubeP = (rotateX(rotX) * rotateY(rotY) * vec4(p, 1.0)).xyz;
+    }
+
+    else{
         cubeP = (rotateX((nframe - 344.0)/45.0) * vec4(p, 1.0)).xyz;
         cubeP = (rotateY((nframe - 344.0)/45.0) * vec4(cubeP, 1.0)).xyz;
         cubeSize = 1.0 + 1.5 * sin((16.0 + nframe) * 3.1415 / 30.0);
@@ -120,7 +141,6 @@ vec2 sdf(vec3 p) {
 
 
     float sphereSize = 0.3;
-   // cubeSize += kickThrob * 0.8;
     vec2 distoid = sphereCube(cubeP, sphereSize, cubeSize);
     return distoid;
 }
@@ -176,7 +196,9 @@ void main() {
 
         vec3 p = eye + dir * dist;
         color = mod(oID, 2.0) == 0.0 ? white : color2;
-        //color += 0.3 * kickThrob;
+        if(BEAN >= 240.0){
+            color += 0.3 * kickThrob - 0.3;
+        }
         //float gray = + 0.1 + 0.5 * kickThrob;
     }
     
