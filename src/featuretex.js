@@ -27,7 +27,7 @@
       this.frame = frame;
     }
 
-    render(renderer) {
+    render() {
       this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
       this.ctx.save();
@@ -43,21 +43,13 @@
         this.ctx.fillText(this.texts[index], 0, 2.3);
       }
 
-      const rotation = -0.41;
+      const rotation = -0.43;
       if(BEAN >= 3816) {
         this.ctx.save();
         this.ctx.font = '1.1pt schmalibre';
         this.ctx.rotate(rotation);
         this.ctx.translate(-12, -6);
-        this.ctx.fillText('AMIGA', 0, 2.3);
-        this.ctx.restore();
-      }
-      if(BEAN >= 3816 + 3) {
-        this.ctx.save();
-        this.ctx.font = '1.1pt schmalibre';
-        this.ctx.rotate(rotation);
-        this.ctx.translate(-6, -9);
-        this.ctx.fillText('AGA', 0, 2.3);
+        this.ctx.fillText('AMIGA', 0, 4);
         this.ctx.restore();
       }
       if(BEAN >= 3816 + 6) {
@@ -65,15 +57,7 @@
         this.ctx.font = '1.1pt schmalibre';
         this.ctx.rotate(rotation);
         this.ctx.translate(0, -6);
-        this.ctx.fillText('OCS', 0, 2.3);
-        this.ctx.restore();
-      }
-      if(BEAN >= 3816 + 9) {
-        this.ctx.save();
-        this.ctx.font = '1.1pt schmalibre';
-        this.ctx.rotate(rotation);
-        this.ctx.translate(6, -9);
-        this.ctx.fillText('DEMO', 0, 2.3);
+        this.ctx.fillText('OCS', 0, 4);
         this.ctx.restore();
       }
       if(BEAN >= 3816 + 18) {
@@ -81,7 +65,7 @@
         this.ctx.font = '1.1pt schmalibre';
         this.ctx.rotate(rotation);
         this.ctx.translate(12, -6);
-        this.ctx.fillText('INTRO', 0, 2.3);
+        this.ctx.fillText('INTRO', 0, 4);
         this.ctx.restore();
       }
       if(BEAN >= 3816) {
@@ -89,31 +73,15 @@
         this.ctx.font = '1.1pt schmalibre';
         this.ctx.rotate(rotation);
         this.ctx.translate(-12, 1);
-        this.ctx.fillText('OLDSKOOL', 0, 2.3);
-        this.ctx.restore();
-      }
-      if(BEAN >= 3816 + 3) {
-        this.ctx.save();
-        this.ctx.font = '1.1pt schmalibre';
-        this.ctx.rotate(rotation);
-        this.ctx.translate(-6, 5);
-        this.ctx.fillText('DEMO', 0, 2.3);
-        this.ctx.restore();
-      }
-      if(BEAN >= 3816 + 6) {
-        this.ctx.save();
-        this.ctx.font = '1.1pt schmalibre';
-        this.ctx.rotate(rotation);
-        this.ctx.translate(0, 1);
-        this.ctx.fillText('4K INTRO', 0, 2.3);
+        this.ctx.fillText('OLDSKOOL', 0, 0.4);
         this.ctx.restore();
       }
       if(BEAN >= 3816 + 9) {
         this.ctx.save();
         this.ctx.font = '1.1pt schmalibre';
         this.ctx.rotate(rotation);
-        this.ctx.translate(6, 5);
-        this.ctx.fillText('GRAPHICS', 0, 2.3);
+        this.ctx.translate(0, 1);
+        this.ctx.fillText('4K INTRO', 0, 0.4);
         this.ctx.restore();
       }
       if(BEAN >= 3816 + 18) {
@@ -121,7 +89,7 @@
         this.ctx.font = '1.1pt schmalibre';
         this.ctx.rotate(rotation);
         this.ctx.translate(12, 1);
-        this.ctx.fillText('MUSIC', 0, 2.3);
+        this.ctx.fillText('MUSIC', 0, 0.4);
         this.ctx.restore();
       }
 
