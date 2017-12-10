@@ -9,61 +9,16 @@
       });
 
 
-
+      //Camera
       var zoom = 5.8;
       this.camera = new THREE.OrthographicCamera( -zoom * 16, zoom * 16 , zoom * 9, -zoom * 9, 1, 100000 );
       this.camera.position.z = 10000;
 
-
+      // Scene background
       this.cube = new THREE.Mesh(new THREE.BoxGeometry(196, 109, 0.1),
                                  new THREE.MeshBasicMaterial({ color: 0x373c3f }));
       this.cube.position.set(0,0,-100);
       this.scene.add(this.cube);
-
-      var radius   = 30,
-      segments = 64,
-      material = new THREE.LineDashedMaterial( { color: 0x222222 } ),
-      geometry = new THREE.CircleGeometry( radius, segments );
-
-      // Remove center vertex
-      geometry.vertices.shift();
-      geometry.computeLineDistances();
-
-      //this.scene.add( new THREE.Line( geometry, material ) );
-
-      var radius2  = 36,
-      segments2 = 6,
-      material2 = new THREE.LineBasicMaterial( { color: 0x222222 } ),
-      geometry2 = new THREE.CircleGeometry( radius2, segments2 );
-
-      geometry2.vertices.shift();
-      geometry2.computeLineDistances();
-
-      //this.scene.add( new THREE.Line( geometry2, material2 ) );
-
-      var radius3  = 10,
-      segments3 = 6,
-      material3 = new THREE.LineBasicMaterial( { color: 0x222222 } ),
-      geometry3 = new THREE.CircleGeometry( radius3, segments3 );
-
-      geometry3.vertices.shift();
-      geometry3.computeLineDistances();
-
-      var hex1 = new THREE.Line( geometry3, material3 );
-      var hex2 = new THREE.Line( geometry3, material3 );
-      var hex3 = new THREE.Line( geometry3, material3 );
-      var hex4 = new THREE.Line( geometry3, material3 );
-
-      hex1.position.set(10,0,0);
-      hex2.position.set(-10,0,0);
-      hex3.position.set(0,12,0);
-      hex4.position.set(0,-12,0);
-
-      /*this.scene.add( hex1 );
-      this.scene.add( hex2 );
-      this.scene.add( hex3 );
-      this.scene.add( hex4 );*/
-
  
       var line_material = new THREE.LineBasicMaterial( { color: 0x999999 } );
       var small_radius  = 10;
@@ -79,9 +34,12 @@
       this.center_rotation_container.add(this.small_center_hex);
       this.small_center_hex.rotation.set(0, 0, Math.PI / 6);
 
-      this.level1_hex1 = new THREE.Line( small_geometry, line_material );
-      this.level1_hex2 = new THREE.Line( small_geometry, line_material );
-      this.level1_hex3 = new THREE.Line( small_geometry, line_material );
+      this.level1_hex1 = new THREE.Object3D();
+      this.level1_hex1.add(new THREE.Line( small_geometry, line_material ));
+      this.level1_hex2= new THREE.Object3D();
+      this.level1_hex2.add(new THREE.Line( small_geometry, line_material ));
+      this.level1_hex3 = new THREE.Object3D();
+      this.level1_hex3.add(new THREE.Line( small_geometry, line_material ));
       this.center_rotation_container.add(this.level1_hex1);
       this.center_rotation_container.add(this.level1_hex2);
       this.center_rotation_container.add(this.level1_hex3);
@@ -226,8 +184,12 @@
       this.spin_cube.rotation.set(spin * 0.7837 , spin , 0);
 
       //prepare the actually visible geometries
-      this.line_width = 2;
+      this.line_width = .3;
       this.star_arr = this.add_lines_for_geometry(star_geometry, this.three_point_star);
+      this.add_lines_for_geometry(this.level1_hex1.children[0].geometry, this.level1_hex1);
+      this.add_lines_for_geometry(this.level1_hex2.children[0].geometry, this.level1_hex2);
+      this.add_lines_for_geometry(this.level1_hex3.children[0].geometry, this.level1_hex3);
+      console.log(this.level1_hex1);
     }
 
 
