@@ -64,7 +64,11 @@
           this.ctx.fillStyle = 'rgb(255, 73, 130)';
           this.ctx.fillStyle = '#77e15d';
         }
-        const t = easeIn(1, 0, (this.frame - timings[i] + 15) / 15);
+        const t = easeOut(
+          easeIn(1, 0, (this.frame - timings[i] + 15) / 15),
+          1,
+          (this.frame - timings[30]) / 120
+        );
         this.ctx.save();
         this.ctx.translate(8, 4.5);
         this.ctx.rotate(+Math.PI * 2 * i / 32 - this.frame / 100 + 1 + Math.PI / 2);
@@ -79,20 +83,10 @@
       }
 
       this.ctx.fillStyle = 'rgb(0, 0, 255)';
-      const t = easeOut(1, -5, (this.frame - timings[30]) / 160);
-      this.ctx.save();
-      this.ctx.translate(
-        -(this.frame - 4070) / 7,
-        (this.frame - 4000) / 50 + 6 * t + 30 / 4 * t
-      );
+      const t = easeOut(0, 1, (this.frame - timings[30]) / 120);
       this.ctx.beginPath();
-      this.ctx.moveTo(0, 135);
-      this.ctx.lineTo(32, 9 - (5 + 30 / 8));
-      this.ctx.lineTo(64, 135);
-      this.ctx.lineTo(0, 135);
+      this.ctx.arc(8, 4.5, 10 * t, 0, Math.PI * 2);
       this.ctx.fill();
-      this.ctx.stroke();
-      this.ctx.restore();
       this.ctx.restore();
 
       this.output.needsUpdate = true;
