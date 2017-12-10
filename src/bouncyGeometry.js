@@ -46,6 +46,50 @@
       );
       this.scene.add(this.textPlane);
 
+
+      // HEXAGONS
+      const whiteColor = 0xffffff;
+      const grayColor = 0x373c3f;
+      const greenColor = 0x77e15d;
+      const pinkColor = 0xff4982;
+      this.colors = {
+        0: new THREE.MeshBasicMaterial({ color: grayColor }),
+        1: new THREE.MeshBasicMaterial({ color: whiteColor }),
+        2: new THREE.MeshBasicMaterial({ color: greenColor }),
+        3: new THREE.MeshBasicMaterial({ color: pinkColor }),
+      };
+      this.numHexagonsX = 22;
+      this.numHexagonsY = 21;
+      const cylinderRadius = 0.2;
+      const cylinderGeometry = new THREE.CylinderGeometry(cylinderRadius, cylinderRadius, cylinderRadius / 4, 6);
+      const padding = 0.1;
+      const distanceBetweenHexagonCores = (2 * Math.sqrt(3.0) / 2.0) * cylinderRadius + padding;
+      const offsetX = Math.sin(Math.PI / 6.0) * distanceBetweenHexagonCores;
+      const offsetY = Math.cos(Math.PI / 6.0) * distanceBetweenHexagonCores;
+
+      this.hexagons = new THREE.Object3D();
+      for (let y = 0; y < this.numHexagonsY; y++) {
+        for (let x = 0; x < this.numHexagonsX; x++) {
+          const cylinder = new THREE.Mesh(
+            cylinderGeometry,
+            this.colors[0],
+          );
+
+          cylinder.rotation.x = Math.PI / 2;
+          cylinder.rotation.y = Math.PI / 2;
+
+          const offset = x % 2 === 1 ? offsetX : 0;
+          cylinder.position.x = x * offsetY;
+          cylinder.position.y = 2 * y * offsetX + offset;
+          cylinder.x = x;
+          cylinder.y = y;
+          this.hexagons.add(cylinder);
+        }
+      }
+      this.hexagons.position.x = -(this.numHexagonsX - 1) * offsetY / 2;
+      this.hexagons.position.y = -(this.numHexagonsY - 0.5) * offsetX;
+      this.hexagons.position.z = -80;
+
       // BALL
       this.ballGeometry = new THREE.SphereGeometry(1, 8, 8);
       this.ballTexture = Loader.loadTexture('res/checkers_color.png');
@@ -55,27 +99,7 @@
         {map: this.ballTexture}
       );
       this.ball = new THREE.Mesh(this.ballGeometry, this.ballMaterial);
-      const ballSpeedFactor = 1;
-      this.ball.userData = {
-        dx: ballSpeedFactor * this.random(),
-        dy: ballSpeedFactor * this.random(),
-        dz: ballSpeedFactor * this.random()
-      };
       this.scene.add(this.ball);
-
-      // CYLINDER
-      this.cylinder = new THREE.Mesh(
-        new THREE.CylinderGeometry(16, 16, 180, 32, 1, true),
-        new THREE.MeshBasicMaterial(
-          {
-            color: 0xffffff,
-            side: THREE.DoubleSide,
-            transparent: true,
-            opacity: 0.3
-          }
-        )
-      );
-      this.scene.add(this.cylinder);
 
       // BEAMS
       this.beamMaterial = new THREE.MeshBasicMaterial({color: 0xffffff});
@@ -90,6 +114,7 @@
         this.scene.add(beamMesh);
       }
       this.beamThicknessScalers = [1, 1, 1, 1, 1, 1];
+      // TODO: turn into an object with direct property access, for performance reasons
       this.chordStabBeans = [
         0, 4, 10, 22, 24, 28, 34, 40, 42, 44, 46,
         48, 52, 58, 72, 76, 82, 96, 100, 106, 118,
@@ -110,17 +135,17 @@
           let scalerIdx = idx % this.beamThicknessScalers.length;
           this.beamThicknessScalers[scalerIdx] = 4;
         }
-        const startFrame = FRAME_FOR_BEAN(2976);
       };
 
-      // TORUS
-      this.torus = new THREE.Mesh(
-        new THREE.TorusGeometry(10, 3, 16, 100),
-        new THREE.MeshBasicMaterial({color: 0xffffff})
-      );
-      //this.scene.add(this.torus);
+      // TODO: turn into an object with direct property access, for performance reasons
+      this.leadBeans = [
+        3072, 3082, 3090, 3094, 3096, 3102, 3106, 3112, 3114, 3118, 3120, 3130, 3138, 3142, 3144, 3150, 3154, 3168,
+        3178, 3186, 3190, 3192, 3198, 3202, 3210, 3214, 3216, 3226, 3234, 3238, 3240, 3244, 3246, 3250, 3264, 3274,
+        3282, 3286, 3288, 3294, 3298, 3306, 3310,
+      ];
 
       // FRACTURE
+      /*
       this.fractureMaterial = new THREE.MeshBasicMaterial({color: 0xffffff});
       this.fractureSize = 0.3;
       this.fractureGeometry = new THREE.BoxGeometry(this.fractureSize, this.fractureSize, this.fractureSize);
@@ -128,13 +153,10 @@
       this.fractureParts = [];
       for (let i = 0; i < this.numfractureParts; i++) {
         const fractureMesh = new THREE.Mesh(this.fractureGeometry, this.fractureMaterial);
-        fractureMesh.userData = {
-          dx: this.random(),
-          dy: this.random()
-        };
         this.fractureParts.push(fractureMesh);
         this.scene.add(fractureMesh);
       }
+      */
 
       // REVISION LOGO
       this.revisionLogoSegments = [
@@ -151,7 +173,6 @@
 
 
       // PARTICLES
-
       this.generateParticleSprite = function() {
         const canvas = document.createElement( 'canvas' );
         canvas.width = 16;
@@ -220,14 +241,14 @@
       demo.nm.nodes.bloom.opacity = 0.1;
 
       this.scene.remove(this.textPlane);
-      this.scene.remove(this.cylinder);
       this.scene.add(this.ball);
       this.ps.particles.visible = false;
+      this.scene.remove(this.hexagons);
 
       this.ps.decayFactor = 0.98;
 
       const startFrame = FRAME_FOR_BEAN(2976);
-      const endFrame = FRAME_FOR_BEAN(3072);
+      const endFrame = FRAME_FOR_BEAN(3024);
       const progress = (frame - startFrame) / (endFrame - startFrame);
 
       // BALL
@@ -249,7 +270,7 @@
       }
 
       // CAMERA
-      this.camera.position.x = 0;
+      this.camera.position.x = lerp(0, 0.8, progress);
       this.camera.position.y = 0;
       this.camera.position.z = 6;
       this.camera.lookAt(this.ball.position);
@@ -260,10 +281,10 @@
       demo.nm.nodes.bloom.opacity = 0.1;
 
       this.scene.remove(this.textPlane);
-      this.scene.remove(this.cylinder);
       this.scene.add(this.ball);
       this.ps.particles.visible = true;
       this.setBeamsVisibility(true);
+      this.scene.remove(this.hexagons);
 
       this.ps.decayFactor = 0.98;
 
@@ -325,6 +346,7 @@
       this.ps.update();
 
       // FRACTURE PARTS
+      /*
       for (let i = 0; i < this.fractureParts.length; i++) {
         const fracturePart = this.fractureParts[i];
         fracturePart.position.x = this.fractureSize * (i % 15) - 7.5 * this.fractureSize;
@@ -334,6 +356,7 @@
         fracturePart.rotation.y = 0;
         fracturePart.rotation.z = 0;
       }
+      */
     }
 
     // 33333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333
@@ -341,10 +364,10 @@
       demo.nm.nodes.bloom.opacity = 0.1;
 
       this.scene.remove(this.textPlane);
-      this.scene.remove(this.cylinder);
       this.scene.add(this.ball);
       this.ps.particles.visible = true;
       this.setBeamsVisibility(true);
+      this.scene.add(this.hexagons);
 
       this.ps.decayFactor = 0.98;
 
@@ -352,8 +375,8 @@
       const endFrame = FRAME_FOR_BEAN(3120);
       const progress = (frame - startFrame) / (endFrame - startFrame);
 
-      this.camera.position.x = 6 * Math.cos(frame / 85 - 2);
-      this.camera.position.y = 6 * Math.sin(frame / 85 - 1);
+      this.camera.position.x = 6 * Math.cos(frame / 85 - 1.5);
+      this.camera.position.y = 6 * Math.sin(frame / 85 - 0.5);
       this.camera.position.z = -70;
 
       // PARTICLES
@@ -400,7 +423,16 @@
 
       this.camera.lookAt(new THREE.Vector3(0, 0, -80));
 
+      // HEXAGONS
+      for (let i = 0; i < this.hexagons.children.length; i++) {
+        const hexagon = this.hexagons.children[i];
+        hexagon.traverse((obj) => {
+          obj.material = this.colors[0]; // grey
+        });
+      }
+
       // FRACTURE PARTS
+      /*
       for (let i = 0; i < this.fractureParts.length; i++) {
         const fracturePart = this.fractureParts[i];
         fracturePart.position.x = this.fractureSize * (i % 15) - 7.5 * this.fractureSize;
@@ -410,10 +442,13 @@
         fracturePart.rotation.y = 0;
         fracturePart.rotation.z = 0;
       }
+      */
     }
 
     // 44444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444
     updatePart4(frame) {
+      this.scene.add(this.hexagons);
+
       const startFrame = FRAME_FOR_BEAN(3120);
       const endFrame = FRAME_FOR_BEAN(3168);
       const progress = (frame - startFrame) / (endFrame - startFrame);
@@ -460,7 +495,34 @@
       this.ball.rotation.x = lerp(0, 2, progress);
       this.ball.rotation.y = lerp(0, 2, progress);
 
+      // HEXAGONS
+
+      const idx = this.leadBeans.indexOf(BEAN);
+      if (idx !== -1) {
+        if (idx >= 10) {
+          this.hexagonRadius = (idx - 9) * 0.9;
+        }
+      }
+      if (!this.hexagonRadius) {
+        this.hexagonRadius = 0;
+      }
+
+      for (let i = 0; i < this.hexagons.children.length; i++) {
+        const hexagon = this.hexagons.children[i];
+        hexagon.traverse((obj) => {
+          const x = obj.position.x + this.hexagons.position.x;
+          const y = obj.position.y + this.hexagons.position.y;
+          const distanceToCenter = Math.sqrt(x * x + y * y);
+          if (distanceToCenter <= this.hexagonRadius) {
+            obj.material = this.colors[i % 4];
+          } else {
+            //obj.visible = false;
+          }
+        });
+      }
+
       // FRACTURE PARTS
+      /*
       for (let i = 0; i < this.fractureParts.length; i++) {
         const fracturePart = this.fractureParts[i];
         let x = this.fractureSize * (i % 15) - 7.5 * this.fractureSize;
@@ -501,6 +563,7 @@
           }
         }
       }
+      */
 
       // BEAMS
       for (let i = 0; i < this.beams.length; i++) {
@@ -520,8 +583,8 @@
     updateLastTextPart(frame) {
       demo.nm.nodes.bloom.opacity = 0.1;
       this.scene.add(this.textPlane);
-      this.scene.remove(this.cylinder);
       this.scene.remove(this.ball);
+      this.scene.remove(this.hexagons);
       this.ps.particles.visible = false;
 
       const white = 'white';
