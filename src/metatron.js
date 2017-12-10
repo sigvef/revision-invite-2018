@@ -30,7 +30,8 @@
 
       this.center_rotation_container = new THREE.Object3D();
 
-      this.small_center_hex = new THREE.Line( small_geometry, line_material );
+      this.small_center_hex = new THREE.Object3D();
+      this.small_center_hex.add(new THREE.Line( small_geometry, line_material ));
       this.center_rotation_container.add(this.small_center_hex);
       this.small_center_hex.rotation.set(0, 0, Math.PI / 6);
 
@@ -54,9 +55,12 @@
       line_geometry.vertices.push(new THREE.Vector3(0, -15, 0));
       line_geometry.vertices.push(new THREE.Vector3(0, 15, 0));
 
-      this.center_line1 = new THREE.Line( line_geometry, line_material );
-      this.center_line2 = new THREE.Line( line_geometry, line_material );
-      this.center_line3 = new THREE.Line( line_geometry, line_material );
+      this.center_line1 = new THREE.Object3D();
+      this.center_line1.add( new THREE.Line( line_geometry, line_material ));
+      this.center_line2 = new THREE.Object3D();
+      this.center_line2.add( new THREE.Line( line_geometry, line_material ));
+      this.center_line3 = new THREE.Object3D();
+      this.center_line3.add( new THREE.Line( line_geometry, line_material ));
 
       this.scene.add(this.center_line1);
       this.scene.add(this.center_line2);
@@ -184,11 +188,15 @@
       this.spin_cube.rotation.set(spin * 0.7837 , spin , 0);
 
       //prepare the actually visible geometries
-      this.line_width = .3;
+      this.line_width = .15;
       this.star_arr = this.add_lines_for_geometry(star_geometry, this.three_point_star);
+      this.add_lines_for_geometry(this.small_center_hex.children[0].geometry, this.small_center_hex);
       this.add_lines_for_geometry(this.level1_hex1.children[0].geometry, this.level1_hex1);
       this.add_lines_for_geometry(this.level1_hex2.children[0].geometry, this.level1_hex2);
       this.add_lines_for_geometry(this.level1_hex3.children[0].geometry, this.level1_hex3);
+      this.add_lines_for_geometry(this.center_line1.children[0].geometry, this.center_line1);
+      this.add_lines_for_geometry(this.center_line2.children[0].geometry, this.center_line2);
+      this.add_lines_for_geometry(this.center_line3.children[0].geometry, this.center_line3);
       console.log(this.level1_hex1);
     }
 
