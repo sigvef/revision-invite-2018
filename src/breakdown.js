@@ -478,8 +478,8 @@
       this.ctx.save();
       this.ctx.scale(GU, GU);
 
-      const t = (this.frame - FRAME_FOR_BEAN(3660 + 6)) / (
-          FRAME_FOR_BEAN(3672) - FRAME_FOR_BEAN(3660 + 6));
+      const t = (this.frame - FRAME_FOR_BEAN(3660 + 9)) / (
+          FRAME_FOR_BEAN(3672) - FRAME_FOR_BEAN(3660 + 9));
 
       this.ctx.save();
       this.ctx.translate(
