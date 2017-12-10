@@ -10,7 +10,7 @@
 
 
 
-      var zoom = 5.8;
+      var zoom = 2;//5.8;
       this.camera = new THREE.OrthographicCamera( -zoom * 16, zoom * 16 , zoom * 9, -zoom * 9, 1, 100000 );
       this.camera.position.z = 10000;
 
@@ -122,16 +122,16 @@
 
       var inner_distance = 5;
       var outer_distance = 15;
-      var line_geometry = new THREE.Geometry();
-          line_geometry.vertices.push(new THREE.Vector3(0, outer_distance, 0));
-          line_geometry.vertices.push(new THREE.Vector3(-inner_distance * r32, inner_distance / 2, 0));
-          line_geometry.vertices.push(new THREE.Vector3(-outer_distance * r32, -outer_distance / 2, 0));
-          line_geometry.vertices.push(new THREE.Vector3(0, -inner_distance, 0));
-          line_geometry.vertices.push(new THREE.Vector3(outer_distance * r32, -outer_distance / 2, 0));
-          line_geometry.vertices.push(new THREE.Vector3(inner_distance * r32, inner_distance / 2, 0));
-          line_geometry.vertices.push(new THREE.Vector3(0, outer_distance, 0));
+      var star_geometry = new THREE.Geometry();
+          star_geometry.vertices.push(new THREE.Vector3(0, outer_distance, 0));
+          star_geometry.vertices.push(new THREE.Vector3(-inner_distance * r32, inner_distance / 2, 0));
+          star_geometry.vertices.push(new THREE.Vector3(-outer_distance * r32, -outer_distance / 2, 0));
+          star_geometry.vertices.push(new THREE.Vector3(0, -inner_distance, 0));
+          star_geometry.vertices.push(new THREE.Vector3(outer_distance * r32, -outer_distance / 2, 0));
+          star_geometry.vertices.push(new THREE.Vector3(inner_distance * r32, inner_distance / 2, 0));
+          star_geometry.vertices.push(new THREE.Vector3(0, outer_distance, 0));
 
-      this.three_point_star = new THREE.Line( line_geometry, line_material );
+      this.three_point_star = new THREE.Line( star_geometry, line_material );
       this.scene.add(this.three_point_star);
 
       var darker_line_material = new THREE.LineBasicMaterial( { color: 0x373c3f } );
@@ -223,7 +223,47 @@
       var spin = Math.PI / 4
 
       this.spin_cube.rotation.set(spin * 0.7837 , spin , 0);
+
+      //prepare the actually visible geometries
+      this.line_width = .3;
+      this.add_lines_for_geometry(star_geometry);
     }
+
+
+    add_lines_for_geometry(geometry) {
+      console.log(geometry.vertices.length);
+      var material = new THREE.LineBasicMaterial( { color: 0xFFFFFF } );
+      //for(var i = 0; i < geometry.vertices.length;  i++) {
+      for(var i = 0; i < 1;  i++) {
+        var cur_x = geometry.vertices[i].x;
+        var cur_y = geometry.vertices[i].y;
+        var next_x = geometry.vertices[(i + 1)%geometry.vertices.length].x;
+        var next_y = geometry.vertices[(i + 1)%geometry.vertices.length].y;
+
+        var angle = Math.atan2(next_x - cur_x, next_y - cur_y);
+
+        console.log("angle:")
+        console.log(i);
+        console.log(angle / Math.PI);
+
+        var geometry = new THREE.Geometry();
+        geometry.vertices.push(new THREE.Vector3(cur_x - this.line_width * Math.sin(angle + Math.PI/2), cur_y - this.line_width * Math.cos(angle + Math.PI/2),0));
+        geometry.vertices.push(new THREE.Vector3(next_x - this.line_width * Math.sin(angle + Math.PI/2), next_y - this.line_width * Math.cos(angle + Math.PI/2),0));
+        geometry.vertices.push(new THREE.Vector3(next_x + this.line_width * Math.sin(angle + Math.PI/2), next_y + this.line_width * Math.cos(angle + Math.PI/2),0));
+        geometry.vertices.push(new THREE.Vector3(cur_x + this.line_width * Math.sin(angle + Math.PI/2), cur_y + this.line_width * Math.cos(angle + Math.PI/2),0));
+
+        geometry.faces.push( new THREE.Face3( 0, 2, 1 ) );
+        geometry.faces.push( new THREE.Face3( 0, 3, 2 ) );
+
+        var object = new THREE.Mesh( geometry, new THREE.MeshBasicMaterial() );
+        //var object = new THREE.Line( geometry, material );
+        this.scene.add(object);
+        var object2 = new THREE.Mesh( new THREE.BoxBufferGeometry( 1, 1, 1 ), new THREE.MeshBasicMaterial() );
+        this.scene.add(object2);
+
+      }
+    }
+
 
     update(frame) {
       super.update(frame);
