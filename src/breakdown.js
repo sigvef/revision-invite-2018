@@ -127,7 +127,7 @@
 
       if(BEAN >= 3360 + 9) {
         this.ctx.fillText(
-            'THEME',
+            'AMIGA',
             - 8 / 3 + 0.25,
             fontYOffset + easeIn(0, 10, t));
       }
