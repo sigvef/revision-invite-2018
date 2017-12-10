@@ -45,7 +45,7 @@
       this.background = new THREE.Mesh(
         new THREE.PlaneGeometry(80, 80, 1),
         new THREE.MeshBasicMaterial({
-          color: new THREE.Color(1, 73 / 255, 130 / 255),
+          color: new THREE.Color(140 / 255, 40 / 255, 71 / 255),
         })
       );
       this.background.position.z = -5;
@@ -184,7 +184,15 @@
     }
 
     update(frame) {
-      demo.nm.nodes.bloom.opacity = 0.5;
+      demo.nm.nodes.bloom.opacity = 0.25;
+
+      const scale = lerp(0.0001, 1, (frame - FRAME_FOR_BEAN(84 * 48 + 18)) / 6);
+      this.root.scale.set(scale, scale, scale);
+      /*
+      for (const cylinder of this.cylinders) {
+        cylinder.scale.set(scale, scale, scale);
+      }
+      */
 
       const cameraPosition = new THREE.Vector3(0, 0, 0);
       const cameraLookAt = new THREE.Vector3(0, 0, 0);
@@ -209,9 +217,9 @@
           easeIn(-2, -1, t)
         );
         this.cylinders[index].scale.set(
-          easeIn(1, 1, t),
+          lerp(0.0001, 1, frame >= FRAME_FOR_BEAN(startBEAN) - 8),
           easeIn(0.0001, 1, t),
-          easeIn(1, 1, t)
+          lerp(0.0001, 1, frame >= FRAME_FOR_BEAN(startBEAN) - 8)
         );
       }
 
