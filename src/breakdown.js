@@ -90,18 +90,19 @@
     renderZoomer() {
       const fontYOffset = 0.3223;
       this.ctx.save();
-      this.ctx.fillStyle = '#ffeb0c';
+      this.ctx.fillStyle = '#77e15d';
       this.ctx.fillRect(-8, -4.5, 16, 9);
       this.ctx.font = 'bold 2pt schmalibre';
       this.ctx.textBaseline = 'middle';
       this.ctx.textAlign = 'right';
       this.ctx.fillStyle = 'white';
       this.ctx.lineWidth = 0.2;
-      this.ctx.strokeStyle = 'black';
-      this.ctx.strokeText('NO', -8 / 3 - 0.25, fontYOffset);
+      this.ctx.fillStyle = 'rgb(55, 60, 63)';
+      this.ctx.fillText('NO', -8 / 3 - 0.25 + 0.1, fontYOffset + 0.1);
+      this.ctx.fillStyle = 'white';
       this.ctx.fillText('NO', -8 / 3 - 0.25, fontYOffset);
 
-      this.ctx.fillStyle = 'black';
+      this.ctx.fillStyle = 'rgb(55, 60, 63)';
       this.ctx.textAlign = 'left';
 
       let t = (this.frame - FRAME_FOR_BEAN(3408 - 6)) / (
@@ -288,7 +289,7 @@
       this.ctx.restore();
     }
 
-    render(renderer) {
+    render() {
       this.ctx.fillStyle = '#373c3f';
       this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
 
@@ -310,14 +311,14 @@
       let textColor = 'white';
       let textShadow = true;
       if(BEAN >= 3648 + 16) {
-        textColor = '#373c3f';
+        textColor = 'white';
         textShadow = false;
         text = 'JUST REVISION';
         cameraZoom = 1;
         cameraX = 0;
         cameraRotate = -0.05;
       } else if(BEAN >= 3648 + 10) {
-        textColor = '#373c3f';
+        textColor = 'rgb(55, 60, 63)';
         textShadow = false;
         text = 'JUST REVIS';
         textOffset = -1.27;
@@ -325,7 +326,7 @@
         cameraX = 1.8;
         cameraRotate = 0.05;
       } else if(BEAN >= 3648 + 4) {
-        textColor = '#373c3f';
+        textColor = 'rgb(55, 60, 63)';
         textShadow = false;
         text = 'JUST RE';
         textOffset = -2.452;
@@ -333,7 +334,7 @@
         cameraX = 4;
         cameraRotate = -0.1;
       } else if(BEAN >= 3648) {
-        textColor = '#373c3f';
+        textColor = 'rgb(55, 60, 63)';
         textShadow = false;
         text = 'JUST';
         textOffset = -3.526;
@@ -405,8 +406,29 @@
       this.ctx.scale(cameraZoom, cameraZoom);
 
       if(BEAN >= 3624) {
-        this.ctx.fillStyle = '#c8c3c0';
+        this.ctx.fillStyle = '#77e15d';
         this.ctx.fillRect(-8 * 2, -4.5 * 2, 16 * 2, 9 * 2); 
+
+        this.ctx.fillStyle = 'rgba(255, 255, 255, 0.15)';
+        const width = 0.5;
+        this.ctx.save();
+        this.ctx.rotate(Math.PI / 8);
+        const frameStart = 9501 - 5;
+        for(let i = 0; i < 20; i++) {
+          const height = easeOut(0, 20, (this.frame - frameStart - i * 1) / 20);
+          let yOffset = 0;
+          if(i % 2 == 0) {
+            yOffset = 20 - height;
+          }
+          this.ctx.fillRect(
+            -10 + i * width * 2, 
+            -4.5 * 2 + yOffset,
+            width,
+            height);
+
+        }
+        this.ctx.restore();
+
       } else if(BEAN >=  offset + 48 + 24 + 6) {
         const t = easeIn(1, 0,
               (this.frame - FRAME_FOR_BEAN(3576)) /
@@ -430,6 +452,18 @@
       const shadowOffset = 0.08;
       const fontYOffset = 0.5123;
       this.ctx.save();
+
+      if(BEAN >= 3660 - 2 + 6) {
+        this.ctx.fillStyle = 'rgb(55, 60, 63)';
+        this.ctx.moveTo(-5.8, 0.3);
+        this.ctx.lineTo(-5.3, 0.9);
+        this.ctx.lineTo(5.4, 1.1);
+        this.ctx.lineTo(6.1 ,-0.35);
+        this.ctx.lineTo(5.5 ,-1.15);
+        this.ctx.lineTo(-5.2 ,-0.9);
+        this.ctx.fill();
+      }
+
       this.ctx.translate(textOffset, fontYOffset);
       this.ctx.globalAlpha = textOpacity;
       if(textShadow) {
