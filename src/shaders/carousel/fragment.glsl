@@ -67,6 +67,6 @@ void main() {
     gl_FragColor = mix(layer2Color, overlay2Color, overlay2Color.a);
 
     if (overlay2Color.rgb == vec3(0., 0., 1.)) {
-        gl_FragColor = texture2D(nextScene, uv);
+        gl_FragColor = texture2D(nextScene, vUv);
     }
 }
