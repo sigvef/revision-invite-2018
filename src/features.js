@@ -209,13 +209,13 @@
 
       if(BEAT) {
         switch(BEAN) {
-        case 3816:
+        case 3816.1:
           this.cameraShakeVelocity.x = (this.camera.position.x -
-            this.cameraPreviousPosition.x) * 0.01;
+            this.cameraPreviousPosition.x) * .05;
           this.cameraShakeVelocity.y = (this.camera.position.y -
-            this.cameraPreviousPosition.y) * 0.01;
+            this.cameraPreviousPosition.y) * .05;
           this.cameraShakeVelocity.z = (this.camera.position.z -
-            this.cameraPreviousPosition.z) * 0.01;
+            this.cameraPreviousPosition.z) * .05;
           break;
         case 3672:
         case 3768:
@@ -248,11 +248,11 @@
       this.ball.scale.set(scale, scale, scale);
       this.textball.scale.set(scale, scale, scale);
       let oldscale = scale;
-      if(BEAN >= 3816) {
-        scale = 1.08;
-      } else {
-        scale = 1;
-      }
+
+      const threeEightT = (frame - FRAME_FOR_BEAN(3816 - 24) / (
+              FRAME_FOR_BEAN(3816) - FRAME_FOR_BEAN(3816 - 24)));
+      scale = easeIn(1, 1.08, threeEightT);
+
       scale = easeIn(0.01, scale, t);
       this.gridball.scale.set(scale, scale, scale);
 
@@ -265,6 +265,19 @@
       this.ball.material.uniforms.lineWidth.value = (0.03 + scalediff * scalediff) * 0.9 * 2;
       this.ball.material.uniforms.ballRadius.value = (0.15 + scalediff * scalediff) * 0.9;
       this.ball.material.uniforms.smoothPercentage.value = scalediff * 10;
+
+      this.ball.material.uniforms.lineWidth.value = easeIn(
+          this.ball.material.uniforms.lineWidth.value,
+          0.03,
+          threeEightT);
+      this.ball.material.uniforms.ballRadius.value = easeIn(
+          this.ball.material.uniforms.ballRadius.value,
+          0.18,
+          threeEightT);
+      this.ball.material.uniforms.smoothPercentage.value = easeIn(
+          this.ball.material.uniforms.smoothPercentage.value,
+          0.1, 
+          threeEightT);
 
       this.textball.material.map = this.inputs.featuretex.getValue();
       if(this.textball.material.map) {
@@ -292,8 +305,8 @@
       this.gridball.rotation.x = 1.5 + frame / 170;
       this.gridball.rotation.y = 1.7 + frame / 100;
       if(BEAN >= 3720) {
-        this.gridball.rotation.x = 1.5 + frame / 7;
-        this.gridball.rotation.y = 1.7 + frame / 100;
+        this.gridball.rotation.x += (frame - 9954) / 7;
+        this.gridball.rotation.y += 0;
       }
       this.textball.visible = true;
       if(BEAN >= 3840) {
@@ -339,14 +352,24 @@
         let cameraT =  (frame - FRAME_FOR_BEAN(tunnelStartBean)) / (
             FRAME_FOR_BEAN(3816) - FRAME_FOR_BEAN(tunnelStartBean));
         const point = this.tunnelPath.getPoint(1 - t);
-        const cameraDistance = easeIn(0.15, 0.01, cameraT * cameraT);
+        const cameraDistance = easeIn(0.15, 0.02, cameraT * cameraT);
         const cameraPoint = this.tunnelPath.getPoint(1 - (t - cameraDistance));
         const cameraLookatPoint = this.tunnelPath.getPoint(1 - (t + 0.15));
+        point.x = easeIn(point.x, 0, cameraT);
+        point.y = easeIn(point.y, 0, cameraT);
+        point.z = easeIn(point.z, 0, cameraT);
         this.ball.position.copy(point);
         this.bg.position.copy(point);
         this.bg.position.z -= 100;
+        cameraPoint.x = easeIn(cameraPoint.x, 1.1, cameraT);
+        cameraPoint.y = easeIn(cameraPoint.y, 0, cameraT);
+        cameraPoint.z = easeIn(cameraPoint.z, 25, cameraT);
         position.copy(cameraPoint);
         this.camera.lookAt(cameraLookatPoint);
+
+        const ballTargetScale = easeIn(this.ball.scale.x, 1, cameraT);
+        this.ball.scale.set(ballTargetScale, ballTargetScale, ballTargetScale);
+        this.textball.scale.copy(this.ball.scale);
 
 
         if(BEAN <= 3720) {
@@ -395,6 +418,12 @@
         }
         this.ball.material.uniforms.ambientLightIntensity.value = this.stabThrob;
       }
+
+      this.ball.material.uniforms.ambientLightIntensity.value = easeIn(
+        this.ball.material.uniforms.ambientLightIntensity.value,
+        0.2,
+        (frame - FRAME_FOR_BEAN(3816 - 24)) / (
+          FRAME_FOR_BEAN(3816) - FRAME_FOR_BEAN(3816 - 24)));
 
       this.gridball.material.uniforms.frame.value = frame;
       this.ball.material.uniforms.frame.value = frame;
