@@ -58,7 +58,8 @@
         2: new THREE.MeshBasicMaterial({ color: greenColor }),
         3: new THREE.MeshBasicMaterial({ color: pinkColor }),
       };
-      const [numX, numY] = [42, 21];
+      this.numHexagonsX = 22;
+      this.numHexagonsY = 21;
       const cylinderRadius = 0.2;
       const cylinderGeometry = new THREE.CylinderGeometry(cylinderRadius, cylinderRadius, cylinderRadius / 4, 6);
       const padding = 0.1;
@@ -67,11 +68,11 @@
       const offsetY = Math.cos(Math.PI / 6.0) * distanceBetweenHexagonCores;
 
       this.hexagons = new THREE.Object3D();
-      for (let y = 0; y < numY; y++) {
-        for (let x = 0; x < numX; x++) {
+      for (let y = 0; y < this.numHexagonsY; y++) {
+        for (let x = 0; x < this.numHexagonsX; x++) {
           const cylinder = new THREE.Mesh(
             cylinderGeometry,
-            this.colors[2],
+            this.colors[0],
           );
 
           cylinder.rotation.x = Math.PI / 2;
@@ -85,8 +86,8 @@
           this.hexagons.add(cylinder);
         }
       }
-      this.hexagons.position.x = -(numX - 1) * offsetY / 2;
-      this.hexagons.position.y = -(numY - 0.5) * offsetX;
+      this.hexagons.position.x = -(this.numHexagonsX - 1) * offsetY / 2;
+      this.hexagons.position.y = -(this.numHexagonsY - 0.5) * offsetX;
       this.hexagons.position.z = -80;
 
       // BALL
@@ -113,6 +114,7 @@
         this.scene.add(beamMesh);
       }
       this.beamThicknessScalers = [1, 1, 1, 1, 1, 1];
+      // TODO: turn into an object with direct property access, for performance reasons
       this.chordStabBeans = [
         0, 4, 10, 22, 24, 28, 34, 40, 42, 44, 46,
         48, 52, 58, 72, 76, 82, 96, 100, 106, 118,
@@ -135,7 +137,15 @@
         }
       };
 
+      // TODO: turn into an object with direct property access, for performance reasons
+      this.leadBeans = [
+        3072, 3082, 3090, 3094, 3096, 3102, 3106, 3112, 3114, 3118, 3120, 3130, 3138, 3142, 3144, 3150, 3154, 3168,
+        3178, 3186, 3190, 3192, 3198, 3202, 3210, 3214, 3216, 3226, 3234, 3238, 3240, 3244, 3246, 3250, 3264, 3274,
+        3282, 3286, 3288, 3294, 3298, 3306, 3310,
+      ];
+
       // FRACTURE
+      /*
       this.fractureMaterial = new THREE.MeshBasicMaterial({color: 0xffffff});
       this.fractureSize = 0.3;
       this.fractureGeometry = new THREE.BoxGeometry(this.fractureSize, this.fractureSize, this.fractureSize);
@@ -146,6 +156,7 @@
         this.fractureParts.push(fractureMesh);
         this.scene.add(fractureMesh);
       }
+      */
 
       // REVISION LOGO
       this.revisionLogoSegments = [
@@ -335,6 +346,7 @@
       this.ps.update();
 
       // FRACTURE PARTS
+      /*
       for (let i = 0; i < this.fractureParts.length; i++) {
         const fracturePart = this.fractureParts[i];
         fracturePart.position.x = this.fractureSize * (i % 15) - 7.5 * this.fractureSize;
@@ -344,6 +356,7 @@
         fracturePart.rotation.y = 0;
         fracturePart.rotation.z = 0;
       }
+      */
     }
 
     // 33333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333
@@ -410,7 +423,16 @@
 
       this.camera.lookAt(new THREE.Vector3(0, 0, -80));
 
+      // HEXAGONS
+      for (let i = 0; i < this.hexagons.children.length; i++) {
+        const hexagon = this.hexagons.children[i];
+        hexagon.traverse((obj) => {
+          obj.material = this.colors[0]; // grey
+        });
+      }
+
       // FRACTURE PARTS
+      /*
       for (let i = 0; i < this.fractureParts.length; i++) {
         const fracturePart = this.fractureParts[i];
         fracturePart.position.x = this.fractureSize * (i % 15) - 7.5 * this.fractureSize;
@@ -420,6 +442,7 @@
         fracturePart.rotation.y = 0;
         fracturePart.rotation.z = 0;
       }
+      */
     }
 
     // 44444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444
@@ -473,14 +496,33 @@
       this.ball.rotation.y = lerp(0, 2, progress);
 
       // HEXAGONS
+
+      const idx = this.leadBeans.indexOf(BEAN);
+      if (idx !== -1) {
+        if (idx >= 10) {
+          this.hexagonRadius = (idx - 9) * 0.9;
+        }
+      }
+      if (!this.hexagonRadius) {
+        this.hexagonRadius = 0;
+      }
+
       for (let i = 0; i < this.hexagons.children.length; i++) {
         const hexagon = this.hexagons.children[i];
         hexagon.traverse((obj) => {
-          obj.material = this.colors[i % 4];
+          const x = obj.position.x + this.hexagons.position.x;
+          const y = obj.position.y + this.hexagons.position.y;
+          const distanceToCenter = Math.sqrt(x * x + y * y);
+          if (distanceToCenter <= this.hexagonRadius) {
+            obj.material = this.colors[i % 4];
+          } else {
+            //obj.visible = false;
+          }
         });
       }
 
       // FRACTURE PARTS
+      /*
       for (let i = 0; i < this.fractureParts.length; i++) {
         const fracturePart = this.fractureParts[i];
         let x = this.fractureSize * (i % 15) - 7.5 * this.fractureSize;
@@ -521,6 +563,7 @@
           }
         }
       }
+      */
 
       // BEAMS
       for (let i = 0; i < this.beams.length; i++) {
