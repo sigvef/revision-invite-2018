@@ -131,7 +131,8 @@
           star_geometry.vertices.push(new THREE.Vector3(inner_distance * r32, inner_distance / 2, 0));
           star_geometry.vertices.push(new THREE.Vector3(0, outer_distance, 0));
 
-      this.three_point_star = new THREE.Line( star_geometry, line_material );
+      this.three_point_star = new THREE.Object3D();
+      this.three_point_star.add(new THREE.Line( star_geometry, line_material ));
       this.scene.add(this.three_point_star);
 
       var darker_line_material = new THREE.LineBasicMaterial( { color: 0x373c3f } );
@@ -226,11 +227,11 @@
 
       //prepare the actually visible geometries
       this.line_width = 2;
-      this.star_arr = this.add_lines_for_geometry(star_geometry);
+      this.star_arr = this.add_lines_for_geometry(star_geometry, this.three_point_star);
     }
 
 
-    add_lines_for_geometry(geometry) {
+    add_lines_for_geometry(geometry, container) {
       var material = new THREE.LineBasicMaterial( { color: 0xFFFFFF } );
       var arr = [];
       for(var i = 0; i < geometry.vertices.length;  i++) {
@@ -250,7 +251,7 @@
         arr[i].faces.push( new THREE.Face3( 0, 2, 1 ) );
         arr[i].faces.push( new THREE.Face3( 0, 3, 2 ) );
 
-        this.scene.add(new THREE.Mesh( arr[i], new THREE.MeshBasicMaterial()));
+        container.add(new THREE.Mesh( arr[i], new THREE.MeshBasicMaterial()));
       }
       return arr;
     }
@@ -314,11 +315,11 @@
       this.level1_hex1.scale.set(1, 1, 1);
       this.level1_hex2.scale.set(1, 1, 1);
       this.level1_hex3.scale.set(1, 1, 1);
-      this.three_point_star.geometry.vertices[1].x = 0;
-      this.three_point_star.geometry.vertices[1].y = 0;
-      this.three_point_star.geometry.vertices[3].y = 0;
-      this.three_point_star.geometry.vertices[5].x = 0;
-      this.three_point_star.geometry.vertices[5].y = 0;
+      this.three_point_star.children[0].geometry.vertices[1].x = 0;
+      this.three_point_star.children[0].geometry.vertices[1].y = 0;
+      this.three_point_star.children[0].geometry.vertices[3].y = 0;
+      this.three_point_star.children[0].geometry.vertices[5].x = 0;
+      this.three_point_star.children[0].geometry.vertices[5].y = 0;
       this.three_point_star.rotation.set(0, 0, 0);
       this.three_point_star.position.set(200, 0, 0);
       this.spin_cube.position.set(200, 0, 0);
@@ -407,11 +408,11 @@
 
         this.three_point_star.position.set(0, 0, 0);
 
-        this.three_point_star.geometry.vertices[1].x = -(distance3 - 10) * r32;
-        this.three_point_star.geometry.vertices[1].y = (distance3 - 10) / 2;
-        this.three_point_star.geometry.vertices[3].y = -(distance2 - 10);
-        this.three_point_star.geometry.vertices[5].x = (distance1 - 10) * r32;
-        this.three_point_star.geometry.vertices[5].y = (distance1 - 10) / 2;
+        this.three_point_star.children[0].geometry.vertices[1].x = -(distance3 - 10) * r32;
+        this.three_point_star.children[0].geometry.vertices[1].y = (distance3 - 10) / 2;
+        this.three_point_star.children[0].geometry.vertices[3].y = -(distance2 - 10);
+        this.three_point_star.children[0].geometry.vertices[5].x = (distance1 - 10) * r32;
+        this.three_point_star.children[0].geometry.vertices[5].y = (distance1 - 10) / 2;
 
         this.three_point_star.rotation.set(0, 0, - 3 * Math.PI / 3 * asmoothstep(FRAME_FOR_BEAN(26.25 * 48), FRAME_FOR_BEAN(12), frame));
 
@@ -467,9 +468,10 @@
 
       }
 
-      this.update_geometry_lines(this.three_point_star.geometry, this.star_arr);
+      this.update_geometry_lines(this.three_point_star.children[0].geometry, this.star_arr);
 
-      this.three_point_star.geometry.verticesNeedUpdate = true;
+
+      this.three_point_star.children[0].geometry.verticesNeedUpdate = true;
     }
   }
 
