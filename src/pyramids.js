@@ -260,6 +260,27 @@
         upperToBean: 0,
         lowerFromBean: 2256 + 48 * 4.75, 
         lowerToBean: 2256 + 48 * 4.75 + 6,
+      /* N */
+      }, {
+        upperFromBean: 2256 + 48 * 2, 
+        upperToBean: 2256 + 48 * 3,
+        lowerFromBean: 0, 
+        lowerToBean: 0,
+      }, {
+        upperFromBean: 0,
+        upperToBean: 0,
+        lowerFromBean: 2256 + 48 * 4,
+        lowerToBean: 2256 + 48 * 4 + 6,
+      }, {
+        upperFromBean: 0,
+        upperToBean: 0,
+        lowerFromBean: 2256 + 48 * 5,
+        lowerToBean: 2256 + 48 * 5 + 6,
+      }, {
+        upperFromBean: 0,
+        upperToBean: 0,
+        lowerFromBean: 2256 + 48 * 6,
+        lowerToBean: 2256 + 48 * 6 + 6,
       }];
 
       this.coords = [
@@ -375,7 +396,8 @@
         {from: 37, to: 38, startBean: 2400 + 12 * 3, endBean: 2400 + 12 * 4},
         {from: 38, to: 39, startBean: 2400 + 12 * 4, endBean: 2400 + 12 * 5},
         {from: 39, to: 40, startBean: 2400 + 12 * 5, endBean: 2400 + 12 * 6},
-        {from: 41, to: 34, startBean: 2400 + 12 * 6, endBean: 2400 + 12 * 7},
+        {from: 40, to: 41, startBean: 2400 + 12 * 6, endBean: 2400 + 12 * 7},
+        {from: 41, to: 34, startBean: 2400 + 12 * 7, endBean: 2400 + 12 * 8},
 
         /* N */
         {from: 42, to: 43, startBean: 2400, endBean: 2400 + 48},
@@ -480,7 +502,7 @@
         object3d.position.x = coords.x / 10;
         object3d.position.y = 1;
         object3d.position.z = coords.z / 10;
-        object3d.scale.x = Math.sqrt(Math.pow(next.z - coords.z, 2) + Math.pow(next.x - coords.x, 2)) / 10;
+        object3d.scale.x = Math.max(0.001, Math.sqrt(Math.pow(next.z - coords.z, 2) + Math.pow(next.x - coords.x, 2)) / 10);
         const angle = -Math.atan2(next.z - coords.z, next.x - coords.x);
         object3d.rotation.y = angle;
         this.lasers.push(laserBeam);
@@ -572,7 +594,7 @@
         }
         const coords = this.coords[edge.from];
         const next = this.coords[edge.to];
-        const length = Math.sqrt(Math.pow(next.z - coords.z, 2) + Math.pow(next.x - coords.x, 2)) / 10;
+        const length = Math.max(0.001, Math.sqrt(Math.pow(next.z - coords.z, 2) + Math.pow(next.x - coords.x, 2)) / 10);
         const localT = (frame - FRAME_FOR_BEAN(edge.startBean)) / (FRAME_FOR_BEAN(edge.endBean) - FRAME_FOR_BEAN(edge.startBean));
         laser.object3d.scale.x = lerp(0.001, length, localT);
         laser.sprite.visible = localT > 0.05 && localT < 0.9999;
@@ -643,22 +665,23 @@
             t)
         );
         quaternion.set(
-            lerp(quaternion.x, -0.2299600654102617, t), 
+            lerp(quaternion.x, -0.2299600654102617, t),
             lerp(quaternion.y, -0.3576233423821262, t),
             lerp(quaternion.z, -0.09421327323726097, t),
             lerp(quaternion.w, 0.9001931861805363, t));
 
         t = clamp(0, (frame - 6072) / (6260 - 6072), 1);
         position.set(
-          easeIn(position.x, -6.4, t * t),
-          lerp(position.y, 52.13, t * t * t),
-          easeIn(position.z, 86.9, t)
+          easeIn(position.x, 23.6, t * t),
+          lerp(position.y, 40.4, t * t * t),
+          easeIn(position.z, 45.1, t)
         );
         this.camera.quaternion.set(
-          easeIn(quaternion.x, -0.41257331660909724, t),
-          easeIn(quaternion.y, -0.361267901863899, t),
-          easeIn(quaternion.z, 0.022388817497537183, t),
-          easeIn(quaternion.w, 0.8359231438093384, t));
+          lerp(quaternion.x, -0.7739245846765637, t * t),
+          easeIn(quaternion.y, 0.04507274468663894, t * t),
+          easeIn(quaternion.z, -0.04315116964068938, t * t),
+          easeIn(quaternion.w, 0.6301961293742305, t * t)
+        );
 
         if(frame >= 6322) {
           t = clamp(0, (frame - 6322) / (6510 - 6322), 1);
@@ -684,10 +707,31 @@
             -0.027595680369875086,
             0.7939694219054555);
           quaternion.set(
-            easeIn(quaternion.x, -0.5661388475838134, t * t),
-            easeIn(quaternion.y, -0.3525695174641078, t * t),
-            easeIn(quaternion.z, 0.08535741284411338, t * t),
-            easeIn(quaternion.w, 0.7401997383707709, t * t));
+            easeIn(quaternion.x, -0.5661388475838134, t),
+            easeIn(quaternion.y, -0.3525695174641078, t),
+            easeIn(quaternion.z, 0.08535741284411338, t),
+            easeIn(quaternion.w, 0.7401997383707709, t)
+          );
+
+          t = clamp(0, (frame - 6444) / (6680 - 6444), 1);
+          position.set(
+            smoothstep(position.x, -3.9, t),
+            smoothstep(position.y, 62.11, t),
+            smoothstep(position.z, 64.24, t)
+          );
+          quaternion.set(
+            lerp(quaternion.x, -0.604121491240459, t),
+            lerp(quaternion.y, -0.29624726853791394, t),
+            lerp(quaternion.z, 0.18852166063286604, t),
+            lerp(quaternion.w, 0.7153561093451678, t)
+          );
+
+          t = clamp(0, (frame - 6600) / (6760 - 6600), 1);
+          position.set(
+            smoothstep(position.x, -3.34, t),
+            smoothstep(position.y, 70.32, t),
+            smoothstep(position.z, 65.07, t)
+          );
         }
 
         this.camera.updateProjectionMatrix();
