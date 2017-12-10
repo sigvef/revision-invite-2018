@@ -84,7 +84,12 @@
 
       this.ctx.fillStyle = 'rgb(55, 60, 63)';
       this.ctx.beginPath();
-      const t2 = elasticOut(0, 1, 1.5, (this.frame - 4006 + 10) / 20);
+      let t2 = elasticOut(0, 0.4, 1.5, (this.frame - 4006 + 10) / 20);
+      for (const timing of Object.values(timings)) {
+        if (timing <= this.frame) {
+          t2 = lerp(0.6, 0.4, (this.frame - timing) / 10);
+        }
+      }
       this.ctx.arc(8, 4.5, t2, 0, Math.PI * 2);
       this.ctx.fill();
 
