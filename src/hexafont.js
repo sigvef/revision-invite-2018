@@ -517,6 +517,7 @@
           y: 0.4353303335010363,
           z: -28.322423444873575,
         }
+        /*
       }, {
         bean: 1632 + 48 + 12 + 9 - 3,
         easing: 'step',
@@ -539,6 +540,7 @@
           y: 3.763425633245651,
           z: -10.722103829131264,
         }
+        */
       }, {
         bean: 1632 + 48 + 12 + 18 + 9 - 3,
         easing: 'step',
@@ -579,6 +581,7 @@
           z: -0.007062990946289542,
           w: 0.007339297872259038,
         }
+        /*
       }, {
         bean: 1632 + 48 + 12 + 9 - 3,
         easing: 'step',
@@ -606,6 +609,7 @@
       }, {
         bean: 1632 + 48 + 12 + 18 + 9 - 3,
         easing: 'step',
+        */
       }, {
         bean: 1632 + 48 + 12 + 18 + 9,
         easing: 'step',
@@ -1072,8 +1076,17 @@
           riser.y = riser.y % 21;
           riser.x = Math.random() * 42 | 0;
         }
-        if(BEAN >= 1680 + 12 + 9 + 9 + 9 && BEAN < 1728) {
-          this.drawPixel(riser.x, riser.y | 0, riser.color);
+        if(BEAN >= 1680 + 12 + 9 &&
+            BEAN < 1680 + 12 + 9 + 9) {
+          this.drawPixel(riser.x, riser.y | 0, 2);
+        }
+        if(BEAN >= 1680 + 12 + 9 + 9 &&
+            BEAN < 1680 + 12 + 9 + 9 + 9) {
+          this.drawPixel(riser.x, riser.y | 0, 3);
+        }
+        if(BEAN >= 1680 + 12 + 9 + 9 + 9 &&
+            BEAN < 1728) {
+          this.drawPixel(riser.x, riser.y | 0, 2);
         }
       }
 
@@ -1155,7 +1168,22 @@
       this.camera.rotation.x += this.cameraShakeRotation.x;
       this.camera.rotation.y += this.cameraShakeRotation.y;
       this.camera.rotation.z += this.cameraShakeRotation.z;
-      if(BEAN >= 1680 + 12 + 9 + 9 + 9 && BEAN < 1728) {
+      if(BEAN >= 1680 - 24 + 18 && BEAN < (1680 + 6)) {
+        this.camera.position.x += (Math.random() - 0.5) * 0.5;
+        this.camera.position.y += (Math.random() - 0.5) * 0.5;
+        this.camera.position.z += (Math.random() - 0.5) * 0.5;
+      }
+      if(BEAN >= 1680 + 12 + 9 && BEAN < (1680 + 12 + 9 + 9 - 3)) {
+        this.camera.position.x += (Math.random() - 0.5) * 0.5;
+        this.camera.position.y += (Math.random() - 0.5) * 0.5;
+        this.camera.position.z += (Math.random() - 0.5) * 0.5;
+      }
+      if(BEAN >= 1680 + 12 + 9 + 9 && BEAN < (1680 + 12 + 9 + 9 + 9 - 3)) {
+        this.camera.position.x += (Math.random() - 0.5) * 0.5;
+        this.camera.position.y += (Math.random() - 0.5) * 0.5;
+        this.camera.position.z += (Math.random() - 0.5) * 0.5;
+      }
+      if(BEAN >= 1680 + 12 + 9 + 9 + 9 && BEAN < 1728 - 3) {
         this.camera.position.x += (Math.random() - 0.5) * 0.5;
         this.camera.position.y += (Math.random() - 0.5) * 0.5;
         this.camera.position.z += (Math.random() - 0.5) * 0.5;
