@@ -10,7 +10,7 @@
 
 
 
-      var zoom = 2;//5.8;
+      var zoom = 5.8;
       this.camera = new THREE.OrthographicCamera( -zoom * 16, zoom * 16 , zoom * 9, -zoom * 9, 1, 100000 );
       this.camera.position.z = 10000;
 
@@ -225,16 +225,15 @@
       this.spin_cube.rotation.set(spin * 0.7837 , spin , 0);
 
       //prepare the actually visible geometries
-      this.line_width = .3;
-      this.add_lines_for_geometry(star_geometry);
+      this.line_width = 2;
+      this.star_arr = this.add_lines_for_geometry(star_geometry);
     }
 
 
     add_lines_for_geometry(geometry) {
-      console.log(geometry.vertices.length);
       var material = new THREE.LineBasicMaterial( { color: 0xFFFFFF } );
-      //for(var i = 0; i < geometry.vertices.length;  i++) {
-      for(var i = 0; i < 1;  i++) {
+      var arr = [];
+      for(var i = 0; i < geometry.vertices.length;  i++) {
         var cur_x = geometry.vertices[i].x;
         var cur_y = geometry.vertices[i].y;
         var next_x = geometry.vertices[(i + 1)%geometry.vertices.length].x;
@@ -242,28 +241,47 @@
 
         var angle = Math.atan2(next_x - cur_x, next_y - cur_y);
 
-        console.log("angle:")
-        console.log(i);
-        console.log(angle / Math.PI);
+        arr.push(new THREE.Geometry());
+        arr[i].vertices.push(new THREE.Vector3(cur_x - this.line_width * Math.sin(angle + Math.PI/2), cur_y - this.line_width * Math.cos(angle + Math.PI/2),0));
+        arr[i].vertices.push(new THREE.Vector3(next_x - this.line_width * Math.sin(angle + Math.PI/2), next_y - this.line_width * Math.cos(angle + Math.PI/2),0));
+        arr[i].vertices.push(new THREE.Vector3(next_x + this.line_width * Math.sin(angle + Math.PI/2), next_y + this.line_width * Math.cos(angle + Math.PI/2),0));
+        arr[i].vertices.push(new THREE.Vector3(cur_x + this.line_width * Math.sin(angle + Math.PI/2), cur_y + this.line_width * Math.cos(angle + Math.PI/2),0));
 
-        var geometry = new THREE.Geometry();
-        geometry.vertices.push(new THREE.Vector3(cur_x - this.line_width * Math.sin(angle + Math.PI/2), cur_y - this.line_width * Math.cos(angle + Math.PI/2),0));
-        geometry.vertices.push(new THREE.Vector3(next_x - this.line_width * Math.sin(angle + Math.PI/2), next_y - this.line_width * Math.cos(angle + Math.PI/2),0));
-        geometry.vertices.push(new THREE.Vector3(next_x + this.line_width * Math.sin(angle + Math.PI/2), next_y + this.line_width * Math.cos(angle + Math.PI/2),0));
-        geometry.vertices.push(new THREE.Vector3(cur_x + this.line_width * Math.sin(angle + Math.PI/2), cur_y + this.line_width * Math.cos(angle + Math.PI/2),0));
+        arr[i].faces.push( new THREE.Face3( 0, 2, 1 ) );
+        arr[i].faces.push( new THREE.Face3( 0, 3, 2 ) );
 
-        geometry.faces.push( new THREE.Face3( 0, 2, 1 ) );
-        geometry.faces.push( new THREE.Face3( 0, 3, 2 ) );
-
-        var object = new THREE.Mesh( geometry, new THREE.MeshBasicMaterial() );
-        //var object = new THREE.Line( geometry, material );
-        this.scene.add(object);
-        var object2 = new THREE.Mesh( new THREE.BoxBufferGeometry( 1, 1, 1 ), new THREE.MeshBasicMaterial() );
-        this.scene.add(object2);
-
+        this.scene.add(new THREE.Mesh( arr[i], new THREE.MeshBasicMaterial()));
       }
+      return arr;
     }
 
+
+    update_geometry_lines(geometry, arr) {
+
+      for(var i = 0; i < geometry.vertices.length;  i++) {
+        var cur_x = geometry.vertices[i].x;
+        var cur_y = geometry.vertices[i].y;
+        var next_x = geometry.vertices[(i + 1)%geometry.vertices.length].x;
+        var next_y = geometry.vertices[(i + 1)%geometry.vertices.length].y;
+
+        var angle = Math.atan2(next_x - cur_x, next_y - cur_y);
+
+        //arr[i].vertices.push(new THREE.Vector3(cur_x - this.line_width * Math.sin(angle + Math.PI/2), cur_y - this.line_width * Math.cos(angle + Math.PI/2),0));
+        arr[i].vertices[0].x = cur_x - this.line_width * Math.sin(angle + Math.PI/2);
+        arr[i].vertices[0].y = cur_y - this.line_width * Math.cos(angle + Math.PI/2);
+        //arr[i].vertices.push(new THREE.Vector3(next_x - this.line_width * Math.sin(angle + Math.PI/2), next_y - this.line_width * Math.cos(angle + Math.PI/2),0));
+        arr[i].vertices[1].x = next_x - this.line_width * Math.sin(angle + Math.PI/2);
+        arr[i].vertices[1].y = next_y - this.line_width * Math.cos(angle + Math.PI/2);
+        //arr[i].vertices.push(new THREE.Vector3(next_x + this.line_width * Math.sin(angle + Math.PI/2), next_y + this.line_width * Math.cos(angle + Math.PI/2),0));
+        arr[i].vertices[2].x = next_x + this.line_width * Math.sin(angle + Math.PI/2);
+        arr[i].vertices[2].y = next_y + this.line_width * Math.cos(angle + Math.PI/2);
+        //arr[i].vertices.push(new THREE.Vector3(cur_x + this.line_width * Math.sin(angle + Math.PI/2), cur_y + this.line_width * Math.cos(angle + Math.PI/2),0));
+        arr[i].vertices[3].x = cur_x + this.line_width * Math.sin(angle + Math.PI/2);
+        arr[i].vertices[3].y = cur_y + this.line_width * Math.cos(angle + Math.PI/2);
+
+        arr[i] .verticesNeedUpdate = true;
+      }
+    }    
 
     update(frame) {
       super.update(frame);
@@ -448,6 +466,8 @@
         this.outer_center_hex.rotation.set(0, 0, rotation + Math.PI / 6);
 
       }
+
+      this.update_geometry_lines(this.three_point_star.geometry, this.star_arr);
 
       this.three_point_star.geometry.verticesNeedUpdate = true;
     }
