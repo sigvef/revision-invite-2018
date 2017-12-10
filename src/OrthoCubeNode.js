@@ -6,7 +6,8 @@
     }
 
     update(frame) {
-      this.kickThrob *= 0.95;
+      demo.nm.nodes.bloom.opacity = 0;
+      this.kickThrob *= 0.8;
       if(BEAT && BEAN % 12 == 0) {
         this.kickThrob = 1;
       }

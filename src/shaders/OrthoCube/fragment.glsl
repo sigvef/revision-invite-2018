@@ -176,7 +176,7 @@ void main() {
 
         vec3 p = eye + dir * dist;
         color = mod(oID, 2.0) == 0.0 ? white : color2;
-        color += 0.3 * kickThrob - 0.3;
+        //color += 0.3 * kickThrob;
         //float gray = + 0.1 + 0.5 * kickThrob;
     }
     
