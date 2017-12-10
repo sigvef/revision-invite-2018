@@ -36,9 +36,9 @@
       "_20_A_theme_breakdown_2": "breakdown.render",
       "_21_third_B_theme_1": "featureblend.render",
       "_22_third_B_theme_2": "featureblend.render",
-      "_22_third_B_theme_3": "rotataroon.render",
-      "_22_third_B_theme_4": "rotataroon.render",
-      "_22_third_B_theme_5": "rotataroon.render",
+      "_22_third_B_theme_3": "rotablend.render",
+      "_22_third_B_theme_4": "rotablend.render",
+      "_22_third_B_theme_5": "rotablend.render",
       "_23_final_A_theme_rolldown": "tree.render",
       "_24_outro": "ewerk.render",
       "_25_outro_2": "fadeout.render"
@@ -432,7 +432,22 @@
     }
   },
   {
+    "id": "rotablend",
+    "type": "AlphaBlendNode",
+    "options": {
+      "shader": "AlphaBlend"
+    },
+    "connected": {
+      "under": "rotataroon.render",
+      "over": "textigrades.render"
+    }
+  },
+  {
     "id": "Ccc",
     "type": "ccc"
+  },
+  {
+    "id": "textigrades",
+    "type": "textigrades"
   }
 ]
