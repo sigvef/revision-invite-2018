@@ -78,9 +78,15 @@
         this.ctx.lineTo(0 + 1.5, 10 + 10 * t);
         this.ctx.lineTo(0, 10 * t);
         this.ctx.fill();
-        this.ctx.stroke();
         this.ctx.restore();
+
       }
+
+      this.ctx.fillStyle = 'rgb(55, 60, 63)';
+      this.ctx.beginPath();
+      const t2 = elasticOut(0, 1, 1.5, (this.frame - 4006 + 10) / 20);
+      this.ctx.arc(8, 4.5, t2, 0, Math.PI * 2);
+      this.ctx.fill();
 
       this.ctx.fillStyle = 'rgb(0, 0, 255)';
       const t = easeOut(0, 1, (this.frame - timings[30]) / 120);
