@@ -150,7 +150,24 @@
       this.cube2.visible = frame >= 10200;
 
       if(BEAN >= 3960) {
-        const scale = 1 + this.lightThrob * 0.25;
+        let scale = 1 + this.lightThrob * 0.25;
+        if (BEAN >= 84 * 48 + 4) {
+          if (BEAN < 84 * 48 + 6) {
+            scale += 1;
+          } else if (BEAN < 84 * 48 + 10) {
+            scale += 2;
+          } else if (BEAN < 84 * 48 + 12) {
+            scale += 4;
+          } else if (BEAN < 84 * 48 + 16) {
+            scale += 6;
+          } else if (BEAN < 84 * 48 + 18) {
+            scale += 8;
+          } else if (BEAN < 84 * 48 + 24) {
+            scale += 10;
+          } else if (BEAN < 84 * 48 + 30) {
+            scale += 12;
+          }
+        }
         this.cube.scale.set(scale, scale, scale);
         this.cube2.visible = false;
         this.cube.material.uniforms.lineAmount.value = 1;

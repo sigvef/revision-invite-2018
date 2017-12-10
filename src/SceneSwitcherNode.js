@@ -133,7 +133,7 @@
         selectedScene = this.inputs._22_third_B_theme_3;
       } else if (BEAN < 48 * 81.5) {
         selectedScene = this.inputs._22_third_B_theme_4;
-      } else if (BEAN < 48 * 84.5) {
+      } else if (BEAN < 48 * 84.5 - 6) {
         selectedScene = this.inputs._22_third_B_theme_5;
       } else if (BEAN < 48 * 88.5 - 1) {
         selectedScene = this.inputs._23_final_A_theme_rolldown;

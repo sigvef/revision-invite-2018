@@ -32,7 +32,9 @@
       this.ctx.textAlign = 'left';
       this.ctx.textBaseline = 'middle';
 
-      if(BEAN >= 3960 + 24 + 9) {
+      if(BEAN >= 84 * 48 + 4) {
+        // Show nothing
+      } else if(BEAN >= 3960 + 24 + 9) {
         this.ctx.textAlign = 'center';
         const x = -8 + 2 * 16 / 3;
         const y = -0.1;
