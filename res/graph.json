@@ -17,7 +17,7 @@
       "_04_car_rev_interstitial": "schmapple.render",
       "_05_first_A_theme_1": "textout.render",
       "_05_first_A_theme_1_2": "cubes.render",
-      "_06_first_A_theme_2": "GridShader.render",
+      "_06_first_A_theme_2": "AtariRacer.render",
       "_06_first_A_theme_2_2": "textout.render",
       "_07_first_B_theme_1": "clockTransition.render",
       "_08_first_B_theme_2": "clockTransition.render",
@@ -131,24 +131,14 @@
     }
   },
   {
-    "id": "GridNode",
-    "type": "gridNode"
+    "id": "AtariRacer",
+    "type": "AtariRacer"
   },
   {
     "id": "lulle",
     "type": "lulleNode",
     "options": {
       "shader": "lulle"
-    }
-  },
-  {
-    "id": "GridShader",
-    "type": "GridShaderNode",
-    "options": {
-      "shader": "GridShader"
-    },
-    "connected": {
-      "image": "GridNode.render"
     }
   },
   {
@@ -323,7 +313,7 @@
     },
     "connected": {
       "A": "text.render",
-      "B": "GridShader.render"
+      "B": "AtariRacer.render"
     }
   },
   {
