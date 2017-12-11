@@ -44,7 +44,6 @@
       };
       Loader.loadAjax('res/ewerk.obj', text => {
         const obj = objLoader.parse(text);
-        console.log(obj);
         obj.rotation.y += Math.PI;
         obj.scale.set(10, 10, 10);
         obj.traverse(mesh => {
@@ -200,12 +199,13 @@
       this.scene.add(this.skybox);
 
       this.revisionLogo = new THREE.Mesh(
-        new THREE.PlaneGeometry(545, 545, 1, 1),
+        new THREE.PlaneGeometry(1920, 1080, 1, 1),
         new THREE.MeshBasicMaterial({
-          map: Loader.loadTexture('res/revision_o.png'),
+          map: Loader.loadTexture('res/end.png'),
           transparent: true,
         })
       );
+      this.revisionLogo.scale.set(0.75, 0.75, 0.75);
       this.revisionLogo.rotation.x = -Math.PI / 2;
       this.revisionLogo.position.set(0, 350, 55);
       this.scene.add(this.revisionLogo);
