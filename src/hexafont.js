@@ -976,6 +976,9 @@
 
           cylinder.rotation.x = Math.PI / 2;
           cylinder.rotation.y = Math.PI / 2;
+          cylinder.scale.x = 1.2;
+          cylinder.scale.y = 1.2;
+          cylinder.scale.z = 1.2;
 
           const offset = x % 2 == 1 ? offsetX : 0;
           cylinder.position.x = x * offsetY;
@@ -1134,11 +1137,11 @@
         case baseBean + 48 + 12 + 9:
         case baseBean + 48 + 12 + 9 + 48:
           this.cameraShakeVelocity.x = (this.camera.position.x -
-            this.cameraPreviousPosition.x) * 0.02;
+            this.cameraPreviousPosition.x) * 0.5;
           this.cameraShakeVelocity.y = (this.camera.position.y -
-            this.cameraPreviousPosition.y) * 0.02;
+            this.cameraPreviousPosition.y) * 0.5;
           this.cameraShakeVelocity.z = (this.camera.position.z -
-            this.cameraPreviousPosition.z) * 0.02;
+            this.cameraPreviousPosition.z) * 0.5;
           this.cameraShakeAngularVelocity.x = (Math.random() - 0.5) * 0.01;
           this.cameraShakeAngularVelocity.y = (Math.random() - 0.5) * 0.01;
           this.cameraShakeAngularVelocity.z = (Math.random() - 0.5) * 0.01;
@@ -1433,7 +1436,9 @@
           }
           if(this.drawGrid[y][x] > 0) {
             if(this.grid[y][x].material.emissiveIntensity < 0.25) {
-              this.grid[y][x].rotation.z = Math.PI;
+              if(this.drawGrid[y][x] == 1) {
+                this.grid[y][x].rotation.z = Math.PI;
+              }
             }
             this.grid[y][x].material.emissiveIntensity = 1;
           }

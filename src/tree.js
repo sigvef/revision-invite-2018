@@ -35,7 +35,7 @@
         new THREE.SphereGeometry(.5, 32, 32),
         new THREE.MeshStandardMaterial({
           color: 0x373c3f,
-          roughness: 0,
+          roughness: 1,
           metalness: 0,
         })
       );
@@ -45,7 +45,7 @@
       this.background = new THREE.Mesh(
         new THREE.PlaneGeometry(80, 80, 1),
         new THREE.MeshBasicMaterial({
-          color: new THREE.Color(140 / 255, 40 / 255, 71 / 255),
+          color: new THREE.Color(255 / 255, 73 / 255, 130 / 255),
         })
       );
       this.background.position.z = -5;
@@ -105,26 +105,9 @@
       this.ballMeshes = [];
       for (const ball of this.balls) {
         const canvas = document.createElement('canvas');
-        canvas.width = 8 * GU;
-        canvas.height = 8 * GU;
+        canvas.width = 4 * GU;
+        canvas.height = 4 * GU;
         const ctx = canvas.getContext('2d');
-        ctx.fillRect(0, 0, 8 * GU, 8 * GU);
-        ctx.scale(GU, GU);
-        ctx.translate(4, 4);
-        ctx.rotate(Math.PI / 6);
-        ctx.shadowColor = 'rgba(255, 255, 255, 0.5)';
-        ctx.shadowOffsetX = 0;
-        ctx.shadowOffsetY = 0;
-        ctx.shadowBlur = GU * 5;
-        ctx.textAlign = 'center';
-        ctx.textBaseline = 'middle';
-        ctx.font = 'bold 4pt schmalibre';
-        ctx.fillStyle = 'white';
-        ctx.fillText(
-          ball.letter,
-          0,
-          1.6
-        );
         const output = new THREE.VideoTexture(canvas);
         output.minFilter = THREE.LinearFilter;
         output.magFilter = THREE.LinearFilter;
@@ -132,17 +115,17 @@
         const ballMesh = new THREE.Mesh(
           new THREE.CylinderGeometry(1, 1, 0.5, 6),
           new THREE.MeshStandardMaterial({
-            color: 0x77e15d,
             bumpMap: output,
             bumpScale: -0.01,
-            metalness: 1,
-            roughness: 0.9,
-            emissive: 0xffffff,
-            emissiveIntensity: 1,
-            emissiveMap: output,
+            metalness: 0,
+            roughness: 1,
+            map: output,
             shading: THREE.FlatShading,
           })
         );
+        ballMesh.output = output;
+        ballMesh.canvas = canvas;
+        ballMesh.ctx = ctx;
         ballMesh.position.set(ball.x, ball.y, 0);
         ballMesh.rotation.x = Math.PI / 2;
         ballMesh.rotation.y = Math.PI / 2;
@@ -174,6 +157,8 @@
           new THREE.MeshStandardMaterial({
             color: 0x373c3f,
             shading: THREE.FlatShading,
+            roughness: 1,
+            metalness: 0,
           })
         );
         cylinder.applyMatrix(orientation);
@@ -184,7 +169,7 @@
     }
 
     update(frame) {
-      demo.nm.nodes.bloom.opacity = 0.25;
+      demo.nm.nodes.bloom.opacity = 0;
 
       const scale = lerp(0.0001, 1, (frame - FRAME_FOR_BEAN(84 * 48 + 18)) / 6);
       this.root.scale.set(scale, scale, scale);
@@ -283,6 +268,8 @@
           Math.max((frame - FRAME_FOR_BEAN(4056 + 24 +9 +9)) / 60 / 60 * 115, 0);
       }
 
+      this.rotation = this.ballMeshes[0].rotation.y;
+
       if(BEAT) {
         switch(BEAN) {
         case 4056:
@@ -324,6 +311,40 @@
       this.camera.rotation.x += this.cameraShakeRotation.x;
       this.camera.rotation.y += this.cameraShakeRotation.y;
       this.camera.rotation.z += this.cameraShakeRotation.z;
+    }
+
+    render(renderer) {
+      for(let i = 0; i < this.ballMeshes.length; i++) {
+        const ballMesh = this.ballMeshes[i];
+        const ball = this.balls[i];
+        const ctx = ballMesh.ctx;
+        ctx.fillStyle = '#77e15d';
+        ctx.fillRect(0, 0, ballMesh.canvas.width, ballMesh.canvas.height);
+        ctx.save();
+        ctx.scale(GU, GU);
+        ctx.translate(2, 2);
+        ctx.rotate(Math.PI / 6);
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.font = 'bold 2pt schmalibre';
+        ctx.fillStyle = 'rgb(55, 60, 63)';
+        const offsetX = Math.sin(this.rotation) * 0.3;
+        const offsetY = -Math.cos(this.rotation) * 0.3;
+        ctx.fillText(
+          ball.letter,
+          offsetX,
+          offsetY + 0.3
+        );
+        ctx.fillStyle = 'white';
+        ctx.fillText(
+          ball.letter,
+          0,
+          0.3
+        );
+        ctx.restore();
+        ballMesh.output.needsUpdate = true;
+      }
+      super.render(renderer);
     }
   }
 
