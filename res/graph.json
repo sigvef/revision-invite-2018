@@ -18,7 +18,7 @@
       "_05_first_A_theme_1": "textout.render",
       "_05_first_A_theme_1_2": "cubes.render",
       "_06_first_A_theme_2": "AtariRacer.render",
-      "_06_first_A_theme_2_2": "textout.render",
+      "_06_first_A_theme_2_2": "AtariRacer.render",
       "_07_first_B_theme_1": "clockTransition.render",
       "_08_first_B_theme_2": "clockTransition.render",
       "_09_second_A_theme_1": "clockTransition.render",
