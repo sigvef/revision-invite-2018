@@ -19,7 +19,9 @@
                                  new THREE.MeshBasicMaterial({ color: 0x373c3f }));
       this.cube.position.set(0,0,-100);
       this.scene.add(this.cube);
- 
+
+      this.line_width = .20;
+
       var line_material = new THREE.LineBasicMaterial( { color: 0x999999 } );
       var small_radius  = 10;
       var hex_segments = 6;
@@ -66,14 +68,21 @@
       this.scene.add(this.center_line2);
       this.scene.add(this.center_line3);
       
-      var circle_geometry = new THREE.CircleGeometry( 10, 128 );
+      /*var circle_geometry = new THREE.CircleGeometry( 10, 128 );
       circle_geometry.vertices.shift();
       circle_geometry.computeLineDistances();
       this.center_circle = new THREE.Line( circle_geometry, line_material );
+      this.scene.add(this.center_circle);*/
+      
+      var circle_geometry = new THREE.TorusGeometry( 10, this.line_width, 10, 128 );
+      circle_geometry.computeLineDistances();
+      this.center_circle = new THREE.Mesh( circle_geometry, new THREE.MeshBasicMaterial() );
       this.scene.add(this.center_circle);
 
-      this.middle_center_hex = new THREE.Line( small_geometry, line_material );
-      this.outer_center_hex = new THREE.Line( small_geometry, line_material );
+      this.middle_center_hex = new THREE.Object3D();
+      this.middle_center_hex.add(new THREE.Line( small_geometry, line_material ));
+      this.outer_center_hex = new THREE.Object3D();
+      this.outer_center_hex.add(new THREE.Line( small_geometry, line_material ));
       this.middle_center_hex.rotation.set(0, 0, Math.PI / 6);
       this.outer_center_hex.rotation.set(0, 0, Math.PI / 6);
       this.scene.add(this.middle_center_hex);
@@ -107,15 +116,24 @@
       var horizontal_distance3 = 15;
 
       var small_claw_geometry = new THREE.Geometry();
+      
       small_claw_geometry.vertices.push(new THREE.Vector3(horizontal_distance1 * r32 + horizontal_distance3, horizontal_distance1 / 2, 0));
       small_claw_geometry.vertices.push(new THREE.Vector3(horizontal_distance2 * r32, horizontal_distance1 + horizontal_distance2 / 2, 0));
       small_claw_geometry.vertices.push(new THREE.Vector3(-horizontal_distance1 * r32, horizontal_distance1 / 2, 0));
       small_claw_geometry.vertices.push(new THREE.Vector3(-horizontal_distance1 * r32, -horizontal_distance1 / 2, 0));
       small_claw_geometry.vertices.push(new THREE.Vector3(horizontal_distance2 * r32, -(horizontal_distance1 + horizontal_distance2 / 2), 0));
       small_claw_geometry.vertices.push(new THREE.Vector3(horizontal_distance1 * r32 + horizontal_distance3, -horizontal_distance1 / 2, 0));
+      small_claw_geometry.vertices.push(new THREE.Vector3(horizontal_distance2 * r32, -(horizontal_distance1 + horizontal_distance2 / 2), 0));
+      small_claw_geometry.vertices.push(new THREE.Vector3(-horizontal_distance1 * r32, -horizontal_distance1 / 2, 0));
+      small_claw_geometry.vertices.push(new THREE.Vector3(-horizontal_distance1 * r32, horizontal_distance1 / 2, 0));
+      small_claw_geometry.vertices.push(new THREE.Vector3(horizontal_distance2 * r32, horizontal_distance1 + horizontal_distance2 / 2, 0));
+      small_claw_geometry.vertices.push(new THREE.Vector3(horizontal_distance1 * r32 + horizontal_distance3, horizontal_distance1 / 2, 0));
 
-      this.small_claw_r = new THREE.Line( small_claw_geometry, darker_line_material );
-      this.small_claw_l = new THREE.Line( small_claw_geometry, darker_line_material2 );
+
+      this.small_claw_r = new THREE.Object3D();
+      this.small_claw_r.add(new THREE.Line( small_claw_geometry, darker_line_material ));
+      this.small_claw_l = new THREE.Object3D();
+      this.small_claw_l.add(new THREE.Line( small_claw_geometry, darker_line_material2 ));
       this.small_claw_r.position.set(30 * r32, 0, -1);
       this.small_claw_l.position.set(-30 * r32, 0, -1);
       this.small_claw_l.scale.set(-1, 1, 1);
@@ -126,16 +144,22 @@
       var claw_outer_distance = 50;
 
       var large_claw_geometry = new THREE.Geometry();
+
       large_claw_geometry.vertices.push(new THREE.Vector3(claw_outer_distance * r32, claw_outer_distance / 2, 0));
       large_claw_geometry.vertices.push(new THREE.Vector3(0, claw_outer_distance, 0));
       large_claw_geometry.vertices.push(new THREE.Vector3(-claw_outer_distance * r32, claw_outer_distance / 2, 0));
       large_claw_geometry.vertices.push(new THREE.Vector3(-claw_outer_distance * r32, -claw_outer_distance / 2, 0));
       large_claw_geometry.vertices.push(new THREE.Vector3(0, -claw_outer_distance, 0));
       large_claw_geometry.vertices.push(new THREE.Vector3(claw_outer_distance * r32, -claw_outer_distance / 2, 0));
-      
+      large_claw_geometry.vertices.push(new THREE.Vector3(0, -claw_outer_distance, 0));
+      large_claw_geometry.vertices.push(new THREE.Vector3(-claw_outer_distance * r32, -claw_outer_distance / 2, 0));
+      large_claw_geometry.vertices.push(new THREE.Vector3(-claw_outer_distance * r32, claw_outer_distance / 2, 0));
+      large_claw_geometry.vertices.push(new THREE.Vector3(0, claw_outer_distance, 0));
 
-      this.large_claw_r = new THREE.Line( large_claw_geometry, darker_line_material3 );
-      this.large_claw_l = new THREE.Line( large_claw_geometry, darker_line_material4 );
+      this.large_claw_r = new THREE.Object3D();
+      this.large_claw_r.add(new THREE.Line( large_claw_geometry, darker_line_material3 ));
+      this.large_claw_l = new THREE.Object3D();
+      this.large_claw_l.add(new THREE.Line( large_claw_geometry, darker_line_material4 ));
       this.large_claw_r.position.set(claw_outer_distance * r32, 0, -1);
       this.large_claw_l.position.set(-claw_outer_distance * r32, 0, -1);
       this.large_claw_l.scale.set(-1, 1, 1);
@@ -188,7 +212,6 @@
       this.spin_cube.rotation.set(spin * 0.7837 , spin , 0);
 
       //prepare the actually visible geometries
-      this.line_width = .15;
       this.star_arr = this.add_lines_for_geometry(star_geometry, this.three_point_star);
       this.add_lines_for_geometry(this.small_center_hex.children[0].geometry, this.small_center_hex);
       this.add_lines_for_geometry(this.level1_hex1.children[0].geometry, this.level1_hex1);
@@ -197,7 +220,35 @@
       this.add_lines_for_geometry(this.center_line1.children[0].geometry, this.center_line1);
       this.add_lines_for_geometry(this.center_line2.children[0].geometry, this.center_line2);
       this.add_lines_for_geometry(this.center_line3.children[0].geometry, this.center_line3);
-      console.log(this.level1_hex1);
+      this.add_lines_for_geometry(this.middle_center_hex.children[0].geometry, this.middle_center_hex);
+      this.add_lines_for_geometry(this.outer_center_hex.children[0].geometry, this.outer_center_hex);
+      this.add_lines_for_geometry(this.small_claw_r.children[0].geometry, this.small_claw_r);
+      this.add_lines_for_geometry(this.small_claw_l.children[0].geometry, this.small_claw_l);
+      this.add_lines_for_geometry(this.large_claw_r.children[0].geometry, this.large_claw_r);
+      this.add_lines_for_geometry(this.large_claw_l.children[0].geometry, this.large_claw_l);
+      
+
+      this.three_point_star.children[0].visible = false;
+      this.small_center_hex.children[0].visible = false;
+      this.level1_hex1.children[0].visible = false;
+      this.level1_hex2.children[0].visible = false;
+      this.level1_hex3.children[0].visible = false;
+      this.center_line1.children[0].visible = false;
+      this.center_line2.children[0].visible = false;
+      this.center_line3.children[0].visible = false;
+      this.middle_center_hex.children[0].visible = false;
+      this.outer_center_hex.children[0].visible = false;
+
+      this.small_claw_r.children[0].visible = false;
+      this.small_claw_l.children[0].visible = false;
+      this.large_claw_r.children[0].visible = false;
+      this.large_claw_l.children[0].visible = false;
+      this.small_claw_r.children[0].position.set(200,0,0);
+      this.small_claw_l.children[0].position.set(200,0,0);
+      this.large_claw_r.children[0].position.set(200,0,0);
+      this.large_claw_l.children[0].position.set(200,0,0);
+
+      console.log(this.large_claw_l.children[1]);
     }
 
 
@@ -221,8 +272,13 @@
         arr[i].faces.push( new THREE.Face3( 0, 2, 1 ) );
         arr[i].faces.push( new THREE.Face3( 0, 3, 2 ) );
 
-        container.add(new THREE.Mesh( arr[i], new THREE.MeshBasicMaterial()));
+        arr[i].faces[0].color = new THREE.Color(0x999999);
+        arr[i].faces[1].color = new THREE.Color(0x999999);
+
+        //container.add(new THREE.Mesh( arr[i], new THREE.MeshBasicMaterial({side: THREE.DoubleSide, vertexColors: THREE.FaceColors})));
+        container.add(new THREE.Mesh( arr[i], new THREE.MeshBasicMaterial({side: THREE.DoubleSide, vertexColors: THREE.FaceColors})));
       }
+
       return arr;
     }
 
@@ -250,7 +306,7 @@
         arr[i].vertices[3].x = cur_x + this.line_width * Math.sin(angle + Math.PI/2);
         arr[i].vertices[3].y = cur_y + this.line_width * Math.cos(angle + Math.PI/2);
 
-        arr[i] .verticesNeedUpdate = true;
+        arr[i].verticesNeedUpdate = true;
       }
     }    
 
@@ -403,21 +459,21 @@
         var claw_progress3 = asmoothstep(FRAME_FOR_BEAN(27 * 48), FRAME_FOR_BEAN(12), frame);
         var claw_progress4 = asmoothstep(FRAME_FOR_BEAN(27.125 * 48), FRAME_FOR_BEAN(12), frame);
 
-        this.small_claw_r.material.color.r = this.cube.material.color.r + 0.15 * claw_progress1;
-        this.small_claw_r.material.color.g = this.cube.material.color.r + 0.15 * claw_progress1;
-        this.small_claw_r.material.color.b = this.cube.material.color.r + 0.15 * claw_progress1;
+        this.small_claw_r.children[1].material.color.r = this.cube.material.color.r + 0.15 * claw_progress1;
+        this.small_claw_r.children[1].material.color.g = this.cube.material.color.g + 0.15 * claw_progress1;
+        this.small_claw_r.children[1].material.color.b = this.cube.material.color.b + 0.15 * claw_progress1;
 
-        this.small_claw_l.material.color.r = this.cube.material.color.r + 0.15 * claw_progress2;
-        this.small_claw_l.material.color.g = this.cube.material.color.r + 0.15 * claw_progress2;
-        this.small_claw_l.material.color.b = this.cube.material.color.r + 0.15 * claw_progress2;
+        this.small_claw_l.children[1].material.color.r = this.cube.material.color.r + 0.15 * claw_progress2;
+        this.small_claw_l.children[1].material.color.g = this.cube.material.color.g + 0.15 * claw_progress2;
+        this.small_claw_l.children[1].material.color.b = this.cube.material.color.b + 0.15 * claw_progress2;
 
-        this.large_claw_r.material.color.r = this.cube.material.color.r + 0.15 * claw_progress3;
-        this.large_claw_r.material.color.g = this.cube.material.color.r + 0.15 * claw_progress3;
-        this.large_claw_r.material.color.b = this.cube.material.color.r + 0.15 * claw_progress3;
+        this.large_claw_r.children[1].material.color.r = this.cube.material.color.r + 0.15 * claw_progress3;
+        this.large_claw_r.children[1].material.color.g = this.cube.material.color.g + 0.15 * claw_progress3;
+        this.large_claw_r.children[1].material.color.b = this.cube.material.color.b + 0.15 * claw_progress3;
 
-        this.large_claw_l.material.color.r = this.cube.material.color.r + 0.15 * claw_progress4;
-        this.large_claw_l.material.color.g = this.cube.material.color.r + 0.15 * claw_progress4;
-        this.large_claw_l.material.color.b = this.cube.material.color.r + 0.15 * claw_progress4;
+        this.large_claw_l.children[1].material.color.r = this.cube.material.color.r + 0.15 * claw_progress4;
+        this.large_claw_l.children[1].material.color.g = this.cube.material.color.g + 0.15 * claw_progress4;
+        this.large_claw_l.children[1].material.color.b = this.cube.material.color.b + 0.15 * claw_progress4;
         
         this.small_claw_r.position.set(30 * r32 - 8 * (1 - claw_progress1), 0, -1);
         this.small_claw_l.position.set(-30 * r32 + 8 * (1 - claw_progress2), 0, -1);
@@ -441,7 +497,15 @@
       this.update_geometry_lines(this.three_point_star.children[0].geometry, this.star_arr);
 
 
-      this.three_point_star.children[0].geometry.verticesNeedUpdate = true;
+      this.three_point_star.children[1].geometry.verticesNeedUpdate = true;
+
+      for(var i = 1; i<this.small_claw_r.children.length; i++) {
+        this.small_claw_r.children[i].geometry.faces[0].color.setRGB(0,0,0);
+        this.small_claw_r.children[i].geometry.faces[1].color.setRGB(0,0,0);
+        this.small_claw_r.children[i].geometry.colorsNeedUpdate = true;
+      }
+      console.log(this.small_claw_r);
+      
     }
   }
 
