@@ -34,8 +34,8 @@
       "_19_groovy_B_theme": "bouncyGeometry.render",
       "_20_A_theme_breakdown_1": "breakdown.render",
       "_20_A_theme_breakdown_2": "breakdown.render",
-      "_21_third_B_theme_1": "featureblend.render",
-      "_22_third_B_theme_2": "featureblend.render",
+      "_21_third_B_theme_1": "featuresfxaa.render",
+      "_22_third_B_theme_2": "featuresfxaa.render",
       "_22_third_B_theme_3": "rotablend.render",
       "_22_third_B_theme_4": "rotablend.render",
       "_22_third_B_theme_5": "rotablend.render",
@@ -445,6 +445,13 @@
     "type": "FXAANode",
     "connected": {
         "tDiffuse": "pyramids.render"
+    }
+  },
+  {
+    "id": "featuresfxaa",
+    "type": "FXAANode",
+    "connected": {
+        "tDiffuse": "featureblend.render"
     }
   }
 ]
