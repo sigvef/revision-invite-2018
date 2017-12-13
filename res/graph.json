@@ -10,8 +10,8 @@
     "id": "sceneSwitcherNode",
     "type": "SceneSwitcherNode",
     "connected": {
-      "_00_silence": "ewerk.render",
-      "_01_pre_intro_with_car_rev_sounds": "ewerk.render",
+      "_00_silence": "ewerkfxaa.render",
+      "_01_pre_intro_with_car_rev_sounds": "ewerkfxaa.render",
       "_02_intro_1": "OrthoCube.render",
       "_03_intro_2": "schmapple.render",
       "_04_car_rev_interstitial": "schmapple.render",
@@ -40,7 +40,7 @@
       "_22_third_B_theme_4": "rotablend.render",
       "_22_third_B_theme_5": "rotablend.render",
       "_23_final_A_theme_rolldown": "treefxaa.render",
-      "_24_outro": "ewerk.render",
+      "_24_outro": "ewerkfxaa.render",
       "_25_outro_2": "fadeout.render"
     }
   },
@@ -346,7 +346,7 @@
       "shader": "fadeout"
     },
     "connected": {
-      "A": "ewerk.render"
+      "A": "ewerkfxaa.render"
     }
   },
   {
@@ -459,6 +459,13 @@
     "type": "FXAANode",
     "connected": {
         "tDiffuse": "tree.render"
+    }
+  },
+  {
+    "id": "ewerkfxaa",
+    "type": "FXAANode",
+    "connected": {
+        "tDiffuse": "ewerk.render"
     }
   }
 ]
