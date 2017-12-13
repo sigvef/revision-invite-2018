@@ -35,6 +35,10 @@
         this.racingGridFrame.add(meshRight);
       }
 
+      const racingGridHeight = (gridHeight - 1) * (1 + padding);
+      this.racingGridFrame.position.x = -((gridWidth - 1) * (1 + padding)) / 2;
+      this.racingGridFrame.position.y = -racingGridHeight / 2;
+
       this.playerRacingCar = this.createRacer();
 
       const rCar = this.fromCoordinates([[1, 0], [2, 0], [0, -1], [0, -2], [0, -3], [0, -4]]);
@@ -99,7 +103,6 @@
       this.racingWrapper.add(this.incomingCars);
 
       this.scene.add(this.racingWrapper);
-      this.racingWrapper.position.x = -21
 
       const baseIncomingDownwardsOffset = 9.5;
       this.incomingCarsPosition = [
@@ -115,17 +118,16 @@
         },
       ]
 
-      const racingGridHeight = (gridHeight - 1) * (1 + padding);
-      this.racingGridFramePositions = [
+      this.racingWrapperPositions = [
         {
           frame: FRAME_FOR_BEAN(baseBean),
-          x: -((gridWidth - 1) * (1 + padding)) / 2,
+          x: -21,
           y: racingGridHeight,
         },
         {
           frame: FRAME_FOR_BEAN(baseBean + 12),
-          x: -((gridWidth - 1) * (1 + padding)) / 2,
-          y: -racingGridHeight / 2,
+          x: -21,
+          y: 0,
         },
       ];
 
@@ -272,9 +274,9 @@
         this.throb = 1.0;
       }
 
-      var { x, y } = this.animate(this.racingGridFramePositions, frame, easeOut);
-      this.racingGridFrame.position.x = x;
-      this.racingGridFrame.position.y = y;
+      var { x, y } = this.animate(this.racingWrapperPositions, frame, easeOut);
+      this.racingWrapper.position.x = x;
+      this.racingWrapper.position.y = y;
 
       const scale = Math.max(Math.sqrt(this.throb), 0.01);
       for (let cube of this.racingGridFrame.children) {
