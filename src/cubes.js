@@ -7,6 +7,15 @@
           render: new NIN.TextureOutput()
         }
       });
+      this.blinkThrob = 0;
+
+      this.cameraPreviousPosition = new THREE.Vector3(0, 0, 0);
+      this.cameraShakePosition = new THREE.Vector3(0, 0, 0);
+      this.cameraShakeVelocity = new THREE.Vector3(0, 0, 0);
+      this.cameraShakeAcceleration = new THREE.Vector3(0, 0, 0);
+      this.cameraShakeRotation = new THREE.Vector3(0, 0, 0);
+      this.cameraShakeAngularVelocity = new THREE.Vector3(0, 0, 0);
+      this.cameraShakeAngularAcceleration = new THREE.Vector3(0, 0, 0);
 
       this.cubes = [];
       this.cubeWidth = 16 / 4 * 4;
@@ -42,9 +51,41 @@
     }
 
     update(frame) {
-      this.camera.position.z = 100;
-      this.camera.position.x = 0;
-      this.camera.position.y = 0;
+
+      this.blinkThrob *= 0.8;
+      const baseBean = 768;
+      if(BEAT) {
+        switch(BEAN) {
+        case baseBean:
+        case baseBean + 9:
+        case baseBean + 9 + 9:
+        case baseBean + 24:
+          this.cameraShakeAngularVelocity.x = (Math.random() - 0.5) * 0.05;
+          this.cameraShakeAngularVelocity.y = (Math.random() - 0.5) * 0.05;
+          this.cameraShakeAngularVelocity.z = (Math.random() - 0.5) * 0.05;
+        case baseBean + 24 + 12:
+        case baseBean + 24 + 12 +  6:
+        case baseBean + 48:
+        case baseBean + 48 + 6:
+        case baseBean + 48 + 12:
+        case baseBean + 48 + 12 + 3:
+        case baseBean + 48 + 24 - 3:
+          this.cameraShakeVelocity.x = (this.camera.position.x -
+            this.cameraPreviousPosition.x) * 0.1;
+          this.cameraShakeVelocity.y = (this.camera.position.y -
+            this.cameraPreviousPosition.y) * 0.1;
+          this.cameraShakeVelocity.z = (this.camera.position.z -
+            this.cameraPreviousPosition.z) * 0.1;
+          this.blinkThrob = 1;
+        }
+      }
+
+      const cameraPosition = new THREE.Vector3(0, 0, 0);
+      const cameraQuaternion = new THREE.Quaternion(0, 0, 0, 0);
+
+      cameraPosition.z = 100;
+      cameraPosition.x = 0;
+      cameraPosition.y = 0;
       const scaleUpT = (frame - 2002) / (2253 - 2002);
       for(let i = 0; i < this.cubes.length; i++) {
         const cube = this.cubes[i];
@@ -89,63 +130,63 @@
       this.cubes[6].scale.set(C, C, C);
 
       const t = (frame - 2096 + 10) / 10;
-      this.camera.position.x = easeIn(0, -30, t);
-      this.camera.position.y = easeIn(0, 10, t);
-      this.camera.position.z = easeIn(100, 25, t);
+      cameraPosition.x = easeIn(0, -30, t);
+      cameraPosition.y = easeIn(0, 10, t);
+      cameraPosition.z = easeIn(100, 25, t);
       if(frame >= 2096) {
-        this.camera.position.x = -30;
-        this.camera.position.y = 10;
-        this.camera.position.z = 25;
+        cameraPosition.x = -30;
+        cameraPosition.y = 10;
+        cameraPosition.z = 25;
 
         const t = (frame - 2109 + 10) / 10;
-        this.camera.position.x = easeIn(-30, -10.5, t);
-        this.camera.position.y = easeIn(10, 10.5, t);
-        this.camera.position.z = easeIn(25, 25, t);
+        cameraPosition.x = easeIn(-30, -10.5, t);
+        cameraPosition.y = easeIn(10, 10.5, t);
+        cameraPosition.z = easeIn(25, 25, t);
       }
       if(frame >= 2109) {
-        this.camera.position.x = -10.5;
-        this.camera.position.y = 10.5;
-        this.camera.position.z = 25;
+        cameraPosition.x = -10.5;
+        cameraPosition.y = 10.5;
+        cameraPosition.z = 25;
 
         const t = (frame - 2128 + 10) / 10;
-        this.camera.position.x = easeIn(-10.5, 10.5, t);
-        this.camera.position.y = easeIn(10.5, 10.5, t);
-        this.camera.position.z = easeIn(25, 10, t);
+        cameraPosition.x = easeIn(-10.5, 10.5, t);
+        cameraPosition.y = easeIn(10.5, 10.5, t);
+        cameraPosition.z = easeIn(25, 10, t);
       }
       if(frame >= 2128) {
-        this.camera.position.x = 10.5;
-        this.camera.position.y = 10.5;
-        this.camera.position.z = 10;
+        cameraPosition.x = 10.5;
+        cameraPosition.y = 10.5;
+        cameraPosition.z = 10;
 
         const t = (frame - 2143 + 10) / 10;
-        this.camera.position.x = easeIn(10.5, 34, t);
-        this.camera.position.y = easeIn(10.5, 13, t);
-        this.camera.position.z = easeIn(10, 25, t);
+        cameraPosition.x = easeIn(10.5, 34, t);
+        cameraPosition.y = easeIn(10.5, 13, t);
+        cameraPosition.z = easeIn(10, 25, t);
       }
       if(frame >= 2143) {
-        this.camera.position.x = 34;
-        this.camera.position.y = 13;
-        this.camera.position.z = 25;
+        cameraPosition.x = 34;
+        cameraPosition.y = 13;
+        cameraPosition.z = 25;
       }
       if(frame >= 2159) {
-        this.camera.position.x = -35;
-        this.camera.position.y = -11;
-        this.camera.position.z = 25;
+        cameraPosition.x = -35;
+        cameraPosition.y = -11;
+        cameraPosition.z = 25;
 
         const t = (frame - 2169 + 7) / 7;
-        this.camera.position.x = easeIn(-35, -12, t);
-        this.camera.position.y = easeIn(-11, -11, t);
-        this.camera.position.z = easeIn(25, 20, t);
+        cameraPosition.x = easeIn(-35, -12, t);
+        cameraPosition.y = easeIn(-11, -11, t);
+        cameraPosition.z = easeIn(25, 20, t);
       }
       if(frame >= 2169) {
-        this.camera.position.x = -12;
-        this.camera.position.y = -11;
-        this.camera.position.z = 20;
+        cameraPosition.x = -12;
+        cameraPosition.y = -11;
+        cameraPosition.z = 20;
 
         const t = (frame - 2186 + 10) / 10;
-        this.camera.position.x = easeIn(-12, 0, t);
-        this.camera.position.y = easeIn(-11, 0, t);
-        this.camera.position.z = easeIn(20, 100, t);
+        cameraPosition.x = easeIn(-12, 0, t);
+        cameraPosition.y = easeIn(-11, 0, t);
+        cameraPosition.z = easeIn(20, 100, t);
 
         for(let i = 0; i < this.cubes.length; i++) {
           this.cubes[i].scale.x = easeIn(this.cubes[i].scale.x, 1, t);
@@ -153,10 +194,33 @@
         }
       }
       if(frame >= 2186) {
-        this.camera.position.x = 0;
-        this.camera.position.y = 0;
-        this.camera.position.z = 100;
+        cameraPosition.x = 0;
+        cameraPosition.y = 0;
+        cameraPosition.z = 100;
       }
+
+      this.cameraShakeAcceleration.x = -this.cameraShakePosition.x * 0.05;
+      this.cameraShakeAcceleration.y = -this.cameraShakePosition.y * 0.05;
+      this.cameraShakeAcceleration.z = -this.cameraShakePosition.z * 0.05;
+      this.cameraShakeAngularAcceleration.x = -this.cameraShakeRotation.x * 0.05;
+      this.cameraShakeAngularAcceleration.y = -this.cameraShakeRotation.y * 0.05;
+      this.cameraShakeAngularAcceleration.z = -this.cameraShakeRotation.z * 0.05;
+      this.cameraShakeVelocity.add(this.cameraShakeAcceleration);
+      this.cameraShakeAngularVelocity.add(this.cameraShakeAngularAcceleration);
+      this.cameraShakeVelocity.multiplyScalar(0.85);
+      this.cameraShakeAngularVelocity.multiplyScalar(0.85);
+      this.cameraShakePosition.add(this.cameraShakeVelocity);
+      this.cameraShakeRotation.add(this.cameraShakeAngularVelocity);
+
+      this.cameraPreviousPosition.copy(this.camera.position);
+      this.camera.position.copy(cameraPosition);
+      this.camera.position.add(this.cameraShakePosition);
+      this.camera.quaternion.copy(cameraQuaternion);
+      this.camera.rotation.x += this.cameraShakeRotation.x;
+      this.camera.rotation.y += this.cameraShakeRotation.y;
+      this.camera.rotation.z += this.cameraShakeRotation.z;
+
+      demo.nm.nodes.bloom.opacity = this.blinkThrob;
     }
 
     render(renderer) {
