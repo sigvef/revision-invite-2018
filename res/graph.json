@@ -39,7 +39,7 @@
       "_22_third_B_theme_3": "rotablend.render",
       "_22_third_B_theme_4": "rotablend.render",
       "_22_third_B_theme_5": "rotablend.render",
-      "_23_final_A_theme_rolldown": "tree.render",
+      "_23_final_A_theme_rolldown": "treefxaa.render",
       "_24_outro": "ewerk.render",
       "_25_outro_2": "fadeout.render"
     }
@@ -452,6 +452,13 @@
     "type": "FXAANode",
     "connected": {
         "tDiffuse": "featureblend.render"
+    }
+  },
+  {
+    "id": "treefxaa",
+    "type": "FXAANode",
+    "connected": {
+        "tDiffuse": "tree.render"
     }
   }
 ]
