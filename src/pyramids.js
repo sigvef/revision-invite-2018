@@ -423,7 +423,6 @@
       mirrorMesh.position.y = -0.375;
       mirrorMesh.add(this.groundMirror);
       mirrorMesh.rotateX(-Math.PI / 2);
-      mirrorMesh.material.transparent = true;
       this.scene.add(mirrorMesh);
 
       this.mirrorOverlayMesh = new THREE.Mesh(
