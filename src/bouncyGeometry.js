@@ -592,21 +592,21 @@
       let foregroundColor = white;
       if (BEAN >= 3312 && BEAN < 3316) {
         foregroundColor = '#373C3F';
-        text = 'At';
+        text = 'AT';
       } else if (BEAN >= 3316 && BEAN < 3322) {
         foregroundColor = white;
-        text = 'At Easter'
+        text = 'AT EASTER'
       } else if (BEAN >= 3322 && BEAN < 3336) {
         foregroundColor = '#373C3F';
-        text = 'At Easter 2018';
+        text = 'AT EASTER 2018';
       } else if (BEAN >= 3336 && BEAN < 3340) {
-        text = 'things';
+        text = 'THINGS';
         foregroundColor = white;
       } else if (BEAN >= 3340 && BEAN < 3346) {
-        text = 'things will be';
+        text = 'THINGS WILL BE';
         foregroundColor = '#373C3F';
       } else if (BEAN >= 3346) {
-        text = 'things will be different';
+        text = 'THINGS WILL BE DIFFERENT';
         foregroundColor = white;
       }
       const backgroundColor = foregroundColor === white ? '#373C3F': white;
@@ -617,8 +617,9 @@
       this.textCtx.fillRect(0, 0, this.textCanvas.width, this.textCanvas.height);
       this.textCtx.font = `bold ${GU}px schmalibre`;
       this.textCtx.textAlign = 'center';
+      this.textCtx.textBaseline = 'middle';
       this.textCtx.fillStyle = foregroundColor;
-      this.textCtx.fillText(text, GU * 8, GU * 4.5);
+      this.textCtx.fillText(text, GU * 8, GU * 4.665);
 
       this.textTexture.needsUpdate = true;
 
