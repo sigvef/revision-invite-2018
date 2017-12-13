@@ -26,12 +26,14 @@
           0,
           (frame - FRAME_FOR_BEAN(1536 - 24)) /
           (FRAME_FOR_BEAN(1536) - FRAME_FOR_BEAN(1536 - 24)));
+      this.uniforms.width.value = 1;
       this.uniforms.foregroundColor.value = new THREE.Color(0xff4982);
       this.uniforms.foregroundColor2.value = new THREE.Color(204 / 255, 38 / 255, 90 / 255);
       this.uniforms.backgroundColor.value = new THREE.Color(0xffffff);
       this.uniforms.radiusMultiplier.value = easeIn(0, 50, t * 0.05);
       //this.uniforms.thirdColor.value = new THREE.Color(171 / 255, 12 / 255, 62 / 255);
       this.uniforms.thirdColor.value = new THREE.Color(204 / 255, 38 / 255, 90 / 255);
+      this.uniforms.thirdColor.value = new THREE.Color(0x98d19b);
       this.uniforms.thirdColorRadius.value = lerp(
           0.075,
           10,
@@ -41,6 +43,7 @@
       this.uniforms.overlay.value = this.inputs.overlay.getValue();
       this.uniforms.overlay2.value = this.inputs.overlay2.getValue();
       this.uniforms.nextScene.value = this.inputs.nextScene.getValue();
+      demo.nm.nodes.bloom.opacity = 0;
     }
   }
 
