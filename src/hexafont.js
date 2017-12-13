@@ -954,10 +954,12 @@
       this.boxes = new THREE.Object3D();
       this.grid = [];
       this.drawGrid = [];
-      for (let y = 0; y < numY; y++) {
-        this.grid[y] = [];
-        this.drawGrid[y] = [];
-        for (let x = 0; x < numX; x++) {
+      for (let y = -10; y < numY + 10; y++) {
+        if(y >= 0 && y < numY) {
+          this.grid[y] = [];
+          this.drawGrid[y] = [];
+        }
+        for (let x = -10; x < numX + 10; x++) {
           const cylinder = new THREE.Mesh(
             cylinderGeometry,
             new THREE.MeshStandardMaterial({
@@ -974,14 +976,16 @@
           cylinder.scale.y = 1.2;
           cylinder.scale.z = 1.2;
 
-          const offset = x % 2 == 1 ? offsetX : 0;
+          const offset = (x + 100) % 2 == 1 ? offsetX : 0;
           cylinder.position.x = x * offsetY;
           cylinder.position.y = 2 * y * offsetX + offset;
           cylinder.x = x;
           cylinder.y = y;
           this.boxes.add(cylinder);
-          this.grid[y][x] = cylinder;
-          this.drawGrid[y][x] = 0;
+          if(y >= 0 && y < numY && x >= 0 && x < numX) {
+            this.grid[y][x] = cylinder;
+            this.drawGrid[y][x] = 0;
+          }
         }
       }
 
@@ -996,7 +1000,6 @@
       this.camera.lookAt(new THREE.Vector3(0, 0, 0));
       this.camera.fov = 18;
       this.camera.updateProjectionMatrix();
-      this.thwomp = 1.0;
     }
 
     makeLines(items) {
@@ -1184,80 +1187,6 @@
         this.camera.position.x += (Math.random() - 0.5) * 0.5;
         this.camera.position.y += (Math.random() - 0.5) * 0.5;
         this.camera.position.z += (Math.random() - 0.5) * 0.5;
-      }
-
-      /*
-      */
-
-      const beans = [
-        baseBean + 0,
-        baseBean + 9,
-        baseBean + 24,
-        baseBean + 33,
-        baseBean + 42,
-        baseBean + 60,
-        baseBean + 69,
-        baseBean + 78,
-        baseBean + 81,
-        baseBean + 87,
-      ];
-
-      const activeBean = beans.indexOf(BEAN_FOR_FRAME(frame));
-      if (activeBean > 0) {
-        this.thwomp = 1.0;
-      }
-
-      for (let box of this.boxes.children) {
-        if (BEAN < baseBean) {
-          //box.traverse(obj => obj.material = this.colors[this.bottomRightStar[obj.y][obj.x] | this.topLeftStar[obj.y][obj.x]]);
-          box.rotation.z = 0;
-          box.spun = false;
-          continue;
-        }
-
-        // First, we spin all the background gray tiles
-        if (this.allCombined[box.y][box.x] === 0) {
-          // + this.thwomp * 0.1;
-          //box.rotation.z += 0.05;
-          continue;
-        }
-
-        // Now, if we're a part of the stars, spin them if on the beat.
-        let wasStar = false;
-        if (this.topLeftStar[box.y][box.x]) {
-          wasStar = true;
-
-          if (activeBean > -1) {
-            //box.rotation.z = 0.8 * Math.PI;
-          }
-        } else if (this.bottomRightStar[box.y][box.x]) {
-          wasStar = true;
-
-          if (activeBean > -1) {
-            //box.rotation.z = 0.8 * Math.PI;
-          }
-        }
-
-        if (wasStar) {
-          //box.rotation.z *= 0.92;
-          continue;
-        }
-
-        if (this.lettersCombined[activeBean] && this.lettersCombined[activeBean][box.y][box.x]) {
-          //box.rotation.z = 0.8 * Math.PI;
-          //box.traverse(obj => obj.material = this.colors[1]);
-          box.spun = true;
-        } else if (activeBean > 8) {
-          //box.rotation.z = 0.8 * Math.PI;
-        }
-
-        if (box.spun) {
-          //box.rotation.z *= 0.92;
-        } else {
-          //box.rotation.z += 0.05;
-        }
-
-        this.thwomp *= 0.96;
       }
 
       for(let i = 0; i < this.grid.length; i++) {
