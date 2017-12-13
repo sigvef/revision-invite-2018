@@ -21,22 +21,19 @@
       this.camera = new THREE.OrthographicCamera(-32, 32, 18, -18, 1, 1000);
       this.camera.position.z = 10;
 
-      const racingGridFrame = new THREE.Object3D();
+      this.racingGridFrame = new THREE.Object3D();
       const [gridWidth, gridHeight] = [15, 36];
       for (let y = 0; y < gridHeight; y++) {
         const meshLeft = new THREE.Mesh(box, greenMaterial);
         meshLeft.position.x = 0;
         meshLeft.position.y = y * (1 + padding);
-        racingGridFrame.add(meshLeft);
+        this.racingGridFrame.add(meshLeft);
 
         const meshRight = new THREE.Mesh(box, greenMaterial);
         meshRight.position.x = gridWidth;
         meshRight.position.y = y * (1 + padding);
-        racingGridFrame.add(meshRight);
+        this.racingGridFrame.add(meshRight);
       }
-
-      racingGridFrame.position.x = -((gridWidth - 1) * (1 + padding)) / 2;
-      racingGridFrame.position.y = -((gridHeight - 1) * (1 + padding)) / 2;
 
       this.playerRacingCar = this.createRacer();
 
@@ -75,7 +72,7 @@
 
       this.racingWrapper = new THREE.Object3D();
       this.racingWrapper.add(this.playerRacingCar);
-      this.racingWrapper.add(racingGridFrame);
+      this.racingWrapper.add(this.racingGridFrame);
       this.racingWrapper.add(this.incomingCars);
 
       this.scene.add(this.racingWrapper);
@@ -94,9 +91,47 @@
         },
       ]
 
+      const baseBean = 864;
+      this.importantFrames = [
+        -9,
+        -6,
+        0,
+        9,
+        24,
+        24 + 9,
+        24 + 9 + 9,
+        61,
+        //64, //
+        67,
+        74,
+        81,
+        89, //
+        101,
+      ].map(bean => FRAME_FOR_BEAN(bean + baseBean));
+
+      const racingGridHeight = (gridHeight - 1) * (1 + padding);
+      this.racingGridFramePositions = [
+        {
+          frame: FRAME_FOR_BEAN(baseBean),
+          x: -((gridWidth - 1) * (1 + padding)) / 2,
+          y: racingGridHeight / 2,
+        },
+        {
+          frame: FRAME_FOR_BEAN(baseBean + 12),
+          x: -((gridWidth - 1) * (1 + padding)) / 2,
+          y: -racingGridHeight / 2,
+        },
+      ];
+
+
       this.carPositions = [
         {
-          frame: FRAME_FOR_BEAN(900),
+          frame: FRAME_FOR_BEAN(baseBean),
+          x: -5,
+          y: -9 - 5,
+        },
+        {
+          frame: FRAME_FOR_BEAN(baseBean + 12),
           x: -5,
           y: -9,
         },
@@ -131,24 +166,6 @@
           y: -9,
         }
       ];
-
-      const baseBean = 864;
-      this.importantFrames = [
-        -9,
-        -6,
-        0,
-        9,
-        24,
-        24 + 9,
-        24 + 9 + 9,
-        61,
-        //64, //
-        67,
-        74,
-        81,
-        89, //
-        101,
-      ].map(bean => FRAME_FOR_BEAN(bean + baseBean));
 
       const largeLeader = this.createRacer(4.0);
       const largeRCar = this.fromCoordinates([[1, 0], [2, 0], [0, -1], [0, -2], [0, -3], [0, -4]], 4.0);
@@ -204,7 +221,7 @@
 
 
     createRacer(scale) {
-      const racer = this.fromCoordinates([[1, 0], [0, -1], [1, -3], [2, -1], [1, -2], [1, -3], [0, -4], [2, -4]], scale);
+      const racer = this.fromCoordinates([[1, 0], [0, -1], [1, -1], [2, -1], [1, -2], [0, -3], [1, -3], [2, -3]], scale);
       racer.traverse(obj => obj.material = pinkMaterial);
       return racer;
     }
@@ -229,7 +246,12 @@
       const idx = positions.findIndex(point => point.frame > frame);
 
       if (idx === -1) {
-        return positions[0];
+        const lastPosition = positions[positions.length - 1];
+        if (lastPosition.frame < frame) {
+          return lastPosition;
+        } else {
+          return positions[0];
+        }
       }
 
       const current = positions[idx]
@@ -259,9 +281,18 @@
         this.throb = 1.0;
       }
 
+      var { x, y } = this.animate(this.racingGridFramePositions, frame, easeOut);
+      this.racingGridFrame.position.x = x;
+      this.racingGridFrame.position.y = y;
+
       var { x, y } = this.animate(this.carPositions, frame, easeOut);
       this.playerRacingCar.position.x = x;
       this.playerRacingCar.position.y = y;
+      this.playerRacingCar.scale.set(
+        0.7 + 0.3 * this.throb,
+        0.7 + 0.3 * this.throb,
+        0.7 + 0.3 * this.throb,
+      )
 
       var { x, y } = this.animate(this.incomingCarsPosition, frame, lerp);
       this.incomingCars.position.x = x;
