@@ -239,7 +239,7 @@
     }
 
     render() {
-      demo.nm.nodes.bloom.opacity = 0.1;
+      demo.nm.nodes.bloom.opacity = 0;
       this.ctx.fillStyle = '#111';
       this.ctx.fillStyle = '#373c3f';
       this.ctx.save();
@@ -366,7 +366,7 @@
       this.ctx.save();
 
       if(BEAN >= 612 + 24) {
-        this.ctx.fillStyle = '#77e15d';
+        this.ctx.fillStyle = 'rgb(255, 73, 130)';
         this.ctx.save();
         this.ctx.translate(80, 45);
         this.ctx.rotate(this.frame / 60);
@@ -387,6 +387,21 @@
         }
         this.ctx.fill();
         this.ctx.restore();
+
+        this.ctx.fillStyle = '#77e15d';
+        const total = 4;
+        for(let i = 0; i < total; i++) {
+          const beanLength = 2;
+          const fromBean = 660 + i * beanLength;
+          const t = (this.frame - FRAME_FOR_BEAN(fromBean)) / (
+              FRAME_FOR_BEAN(fromBean + beanLength) - FRAME_FOR_BEAN(fromBean));
+          const eased = easeOut(0, 90, t);
+          this.ctx.fillRect(
+              i * 160 / total | 0,
+              i % 2 ? eased - 90 : 90 - eased,
+              160 / total + 1.5 | 0,
+              90);
+        }
       }
 
       if(BEAN >= 648) {
@@ -414,10 +429,11 @@
         this.ctx.rotate(this.cameraR);
         const scale = 1 + this.throb * 0.5;
         this.ctx.scale(scale, scale);
-        this.ctx.fillStyle = 'rgb(55, 60, 63)';
-        this.ctx.fillText(text, 2, 2);
+        this.ctx.fillStyle = 'rgba(55, 60, 63 , 0.2)';
+        this.ctx.fillText(text, 1, 1);
         this.ctx.fillStyle = 'white';
         this.ctx.fillText(text, 0, 0);
+
         this.ctx.restore();
       }
       this.ctx.restore();

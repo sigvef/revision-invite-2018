@@ -4,10 +4,42 @@
       super(id, {
         camera: options.camera,
         outputs: {
-          render: new NIN.TextureOutput()
+          render: new NIN.TextureOutput(),
+          debug: new NIN.TextureOutput()
         }
       });
       this.blinkThrob = 0;
+      this.backThrob = 0;
+
+      this.wallCanvas = document.createElement('canvas');
+      this.wallCanvas.width = 48 / 3 * 2;
+      this.wallCanvas.height = 27 / 3 * 2;
+      this.wallCtx = this.wallCanvas.getContext('2d');
+      this.wallTexture = new THREE.CanvasTexture(this.wallCanvas);
+      this.wallTexture.minFilter = THREE.NearestFilter;
+      this.wallTexture.magFilter = THREE.NearestFilter;
+      
+      this.blindLight = new THREE.DirectionalLight();
+      this.blindLight.intensity = 1000;
+      this.blindLight.position.set(0, 0, -1);
+      this.scene.add(this.blindLight);
+
+      this.ambientLight = new THREE.AmbientLight();
+      this.ambientLight.intensity = 0.2;
+      this.scene.add(this.ambientLight);
+
+      this.directionalLight = new THREE.DirectionalLight();
+      this.directionalLight.position.set(-1, 1, 1);
+      this.directionalLight.intensity = 1.5;
+      this.scene.add(this.directionalLight);
+
+      this.bg = new THREE.Mesh(
+          new THREE.BoxGeometry(16, 9, 1),
+          new THREE.ShaderMaterial(SHADERS.discowall));
+      this.scene.add(this.bg);
+      this.bg.position.z = -100;
+      const scale = 18;
+      this.bg.scale.set(scale, scale, scale);
 
       this.cameraPreviousPosition = new THREE.Vector3(0, 0, 0);
       this.cameraShakePosition = new THREE.Vector3(0, 0, 0);
@@ -29,9 +61,9 @@
           cubeGeometry,
           new THREE.MeshStandardMaterial({
             map: mapClone,
-            emissive: 0xffffff,
-            emissiveIntensity: 1,
             emissiveMap: mapClone,
+            roughness: 1,
+            metalness: 0,
           }));
         mapClone.repeat.set(1 / 4, 1 / 2);
         mapClone.offset.set(
@@ -51,6 +83,36 @@
     }
 
     update(frame) {
+      this.wallCtx.save();
+      this.wallCtx.globalAlpha = 0.1;
+      this.wallCtx.fillStyle = 'rgb(25, 30, 33)';
+      this.wallCtx.fillRect(0, 0, this.wallCanvas.width, this.wallCanvas.height);
+
+      this.wallCtx.globalAlpha = 1;
+      this.backThrob *= 0.9;
+      const start = 840 - 6;
+      if(BEAT && BEAN >= start) {
+        this.backThrob = 1;
+        const size = 2;
+        const offset = BEAN - start;
+        for(let j = 0; j < 9; j++) {
+          const y = j;
+          const lower = y > this.wallCanvas.height / size / 2; 
+          let x = offset;
+          if(lower) {
+            x = 16 - offset;
+          }
+          const color = lower ? 'rgb(255, 73, 130)' : '#77e15d';
+          this.wallCtx.fillStyle = color;
+          this.wallCtx.fillRect(x * size, y * size, size, size);
+        }
+      }
+      this.wallCtx.restore();
+      this.wallTexture.needsUpdate = true;
+      this.bg.material.uniforms.walltexture.value = this.wallTexture;
+      this.outputs.debug.value = this.wallTexture;
+
+      this.blindLight.intensity = 10 * this.backThrob;
 
       this.blinkThrob *= 0.8;
       const baseBean = 768;
