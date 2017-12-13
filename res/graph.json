@@ -356,7 +356,7 @@
       "shader": "pyramidfx"
     },
     "connected": {
-      "tDiffuse": "pyramids.render"
+      "tDiffuse": "pyramidfxaa.render"
     }
   },
   {
@@ -439,5 +439,12 @@
   {
     "id": "textigrades",
     "type": "textigrades"
+  },
+  {
+    "id": "pyramidfxaa",
+    "type": "FXAANode",
+    "connected": {
+        "tDiffuse": "pyramids.render"
+    }
   }
 ]

@@ -8,7 +8,7 @@ void main() {
     vec3 orange = vec3(153. / 255., 224. / 255., 182. / 255.) * 0.5;
     vec4 color = vec4(orange * 0.1, 1.);
 
-    float lineWidth = 0.01;
+    float lineWidth = 0.02;
     if(uv.y < 0. + lineWidth) {
         color = vec4(orange, 1.);
     }
