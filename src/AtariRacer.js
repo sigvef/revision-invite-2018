@@ -142,11 +142,12 @@
         24 + 9,
         24 + 9 + 9,
         61,
-        //64,
+        //64, //
         67,
         74,
-        84,
-        96,
+        81,
+        89, //
+        101,
       ].map(bean => FRAME_FOR_BEAN(bean + baseBean));
 
       const largeLeader = this.createRacer(4.0);
@@ -159,7 +160,17 @@
       const largeOCar = this.fromCoordinates([[1, 0], [0, -1], [2, -1], [0, -2], [2, -2], [0, -3], [2, -3], [1, -4]], 4.0);
       const largeNCar = this.fromCoordinates([[0, 0], [1, -1], [1, -2], [1, -3], [2, -4]], 4.0);
       const largeTrailer = this.createRacer(4.0);
-      this.largeLetters = [largeLeader, largeRCar, largeECar, largeVCar, largeICar, largeSCar, largeI2Car, largeOCar, largeNCar, largeTrailer];
+      this.largeLetters = [
+        largeLeader,
+        largeRCar,
+        largeECar,
+        largeVCar,
+        largeICar,
+        largeSCar,
+        largeI2Car,
+        largeOCar,
+        largeNCar,
+        largeTrailer];
       this.largeLetterAnimationPaths = [];
       for (let [i, largeLetter] of this.largeLetters.entries()) {
         this.scene.add(largeLetter);
@@ -224,11 +235,13 @@
       const current = positions[idx]
       const prev = positions[Math.max(0, idx - 1)];
 
-      const x = easingFn(prev.x, current.x, (frame - prev.frame) / (current.frame - prev.frame));
-      const y = easingFn(prev.y, current.y, (frame - prev.frame) / (current.frame - prev.frame));
+      const mixer = (frame - prev.frame) / (current.frame - prev.frame);
+      const x = easingFn(prev.x, current.x, mixer);
+      const y = easingFn(prev.y, current.y, mixer);
       return {
         x: this.gridify(x),
         y: this.gridify(y),
+        mixer,
       };
     }
 
@@ -255,7 +268,10 @@
       this.incomingCars.position.y = y;
 
       for (let [i, letter] of this.largeLetters.entries()) {
-        var { x, y } = this.animate(this.largeLetterAnimationPaths[i], frame, easeOut);
+        var { x, y, mixer, } = this.animate(this.largeLetterAnimationPaths[i], frame, easeOut);
+        mixer = easeOut(0, 1, mixer);
+        const scale = 4.0 * (mixer < 0.5 ? 1.0 - mixer : mixer);
+        letter.scale.set(scale, scale, scale);
         letter.position.x = x;
         letter.position.y = y;
       }
