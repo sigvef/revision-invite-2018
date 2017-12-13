@@ -33,7 +33,7 @@
       this.ctx.save();
       this.ctx.scale(GU, GU);
 
-      this.ctx.lineWidth = 0.1;
+      this.ctx.lineWidth = 0.05;
 
       const startBEAN = 32 * 48;
       const timings = {
@@ -60,15 +60,21 @@
           this.ctx.fillStyle = 'rgb(255, 73, 130)';
           this.ctx.fillStyle = '#77e15d';
           this.ctx.fillStyle = 'white';
+          this.ctx.fillStyle = '#77e15d';
+          this.ctx.fillStyle = 'rgb(55, 60, 53)';
+          this.ctx.fillStyle = 'rgb(255, 73, 130)';
+          this.ctx.fillStyle = '#77e15d';
+          this.ctx.fillStyle = '#98d19b';
         } else {
           this.ctx.fillStyle = 'rgb(255, 73, 130)';
           this.ctx.fillStyle = '#77e15d';
+          this.ctx.fillStyle = 'rgb(55, 60, 53)';
+          this.ctx.fillStyle = 'rgb(255, 73, 130)';
+          this.ctx.fillStyle = 'white';
+          this.ctx.fillStyle = '#77e15d';
         }
-        const t = easeOut(
-          easeIn(1, 0, (this.frame - timings[i] + 15) / 15),
-          1,
-          (this.frame - timings[30]) / 120
-        );
+        const t = 
+          easeIn(1, 0, (this.frame - timings[i] + 15) / 15);
         this.ctx.save();
         this.ctx.translate(8, 4.5);
         this.ctx.rotate(+Math.PI * 2 * i / 32 - this.frame / 100 + 1 + Math.PI / 2);
@@ -78,6 +84,7 @@
         this.ctx.lineTo(0 + 1.5, 10 + 10 * t);
         this.ctx.lineTo(0, 10 * t);
         this.ctx.fill();
+        this.ctx.stroke();
         this.ctx.restore();
 
       }
