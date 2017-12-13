@@ -419,7 +419,8 @@
         }
       }
 
-      demo.nm.nodes.bloom.opacity = this.throb * 0.25;
+      //demo.nm.nodes.bloom.opacity = this.throb * 1;
+      demo.nm.nodes.bloom.opacity = 0;
 
       this.cameraDDX = -this.cameraX * 0.1;
       this.cameraDDY = -this.cameraY * 0.1;

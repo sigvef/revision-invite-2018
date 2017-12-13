@@ -322,7 +322,10 @@
   },
   {
     "id": "cubes",
-    "type": "cubes"
+    "type": "cubes",
+    "options": {
+        "shader": "discowall"
+    }
   },
   {
     "id": "breakdown",
