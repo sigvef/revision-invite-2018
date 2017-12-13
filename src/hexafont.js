@@ -436,12 +436,6 @@
 
       this.scene.add(new THREE.AmbientLight(0x373c3f));
 
-      this.powerCanvas = document.createElement('canvas');
-      this.powerCtx = this.powerCanvas.getContext('2d');
-      this.powerCanvas.width = 42 * 2;
-      this.powerCanvas.height = 20 * 2;
-      this.outputs.debug.value = new THREE.CanvasTexture(this.powerCanvas);
-
       this.cameraPreviousPosition = new THREE.Vector3(0, 0, 0);
       this.cameraShakePosition = new THREE.Vector3(0, 0, 0);
       this.cameraShakeVelocity = new THREE.Vector3(0, 0, 0);
@@ -960,10 +954,12 @@
       this.boxes = new THREE.Object3D();
       this.grid = [];
       this.drawGrid = [];
-      for (let y = 0; y < numY; y++) {
-        this.grid[y] = [];
-        this.drawGrid[y] = [];
-        for (let x = 0; x < numX; x++) {
+      for (let y = -10; y < numY + 10; y++) {
+        if(y >= 0 && y < numY) {
+          this.grid[y] = [];
+          this.drawGrid[y] = [];
+        }
+        for (let x = -10; x < numX + 10; x++) {
           const cylinder = new THREE.Mesh(
             cylinderGeometry,
             new THREE.MeshStandardMaterial({
@@ -980,14 +976,16 @@
           cylinder.scale.y = 1.2;
           cylinder.scale.z = 1.2;
 
-          const offset = x % 2 == 1 ? offsetX : 0;
+          const offset = (x + 100) % 2 == 1 ? offsetX : 0;
           cylinder.position.x = x * offsetY;
           cylinder.position.y = 2 * y * offsetX + offset;
           cylinder.x = x;
           cylinder.y = y;
           this.boxes.add(cylinder);
-          this.grid[y][x] = cylinder;
-          this.drawGrid[y][x] = 0;
+          if(y >= 0 && y < numY && x >= 0 && x < numX) {
+            this.grid[y][x] = cylinder;
+            this.drawGrid[y][x] = 0;
+          }
         }
       }
 
@@ -1002,7 +1000,6 @@
       this.camera.lookAt(new THREE.Vector3(0, 0, 0));
       this.camera.fov = 18;
       this.camera.updateProjectionMatrix();
-      this.thwomp = 1.0;
     }
 
     makeLines(items) {
@@ -1192,243 +1189,13 @@
         this.camera.position.z += (Math.random() - 0.5) * 0.5;
       }
 
-      /*
-      */
-
-      const beans = [
-        baseBean + 0,
-        baseBean + 9,
-        baseBean + 24,
-        baseBean + 33,
-        baseBean + 42,
-        baseBean + 60,
-        baseBean + 69,
-        baseBean + 78,
-        baseBean + 81,
-        baseBean + 87,
-      ];
-
-      const activeBean = beans.indexOf(BEAN_FOR_FRAME(frame));
-      if (activeBean > 0) {
-        this.thwomp = 1.0;
-      }
-
-      for (let box of this.boxes.children) {
-        if (BEAN < baseBean) {
-          //box.traverse(obj => obj.material = this.colors[this.bottomRightStar[obj.y][obj.x] | this.topLeftStar[obj.y][obj.x]]);
-          box.rotation.z = 0;
-          box.spun = false;
-          continue;
-        }
-
-        // First, we spin all the background gray tiles
-        if (this.allCombined[box.y][box.x] === 0) {
-          // + this.thwomp * 0.1;
-          //box.rotation.z += 0.05;
-          continue;
-        }
-
-        // Now, if we're a part of the stars, spin them if on the beat.
-        let wasStar = false;
-        if (this.topLeftStar[box.y][box.x]) {
-          wasStar = true;
-
-          if (activeBean > -1) {
-            //box.rotation.z = 0.8 * Math.PI;
-          }
-        } else if (this.bottomRightStar[box.y][box.x]) {
-          wasStar = true;
-
-          if (activeBean > -1) {
-            //box.rotation.z = 0.8 * Math.PI;
-          }
-        }
-
-        if (wasStar) {
-          //box.rotation.z *= 0.92;
-          continue;
-        }
-
-        if (this.lettersCombined[activeBean] && this.lettersCombined[activeBean][box.y][box.x]) {
-          //box.rotation.z = 0.8 * Math.PI;
-          //box.traverse(obj => obj.material = this.colors[1]);
-          box.spun = true;
-        } else if (activeBean > 8) {
-          //box.rotation.z = 0.8 * Math.PI;
-        }
-
-        if (box.spun) {
-          //box.rotation.z *= 0.92;
-        } else {
-          //box.rotation.z += 0.05;
-        }
-
-        this.thwomp *= 0.96;
-      }
-
-      const ctx = this.powerCtx;
-      ctx.fillStyle = 'black';
-      ctx.fillRect(0, 0, this.powerCanvas.width, this.powerCanvas.height);
-      ctx.fillStyle = '#00ff00';
-
-      ctx.fillRect(40 + 20 * Math.cos(frame / 20), 20 + 20 * Math.sin(frame / 20), 10, 10);
-
-      ctx.strokeStyle = '#ff0000';
-      ctx.lineWidth = 1;
-
-      let t = (frame - FRAME_FOR_BEAN(1728)) / (
-          FRAME_FOR_BEAN(1728 + 6) - FRAME_FOR_BEAN(1728));
-
-      ctx.beginPath();
-      ctx.moveTo(0, 42);
-      ctx.lineTo(easeOut(0, 28, t), easeOut(42, 28, t));
-      if(t > 0.99) {
-        ctx.lineTo(28, 34);
-      }
-      ctx.stroke();
-
-      ctx.strokeStyle = '#00ff00';
-      ctx.beginPath();
-      ctx.moveTo(0, 44);
-      ctx.lineTo(easeIn(0, 26, t), easeIn(44, 31, t));
-      if(t > 0.99) {
-        ctx.lineTo(26, 34);
-      }
-      ctx.stroke();
-
-      t = (frame - FRAME_FOR_BEAN(1728 + 9)) / (
-          FRAME_FOR_BEAN(1728 + 6 + 9) - FRAME_FOR_BEAN(1728 + 9));
-
-      ctx.strokeStyle = '#ff0000';
-      ctx.beginPath();
-      ctx.moveTo(78, 0);
-      ctx.lineTo(easeOut(78, 48, t), easeOut(0, 15, t));
-      if(t > 0.99) {
-        //ctx.lineTo(28, 34);
-      }
-      ctx.stroke();
-
-      ctx.strokeStyle = '#00ff00';
-      ctx.beginPath();
-      ctx.moveTo(78, 2);
-      ctx.lineTo(easeOut(78, 48 +2, t), easeOut(0, 15 + 2, t));
-      if(t > 0.99) {
-        //ctx.lineTo(28, 34);
-      }
-      ctx.stroke();
-
-      ctx.fillStyle = '#0000ff';
-      ctx.strokeStyle = '#0000ff';
-
-
-      ctx.strokeStyle = '#00f';
-      ctx.lineWidth = 2;
-
-      /* R */
-      t = (frame - FRAME_FOR_BEAN(baseBean)) / 10;
-      let y = easeOut(22, 36, t);
-      ctx.beginPath();
-      ctx.moveTo(6, 20);
-      ctx.lineTo(6, y);
-      ctx.moveTo(6, 22);
-      ctx.lineTo(easeOut(
-            6, 12.5, t),
-          easeOut(22, 19, t));
-      ctx.stroke();
-
-      /* E */
-      t = (frame - FRAME_FOR_BEAN(baseBean + 9)) / 10;
-      ctx.beginPath();
-      ctx.moveTo(18, 14);
-      ctx.lineTo(18, easeOut(16, 30, t));
-      ctx.moveTo(18, 16);
-      ctx.lineTo(easeOut(18, 25, t), easeOut(16, 12, t));
-
-      ctx.moveTo(18, 20);
-      ctx.lineTo(easeOut(18, 24, t - 0.2), easeOut(18, 20, t - 0.2));
-
-      ctx.moveTo(18, 28);
-      ctx.lineTo(easeOut(18, 25, t - 0.4), easeOut(28, 24, t - 0.4));
-      ctx.stroke();
-
-      /* V */
-      t = (frame - FRAME_FOR_BEAN(baseBean + 24)) / 10;
-      ctx.beginPath();
-      ctx.moveTo(18 + 12, 8);
-      ctx.lineTo(18 + 12, easeOut(8, 18, t * 2));
-      ctx.moveTo(18 + 12, 18);
-      ctx.lineTo(easeOut(18 + 12, 18 + 14, t - 0.5), easeOut(18, 20, t - 0.5));
-      ctx.moveTo(18 + 14, 20);
-      ctx.lineTo(easeOut(18 + 14, 18 + 18, t - 0.4), easeOut(20, 18, t - 0.4));
-      ctx.moveTo(18 + 18, 6);
-      ctx.lineTo(18 + 18, easeOut(6, 19, t - 0.2));
-      ctx.stroke();
-      
-      /* I */
-      t = (frame - FRAME_FOR_BEAN(baseBean + 24 + 9)) / 10;
-      ctx.beginPath();
-      ctx.moveTo(42, 2);
-      ctx.lineTo(42, easeOut(2, 16, t));
-      ctx.stroke();
-
-      /* S */
-      t = (frame - FRAME_FOR_BEAN(baseBean + 24 + 9 + 9)) / 10;
-      ctx.beginPath();
-      ctx.moveTo(34, 28);
-      ctx.lineTo(easeOut(34, 42, t), easeOut(28, 23.6, t));
-      ctx.moveTo(34, 28);
-      ctx.lineTo(34, easeOut(28, 34, t * 2));
-      ctx.moveTo(34, 34);
-      ctx.lineTo(easeOut(34, 42, t * 2 - 0.5), easeOut(34, 30, t * 2 - 0.5));
-      ctx.moveTo(42, 30);
-      ctx.lineTo(42, easeOut(30, 36, t * 2 - 1));
-      ctx.moveTo(42, 36);
-      ctx.lineTo(easeOut(42, 34, t * 2 - 1.5), easeOut(36, 40, t * 2 - 1.5));
-      ctx.stroke();
-
-      /* I */
-      t = (frame - FRAME_FOR_BEAN(baseBean + 48 + 12)) / 10;
-      ctx.beginPath();
-      ctx.moveTo(48, 20);
-      ctx.lineTo(48, easeOut(20, 35, t));
-      ctx.stroke();
-
-      /* O */
-      t = (frame - FRAME_FOR_BEAN(baseBean + 48 + 12 + 9)) / 10;
-      ctx.beginPath();
-      ctx.moveTo(54, 16);
-      ctx.lineTo(54, easeOut(16, 30, t));
-      ctx.moveTo(54, 30);
-      ctx.lineTo(easeOut(54, 58, t), easeOut(30, 28, t));
-      ctx.moveTo(58, 28);
-      ctx.lineTo(easeOut(58, 60, t), easeOut(28, 24, t));
-      ctx.moveTo(60, 24);
-      ctx.lineTo(60, easeOut(24, 14, t));
-      ctx.moveTo(60, 14);
-      ctx.lineTo(easeOut(54, 60, t), easeOut(14, 16, t));
-      ctx.stroke();
-
-      /* N */
-      t = (frame - FRAME_FOR_BEAN(baseBean + 48 + 12 + 9 + 9)) / 10;
-      ctx.beginPath();
-      ctx.lineWidth = 3;
-      ctx.moveTo(66, 10);
-      ctx.lineTo(66, easeOut(10, 26, t));
-      ctx.moveTo(66, 10);
-      ctx.lineTo(easeOut(66, 78, t), easeOut(10, 20, t));
-      t = (frame - FRAME_FOR_BEAN(baseBean + 48 + 12 + 9 + 9 + 9)) / 10;
-      ctx.moveTo(78, 20);
-      ctx.lineTo(78, easeOut(20, 2, t));
-      ctx.stroke();
-
-      this.outputs.debug.value.needsUpdate = true;
-
       for(let i = 0; i < this.grid.length; i++) {
         for(let j = 0; j < this.grid[i].length; j++) {
           this.grid[i][j].material.emissiveIntensity *= 0.85;
           this.grid[i][j].rotation.z *= 0.9;
         }
       }
+
       for(let y = 0; y < this.drawGrid.length; y++) {
         for(let x = 0; x < this.drawGrid[y].length; x++) {
           if(this.drawGrid[y][x]) {
