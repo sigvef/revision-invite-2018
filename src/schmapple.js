@@ -370,7 +370,7 @@
         this.ctx.save();
         this.ctx.translate(80, 45);
         this.ctx.rotate(this.frame / 60);
-        const scale = easeIn(0.01, 10,
+        const scale = easeIn(0.01, 20,
             (this.frame - FRAME_FOR_BEAN(612 + 24)) / (
               FRAME_FOR_BEAN(648 + 6) - FRAME_FOR_BEAN(612 + 24)));
         this.ctx.scale(scale, scale);
