@@ -99,14 +99,14 @@
 
       this.wallCtx.globalAlpha = 1;
       this.backThrob *= 0.9;
-      const start = 840 - 6;
+      const start = baseBean + 48 + 24;
       if(BEAT && BEAN >= start) {
         this.backThrob = 1;
         const size = 2;
         const offset = BEAN - start;
         for(let j = 0; j < 9; j++) {
           const y = j;
-          const lower = y > this.wallCanvas.height / size / 2; 
+          const lower = y > this.wallCanvas.height / size / 2;
           let x = offset;
           if(lower) {
             x = 16 - offset;
@@ -196,16 +196,16 @@
 
       this.frames = [
         2026,
-        2049,
-        2065,
-        2076,
+        2029,
+        2032,
+        2035,
         2002,
+        2005,
         2008,
-        2014,
-        2020,
+        2011,
       ];
       for (const [index, cube] of this.cubes.entries()) {
-        const localT = lerp(easeOut(0, 70, (frame - this.frames[index]) / 80), 200, frame - 2160);
+        const localT = easeIn(0, 100, (frame - this.frames[index]) / 40);
         cube.position.y -= localT;
         cube.rotation.z = localT / 60;
       }
