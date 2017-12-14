@@ -304,8 +304,6 @@
     update(frame) {
       super.update(frame);
 
-      demo.nm.nodes.bloom.opacity = 0.5;
-
       this.throb *= 0.96;
       if (BEAT && BEAN % 12 == 0) {
         this.throb = 1.0;

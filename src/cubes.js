@@ -18,7 +18,7 @@
       this.wallTexture = new THREE.CanvasTexture(this.wallCanvas);
       this.wallTexture.minFilter = THREE.NearestFilter;
       this.wallTexture.magFilter = THREE.NearestFilter;
-      
+
       this.blindLight = new THREE.DirectionalLight();
       this.blindLight.intensity = 1000;
       this.blindLight.position.set(0, 0, -1);
@@ -80,9 +80,18 @@
       this.camera.position.z = 100;
       this.camera.fov = 18;
       this.camera.updateProjectionMatrix();
+
+      this.textCanvas = document.createElement('canvas');
+      this.textCanvas.width = 16 * GU;
+      this.textCanvas.height = 9 * GU;
+      this.textCtx = this.textCanvas.getContext('2d');
+      this.textTexture = new THREE.CanvasTexture(this.textCanvas);
+      this.textTexture.minFilter = THREE.NearestFilter;
+      this.textTexture.magFilter = THREE.NearestFilter;
     }
 
     update(frame) {
+      const baseBean = 768;
       this.wallCtx.save();
       this.wallCtx.globalAlpha = 0.1;
       this.wallCtx.fillStyle = 'rgb(25, 30, 33)';
@@ -112,10 +121,29 @@
       this.bg.material.uniforms.walltexture.value = this.wallTexture;
       this.outputs.debug.value = this.wallTexture;
 
+      this.textCtx.clearRect(0, 0, 16 * GU, 9 * GU);
+      this.textCtx.fillStyle = 'white';
+      const fontT = (frame - FRAME_FOR_BEAN(((BEAN / 12) | 0) * 12)) / (FRAME_FOR_BEAN(((BEAN / 12) | 0) * 12 + 12) - FRAME_FOR_BEAN(((BEAN / 12) | 0) * 12));
+      this.textCtx.font = `${GU * lerp(1.9, 1.6, fontT)}px schmalibre`;
+      this.textCtx.textAlign = 'center';
+      this.textCtx.textBaseline = 'middle';
+      if (BEAN >= baseBean + 24) {
+        if (BEAN < baseBean + 24 + 12) {
+          this.textCtx.fillText('No concerts', 8 * GU, 4.665 * GU);
+        } else if (BEAN < baseBean + 48) {
+          this.textCtx.fillText('No seminars', 8 * GU, 4.665 * GU);
+        } else if (BEAN < baseBean + 48 + 12) {
+          this.textCtx.fillText('No bonfire', 8 * GU, 4.665 * GU);
+        } else if (BEAN < baseBean + 48 + 24) {
+          this.textCtx.fillText('No live-stream', 8 * GU, 4.665 * GU);
+        }
+      }
+      this.textTexture.needsUpdate = true;
+      this.bg.material.uniforms.texttexture.value = this.textTexture;
+
       this.blindLight.intensity = 10 * this.backThrob;
 
       this.blinkThrob *= 0.8;
-      const baseBean = 768;
       if(BEAT) {
         switch(BEAN) {
         case baseBean:
@@ -148,7 +176,7 @@
       cameraPosition.z = 100;
       cameraPosition.x = 0;
       cameraPosition.y = 0;
-      const scaleUpT = (frame - 2002) / (2253 - 2002);
+      const scaleUpT = (frame - 2002) / (2180 - 2002);
       for(let i = 0; i < this.cubes.length; i++) {
         const cube = this.cubes[i];
         cube.position.x = (((i % 4) + 0.5) / this.cubes.length - 0.25) * 4 * this.cubeWidth * 2;
@@ -166,31 +194,23 @@
         this.camera.updateProjectionMatrix();
       }
 
-      const A = easeOut(0, 3 * Math.PI * 2,
-          (frame - 2002) / (2065 - 2002)) + frame * Math.PI * 2 / 60 / 60 * 115 / 2;
-      const B = easeOut(0, 1 * Math.PI * 2,
-          (frame - 2026) / 40);
-      const D = easeOut(0, 1 * Math.PI * 2 / 2,
-          (frame - 2049) / 10);
-      const E = easeOut(1, 1.15,
-          (frame - 2065) / 10);
-      const F = easeOut(1, 1.15,
-          (frame - 2076) / 10);
-      this.cubes[4].rotation.y = A;
-      this.cubes[0].rotation.y = A;
-      this.cubes[5].rotation.y = B;
-      this.cubes[1].rotation.x = B;
-      this.cubes[6].rotation.z = D;
-      this.cubes[2].rotation.z = D;
-      this.cubes[3].scale.set(E, E, E);
-      this.cubes[3].position.y += (E - 1) * 15;
-      this.cubes[7].scale.set(F, F, F);
-      this.cubes[7].position.y -= (F - 1) * 15;
+      this.frames = [
+        2026,
+        2049,
+        2065,
+        2076,
+        2002,
+        2008,
+        2014,
+        2020,
+      ];
+      for (const [index, cube] of this.cubes.entries()) {
+        const localT = lerp(easeOut(0, 70, (frame - this.frames[index]) / 80), 200, frame - 2160);
+        cube.position.y -= localT;
+        cube.rotation.z = localT / 60;
+      }
 
-      const C = easeIn(1, 0.3, (frame - 2002) / (2096 - 2002));
-      this.cubes[2].scale.set(C, C, C);
-      this.cubes[6].scale.set(C, C, C);
-
+      /*
       const t = (frame - 2096 + 10) / 10;
       cameraPosition.x = easeIn(0, -30, t);
       cameraPosition.y = easeIn(0, 10, t);
@@ -281,6 +301,8 @@
       this.camera.rotation.x += this.cameraShakeRotation.x;
       this.camera.rotation.y += this.cameraShakeRotation.y;
       this.camera.rotation.z += this.cameraShakeRotation.z;
+      */
+      this.camera.position.copy(cameraPosition);
 
       demo.nm.nodes.bloom.opacity = this.blinkThrob;
     }
