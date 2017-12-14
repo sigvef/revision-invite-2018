@@ -109,7 +109,7 @@
       this.ctx.textBaseline = 'middle';
       this.ctx.translate(8, 4.5);
       this.ctx.scale(t2, -t2);
-      this.ctx.fillText(['NO', '', 'SE', 'MI', 'NA', 'RS'][(BEAN - 1536) / 12 | 0], 0, -0.15);
+      this.ctx.fillText(['NO', '', 'SC', 'RO', 'LL', 'ERS'][(BEAN - 1536) / 12 | 0], 0, -0.15);
       this.ctx.restore();
 
       this.ctx.fillStyle = 'rgb(0, 0, 255)';
