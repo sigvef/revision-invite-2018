@@ -164,20 +164,20 @@
       this.frame = frame;
 
       this.throb *= 0.9;
-      if(BEAT) {
-        switch(BEAN) {
-        case 648:
-        case 648 + 6:
-        case 648 + 12:
-        case 648 + 18:
-          this.throb = 1;
-          this.cameraDX = (Math.random() - 0.5) * 5.0;
-          this.cameraDY = (Math.random() - 0.5) * 5.0;
-          this.cameraDR = (Math.random() - 0.5) * 0.1;
+      if (BEAT) {
+        switch (BEAN) {
+          case 648:
+          case 648 + 6:
+          case 648 + 12:
+          case 648 + 18:
+            this.throb = 1;
+            this.cameraDX = (Math.random() - 0.5) * 5.0;
+            this.cameraDY = (Math.random() - 0.5) * 5.0;
+            this.cameraDR = (Math.random() - 0.5) * 0.1;
         }
       }
 
-      if(BEAN >= 648) {
+      if (BEAN >= 648) {
         this.cameraX += (Math.random() - 0.5) * 2;
         this.cameraY += (Math.random() - 0.5) * 2;
       }
@@ -196,14 +196,14 @@
       this.cameraR += this.cameraDR;
 
       this.stabThrob *= 0.95;
-      if(BEAT) {
-        switch(BEAN - 528) {
-        case 0:
-        case 9:
-        case 24:
-        case 24 + 9:
-        case 24 + 9 + 9:
-          this.stabThrob = 1;
+      if (BEAT) {
+        switch (BEAN - 528) {
+          case 0:
+          case 9:
+          case 24:
+          case 24 + 9:
+          case 24 + 9 + 9:
+            this.stabThrob = 1;
         }
       }
       this.cumulativeStabThrob += this.stabThrob;
@@ -255,8 +255,8 @@
       const alphaMultiplier = Math.max(0.0, Math.min(1.0, (this.frame - 1126) / (1627 - 1126)));
       if (BEAN < 612) {
         this.ctx.globalAlpha = smoothstep(1, 0,
-            (this.frame - FRAME_FOR_BEAN(600)) / (
-              FRAME_FOR_BEAN(612) - FRAME_FOR_BEAN(600)));
+          (this.frame - FRAME_FOR_BEAN(600)) / (
+            FRAME_FOR_BEAN(612) - FRAME_FOR_BEAN(600)));
         for (let i = 0; i < this.texts.length; i++) {
           const row = this.texts[i];
           this.ctx.save();
@@ -347,7 +347,7 @@
         this.ctx.rotate(this.frame / 60 / 60 * 115 / 4 + 0.05 * this.cumulativeStabThrob);
         this.ctx.moveTo(outerWidth, 0);
         const amount = 200;
-        for(let i = 0; i < amount; i++) {
+        for (let i = 0; i < amount; i++) {
           this.ctx.arc(0, 0, Math.max(0, 0.0001 + outerWidth + this.stabThrob * 3 * Math.sin(Math.PI * 2 * i / amount * 10)), Math.PI * 2 * i / amount, Math.PI * 2 * i / amount);
         }
         this.ctx.moveTo(innerWidth, 0);
@@ -362,49 +362,49 @@
       }
 
       this.ctx.restore();
-  
+
       this.ctx.save();
 
-      if(BEAN >= 612 + 24) {
+      if (BEAN >= 612 + 24) {
         this.ctx.fillStyle = 'rgb(255, 73, 130)';
         this.ctx.save();
         this.ctx.translate(80, 45);
         this.ctx.rotate(this.frame / 60);
         const scale = easeIn(0.01, 20,
-            (this.frame - FRAME_FOR_BEAN(612 + 24)) / (
-              FRAME_FOR_BEAN(648 + 6) - FRAME_FOR_BEAN(612 + 24)));
+          (this.frame - FRAME_FOR_BEAN(612 + 24)) / (
+            FRAME_FOR_BEAN(648 + 6) - FRAME_FOR_BEAN(612 + 24)));
         this.ctx.scale(scale, scale);
         const originalRadius = 10;
-        for(let i = 0; i < 10; i++) {
+        for (let i = 0; i < 10; i++) {
           let radius = originalRadius;
           const angle = i / 10 * Math.PI * 2;
-          if(i % 2 == 0) {
+          if (i % 2 == 0) {
             radius *= 2;
           }
           this.ctx.lineTo(
-              radius * Math.cos(angle),
-              radius * Math.sin(angle));
+            radius * Math.cos(angle),
+            radius * Math.sin(angle));
         }
         this.ctx.fill();
         this.ctx.restore();
 
         this.ctx.fillStyle = '#77e15d';
         const total = 4;
-        for(let i = 0; i < total; i++) {
+        for (let i = 0; i < total; i++) {
           const beanLength = 2;
           const fromBean = 660 + i * beanLength;
           const t = (this.frame - FRAME_FOR_BEAN(fromBean)) / (
-              FRAME_FOR_BEAN(fromBean + beanLength) - FRAME_FOR_BEAN(fromBean));
+            FRAME_FOR_BEAN(fromBean + beanLength) - FRAME_FOR_BEAN(fromBean));
           const eased = easeOut(0, 90, t);
           this.ctx.fillRect(
-              i * 160 / total | 0,
-              i % 2 ? eased - 90 : 90 - eased,
-              160 / total + 1.5 | 0,
-              90);
+            i * 160 / total | 0,
+            i % 2 ? eased - 90 : 90 - eased,
+            160 / total + 1.5 | 0,
+            90);
         }
       }
 
-      if(BEAN >= 648) {
+      if (BEAN >= 648) {
         this.ctx.save();
         this.ctx.fillStyle = '#77e15d';
         this.ctx.translate(80, 45);
@@ -413,11 +413,11 @@
         this.ctx.textBaseline = 'middle';
         this.ctx.textAlign = 'center';
         let text = '';
-        if(BEAN >= 648 + 18) {
+        if (BEAN >= 648 + 18) {
           text = 'JUST';
-        } else if(BEAN >= 648 + 12) {
+        } else if (BEAN >= 648 + 12) {
           text = 'IT\'S';
-        } else if(BEAN >= 648 + 6) {
+        } else if (BEAN >= 648 + 6) {
           text = 'YEAR';
         } else {
           text = 'THIS';
