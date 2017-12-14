@@ -1,8 +1,8 @@
 (function (global) {
   const box = new THREE.BoxBufferGeometry(1, 1, 1);
   const padding = 0.0;
-  const whiteColor = 0xffffff;
-  const grayColor = 0x373c3f;
+  //const whiteColor = 0xffffff;
+  //const grayColor = 0x373c3f;
   const greenColor = 0x77e15d;
   const pinkColor = 0xff4982;
 
@@ -41,15 +41,6 @@
 
       this.playerRacingCar = this.createRacer();
 
-      const rCar = this.fromCoordinates([[1, 0], [2, 0], [0, -1], [0, -2], [0, -3], [0, -4]]);
-      const eCar = this.fromCoordinates([[1, 0], [2, 0], [0, -1], [1, -2], [2, -2], [0, -3], [1, -4], [2, -4]]);
-      const vCar = this.fromCoordinates([[0, 0], [2, 0], [0, -1], [2, -1], [0, -2], [2, -2], [0, -3], [2, -3], [1, -4]]);
-      const iCar = this.fromCoordinates([[0, 0], [2, 0], [1, -1], [1, -2], [1, -3], [0, -4], [2, -4]]);
-      const sCar = this.fromCoordinates([[1, 0], [2, 0], [0, -1], [0, -2], [1, -2], [2, -2], [2, -3], [1, -4], [0, -4]]);
-      const i2Car = this.fromCoordinates([[0, 0], [2, 0], [1, -1], [1, -2], [1, -3], [0, -4], [2, -4]]);
-      const oCar = this.fromCoordinates([[1, 0], [0, -1], [2, -1], [0, -2], [2, -2], [0, -3], [2, -3], [1, -4]]);
-      const nCar = this.fromCoordinates([[0, 0], [1, -1], [1, -2], [1, -3], [2, -4]])
-
       const baseBean = 864;
       this.importantFrames = [
         -9,
@@ -63,10 +54,54 @@
         //64, //
         67,
         74,
-        81,
-        89, //
-        101,
+        //78,
+        82, //
+        97,
+        //101,
+        106,
+        114,
+        121,
+        //126,
+        132,
+        144,
+        156,
+        168,
+        180,
+        192,
       ].map(bean => FRAME_FOR_BEAN(bean + baseBean));
+
+      const rawCarPositions = [
+        [0, -9],
+        [2, -9],
+        [1, -9],
+        [2, -9],
+        [1, -9],
+        [2, -9],
+        [0, -9],
+        [1, -9],
+        [0, -9],
+        [1, -9],
+        [2, -9],
+        [0, -9],
+        [2, -9],
+        [0, -9],
+        [1, -9],
+      ];
+
+      const beanWhenTheCarsTouch = 876;
+      this.carPositions = [];
+      for (let [index, [x, y]] of rawCarPositions.entries()) {
+        this.carPositions.push({
+          frame: FRAME_FOR_BEAN(beanWhenTheCarsTouch + 12 * index - 2),
+          x: x * 4 - 4,
+          y,
+        });
+        this.carPositions.push({
+          frame: FRAME_FOR_BEAN(beanWhenTheCarsTouch + 12 * index + 2),
+          x: x * 4 - 4,
+          y,
+        });
+      }
 
       const allIncoming = [
         [1, 1],
@@ -85,6 +120,12 @@
         [1, 9],
         [2, 10],
         [0, 11],
+        [1, 12],
+        [2, 12],
+        [0, 13],
+        [1, 13],
+        [1, 14],
+        [2, 14],
       ];
 
       this.incomingCars = new THREE.Object3D();
@@ -116,7 +157,7 @@
           x: 0,
           y: -baseIncomingDownwardsOffset - incomingCarsHeight,
         },
-      ]
+      ];
 
       this.racingWrapperPositions = [
         {
@@ -131,36 +172,8 @@
         },
       ];
 
-      const rawCarPositions = [
-        [0, -9],
-        [2, -9],
-        [1, -9],
-        [2, -9],
-        [1, -9],
-        [2, -9],
-        [0, -9],
-        [1, -9],
-        [0, -9],
-        [1, -9],
-        [2, -9],
-      ];
+      const largeStarLeader = this.createStar(4.0);
 
-      const beanWhenTheCarsTouch = 876;
-      this.carPositions = [];
-      for (let [index, [x, y]] of rawCarPositions.entries()) {
-        this.carPositions.push({
-          frame: FRAME_FOR_BEAN(beanWhenTheCarsTouch + 12 * index - 2),
-          x: x * 4 - 4,
-          y,
-        });
-        this.carPositions.push({
-          frame: FRAME_FOR_BEAN(beanWhenTheCarsTouch + 12 * index + 2),
-          x: x * 4 - 4,
-          y,
-        });
-      };
-
-      const largeLeader = this.createRacer(4.0);
       const largeRCar = this.fromCoordinates([[1, 0], [2, 0], [0, -1], [0, -2], [0, -3], [0, -4]], 4.0);
       const largeECar = this.fromCoordinates([[1, 0], [2, 0], [0, -1], [1, -2], [2, -2], [0, -3], [1, -4], [2, -4]], 4.0);
       const largeVCar = this.fromCoordinates([[0, 0], [2, 0], [0, -1], [2, -1], [0, -2], [2, -2], [0, -3], [2, -3], [1, -4]], 4.0);
@@ -168,10 +181,18 @@
       const largeSCar = this.fromCoordinates([[1, 0], [2, 0], [0, -1], [0, -2], [1, -2], [2, -2], [2, -3], [1, -4], [0, -4]], 4.0);
       const largeI2Car = this.fromCoordinates([[0, 0], [2, 0], [1, -1], [1, -2], [1, -3], [0, -4], [2, -4]], 4.0);
       const largeOCar = this.fromCoordinates([[1, 0], [0, -1], [2, -1], [0, -2], [2, -2], [0, -3], [2, -3], [1, -4]], 4.0);
-      const largeNCar = this.fromCoordinates([[0, 0], [1, -1], [1, -2], [1, -3], [2, -4]], 4.0);
-      const largeTrailer = this.createRacer(4.0);
+      const largeNCar = this.fromCoordinates([[1, 0], [0, -1], [0, -2], [0, -3], [0, -4], [2, -1], [2, -2], [2, -3], [2, -4]], 4.0);
+
+      const largeStarMid1 = this.createStar(4.0);
+      const largeStarMid2 = this.createStar(4.0);
+
+      const largeTwo = this.fromCoordinates([[1, 0], [0, -1], [2, -1], [2, -2], [1, -3], [0, -4], [1, -4], [2, -4]], 4.0);
+      const largeZero = this.fromCoordinates([[1, 0], [0, -1], [2, -1], [0, -2], [2, -2], [0, -3], [2, -3], [1, -4]], 4.0);
+      const largeOne = this.fromCoordinates([[1, 0], [0, -1], [1, -1], [1, -2], [1, -3], [0, -4], [1, -4], [2, -4]], 4.0);
+      const largeEight = this.fromCoordinates([[1, 0], [0, -1], [2, -1], [1, -2], [0, -3], [2, -3], [1, -4]], 4.0);
+
       this.largeLetters = [
-        largeLeader,
+        largeStarLeader,
         largeRCar,
         largeECar,
         largeVCar,
@@ -180,7 +201,18 @@
         largeI2Car,
         largeOCar,
         largeNCar,
-        largeTrailer];
+        largeStarMid1,
+        largeStarMid2,
+        largeTwo,
+        largeZero,
+        largeOne,
+        largeEight,
+        this.createStar(4.0),
+        this.createStar(4.0),
+        this.createStar(4.0),
+        this.createStar(4.0),
+        this.createStar(4.0),
+      ];
       this.largeLetterAnimationPaths = [];
       for (let [i, largeLetter] of this.largeLetters.entries()) {
         this.scene.add(largeLetter);
@@ -207,11 +239,16 @@
           }
         ];
         this.largeLetterAnimationPaths.push(positions);
-      };
+      }
 
       this.throb = 0;
     }
 
+    createStar(scale = 1.0) {
+      const star = this.fromCoordinates([[1, 0], [0, -1], [1, -1], [2, -1], [1, -2], [0, -3], [1, -3], [2, -3], [1, -4]], scale);
+      star.traverse(obj => obj.material = pinkMaterial);
+      return star;
+    }
 
     createRacer(scale = 1.0) {
       const racer = this.fromCoordinates([[1, 0], [0, -1], [1, -1], [2, -1], [1, -2], [0, -3], /*[1, -3], */[2, -3]], scale);
@@ -247,7 +284,7 @@
         }
       }
 
-      const current = positions[idx]
+      const current = positions[idx];
       const prev = positions[Math.max(0, idx - 1)];
 
       const mixer = (frame - prev.frame) / (current.frame - prev.frame);
@@ -280,14 +317,14 @@
 
       const scale = Math.max(Math.sqrt(this.throb), 0.01);
       for (let cube of this.racingGridFrame.children) {
-        cube.scale.set(scale, scale, scale, );
+        cube.scale.set(scale, scale, scale);
       }
 
       var { x, y } = this.animate(this.carPositions, frame, easeOut);
       this.playerRacingCar.position.x = x;
       this.playerRacingCar.position.y = y;
       for (let cube of this.playerRacingCar.children) {
-        cube.scale.set(scale, scale, scale, );
+        cube.scale.set(scale, scale, scale);
       }
 
       var { x, y } = this.animate(this.incomingCarsPosition, frame, lerp);
@@ -295,7 +332,7 @@
       this.incomingCars.position.y = y;
       for (let incoming of this.incomingCars.children) {
         for (let cube of incoming.children) {
-          cube.scale.set(scale, scale, scale, );
+          cube.scale.set(scale, scale, scale);
         }
       }
 
