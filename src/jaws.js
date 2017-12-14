@@ -61,10 +61,11 @@
           this.ctx.fillStyle = '#77e15d';
           this.ctx.fillStyle = 'white';
           this.ctx.fillStyle = '#77e15d';
-          this.ctx.fillStyle = 'rgb(55, 60, 53)';
+          this.ctx.fillStyle = 'rgb(55, 60, 63)';
           this.ctx.fillStyle = 'rgb(255, 73, 130)';
           this.ctx.fillStyle = '#77e15d';
           this.ctx.fillStyle = '#98d19b';
+          this.ctx.fillStyle = 'rgb(55, 60, 63)';
         } else {
           this.ctx.fillStyle = 'rgb(255, 73, 130)';
           this.ctx.fillStyle = '#77e15d';
@@ -72,6 +73,8 @@
           this.ctx.fillStyle = 'rgb(255, 73, 130)';
           this.ctx.fillStyle = 'white';
           this.ctx.fillStyle = '#77e15d';
+          this.ctx.fillStyle = '#98d19b';
+          this.ctx.fillStyle = 'rgb(55, 60, 63)';
         }
         const t = 
           easeIn(1, 0, (this.frame - timings[i] + 15) / 15);
@@ -86,7 +89,6 @@
         this.ctx.fill();
         this.ctx.stroke();
         this.ctx.restore();
-
       }
 
       this.ctx.fillStyle = 'rgb(55, 60, 63)';
@@ -100,11 +102,32 @@
       this.ctx.arc(8, 4.5, t2, 0, Math.PI * 2);
       this.ctx.fill();
 
+      this.ctx.save();
+      this.ctx.fillStyle = '#77e15d';
+      this.ctx.font = 'bold 0.8pt schmalibre';
+      this.ctx.textAlign = 'center';
+      this.ctx.textBaseline = 'middle';
+      this.ctx.translate(8, 4.5);
+      this.ctx.scale(t2, -t2);
+      this.ctx.fillText(['NO', '', 'SE', 'MI', 'NA', 'RS'][(BEAN - 1536) / 12 | 0], 0, -0.15);
+      this.ctx.restore();
+
       this.ctx.fillStyle = 'rgb(0, 0, 255)';
       const t = easeOut(0, 1, (this.frame - timings[30]) / 120);
       this.ctx.beginPath();
       this.ctx.arc(8, 4.5, 10 * t, 0, Math.PI * 2);
       this.ctx.fill();
+
+      this.ctx.fillStyle = 'white';
+      this.ctx.font = 'bold 2.5pt schmalibre';
+      this.ctx.translate(8, 4.5);
+      this.ctx.scale(1, -1);
+      this.ctx.textAlign = 'center';
+      this.ctx.textBaseline = 'middle';
+      let tt = t * t * t;
+      const x = easeOut(10, -10, tt * 2) + easeOut(10, -10, tt * 2 - 1);
+      this.ctx.fillText('JUST', x, 2.1);
+
       this.ctx.restore();
 
       this.output.needsUpdate = true;
