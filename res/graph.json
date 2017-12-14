@@ -359,7 +359,7 @@
       "shader": "pyramidfx"
     },
     "connected": {
-      "tDiffuse": "pyramidfxaa.render"
+      "tDiffuse": "pyramidsblend.render"
     }
   },
   {
@@ -488,5 +488,20 @@
       "A": "cubes.render",
       "B": "AtariRacer.render"
     }
+  },
+  {
+    "id": "pyramidsblend",
+    "type": "AlphaBlendNode",
+    "options": {
+      "shader": "AlphaBlend"
+    },
+    "connected": {
+      "under": "pyramidfxaa.render",
+      "over": "pyramidsoverlay.render"
+    }
+  },
+  {
+    "id": "pyramidsoverlay",
+    "type": "pyramidsoverlay"
   }
 ]
