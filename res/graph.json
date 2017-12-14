@@ -16,8 +16,8 @@
       "_03_intro_2": "schmapple.render",
       "_04_car_rev_interstitial": "schmapple.render",
       "_05_first_A_theme_1": "textout.render",
-      "_05_first_A_theme_1_2": "cubes.render",
-      "_06_first_A_theme_2": "AtariRacer.render",
+      "_05_first_A_theme_1_2": "justTransition.render",
+      "_06_first_A_theme_2": "justTransition.render",
       "_06_first_A_theme_2_2": "AtariRacer.render",
       "_07_first_B_theme_1": "clockTransition.render",
       "_08_first_B_theme_2": "clockTransition.render",
@@ -324,7 +324,7 @@
     "id": "cubes",
     "type": "cubes",
     "options": {
-        "shader": "discowall"
+      "shader": "discowall"
     }
   },
   {
@@ -447,35 +447,46 @@
     "id": "pyramidfxaa",
     "type": "FXAANode",
     "connected": {
-        "tDiffuse": "pyramids.render"
+      "tDiffuse": "pyramids.render"
     }
   },
   {
     "id": "OrthoCubeFxaa",
     "type": "FXAANode",
     "connected": {
-        "tDiffuse": "OrthoCube.render"
+      "tDiffuse": "OrthoCube.render"
     }
   },
   {
     "id": "featuresfxaa",
     "type": "FXAANode",
     "connected": {
-        "tDiffuse": "featureblend.render"
+      "tDiffuse": "featureblend.render"
     }
   },
   {
     "id": "treefxaa",
     "type": "FXAANode",
     "connected": {
-        "tDiffuse": "tree.render"
+      "tDiffuse": "tree.render"
     }
   },
   {
     "id": "ewerkfxaa",
     "type": "FXAANode",
     "connected": {
-        "tDiffuse": "ewerk.render"
+      "tDiffuse": "ewerk.render"
+    }
+  },
+  {
+    "id": "justTransition",
+    "type": "justTransitionNode",
+    "options": {
+      "shader": "justTransition"
+    },
+    "connected": {
+      "A": "cubes.render",
+      "B": "AtariRacer.render"
     }
   }
 ]
