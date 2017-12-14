@@ -954,6 +954,7 @@
       this.boxes = new THREE.Object3D();
       this.grid = [];
       this.drawGrid = [];
+      this.allgons = [];
       for (let y = -10; y < numY + 10; y++) {
         if(y >= 0 && y < numY) {
           this.grid[y] = [];
@@ -970,6 +971,8 @@
               emissive: 0,
             }));
 
+          this.allgons.push(cylinder);
+
           cylinder.rotation.x = Math.PI / 2;
           cylinder.rotation.y = Math.PI / 2;
           cylinder.scale.x = 1.2;
@@ -981,6 +984,11 @@
           cylinder.position.y = 2 * y * offsetX + offset;
           cylinder.x = x;
           cylinder.y = y;
+          cylinder.targetPosition = cylinder.position.clone();
+          cylinder.startPosition = cylinder.position.clone();
+          cylinder.startPosition.y -= 20;
+          cylinder.startPosition.x -= 10;
+          cylinder.beanOffset = x * .5 + Math.random() * 5;
           this.boxes.add(cylinder);
           if(y >= 0 && y < numY && x >= 0 && x < numX) {
             this.grid[y][x] = cylinder;
@@ -1062,6 +1070,31 @@
       demo.nm.nodes.bloom.opacity = 0;
       super.update(frame);
       this.frame = frame;
+
+
+      for(let i = 0; i < this.allgons.length; i++) {
+        const item = this.allgons[i];
+        let t = (frame - FRAME_FOR_BEAN(1596 + item.beanOffset)) / (
+          FRAME_FOR_BEAN(1632 + item.beanOffset) - FRAME_FOR_BEAN(1596 + item.beanOffset));
+        item.position.x = easeOut(
+          item.startPosition.x,
+          item.targetPosition.x,
+          t);
+        item.position.y = easeOut(
+          item.startPosition.y,
+          item.targetPosition.y,
+          t);
+        item.position.z = easeOut(
+          item.startPosition.z,
+          item.targetPosition.z,
+          t);
+        item.rotation.x = easeOut(-Math.PI * 4, Math.PI / 2, Math.pow(0.75 + t - i / this.allgons.length, 2));
+
+        if(t >= 0 && t < 0.5) {
+          item.material.emissive = this.colors[2].emissive;
+          item.material.emissiveIntensity = 1;
+        }
+      }
 
       for(let i = 0; i < this.drawGrid.length; i++) {
         for(let j = 0; j < this.drawGrid[i].length; j++) {
@@ -1199,7 +1232,9 @@
       for(let y = 0; y < this.drawGrid.length; y++) {
         for(let x = 0; x < this.drawGrid[y].length; x++) {
           if(this.drawGrid[y][x]) {
-            this.grid[y][x].material.emissive = this.colors[this.drawGrid[y][x]].emissive;
+            if(BEAN >= 1632) {
+              this.grid[y][x].material.emissive = this.colors[this.drawGrid[y][x]].emissive;
+            }
           }
           if(this.drawGrid[y][x] > 0) {
             if(this.grid[y][x].material.emissiveIntensity < 0.25) {
