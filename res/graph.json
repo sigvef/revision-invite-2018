@@ -12,7 +12,7 @@
     "connected": {
       "_00_silence": "ewerkfxaa.render",
       "_01_pre_intro_with_car_rev_sounds": "ewerkfxaa.render",
-      "_02_intro_1": "OrthoCube.render",
+      "_02_intro_1": "OrthoCubeFxaa.render",
       "_03_intro_2": "schmapple.render",
       "_04_car_rev_interstitial": "schmapple.render",
       "_05_first_A_theme_1": "textout.render",
@@ -448,6 +448,13 @@
     "type": "FXAANode",
     "connected": {
         "tDiffuse": "pyramids.render"
+    }
+  },
+  {
+    "id": "OrthoCubeFxaa",
+    "type": "FXAANode",
+    "connected": {
+        "tDiffuse": "OrthoCube.render"
     }
   },
   {
