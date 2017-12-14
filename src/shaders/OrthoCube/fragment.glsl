@@ -167,6 +167,14 @@ vec3 march(vec3 eye, vec3 dir, float start, float end) {
     return vec3(end, 0.0, MAX_MARCHING_STEPS);
 }
 
+vec3 estimateNormal(vec3 p) {
+    return normalize(vec3(
+        sdf(vec3(p.x + EPSILON, p.yz)).x - sdf(vec3(p.x - EPSILON, p.yz)).x,
+        sdf(vec3(p.x, p.y + EPSILON, p.z)).x - sdf(vec3(p.x, p.y - EPSILON, p.z)).x,
+        sdf(vec3(p.xy, p.z + EPSILON)).x - sdf(vec3(p.xy, p.z - EPSILON)).x
+    ));
+}
+
 void main() {
     vec3 color1 = vec3(255.0/255.0, 73.0/255.0, 130.0/255.0);
     vec3 color2 = vec3(119.0/255.0, 225.0/255.0, 93.0/255.0);
@@ -195,36 +203,19 @@ void main() {
         float oID = distOid.y;
 
         vec3 p = eye + dir * dist;
-        color = mod(oID, 2.0) == 0.0 ? white : color2;
-        if(BEAN >= 240.0){
+        vec3 normal = estimateNormal(p);
+        float fresnell = abs(dot(dir,normal));
+
+        if(fresnell < 0.5){ //border!
+            color = dark; 
+        }else{
+            color = mod(oID, 2.0) == 0.0 ? white : color2;
+        }
+        if(BEAN >= 240.0 && fresnell >= 0.5){
             color += 0.3 * kickThrob;
         }
-        //float gray = + 0.1 + 0.5 * kickThrob;
     }
-    
-    /*  MSAA experiments. Disregard for now
-    if(distOid.z > 49.0){ //MSAA time
-        for(float x = -1.0; x <= 1.0; x+=2.0){
-            for(float y = -1.0; y <= 1.0; y+=2.0){
-                distOid = march(eye+vec3(x*0.05, y*0.05,0.0), dir, START, END);
-                dist = distOid.x;
-                if (dist >= END-EPSILON) {
-                    color += vec3(55.0/255.0, 60.0/255.0, 63.0/255.0);
-                }else{
-                    float oID = distOid.y;
-                    vec3 p = eye + dir * dist;
-                    float gray = 1.0 * mod(oID, 2.0) + 0.1 + 0.5 * kickThrob;
-                    color += vec3(gray, gray, gray);
-                }
-            }
-        }
-
-        color /= 5.0;
-        color += vec3(0.5,0.0,0.0);
-    }
-    */
 
     gl_FragColor = vec4(color, 1.0);
-
 }
 
