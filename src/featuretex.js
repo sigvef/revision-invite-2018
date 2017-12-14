@@ -1,4 +1,4 @@
-(function(global) {
+(function (global) {
   class featuretex extends NIN.Node {
     constructor(id) {
       super(id, {
@@ -18,8 +18,8 @@
         'MUSIC',
         'VISITORS',
         'DEMOS',
-        'some',
-        'thing',
+        'AND',
+        'MORE',
       ];
     }
 
@@ -39,57 +39,57 @@
       this.ctx.textBaseline = 'middle';
       this.ctx.textAlign = 'center';
       const index = (BEAN - 3672) / 24 | 0;
-      if(this.texts[index]) {
+      if (this.texts[index]) {
         this.ctx.fillText(this.texts[index], 0, 2.3);
       }
 
       const rotation = -0.43;
-      if(BEAN >= 3816) {
+      if (BEAN >= 3816) {
         this.ctx.save();
         this.ctx.font = '1.1pt schmalibre';
         this.ctx.rotate(rotation);
         this.ctx.translate(-12, -6);
-        this.ctx.fillText('AMIGA', 0, 4);
+        this.ctx.fillText('PC', 0, 4);
         this.ctx.restore();
       }
-      if(BEAN >= 3816 + 6) {
+      if (BEAN >= 3816 + 6) {
         this.ctx.save();
         this.ctx.font = '1.1pt schmalibre';
         this.ctx.rotate(rotation);
         this.ctx.translate(0, -6);
-        this.ctx.fillText('OCS', 0, 4);
+        this.ctx.fillText('AMIGA', 0, 4);
         this.ctx.restore();
       }
-      if(BEAN >= 3816 + 18) {
+      if (BEAN >= 3816 + 18) {
         this.ctx.save();
         this.ctx.font = '1.1pt schmalibre';
         this.ctx.rotate(rotation);
         this.ctx.translate(12, -6);
-        this.ctx.fillText('INTRO', 0, 4);
+        this.ctx.fillText('C64', 0, 4);
         this.ctx.restore();
       }
-      if(BEAN >= 3816) {
+      if (BEAN >= 3816) {
         this.ctx.save();
         this.ctx.font = '1.1pt schmalibre';
         this.ctx.rotate(rotation);
         this.ctx.translate(-12, 1);
-        this.ctx.fillText('OLDSKOOL', 0, 0.4);
+        this.ctx.fillText('ATARI', 0, 0.4);
         this.ctx.restore();
       }
-      if(BEAN >= 3816 + 9) {
+      if (BEAN >= 3816 + 9) {
         this.ctx.save();
         this.ctx.font = '1.1pt schmalibre';
         this.ctx.rotate(rotation);
         this.ctx.translate(0, 1);
-        this.ctx.fillText('4K INTRO', 0, 0.4);
+        this.ctx.fillText('CONCERTS', 0, 0.4);
         this.ctx.restore();
       }
-      if(BEAN >= 3816 + 18) {
+      if (BEAN >= 3816 + 18) {
         this.ctx.save();
         this.ctx.font = '1.1pt schmalibre';
         this.ctx.rotate(rotation);
         this.ctx.translate(12, 1);
-        this.ctx.fillText('MUSIC', 0, 0.4);
+        this.ctx.fillText('SEMINARS', 0, 0.4);
         this.ctx.restore();
       }
 
