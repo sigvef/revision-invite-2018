@@ -8,6 +8,7 @@
 
   const pinkMaterial = new THREE.MeshBasicMaterial({ color: pinkColor });
   const greenMaterial = new THREE.MeshBasicMaterial({ color: greenColor });
+  const baseBean = 864;
 
   class AtariRacer extends NIN.THREENode {
     constructor(id, options) {
@@ -41,7 +42,6 @@
 
       this.playerRacingCar = this.createRacer();
 
-      const baseBean = 864;
       this.importantFrames = [
         -9,
         -6,
@@ -55,19 +55,16 @@
         67,
         74,
         //78,
-        82, //
+        82,
         97,
         //101,
         106,
         114,
         121,
         //126,
-        132,
-        144,
-        156,
-        168,
-        180,
-        192,
+        131,
+        137,
+        155,
       ].map(bean => FRAME_FOR_BEAN(bean + baseBean));
 
       const rawCarPositions = [
@@ -86,6 +83,7 @@
         [2, -9],
         [0, -9],
         [1, -9],
+        [1, 20],
       ];
 
       const beanWhenTheCarsTouch = 876;
@@ -97,7 +95,7 @@
           y,
         });
         this.carPositions.push({
-          frame: FRAME_FOR_BEAN(beanWhenTheCarsTouch + 12 * index + 2),
+          frame: FRAME_FOR_BEAN(beanWhenTheCarsTouch + 12 * index + 1),
           x: x * 4 - 4,
           y,
         });
@@ -126,6 +124,8 @@
         [1, 13],
         [1, 14],
         [2, 14],
+        [0, 15],
+        [2, 15],
       ];
 
       this.incomingCars = new THREE.Object3D();
@@ -184,7 +184,6 @@
       const largeNCar = this.fromCoordinates([[1, 0], [0, -1], [0, -2], [0, -3], [0, -4], [2, -1], [2, -2], [2, -3], [2, -4]], 4.0);
 
       const largeStarMid1 = this.createStar(4.0);
-      const largeStarMid2 = this.createStar(4.0);
 
       const largeTwo = this.fromCoordinates([[1, 0], [0, -1], [2, -1], [2, -2], [1, -3], [0, -4], [1, -4], [2, -4]], 4.0);
       const largeZero = this.fromCoordinates([[1, 0], [0, -1], [2, -1], [0, -2], [2, -2], [0, -3], [2, -3], [1, -4]], 4.0);
@@ -202,20 +201,16 @@
         largeOCar,
         largeNCar,
         largeStarMid1,
-        largeStarMid2,
         largeTwo,
         largeZero,
         largeOne,
         largeEight,
         this.createStar(4.0),
-        this.createStar(4.0),
-        this.createStar(4.0),
-        this.createStar(4.0),
-        this.createStar(4.0),
       ];
+      this.largeLettersWrapperObject = new THREE.Object3D();
       this.largeLetterAnimationPaths = [];
       for (let [i, largeLetter] of this.largeLetters.entries()) {
-        this.scene.add(largeLetter);
+        this.largeLettersWrapperObject.add(largeLetter);
         const positions = [
           {
             frame: this.importantFrames[i + 0],
@@ -240,6 +235,8 @@
         ];
         this.largeLetterAnimationPaths.push(positions);
       }
+
+      this.scene.add(this.largeLettersWrapperObject);
 
       this.throb = 0;
     }
@@ -314,6 +311,14 @@
       var { x, y } = this.animate(this.racingWrapperPositions, frame, easeOut);
       this.racingWrapper.position.x = x;
       this.racingWrapper.position.y = y;
+
+      const morphRacingWrapperMixer = (frame - FRAME_FOR_BEAN(baseBean + 137)) / (FRAME_FOR_BEAN(baseBean + 140) - FRAME_FOR_BEAN(baseBean + 137));
+
+      this.camera.rotation.z = lerp(0, Math.PI / 2.0, morphRacingWrapperMixer);
+      this.camera.position.x = lerp(0, -21, morphRacingWrapperMixer);
+      const racingScale = lerp(1.0, 2.0, morphRacingWrapperMixer);
+      this.racingWrapper.scale.set(racingScale, racingScale, racingScale);
+      this.largeLettersWrapperObject.position.x = lerp(0, 10, morphRacingWrapperMixer);//  .scale.set(incomingScale, incomingScale, incomingScale);
 
       const scale = Math.max(Math.sqrt(this.throb), 0.01);
       for (let cube of this.racingGridFrame.children) {
