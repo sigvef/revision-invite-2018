@@ -132,7 +132,10 @@
   },
   {
     "id": "AtariRacer",
-    "type": "AtariRacer"
+    "type": "AtariRacer",
+    "options": {
+      "shader": "ataribackground"
+    }
   },
   {
     "id": "lulle",

@@ -238,6 +238,12 @@
 
       this.scene.add(this.largeLettersWrapperObject);
 
+      this.bg = new THREE.Mesh(
+        new THREE.BoxGeometry(64 * 1.5, 36 * 1.5, 1),
+        new THREE.ShaderMaterial(SHADERS.ataribackground));
+      this.bg.position.z = -100;
+      this.scene.add(this.bg);
+
       this.throb = 0;
     }
 
@@ -314,9 +320,12 @@
 
       this.camera.rotation.z = lerp(0, Math.PI / 2.0, morphRacingWrapperMixer);
       this.camera.position.x = lerp(0, -21, morphRacingWrapperMixer);
-      const racingScale = lerp(1.0, 2.0, morphRacingWrapperMixer);
-      this.racingWrapper.scale.set(racingScale, racingScale, racingScale);
-      this.largeLettersWrapperObject.position.x = lerp(0, 10, morphRacingWrapperMixer);//  .scale.set(incomingScale, incomingScale, incomingScale);
+      this.camera.left = lerp(-32, -16, morphRacingWrapperMixer)
+      this.camera.right = lerp(32, 16, morphRacingWrapperMixer)
+      this.camera.top = lerp(18, 9, morphRacingWrapperMixer)
+      this.camera.bottom = lerp(-18, -9, morphRacingWrapperMixer)
+      this.camera.updateProjectionMatrix();
+      this.largeLettersWrapperObject.position.x = lerp(0, 10, morphRacingWrapperMixer);
 
       const scale = Math.max(Math.sqrt(this.throb), 0.01);
       for (let cube of this.racingGridFrame.children) {
@@ -347,6 +356,8 @@
         letter.position.x = x;
         letter.position.y = y;
       }
+
+      this.bg.material.uniforms.frame.value = frame;
     }
 
     render(renderer) {
