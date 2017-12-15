@@ -97,7 +97,9 @@
         selectedScene = this.inputs._06_first_A_theme_2_2;
       } else if (BEAN < 48 * 26) {
         selectedScene = this.inputs._07_first_B_theme_1;
-      } else if (BEAN < 48 * 30) {
+      } else if (BEAN < 48 * 30 + 1) {
+        // We add one bean here to handle the transition to the next scene
+        // properly as it ends slightly into the next one.
         selectedScene = this.inputs._08_first_B_theme_2;
       } else if (BEAN < 48 * 34) {
         selectedScene = this.inputs._09_second_A_theme_1;

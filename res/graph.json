@@ -21,7 +21,7 @@
       "_06_first_A_theme_2_2": "AtariRacer.render",
       "_07_first_B_theme_1": "clockTransition.render",
       "_08_first_B_theme_2": "clockTransition.render",
-      "_09_second_A_theme_1": "clockTransition.render",
+      "_09_second_A_theme_1": "carousel.render",
       "_10_second_A_theme_2": "hexafont.render",
       "_11_illuminati_confirmed": "logotransitionquadpass.render",
       "_12_first_C_theme_1": "lulle.render",
