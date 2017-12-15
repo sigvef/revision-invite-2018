@@ -20,13 +20,13 @@
             var nextBeanFrame = FRAME_FOR_BEAN(BEAN+1);
 
             var f = (frame - lastBeanFrame)/(nextBeanFrame - lastBeanFrame)
-            console.log(f);
             var interBean = lerp(BEAN, BEAN+1, f);
-            var beat = (interBean - 240.0)/12.0;
+            var beat = (interBean - 240.0)/12.0; 
+            //var beat = (INTERBEAN - 240.0)/12.0; For new nin
             var rotX = 0.0;
             var rotY = 0.0;
             var rotZ = 0.0;
-            var cubeSize = 2.0;
+            var cubeSize = 2.1;
 
             //Pre-scene
             if(beat < 0.0){ //Pre-scene (begins at 208)
@@ -92,27 +92,14 @@
             }
 
             //PART 4 (with wooo)
-            else if(beat < 12.5){
-
+            else if(beat <= 15.0){
             }
-            else if(beat < 13.0){
-
-            }
-            else if(beat < 13.5){
-
-            }
-            else if(beat < 14.0){
-
-            }
-            else if(beat < 14.5){
-
-            }
-            else if(beat < 15.0){
-            }
-            else if(frame < 1120.0){
-                cubeSize += 2.0 * Math.sin((frame - 1097.0)/(1125.0 - 1097.0) * 2.0 * Math.PI);
+            else if(beat <= 15.25){
+                cubeSize += easeOut(0, 1.1, (beat - 15.0)/0.25);
+            }else if(beat <= 15.75){
+                cubeSize += 1.1 - easeOut(0, 3.2, (beat - 15.5)/0.5);
             }else{
-                cubeSize = 0.0;
+                cubeSize = 0;
             }
 
             this.uniforms.cubeSize.value = cubeSize;
