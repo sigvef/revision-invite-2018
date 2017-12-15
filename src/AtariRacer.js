@@ -320,10 +320,10 @@
 
       this.camera.rotation.z = lerp(0, Math.PI / 2.0, morphRacingWrapperMixer);
       this.camera.position.x = lerp(0, -21, morphRacingWrapperMixer);
-      this.camera.left = lerp(-32, -16, morphRacingWrapperMixer)
-      this.camera.right = lerp(32, 16, morphRacingWrapperMixer)
-      this.camera.top = lerp(18, 9, morphRacingWrapperMixer)
-      this.camera.bottom = lerp(-18, -9, morphRacingWrapperMixer)
+      this.camera.left = lerp(-32, -16, morphRacingWrapperMixer);
+      this.camera.right = lerp(32, 16, morphRacingWrapperMixer);
+      this.camera.top = lerp(18, 9, morphRacingWrapperMixer);
+      this.camera.bottom = lerp(-18, -9, morphRacingWrapperMixer);
       this.camera.updateProjectionMatrix();
       this.largeLettersWrapperObject.position.x = lerp(0, 10, morphRacingWrapperMixer);
 
