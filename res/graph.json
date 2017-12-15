@@ -30,7 +30,7 @@
       "_15_second_C_theme_2": "pyramidfx.render",
       "_16_low_down_B_theme_1": "Ccc.render",
       "_17_low_down_B_theme_piano_snippet": "Ccc.render",
-      "_18_low_down_B_theme_2": "Ccc.render",
+      "_18_low_down_B_theme_2": "holeTransition.render",
       "_19_groovy_B_theme": "bouncyGeometry.render",
       "_20_A_theme_breakdown_1": "breakdown.render",
       "_20_A_theme_breakdown_2": "breakdown.render",
@@ -371,6 +371,17 @@
     "connected": {
       "A": "Metatron.render",
       "B": "carousel.render"
+    }
+  },
+  {
+    "id": "holeTransition",
+    "type": "holeTransitionNode",
+    "options": {
+      "shader": "holeTransition"
+    },
+    "connected": {
+      "A": "Ccc.render",
+      "B": "bouncyGeometry.render"
     }
   },
   {
