@@ -3,8 +3,11 @@ precision mediump float; // or lowp
 
 uniform float frame;
 uniform float BEAN;
-uniform float BEAT;
 uniform float kickThrob;
+uniform float rotX;
+uniform float rotY;
+uniform float rotZ;
+uniform float cubeSize;
 uniform sampler2D tDiffuse; 
 varying vec2 vUv;
 
@@ -87,110 +90,10 @@ mat4 rotateZ(float theta) {
 
 vec2 sdf(vec3 p) {
     vec3 cubeP = p;
-    float cubeSize = 2.0;
 
-    float nframe  = frame;
-
-    float beat = (BEAN - 240.0)/12.0;
-
-    //Pre-scene
-    if(beat < 0.0){ //Pre-scene (begins at 208)
-    }
-
-
-    //PART 1
-    else if(beat < 1.0){
-        //spin right
-        float rotZ = 0.5 * M_PI * mix(0.0, 1.0, (beat - 0.0)/1.0);
-        cubeP = (rotateZ(rotZ) * vec4(p, 1.0)).xyz;
-    }else if(beat < 2.0){
-        //pause
-    }else if(beat < 3.0){
-        //spin left
-        float rotZ = -0.5 * M_PI * mix(0.0, 1.0, (beat - 3.0)/1.0);
-        cubeP = (rotateZ(rotZ) * vec4(p, 1.0)).xyz;
-    }else if(beat < 4.0){
-        float a = 1.;
-    }
-
-
-    //PART 2
-    else if(beat < 5.0){
-        float rotY = 0.5 * M_PI * mix(0.0, 1.0, (beat - 4.0)/1.0);
-        cubeP = (rotateY(rotY) * vec4(p, 1.0)).xyz;
-    }
-    else if(beat < 6.0){ //hold for a beat and a half
-        //pause
-    }
-    else if(beat < 7.0){  //half beat for a half spin
-        float rotX = 0.5 * M_PI * mix(0.0, 1.0, (beat - 6.0)/1.0);
-        cubeP = (rotateX(rotX) * vec4(p, 1.0)).xyz;
-    }
-    else if(beat < 8.0){
-        //pause
-    }
-
-
-    //PART 3 (With lead)
-    //Leads: 8.0, 8.75, 10.0, 10.75, 11.5
-    else if(beat < 8.5){
-        float rotX = -0.25 * M_PI * mix(0.0, 1.0, (beat - 8.0)/0.5);
-        cubeP = (rotateX(rotX) * vec4(p, 1.0)).xyz;
-    }
-    else if(beat < 8.75){
-        float rotX = -0.25 * M_PI;
-        cubeP = (rotateX(rotX) * vec4(p, 1.0)).xyz;
-    }
-    else if(beat < 9.5){
-        float rotX = -0.25 * M_PI * mix(1.0, 2.0, (beat - 8.75)/0.75);
-        cubeP = (rotateX(rotX) * vec4(p, 1.0)).xyz;
-    }
-    else if(beat < 10.0){
-
-    }
-    else if(beat < 10.25){
-        float rotY = -0.25 * M_PI * mix(0.0, 1.0, (beat - 10.0)/0.25);
-        cubeP = (rotateY(rotY) * vec4(p, 1.0)).xyz;
-    }
-    else if(beat < 10.75){
-        float rotY = -0.25 * M_PI;
-        cubeP = (rotateY(rotY) * vec4(p, 1.0)).xyz;
-    }
-    else if(beat < 11.0){
-        float rotY = -0.25 * M_PI * mix(1.0, 2.0, (beat - 10.75)/0.25);
-        cubeP = (rotateY(rotY) * vec4(p, 1.0)).xyz;
-    }
-    else if(beat < 11.5){
-    }
-    else if(beat < 14.0){
-        float rot = 1.25 * M_PI * mix(1.0, 2.0, (beat - 11.5)/2.5);
-        cubeP = (rotateX(rot) * vec4(p, 1.0)).xyz;
-        cubeP = (rotateY(rot) * vec4(cubeP, 1.0)).xyz;
-    }
-
-    //PART 4 (with wooo)
-    else if(beat < 12.5){
-
-    }
-    else if(beat < 13.0){
-
-    }
-    else if(beat < 13.5){
-
-    }
-    else if(beat < 14.0){
-
-    }
-    else if(beat < 14.5){
-
-    }
-    else if(beat < 15.0){
-    }
-    else if(frame < 1120.0){
-        cubeSize += 2.0 * sin((frame - 1097.0)/(1125.0 - 1097.0) * 2.0 * M_PI);
-    }else{
-        cubeSize = 0.0;
-    }
+    cubeP = (rotateX(rotX) * vec4(p, 1.0)).xyz;
+    cubeP = (rotateY(rotY) * vec4(cubeP, 1.0)).xyz;
+    cubeP = (rotateZ(rotZ) * vec4(cubeP, 1.0)).xyz;
 
     float sphereSize = 0.6;
 

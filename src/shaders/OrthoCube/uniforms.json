@@ -1,7 +1,10 @@
 {
     "tDiffuse": { "type": "t", "value": null },
     "frame": { "type": "f", "value": 0.0 },
-    "BEAT": { "type": "f", "value": 0.0 },
     "kickThrob": { "type": "f", "value": 0.0 },
+    "rotX": { "type": "f", "value": 0.0 },
+    "rotY": { "type": "f", "value": 0.0 },
+    "rotZ": { "type": "f", "value": 0.0 },
+    "cubeSize": { "type": "f", "value": 0.0 },
     "BEAN": { "type": "f", "value": 0.0 }
 }
