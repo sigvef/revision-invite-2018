@@ -68,6 +68,12 @@
         tentacle.geometry.verticesNeedUpdate = true;
       }
     }
+
+    render(renderer) {
+      renderer.setClearColor(this.grayColor, 1.0);
+      super.render(renderer);
+    }
+
   }
 
   global.ccc = ccc;
