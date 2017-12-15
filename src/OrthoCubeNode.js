@@ -30,6 +30,7 @@
 
             //Pre-scene
             if(beat < 0.0){ //Pre-scene (begins at 208)
+                cubeSize = elasticOut(0, 2.1, 1.0, (beat + 2.0)/2.0);
             }
 
 
@@ -41,7 +42,7 @@
                 //pause
             }else if(beat < 3.0){
                 //spin left
-                rotZ = -0.5 * Math.PI * easeOut(0.0, 1.0, (beat - 3.0)/1.0);
+                rotZ = -0.5 * Math.PI * easeOut(0.0, 1.0, (beat - 2.0)/1.0);
             }else if(beat < 4.0){
             }
 
@@ -86,17 +87,23 @@
             }
             else if(beat < 11.5){
             }
-            else if(beat < 14.5){
-                rotY = 1.5 * Math.PI * easeOut(0.0, 1.0, (beat - 11.5)/3.0);
-                rotX = rotY;
+            else if(beat < 14.0){
+                rotY = (1 + 0.25) * Math.PI * easeOut(0.0, 1.0, (beat - 11.5)/2.5);
+                rotX = (1 + 0.19591111) * Math.PI * easeOut(0.0, 1.0, (beat - 11.5)/2.5);
             }
 
             //PART 4 (with wooo)
             else if(beat <= 15.0){
+                rotY = 0.25 * Math.PI;
+                rotX = 0.19591111 * Math.PI;
             }
             else if(beat <= 15.25){
+                rotY = 0.25 * Math.PI;
+                rotX = 0.19591111 * Math.PI;
                 cubeSize += easeOut(0, 1.1, (beat - 15.0)/0.25);
             }else if(beat <= 15.75){
+                rotY = 0.25 * Math.PI;
+                rotX = 0.19591111 * Math.PI;
                 cubeSize += 1.1 - easeOut(0, 3.2, (beat - 15.5)/0.5);
             }else{
                 cubeSize = 0;
