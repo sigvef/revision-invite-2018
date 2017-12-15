@@ -164,53 +164,55 @@
 
       this.random = new Random(1337);
 
-      for (let i = 0; i < this.texts.length; i++) {
-        const row = this.texts[i];
-        row.offset = this.random() * 20;
-        row.speed = 0.1 + Math.pow(this.random(), 4) * 2;
-        row.speed *= 0.5;
-        row.blinkOffset = i;
+      document.fonts.load('40pt brandontext').then(() => {
+        for (let i = 0; i < this.texts.length; i++) {
+          const row = this.texts[i];
+          row.offset = this.random() * 20;
+          row.speed = 0.1 + Math.pow(this.random(), 4) * 2;
+          row.speed *= 0.5;
+          row.blinkOffset = i;
 
-        let accumulatedWidth = 0;
-        for (let sentence of row) {
-          sentence.throb = 0;
+          let accumulatedWidth = 0;
+          for (let sentence of row) {
+            sentence.throb = 0;
 
-          const colorCanvas = document.createElement('canvas');
-          const canvas = document.createElement('canvas');
-          const ctx = canvas.getContext('2d');
-          const colorCtx = colorCanvas.getContext('2d');
-          ctx.font = '40pt brandontext';
-          const measurement = ctx.measureText(sentence.text);
-          canvas.width = measurement.width;
-          canvas.height = TEXT_IMAGE_HEIGHT;
-          colorCanvas.width = measurement.width;
-          colorCanvas.height = TEXT_IMAGE_HEIGHT;
-          colorCtx.font = ctx.font = '40pt brandontext';
-          colorCtx.textBaseline = ctx.textBaseline = 'middle';
-          colorCtx.textAlign = ctx.textAlign = 'center';
-          ctx.clearRect(0, 0, canvas.width, canvas.height);
-          colorCtx.clearRect(0, 0, canvas.width, canvas.height);
-          ctx.translate(canvas.width / 2, canvas.height / 2);
-          colorCtx.translate(canvas.width / 2, canvas.height / 2);
-          // For future reference
-          // const whiteColor = 0xffffff;
-          // const grayColor = 0x373c3f;
-          // const greenColor = 0x77e15d;
-          // const pinkColor = 0xff4982;
-          ctx.fillStyle = 'white';
-          //colorCtx.fillStyle = '#ff4982';
-          colorCtx.fillStyle = '#77e15d';
-          ctx.fillText(sentence.text, 0, 0);
-          colorCtx.fillText(sentence.text, 0, 0);
-          sentence.canvas = canvas;
-          sentence.colorCanvas = colorCanvas;
-          accumulatedWidth += canvas.width;
+            const colorCanvas = document.createElement('canvas');
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            const colorCtx = colorCanvas.getContext('2d');
+            ctx.font = '40pt brandontext';
+            const measurement = ctx.measureText(sentence.text);
+            canvas.width = measurement.width;
+            canvas.height = TEXT_IMAGE_HEIGHT;
+            colorCanvas.width = measurement.width;
+            colorCanvas.height = TEXT_IMAGE_HEIGHT;
+            colorCtx.font = ctx.font = '40pt brandontext';
+            colorCtx.textBaseline = ctx.textBaseline = 'middle';
+            colorCtx.textAlign = ctx.textAlign = 'center';
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            colorCtx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.translate(canvas.width / 2, canvas.height / 2);
+            colorCtx.translate(canvas.width / 2, canvas.height / 2);
+            // For future reference
+            // const whiteColor = 0xffffff;
+            // const grayColor = 0x373c3f;
+            // const greenColor = 0x77e15d;
+            // const pinkColor = 0xff4982;
+            ctx.fillStyle = 'white';
+            //colorCtx.fillStyle = '#ff4982';
+            colorCtx.fillStyle = '#77e15d';
+            ctx.fillText(sentence.text, 0, 0);
+            colorCtx.fillText(sentence.text, 0, 0);
+            sentence.canvas = canvas;
+            sentence.colorCanvas = colorCanvas;
+            accumulatedWidth += canvas.width;
+          }
+          row.widthWithoutPadding = accumulatedWidth * CANVAS_SCALER;
+          row.padding = 5;
+          const widthWithPadding = row.widthWithoutPadding + row.length * row.padding;
+          row.width = widthWithPadding;
         }
-        row.widthWithoutPadding = accumulatedWidth * CANVAS_SCALER;
-        row.padding = 5;
-        const widthWithPadding = row.widthWithoutPadding + row.length * row.padding;
-        row.width = widthWithPadding;
-      }
+      });
       this.stabThrob = 0;
       this.cumulativeStabThrob = 0;
     }
