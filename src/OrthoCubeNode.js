@@ -36,25 +36,25 @@
             //PART 1
             else if(beat < 1.0){
                 //spin right
-                rotZ = 0.5 * Math.PI * lerp(0.0, 1.0, (beat - 0.0)/1.0);
+                rotZ = 0.5 * Math.PI * easeOut(0.0, 1.0, (beat - 0.0)/1.0);
             }else if(beat < 2.0){
                 //pause
             }else if(beat < 3.0){
                 //spin left
-                rotZ = -0.5 * Math.PI * lerp(0.0, 1.0, (beat - 3.0)/1.0);
+                rotZ = -0.5 * Math.PI * easeOut(0.0, 1.0, (beat - 3.0)/1.0);
             }else if(beat < 4.0){
             }
 
 
             //PART 2
             else if(beat < 5.0){
-                rotY = 0.5 * Math.PI * lerp(0.0, 1.0, (beat - 4.0)/1.0);
+                rotY = 0.5 * Math.PI * easeOut(0.0, 1.0, (beat - 4.0)/1.0);
             }
             else if(beat < 6.0){ //hold for a beat and a half
                 //pause
             }
             else if(beat < 7.0){  //half beat for a half spin
-                rotX = 0.5 * Math.PI * lerp(0.0, 1.0, (beat - 6.0)/1.0);
+                rotX = 0.5 * Math.PI * easeOut(0.0, 1.0, (beat - 6.0)/1.0);
             }
             else if(beat < 8.0){
                 //pause
@@ -64,30 +64,30 @@
             //PART 3 (With lead)
             //Leads: 8.0, 8.75, 10.0, 10.75, 11.5
             else if(beat < 8.5){
-                rotX = -0.25 * Math.PI * lerp(0.0, 1.0, (beat - 8.0)/0.5);
+                rotX = -0.25 * Math.PI * easeOut(0.0, 1.0, (beat - 8.0)/0.5);
             }
             else if(beat < 8.75){
                 rotX = -0.25 * Math.PI;
             }
             else if(beat < 9.5){
-                rotX = -0.25 * Math.PI * lerp(1.0, 2.0, (beat - 8.75)/0.75);
+                rotX = -0.25 * Math.PI * easeOut(1.0, 2.0, (beat - 8.75)/0.75);
             }
             else if(beat < 10.0){
 
             }
             else if(beat < 10.25){
-                rotY = -0.25 * Math.PI * lerp(0.0, 1.0, (beat - 10.0)/0.25);
+                rotY = -0.25 * Math.PI * easeOut(0.0, 1.0, (beat - 10.0)/0.25);
             }
             else if(beat < 10.75){
                 rotY = -0.25 * Math.PI;
             }
             else if(beat < 11.0){
-                rotY = -0.25 * Math.PI * lerp(1.0, 2.0, (beat - 10.75)/0.25);
+                rotY = -0.25 * Math.PI * easeOut(1.0, 2.0, (beat - 10.75)/0.25);
             }
             else if(beat < 11.5){
             }
             else if(beat < 14.5){
-                rotY = 1.5 * Math.PI * lerp(0.0, 1.0, (beat - 11.5)/3.0);
+                rotY = 1.5 * Math.PI * easeOut(0.0, 1.0, (beat - 11.5)/3.0);
                 rotX = rotY;
             }
 
