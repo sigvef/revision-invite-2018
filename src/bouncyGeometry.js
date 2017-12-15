@@ -144,20 +144,6 @@
         3282, 3286, 3288, 3294, 3298, 3306, 3310,
       ];
 
-      // FRACTURE
-      /*
-      this.fractureMaterial = new THREE.MeshBasicMaterial({color: 0xffffff});
-      this.fractureSize = 0.3;
-      this.fractureGeometry = new THREE.BoxGeometry(this.fractureSize, this.fractureSize, this.fractureSize);
-      this.numfractureParts = 225;
-      this.fractureParts = [];
-      for (let i = 0; i < this.numfractureParts; i++) {
-        const fractureMesh = new THREE.Mesh(this.fractureGeometry, this.fractureMaterial);
-        this.fractureParts.push(fractureMesh);
-        this.scene.add(fractureMesh);
-      }
-      */
-
       // REVISION LOGO
       this.revisionLogoSegments = [
         [],
@@ -223,6 +209,8 @@
 
     update(frame) {
       this.updateChordStabBeans(frame);
+      this.updateBall(frame);
+      this.updateBeams(frame);
       if (BEAN >= 2976 && BEAN < 3024) {
         return this.updatePart1(frame);
       } else if (BEAN >= 3024 && BEAN < 3072) {
@@ -236,12 +224,117 @@
       }
     }
 
+    updateBall(frame) {
+      if (BEAN >= 2976 && BEAN < 3024) {
+        this.scene.add(this.ball);
+        this.ball.position.x = 0;
+        this.ball.position.y = 0;
+        this.ball.position.z = 0;
+        this.ball.rotation.x = frame / 40;
+        this.ball.rotation.y = frame / 45;
+
+      } else if (BEAN >= 3024 && BEAN < 3072) {
+        this.scene.add(this.ball);
+        const startFrame = FRAME_FOR_BEAN(3024);
+        const endFrame = FRAME_FOR_BEAN(3072);
+        const progress = (frame - startFrame) / (endFrame - startFrame);
+        this.ball.position.x = 0;
+        this.ball.position.y = 0;
+        this.ball.position.z = lerp(60, -60, progress);
+        this.ball.rotation.x = frame / 40;
+        this.ball.rotation.y = frame / 45;
+
+      } else if (BEAN >= 3072 && BEAN < 3120) {
+        this.scene.add(this.ball);
+
+        const startFrame = FRAME_FOR_BEAN(3072);
+        const endFrame = FRAME_FOR_BEAN(3120);
+        const progress = (frame - startFrame) / (endFrame - startFrame);
+
+        this.ball.position.x = 0;
+        this.ball.position.y = 0;
+        this.ball.position.z = lerp(-70, -79, progress);
+        this.ball.rotation.x = lerp(2, 0, progress);
+        this.ball.rotation.y = lerp(2, 0, progress);
+
+      } else if (BEAN >= 3120 && BEAN < 3312) {
+        this.scene.add(this.ball);
+
+        const startFrame = FRAME_FOR_BEAN(3120);
+        const endFrame = FRAME_FOR_BEAN(3168);
+        const progress = (frame - startFrame) / (endFrame - startFrame);
+
+        this.ball.position.x = 0;
+        this.ball.position.y = 0;
+        this.ball.position.z = -79 + 5 * progress;
+        this.ball.rotation.x = lerp(0, 2, progress);
+        this.ball.rotation.y = lerp(0, 2, progress);
+
+      } else if (BEAN >= 3312) {
+        this.scene.remove(this.ball);
+      }
+    }
+
+    updateBeams(frame) {
+      if (BEAN >= 2976 && BEAN < 3024) {
+        for (let i = 0; i < this.beams.length; i++) {
+          const beam = this.beams[i];
+          const angle = this.randomBeamNumbers[i] * 2 * Math.PI;
+          beam.position.x = 8 * Math.cos(angle);
+          beam.position.y = 8 * Math.sin(angle);
+          beam.position.z = -180 + (1.66 * frame + i) % 190;
+          beam.scale.z = 1;
+          beam.scale.x = beam.scale.y = this.beamThicknessScalers[i % this.beamThicknessScalers.length];
+        }
+
+      } else if (BEAN >= 3024 && BEAN < 3072) {
+        const startFrame = FRAME_FOR_BEAN(3024);
+        const endFrame = FRAME_FOR_BEAN(3072);
+        const progress = (frame - startFrame) / (endFrame - startFrame);
+
+        const beamScale = 0.3 * progress * progress;
+
+        for (let i = 0; i < this.beams.length; i++) {
+          const beam = this.beams[i];
+          const angle = this.randomBeamNumbers[i] * 2 * Math.PI;
+          beam.position.x = 8 * Math.cos(angle);
+          beam.position.y = 8 * Math.sin(angle);
+          beam.scale.z = 0.02 + beamScale * 5;
+          beam.position.z = (-190 / 2 +  (1 * frame + i) % 190) + 20 * beam.scale.z / 2;
+          beam.scale.x = beam.scale.y = this.beamThicknessScalers[i % this.beamThicknessScalers.length];
+        }
+
+      } else if (BEAN >= 3072 && BEAN < 3120) {
+        // BEAMS
+        for (let i = 0; i < this.beams.length; i++) {
+          const beam = this.beams[i];
+          const angle = this.randomBeamNumbers[i] * 2 * Math.PI;
+          beam.position.x = 8 * Math.cos(angle);
+          beam.position.y = 8 * Math.sin(angle);
+          beam.position.z = -190 + (0.09 * frame + i) % 190;
+          beam.scale.z = 1;
+          beam.scale.x = beam.scale.y = this.beamThicknessScalers[i % this.beamThicknessScalers.length];
+        }
+      } else if (BEAN >= 3120 && BEAN < 3312) {
+        for (let i = 0; i < this.beams.length; i++) {
+          const beam = this.beams[i];
+          const angle = this.randomBeamNumbers[i] * 2 * Math.PI;
+          beam.position.x = 8 * Math.cos(angle);
+          beam.position.y = 8 * Math.sin(angle);
+          beam.position.z = -190 + (0.09 * frame + i) % 190;
+          beam.scale.z = 1;
+          beam.scale.x = beam.scale.y = this.beamThicknessScalers[i % this.beamThicknessScalers.length];
+        }
+      } else if (BEAN >= 3312) {
+        this.scene.remove(this.beams);
+      }
+    }
+
     // 11111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111
     updatePart1(frame) {
       demo.nm.nodes.bloom.opacity = 0.1;
 
       this.scene.remove(this.textPlane);
-      this.scene.add(this.ball);
       this.ps.particles.visible = false;
       this.scene.remove(this.hexagons);
 
@@ -250,24 +343,6 @@
       const startFrame = FRAME_FOR_BEAN(2976);
       const endFrame = FRAME_FOR_BEAN(3024);
       const progress = (frame - startFrame) / (endFrame - startFrame);
-
-      // BALL
-      this.ball.position.x = 0;
-      this.ball.position.y = 0;
-      this.ball.position.z = 0;
-      this.ball.rotation.x = frame / 40;
-      this.ball.rotation.y = frame / 45;
-
-      // BEAMS
-      for (let i = 0; i < this.beams.length; i++) {
-        const beam = this.beams[i];
-        const angle = this.randomBeamNumbers[i] * 2 * Math.PI;
-        beam.position.x = 8 * Math.cos(angle);
-        beam.position.y = 8 * Math.sin(angle);
-        beam.position.z = -180 + (1.66 * frame + i) % 190;
-        beam.scale.z = 1;
-        beam.scale.x = beam.scale.y = this.beamThicknessScalers[i % this.beamThicknessScalers.length];
-      }
 
       // CAMERA
       this.camera.position.x = lerp(0, 0.8, progress);
@@ -281,7 +356,6 @@
       demo.nm.nodes.bloom.opacity = 0.1;
 
       this.scene.remove(this.textPlane);
-      this.scene.add(this.ball);
       this.ps.particles.visible = true;
       this.setBeamsVisibility(true);
       this.scene.remove(this.hexagons);
@@ -292,34 +366,12 @@
       const endFrame = FRAME_FOR_BEAN(3072);
       const progress = (frame - startFrame) / (endFrame - startFrame);
 
-      // BALL
-      this.ball.position.x = 0;
-      this.ball.position.y = 0;
-      this.ball.position.z = lerp(60, -60, progress);
-      this.ball.rotation.x = frame / 40;
-      this.ball.rotation.y = frame / 45;
-
       // CAMERA
-      const cameraRotationBefore = this.camera.rotation.y;
       const cameraMovement = Math.pow(progress + 0.1, 3);
       this.camera.position.x = 6;
       this.camera.position.y = 0;
       this.camera.position.z = 12  - 32 * cameraMovement;
       this.camera.lookAt(this.ball.position);
-      const cameraRotationDelta = Math.abs(this.camera.rotation.y - cameraRotationBefore) || 0.2;
-
-      const beamScale = 0.3 * progress * progress + cameraRotationDelta * 2.2;
-
-      // BEAMS
-      for (let i = 0; i < this.beams.length; i++) {
-        const beam = this.beams[i];
-        const angle = this.randomBeamNumbers[i] * 2 * Math.PI;
-        beam.position.x = 8 * Math.cos(angle);
-        beam.position.y = 8 * Math.sin(angle);
-        beam.scale.z = 0.02 + beamScale * 5;
-        beam.position.z = (-190 / 2 +  (1 * frame + i) % 190) + 20 * beam.scale.z / 2;
-        beam.scale.x = beam.scale.y = this.beamThicknessScalers[i % this.beamThicknessScalers.length];
-      }
 
       // PARTICLES
       for(let i = 0; i < 50; i++) {
@@ -344,19 +396,6 @@
         );
       }
       this.ps.update();
-
-      // FRACTURE PARTS
-      /*
-      for (let i = 0; i < this.fractureParts.length; i++) {
-        const fracturePart = this.fractureParts[i];
-        fracturePart.position.x = this.fractureSize * (i % 15) - 7.5 * this.fractureSize;
-        fracturePart.position.y = this.fractureSize * ((i / 15) | 0)  - 7.5 * this.fractureSize;
-        fracturePart.position.z = -80;
-        fracturePart.rotation.x = 0;
-        fracturePart.rotation.y = 0;
-        fracturePart.rotation.z = 0;
-      }
-      */
     }
 
     // 33333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333
@@ -364,7 +403,6 @@
       demo.nm.nodes.bloom.opacity = 0.1;
 
       this.scene.remove(this.textPlane);
-      this.scene.add(this.ball);
       this.ps.particles.visible = true;
       this.setBeamsVisibility(true);
       this.scene.add(this.hexagons);
@@ -403,23 +441,7 @@
       }
       this.ps.update();
 
-      // BEAMS
-      for (let i = 0; i < this.beams.length; i++) {
-        const beam = this.beams[i];
-        const angle = this.randomBeamNumbers[i] * 2 * Math.PI;
-        beam.position.x = 8 * Math.cos(angle);
-        beam.position.y = 8 * Math.sin(angle);
-        beam.position.z = -190 + (0.09 * frame + i) % 190;
-        beam.scale.z = 1;
-        beam.scale.x = beam.scale.y = this.beamThicknessScalers[i % this.beamThicknessScalers.length];
-      }
 
-      // BALL
-      this.ball.position.x = 0;
-      this.ball.position.y = 0;
-      this.ball.position.z = lerp(-70, -79, progress);
-      this.ball.rotation.x = lerp(2, 0, progress);
-      this.ball.rotation.y = lerp(2, 0, progress);
 
       this.camera.lookAt(new THREE.Vector3(0, 0, -80));
 
@@ -430,19 +452,6 @@
           obj.material = this.colors[0]; // grey
         });
       }
-
-      // FRACTURE PARTS
-      /*
-      for (let i = 0; i < this.fractureParts.length; i++) {
-        const fracturePart = this.fractureParts[i];
-        fracturePart.position.x = this.fractureSize * (i % 15) - 7.5 * this.fractureSize;
-        fracturePart.position.y = this.fractureSize * ((i / 15) | 0)  - 7.5 * this.fractureSize;
-        fracturePart.position.z = -80;
-        fracturePart.rotation.x = 0;
-        fracturePart.rotation.y = 0;
-        fracturePart.rotation.z = 0;
-      }
-      */
     }
 
     // 44444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444
@@ -488,13 +497,6 @@
       this.camera.rotation.y += this.cameraShakeRotation.y;
       this.camera.rotation.z += this.cameraShakeRotation.z;
 
-      // BALL
-      this.ball.position.x = 0;
-      this.ball.position.y = 0;
-      this.ball.position.z = -79 + 5 * progress;
-      this.ball.rotation.x = lerp(0, 2, progress);
-      this.ball.rotation.y = lerp(0, 2, progress);
-
       // HEXAGONS
 
       const idx = this.leadBeans.indexOf(BEAN);
@@ -520,62 +522,6 @@
           }
         });
       }
-
-      // FRACTURE PARTS
-      /*
-      for (let i = 0; i < this.fractureParts.length; i++) {
-        const fracturePart = this.fractureParts[i];
-        let x = this.fractureSize * (i % 15) - 7.5 * this.fractureSize;
-        let y = this.fractureSize * ((i / 15) | 0)  - 7.5 * this.fractureSize;
-        const distanceToCenter = Math.sqrt(x * x + y * y);
-        const impact = 1 / (distanceToCenter +   1);
-        fracturePart.position.x = x + 2.2 * progress * x * impact;
-        fracturePart.position.y = y + 2.2 * progress * y * impact;
-        fracturePart.position.z = -80 - 20 * progress * impact;
-        fracturePart.rotation.x = 0;
-        fracturePart.rotation.y = 0;
-        fracturePart.rotation.z = 0;
-
-        // PARTICLES
-        if (BEAN >= 3120) {
-          const beanDiff = BEAN - 3120;
-          const factor = 0 | (5 * impact / (beanDiff / 2 + 1));
-          for (let i = 0; i < factor; i++) {
-            const angle = this.random() * Math.PI * 2;
-            const angle2 = this.random() * Math.PI;
-            const radius = 0.8;
-            const velocityAngle = this.random() * Math.PI * 2;
-            const velocityAngle2 = this.random() * Math.PI * 2;
-            const velocityRadius = 0.01;
-            this.ps.spawn(
-              {
-                x: fracturePart.position.x + Math.sin(angle) * radius,
-                y: fracturePart.position.y + Math.cos(angle) * radius,
-                z: fracturePart.position.z + Math.sin(angle2) * radius,
-              },
-              {
-                x: Math.sin(velocityAngle2) * velocityRadius,
-                y: Math.sin(velocityAngle) * velocityRadius,
-                z: -0.1 * this.random(),
-              },
-              0.014
-            );
-          }
-        }
-      }
-      */
-
-      // BEAMS
-      for (let i = 0; i < this.beams.length; i++) {
-        const beam = this.beams[i];
-        const angle = this.randomBeamNumbers[i] * 2 * Math.PI;
-        beam.position.x = 8 * Math.cos(angle);
-        beam.position.y = 8 * Math.sin(angle);
-        beam.position.z = -190 + (0.09 * frame + i) % 190;
-        beam.scale.z = 1;
-        beam.scale.x = beam.scale.y = this.beamThicknessScalers[i % this.beamThicknessScalers.length];
-      }
-
       this.ps.update();
     }
 
@@ -583,43 +529,70 @@
     updateLastTextPart(frame) {
       demo.nm.nodes.bloom.opacity = 0.1;
       this.scene.add(this.textPlane);
-      this.scene.remove(this.ball);
       this.scene.remove(this.hexagons);
       this.ps.particles.visible = false;
 
       const white = 'white';
+      const black = '#373C3F';
       let text = '';
+      let fontScaler = 1;
       let foregroundColor = white;
+      let shakeAmount = 0;
+      let throbFactor = 1;
       if (BEAN >= 3312 && BEAN < 3316) {
-        foregroundColor = '#373C3F';
         text = 'AT';
+        fontScaler = 1.6;
+        const startFrame = FRAME_FOR_BEAN(3312);
+        const endFrame = FRAME_FOR_BEAN(3316);
+        const progress = (frame - startFrame) / (endFrame - startFrame);
+        throbFactor = easeOut(2, 1, progress);
+        fontScaler *= throbFactor;
       } else if (BEAN >= 3316 && BEAN < 3322) {
-        foregroundColor = white;
-        text = 'AT EASTER'
+        text = 'AT EASTER';
+        fontScaler = 1.5;
+
       } else if (BEAN >= 3322 && BEAN < 3336) {
-        foregroundColor = '#373C3F';
+        foregroundColor = black;
         text = 'AT EASTER 2018';
+        const startFrame = FRAME_FOR_BEAN(3322);
+        const endFrame = FRAME_FOR_BEAN(3332);
+        const progress = (frame - startFrame) / (endFrame - startFrame);
+        throbFactor = lerp(2, 0, progress);
+        shakeAmount = 5 * throbFactor;
+        fontScaler = 1.4;
       } else if (BEAN >= 3336 && BEAN < 3340) {
         text = 'THINGS';
-        foregroundColor = white;
+        fontScaler = 1.5;
       } else if (BEAN >= 3340 && BEAN < 3346) {
-        text = 'THINGS WILL BE';
-        foregroundColor = '#373C3F';
-      } else if (BEAN >= 3346) {
-        text = 'THINGS WILL BE DIFFERENT';
         foregroundColor = white;
+        text = 'THINGS WILL BE';
+        fontScaler = 1.4;
+      } else if (BEAN >= 3346) {
+        foregroundColor = black;
+        text = 'DIFFERENT';
+        fontScaler = 2.2;
+        const startFrame = FRAME_FOR_BEAN(3346);
+        const endFrame = FRAME_FOR_BEAN(3357);
+        const progress = (frame - startFrame) / (endFrame - startFrame);
+        throbFactor = lerp(2, 0, progress);
+        shakeAmount = 8 * throbFactor;
       }
-      const backgroundColor = foregroundColor === white ? '#373C3F': white;
+      const backgroundColor = foregroundColor === white ? black: white;
+
 
       // TEXT
       this.textCanvas.width = this.textCanvas.width;
       this.textCtx.fillStyle = backgroundColor;
       this.textCtx.fillRect(0, 0, this.textCanvas.width, this.textCanvas.height);
-      this.textCtx.font = `bold ${GU}px schmalibre`;
+      this.textCtx.font = `bold ${GU * fontScaler}px schmalibre`;
       this.textCtx.textAlign = 'center';
       this.textCtx.textBaseline = 'middle';
       this.textCtx.fillStyle = foregroundColor;
-      this.textCtx.fillText(text, GU * 8, GU * 4.665);
+      this.textCtx.fillText(
+        text,
+        GU * 8 + (0.5 - this.random()) * shakeAmount,
+        GU * 4.665 + (0.5 - this.random()) * shakeAmount
+      );
 
       this.textTexture.needsUpdate = true;
 
