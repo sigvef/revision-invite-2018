@@ -1,4 +1,4 @@
-(function(global) {
+(function (global) {
   class justTransitionNode extends NIN.ShaderNode {
     constructor(id, options) {
       options.inputs = {
@@ -17,7 +17,7 @@
 
     resize() {
       super.resize();
-      if(this.textCanvas) {
+      if (this.textCanvas) {
         this.textCanvas.width = 16 * GU;
         this.textCanvas.height = 9 * GU;
       }
