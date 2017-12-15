@@ -671,15 +671,31 @@
 
         t = clamp(0, (frame - 6072) / (6260 - 6072), 1);
         position.set(
-          easeIn(position.x, 23.6, t * t),
-          lerp(position.y, 40.4, t * t * t),
-          easeIn(position.z, 45.1, t)
+
+          easeIn(position.x,
+            29.48526056137387,
+            t * t),
+          lerp(position.y,
+            40.629444705590565,
+            t * t * t),
+          easeIn(position.z,
+            44.94734287697881,
+            t)
         );
         this.camera.quaternion.set(
-          lerp(quaternion.x, -0.7739245846765637, t * t),
-          easeIn(quaternion.y, 0.04507274468663894, t * t),
-          easeIn(quaternion.z, -0.04315116964068938, t * t),
-          easeIn(quaternion.w, 0.6301961293742305, t * t)
+
+          lerp(quaternion.x,
+           -0.7751457473569122,
+            t * t),
+          easeIn(quaternion.y,
+            0.04173864444709695,
+            t * t),
+          easeIn(quaternion.z,
+            -0.02408080621712149,
+            t * t),
+          easeIn(quaternion.w,
+            0.6299421169330928,
+            t * t)
         );
 
         if(frame >= 6322) {

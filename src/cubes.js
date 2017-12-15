@@ -90,8 +90,15 @@
       this.textTexture.magFilter = THREE.NearestFilter;
     }
 
+    resize() {
+      super.resize();
+      this.textCanvas.width = 16 * GU * 2;
+      this.textCanvas.height = 9 * GU * 2;
+    }
+
     update(frame) {
       const baseBean = 768;
+      this.frame = frame;
       this.wallCtx.save();
       this.wallCtx.globalAlpha = 0.1;
       this.wallCtx.fillStyle = 'rgb(25, 30, 33)';
@@ -100,8 +107,17 @@
       this.wallCtx.globalAlpha = 1;
       this.backThrob *= 0.9;
       const start = baseBean + 48 + 24;
+      if(BEAT) {
+        switch(BEAN % 96) {
+        case 12:
+        case 36:
+        case 60:
+        case 84:
+        case 90:
+          this.backThrob = 1;
+        }
+      }
       if(BEAT && BEAN >= start) {
-        this.backThrob = 1;
         const size = 2;
         const offset = BEAN - start;
         for(let j = 0; j < 9; j++) {
@@ -120,26 +136,6 @@
       this.wallTexture.needsUpdate = true;
       this.bg.material.uniforms.walltexture.value = this.wallTexture;
       this.outputs.debug.value = this.wallTexture;
-
-      this.textCtx.clearRect(0, 0, 16 * GU, 9 * GU);
-      this.textCtx.fillStyle = 'white';
-      const fontT = (frame - FRAME_FOR_BEAN(((BEAN / 12) | 0) * 12)) / (FRAME_FOR_BEAN(((BEAN / 12) | 0) * 12 + 12) - FRAME_FOR_BEAN(((BEAN / 12) | 0) * 12));
-      this.textCtx.font = `${GU * lerp(1.9, 1.6, fontT)}px schmalibre`;
-      this.textCtx.textAlign = 'center';
-      this.textCtx.textBaseline = 'middle';
-      if (BEAN >= baseBean + 24) {
-        if (BEAN < baseBean + 24 + 12) {
-          this.textCtx.fillText('No concerts', 8 * GU, 4.665 * GU);
-        } else if (BEAN < baseBean + 48) {
-          this.textCtx.fillText('No seminars', 8 * GU, 4.665 * GU);
-        } else if (BEAN < baseBean + 48 + 12) {
-          this.textCtx.fillText('No bonfire', 8 * GU, 4.665 * GU);
-        } else if (BEAN < baseBean + 48 + 24) {
-          this.textCtx.fillText('No live-stream', 8 * GU, 4.665 * GU);
-        }
-      }
-      this.textTexture.needsUpdate = true;
-      this.bg.material.uniforms.texttexture.value = this.textTexture;
 
       this.blindLight.intensity = 10 * this.backThrob;
 
@@ -176,7 +172,7 @@
       cameraPosition.z = 100;
       cameraPosition.x = 0;
       cameraPosition.y = 0;
-      const scaleUpT = (frame - 2002) / (2180 - 2002);
+      const scaleUpT = (frame - 2002) / (2253 - 2002);
       for(let i = 0; i < this.cubes.length; i++) {
         const cube = this.cubes[i];
         cube.position.x = (((i % 4) + 0.5) / this.cubes.length - 0.25) * 4 * this.cubeWidth * 2;
@@ -195,14 +191,14 @@
       }
 
       this.frames = [
-        2026,
-        2029,
-        2032,
-        2035,
-        2002,
-        2005,
-        2008,
-        2011,
+        2026 + 48 + 96,
+        2029 + 48 + 96,
+        2032 + 48 + 96,
+        2035 + 48 + 96,
+        2002 + 96 + 48 + 12,
+        2005 + 96 + 48 + 24,
+        2008 + 96 + 48 + 32,
+        2011 + 96 + 96,
       ];
       for (const [index, cube] of this.cubes.entries()) {
         const localT = easeIn(0, 100, (frame - this.frames[index]) / 40);
@@ -210,7 +206,31 @@
         cube.rotation.z = localT / 60;
       }
 
-      /*
+      const A = easeOut(0, 3 * Math.PI * 2,
+          (frame - 2002) / (2065 - 2002)) + frame * Math.PI * 2 / 60 / 60 * 115 / 2;
+      const B = easeOut(0, 1 * Math.PI * 2,
+          (frame - 2026) / 40);
+      const D = easeOut(0, 1 * Math.PI * 2 / 2,
+          (frame - 2049) / 10);
+      const E = easeOut(1, 1.15, 
+          (frame - 2065) / 10);
+      const F = easeOut(1, 1.15, 
+          (frame - 2076) / 10);
+      this.cubes[4].rotation.y = A;
+      this.cubes[0].rotation.y = A;
+      this.cubes[5].rotation.y = B;
+      this.cubes[1].rotation.x = B;
+      this.cubes[6].rotation.z = D;
+      this.cubes[2].rotation.z = D;   
+      this.cubes[3].scale.set(E, E, E);   
+      this.cubes[3].position.y += (E - 1) * 15;   
+      this.cubes[7].scale.set(F, F, F);   
+      this.cubes[7].position.y -= (F - 1) * 15;   
+    
+      const C = easeIn(1, 0.3, (frame - 2002) / (2096 - 2002));   
+      this.cubes[2].scale.set(C, C, C);   
+      this.cubes[6].scale.set(C, C, C);
+
       const t = (frame - 2096 + 10) / 10;
       cameraPosition.x = easeIn(0, -30, t);
       cameraPosition.y = easeIn(0, 10, t);
@@ -301,6 +321,7 @@
       this.camera.rotation.x += this.cameraShakeRotation.x;
       this.camera.rotation.y += this.cameraShakeRotation.y;
       this.camera.rotation.z += this.cameraShakeRotation.z;
+      /*
       */
       this.camera.position.copy(cameraPosition);
 
@@ -308,6 +329,44 @@
     }
 
     render(renderer) {
+      const baseBean = 768;
+      this.textCtx.save();
+      this.textCtx.scale(GU * 2, GU * 2);
+      this.textCtx.fillStyle = 'black';
+      this.textCtx.fillRect(0, 0, 16, 9);
+      this.textCtx.globalAlpha = 1;
+      this.textCtx.font = '1pt schmalibre';
+      this.textCtx.textAlign = 'center';
+      this.textCtx.textBaseline = 'middle';
+      if (BEAN >= baseBean) {
+        const start = baseBean + 48 + 24;
+        for(let i = 0; i < 16; i++) {
+          const swipeOffset = BEAN - start - i;
+          const reverseSwipeOffset = BEAN - start + i - 14;
+          this.textCtx.save();
+          this.textCtx.translate(1 + i + 0.5, 4.4);
+          this.textCtx.fillStyle = '#77e15d';
+          if(swipeOffset > 0) {
+            this.textCtx.fillText('NO DTSTRACTTON   '[i], 0, 0);
+            this.textCtx.rotate(Math.PI);
+            this.textCtx.fillText('    T      T     '[i], 0, -0.2);
+            this.textCtx.rotate(Math.PI);
+          }
+          if(reverseSwipeOffset > 0) {
+            this.textCtx.translate(0, 1);
+            this.textCtx.fillStyle = 'rgb(255, 73, 130)';
+            this.textCtx.fillText('JUST  REVTSTON    '[i], 0, 0);
+            this.textCtx.rotate(Math.PI);
+            this.textCtx.fillText('         T T    '[i], 0, -0.2);
+          }
+          this.textCtx.restore();
+
+        }
+      }
+      this.textCtx.restore();
+      this.textTexture.needsUpdate = true;
+      this.bg.material.uniforms.texttexture.value = this.textTexture;
+
       renderer.setClearColor(new THREE.Color(
           55 / 255,
           60 / 255,
