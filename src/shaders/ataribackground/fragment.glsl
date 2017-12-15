@@ -27,7 +27,7 @@ void main() {
     }
 
     vec3 greenColor = vec3(94., 112., 89.) / 255.;
-    intensity *= 0.3;
+    intensity *= 0.20;
     intensity = clamp(intensity, 0.0, 1.0);
     gl_FragColor = vec4(intensity * greenColor, 1.0);
 }
