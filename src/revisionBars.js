@@ -74,7 +74,7 @@
           letter: 'O',
           x: 6,
           height: 4.5,
-          beanOffset: 64,
+          beanOffset: 62,
         },
         {
           letter: 'N',
