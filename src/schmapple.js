@@ -157,7 +157,7 @@
           const text = rawShoutouts[nextShoutout];
           if (!text) { break; }
           charsInThisLine += (text.length + 5); // padding is like 5 chars
-          row.push({ text: text.toLowerCase() });
+          row.push({ text: text.toUpperCase() });
           nextShoutout++;
         }
       }
