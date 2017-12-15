@@ -19,7 +19,7 @@ void main() {
     light = pow(light, .1);
 
     vec3 color = texture2D(walltexture, vUv).xyz * 2.;
-    color = mix(color, texture2D(texttexture, vUv).xyz, texture2D(texttexture, vUv).a);
+    color += texture2D(texttexture, vUv).xyz;
     color *= light;
 
     color *= 0.9;
