@@ -89,6 +89,12 @@
       renderer.setClearColor(this.grayColor, 1.0);
       super.render(renderer);
     }
+
+    render(renderer) {
+      renderer.setClearColor(this.grayColor, 1.0);
+      super.render(renderer);
+    }
+
   }
 
   function CCCurve(scale, tentacle) {
