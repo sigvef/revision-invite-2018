@@ -21,7 +21,7 @@
           new THREE.BoxGeometry(500, 500, 500),
           new THREE.MeshBasicMaterial({
             color: 0xadccff,
-            side: THREE.DoubleSide,
+            side: THREE.BackSide,
           }));
       this.scene.add(this.lowpolySkybox);
 
@@ -89,14 +89,6 @@
       }
       this.ps.update();
 
-      this.cube = new THREE.Mesh(
-        new THREE.BoxGeometry(10, 5, 20),
-        new THREE.MeshStandardMaterial({color: 0xff0000})
-      );
-      this.cube.rotation.y = Math.PI / 2;
-      this.cube.position.y = 2.5;
-      //this.scene.add(this.cube);
-
       this.globeContainer = new THREE.Object3D();
       this.globeContainer.add(this.ps.particles);
 
@@ -151,26 +143,6 @@
 
       this.scene.add(this.globeContainer);
 
-      const shape = new THREE.Shape();
-      shape.moveTo(0, 0);
-      shape.lineTo(0, 10);
-      shape.lineTo(1, 5);
-      shape.lineTo(0, 0);
-      this.roof = new THREE.Mesh(
-        new THREE.ExtrudeGeometry(shape, {
-          amount: 20,
-          bevelSize: 1,
-          bevelSegments: 1,
-          bevelEnabled: false,
-          steps: 1,
-        }),
-        new THREE.MeshStandardMaterial({color: 0xff0000})
-      );
-      this.roof.rotation.z = Math.PI/2;
-      this.roof.rotation.y = Math.PI / 2;
-      //this.scene.add(this.cube);
-      this.roof.position.set(-10, 5, -5);
-      //this.scene.add(this.roof);
       this.map = new THREE.Mesh(
         new THREE.PlaneGeometry(700, 700),
         new THREE.MeshStandardMaterial({
@@ -301,15 +273,13 @@
         const scale = easeOut(0.00001, 1, t);
         this.globeContainer.scale.set(scale, scale, scale);
 
-        this.roof.visible = false;
-        this.cube.visible = false;
         this.globeContainer.rotation.x = -Math.PI / 2 + .8;
         this.camera.lookAt(new THREE.Vector3(0, 0, 0));
       } else if (frame <= frame2) {
         this.camera.position.set(
           lerp(0, 0, (frame - frame2 + 10) / 10),
-          lerp(900, 400, (frame - frame2 + 10) / 10),
-          lerp(200, 100, (frame - frame2 + 10) / 10)
+          lerp(900, 390, (frame - frame2 + 10) / 10),
+          lerp(200, 110, (frame - frame2 + 10) / 10)
         );
 
         this.camera.lookAt(new THREE.Vector3(0, 0, 0));
@@ -318,86 +288,91 @@
         const scale = lerp(1, 1.7, (frame - frame2 + 10) / 10);
         this.globeContainer.scale.set(scale, scale, scale);
 
-        this.roof.visible = false;
-        this.cube.visible = false;
         this.camera.lookAt(new THREE.Vector3(0, 0, 0));
       } else if (frame <= frame3) {
         this.camera.position.set(
-          lerp(
-            88.90093644126857,
-            5,
-            (frame - frame3 + 10) / 10),
-          lerp(
-            400,
-            19.8482663014278,
-            (frame - frame3 + 10) / 10),
-          lerp(
-            100,
-            65.95537649497442,
-            (frame - frame3 + 10) / 10)
+          lerp(0, 122.27, (frame - frame3 + 10) / 10),
+          lerp(390, 91.84, (frame - frame3 + 10) / 10),
+          lerp(110, 90.38, (frame - frame3 + 10) / 10)
         );
         const scale = easeIn(1.7, 2.2, (frame - frame3 + 40) / 40);
         this.globeContainer.scale.set(scale, scale, scale);
-        this.roof.visible = false;
-        this.cube.visible = false;
         this.camera.lookAt(new THREE.Vector3(0, 0, 0));
       } else if (frame <= frame4) {
         this.camera.position.set(
           lerp(
-            88.90093644126857,
+            lerp(122.27, 127, (frame - frame3) / (frame4 - frame3)),
             30,
-            (frame - frame4 + 10) / 10),
+            (frame - frame4 + 10) / 10
+          ),
           lerp(
-            19.8482663014278,
+            lerp(91.84, 82, (frame - frame3) / (frame4 - frame3)),
             15,
-            (frame - frame4 + 10) / 10),
+            (frame - frame4 + 10) / 10
+          ),
           lerp(
-            65.95537649497442,
+            lerp(90.38, 86, (frame - frame3) / (frame4 - frame3)),
             10,
-            (frame - frame4 + 10) / 10)
+            (frame - frame4 + 10) / 10
+          )
         );
-        this.roof.visible = true;
-        this.cube.visible = true;
-        this.camera.quaternion.x = -0.140091609651937;
-        this.camera.quaternion.y = 0.44517986075305527;
-        this.camera.quaternion.z = 0.053863896036775064;
-        this.camera.quaternion.w = 0.8827728548096384;
-        //this.camera.lookAt(new THREE.Vector3(0, 0, 0));
+        this.camera.lookAt(new THREE.Vector3(0, 0, 0));
       } else if( frame <= frame5) {
         this.camera.position.set(
-          lerp(30, 15, (frame - frame5 + 10) / 10),
-          lerp(15, 4, (frame - frame5 + 10) / 10),
-          lerp(10, 1, (frame - frame5 + 10) / 10)
+          lerp(
+            lerp(30, 30, (frame - frame4) / (frame5 - frame4)),
+            16,
+            (frame - frame5 + 10) / 10
+          ),
+          lerp(
+            lerp(15, 14, (frame - frame4) / (frame5 - frame4)),
+            5,
+            (frame - frame5 + 10) / 10
+          ),
+          lerp(
+            lerp(10, 9, (frame - frame4) / (frame5 - frame4)),
+            1,
+            (frame - frame5 + 10) / 10
+          )
         );
-        this.roof.visible = true;
-        this.cube.visible = true;
         this.camera.lookAt(new THREE.Vector3(
           lerp(0, -4, (frame - frame5 + 10) / 10),
           lerp(0, -1.5, (frame -frame5 + 10) / 10),
           0
         ));
-      } else if( frame <= frame6) {
+      } else if(frame <= frame6) {
         const t = (frame - 531) / (563 - 531);
         this.camera.position.set(
-          lerp(15, 0, t),
-          lerp(4, 0.5, t) + easeOut(0, -3.5, t * 2) + lerp(0, 3.5, t),
+          lerp(
+            lerp(16, 15, (frame - frame5) / (frame6 - frame5)),
+            0,
+            t
+          ),
+          lerp(
+            lerp(5, 4, (frame - frame5) / (frame6 - frame5)),
+            0.5,
+            t) + easeOut(0, -3.5, t * 2) + lerp(0, 3.5, t),
           lerp(1, 1, t) + easeOut(0, 1.6, t) + easeIn(0, -1.6, t));
         this.camera.lookAt(
             new THREE.Vector3(
-              lerp(-4, -1.75 - 2, t),
-              lerp(-1.5, 0.75, t),
-              lerp(0, 0.32, t)
+              lerp(-4, -5.3, t),
+              lerp(-1.5, 1.1, t),
+              lerp(0, 0.42, t)
               ));
-      } else if (frame <= frame8 - 20) {
-        const x = -1.75;
-        const y = 0.75;
-        const z = 0.32;
+      } else if (frame <= frame7) {
+        const x = -3.34;
+        const y = 1.15;
+        const z = 0.42;
         this.camera.position.set(
-          lerp(0, x, (frame - frame7 + 10) / 10),
+          lerp(
+            lerp(0, -0.5, (frame - frame6) / (frame7 - frame6)),
+            x,
+            (frame - frame7 + 10) / 10
+          ),
           lerp(0.5, y, (frame - frame7 + 10) / 10),
           lerp(1, z, (frame - frame7 + 10) / 10));
         this.camera.lookAt(
-            new THREE.Vector3(x - 2, y, z));
+            new THREE.Vector3(x - 2, y - .05, z));
       } else if (frame <= frame9) {
         const x = -1.75;
         const y = 0.75;
@@ -433,8 +408,6 @@
           0
         ));
       } else if (frame <= frame12) {
-        this.roof.visible = false;
-        this.cube.visible = false;
         this.camera.position.set(
           lerp(30, 5, (frame - frame11) / 10),
           lerp(15, 150, (frame - frame11) / 10),
@@ -451,8 +424,6 @@
         const scale = easeIn(2.2, 1.7, (frame - frame12 + 10) / 10);
         this.globeContainer.scale.set(scale, scale, scale);
         this.globeContainer.rotation.y = 3.4 - frame / 1000;
-        this.roof.visible = false;
-        this.cube.visible = false;
         this.camera.lookAt(new THREE.Vector3(0, 0, 0));
       } else {
         const localT = (frame - frame13) / 10;
@@ -464,8 +435,6 @@
         const scale = easeIn(2.2, 1.7, (frame - frame13 + 40) / 40);
         this.globeContainer.scale.set(scale, scale, scale);
         this.globeContainer.rotation.y = 3.4 - frame / 1000;
-        this.roof.visible = false;
-        this.cube.visible = false;
         this.camera.lookAt(new THREE.Vector3(0, 0, 0));
 
         this.globe.material.opacity = easeIn(1, 0, (frame - 11350) / 100);
