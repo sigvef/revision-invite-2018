@@ -382,7 +382,7 @@
 
       const openingT = (this.frame - FRAME_FOR_BEAN(240 + beanOffset)) / (FRAME_FOR_BEAN(240 + 24 + beanOffset) - FRAME_FOR_BEAN(240 + beanOffset));
       let openingT2 = (this.frame - FRAME_FOR_BEAN(420 + 24)) / (FRAME_FOR_BEAN(420 + 24 + 12) - FRAME_FOR_BEAN(420 + 24));
-      outerWidth = elasticOut(0.15*GU, outerWidth, 1, openingT);
+      outerWidth = elasticOut(6, outerWidth, 1, openingT);
       innerWidth = elasticOut(0, innerWidth, 1, openingT);
       secondSmallestWidth = elasticOut(0, secondSmallestWidth, 1, lerp(0, 1, openingT2));
       smallestWidth = elasticOut(0, smallestWidth, 1, lerp(0, 1, openingT2));
