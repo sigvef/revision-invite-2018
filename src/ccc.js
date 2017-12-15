@@ -1,5 +1,5 @@
 (function(global) {
-  const NUM_TENTACLES = 1;
+  const NUM_TENTACLES = 30;
 
   class ccc extends NIN.THREENode {
     constructor(id, options) {
@@ -19,7 +19,7 @@
       light.position.set(50, 50, 50);
       this.scene.add(light);
 
-      this.camera.position.z = 100;
+      this.camera.position.z = 50;
 
 
       this.group = new THREE.Group();
@@ -30,8 +30,8 @@
           radius: 20
         };
 
-        const path = new CCCurve(10, tentacleInformation);
-        const geometry = new THREE.TubeGeometry(path, 20, .5, 8, false);
+        const path = new CCCurve(1, tentacleInformation);
+        const geometry = new THREE.TubeGeometry(path, 50, 1, 8, true);
         const material = new THREE.MeshBasicMaterial({
           color: (Math.random() > 0.5 ? this.pinkColor : this.greenColor)
         });
@@ -54,9 +54,9 @@
         }
         */
 
-        tentacle.rotation.x = Math.random() * Math.PI;
-        tentacle.rotation.y = Math.random() * Math.PI;
-        tentacle.rotation.z = Math.random() * Math.PI;
+        //tentacle.rotation.x = Math.random() * Math.PI;
+        //tentacle.rotation.y = Math.random() * Math.PI;
+        //tentacle.rotation.z = Math.random() * Math.PI;
         this.group.add(tentacle);
       }
 
@@ -89,25 +89,26 @@
       renderer.setClearColor(this.grayColor, 1.0);
       super.render(renderer);
     }
+
+    render(renderer) {
+      renderer.setClearColor(this.grayColor, 1.0);
+      super.render(renderer);
+    }
+
   }
 
-  function CCCurve(scale, tentacle, frame) {
+  function CCCurve(scale, tentacle) {
     THREE.Curve.call(this);
     this.tentacle = (tentacle === undefined) ? { radius: 1, speed: 1 } : tentacle;
     this.scale = (scale === undefined) ? 1 : scale;
-    this.frame = (frame === undefined) ? 1 : frame;
   }
 
   CCCurve.prototype = Object.create(THREE.Curve.prototype);
   CCCurve.prototype.constructor = CCCurve;
   CCCurve.prototype.getPoint = function(t) {
     let ratio = 1 - ((this.tentacle.radius - Math.abs(Math.random()*this.tentacle.radius)) / this.tentacle.radius);
-    let y = Math.sin(t / this.tentacle.speed + Math.ceil(Math.random()*NUM_TENTACLES)) * 12;
-
-    let tx = Math.sin(t) * 3 - 1.5;
-    let ty = Math.cos(2*Math.PI*t/2 + t/this.tentacle.speed + this.frame/this.tentacle.speed);
-    let tz = 0;
-    return new THREE.Vector3(tx, ty, tz).multiplyScalar(this.scale);
+    let y = Math.sin(t / this.tentacle.speed + Math.ceil(Math.random()*NUM_TENTACLES)*0.15) * 12  ;
+    return new THREE.Vector3(ratio*10*Math.random(), y*Math.random()*10, 10).multiplyScalar(this.scale);
   };
 
   global.ccc = ccc;
