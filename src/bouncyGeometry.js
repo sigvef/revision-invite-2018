@@ -211,7 +211,16 @@
       this.updateChordStabBeans(frame);
       this.updateBall(frame);
       this.updateBeams(frame);
-      if (BEAN >= 2976 && BEAN < 3024) {
+      if (BEAN < 2976) {
+        this.scene.remove(this.textPlane);
+        demo.nm.nodes.bloom.opacity = 0;
+
+        this.scene.remove(this.beams);
+        this.camera.position.x = 0;
+        this.camera.position.y = 0;
+        this.camera.position.z = 6;
+        this.camera.lookAt(this.ball.position);
+      } else if (BEAN >= 2976 && BEAN < 3024) {
         return this.updatePart1(frame);
       } else if (BEAN >= 3024 && BEAN < 3072) {
         return this.updatePart2(frame);
@@ -225,13 +234,52 @@
     }
 
     updateBall(frame) {
-      if (BEAN >= 2976 && BEAN < 3024) {
+      if (BEAN < 2976) {
+        const startFrame = FRAME_FOR_BEAN(2960);
+        const endFrame = FRAME_FOR_BEAN(2975);
+        let progress = (frame - startFrame) / (endFrame - startFrame);
+        progress = Math.min(progress, 1);
+
+        if (progress > 0) {
+          this.scene.add(this.ball);
+
+          const desiredScale = 1.1;
+          const velocityFactor = 0.86;
+
+          if (!this.ballIntroScale) {
+            this.ballIntroScale = 0;
+          }
+          if (!this.ballIntroScaleDelta) {
+            this.ballIntroScaleDelta = 0;
+          }
+          const ballScaleDiff = this.ballIntroScale - desiredScale;
+          this.ballIntroScaleDelta += -0.089 * ballScaleDiff;  // force
+          this.ballIntroScaleDelta *= velocityFactor;  // friction
+          this.ballIntroScale += this.ballIntroScaleDelta;
+
+          this.ball.position.x = 0;
+          this.ball.position.y = 0;
+          this.ball.position.z = 0;
+          this.ball.rotation.x = frame / 40;
+          this.ball.rotation.y = frame / 45;
+          let scaleFactor = lerp(this.ballIntroScale, progress, progress);
+          this.ball.scale.x = scaleFactor;
+          this.ball.scale.y = scaleFactor;
+          this.ball.scale.z = scaleFactor;
+        } else {
+          this.ballIntroScale = 0;
+          this.scene.remove(this.ball);
+        }
+      } else if (BEAN >= 2976 && BEAN < 3024) {
         this.scene.add(this.ball);
         this.ball.position.x = 0;
         this.ball.position.y = 0;
         this.ball.position.z = 0;
         this.ball.rotation.x = frame / 40;
         this.ball.rotation.y = frame / 45;
+        this.ball.scale.x = 1;
+        this.ball.scale.y = 1;
+        this.ball.scale.z = 1;
 
       } else if (BEAN >= 3024 && BEAN < 3072) {
         this.scene.add(this.ball);
@@ -276,9 +324,15 @@
     }
 
     updateBeams(frame) {
-      if (BEAN >= 2976 && BEAN < 3024) {
+      if (BEAN < 2976) {
         for (let i = 0; i < this.beams.length; i++) {
           const beam = this.beams[i];
+          beam.visible = false;
+        }
+      } else if (BEAN >= 2976 && BEAN < 3024) {
+        for (let i = 0; i < this.beams.length; i++) {
+          const beam = this.beams[i];
+          beam.visible = true;
           const angle = this.randomBeamNumbers[i] * 2 * Math.PI;
           beam.position.x = 8 * Math.cos(angle);
           beam.position.y = 8 * Math.sin(angle);
@@ -332,8 +386,6 @@
 
     // 11111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111
     updatePart1(frame) {
-      demo.nm.nodes.bloom.opacity = 0.1;
-
       this.scene.remove(this.textPlane);
       this.ps.particles.visible = false;
       this.scene.remove(this.hexagons);
@@ -343,6 +395,8 @@
       const startFrame = FRAME_FOR_BEAN(2976);
       const endFrame = FRAME_FOR_BEAN(3024);
       const progress = (frame - startFrame) / (endFrame - startFrame);
+
+      demo.nm.nodes.bloom.opacity = lerp(0, 0.1, progress);
 
       // CAMERA
       this.camera.position.x = lerp(0, 0.8, progress);
