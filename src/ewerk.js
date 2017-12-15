@@ -360,19 +360,20 @@
               lerp(0, 0.42, t)
               ));
       } else if (frame <= frame7) {
-        const x = -3.34;
-        const y = 1.15;
-        const z = 0.42;
+        const x = -3.2796042561328207;
+        const y = 1.08649525980141;
+        const z = 0.3240734065472578;
+
         this.camera.position.set(
           lerp(
             lerp(0, -0.5, (frame - frame6) / (frame7 - frame6)),
             x,
-            (frame - frame7 + 10) / 10
+            (frame - frame7 + 10) / 9
           ),
           lerp(0.5, y, (frame - frame7 + 10) / 10),
           lerp(1, z, (frame - frame7 + 10) / 10));
         this.camera.lookAt(
-            new THREE.Vector3(x - 2, y - .05, z));
+            new THREE.Vector3(x - 2, y - .0, z + 0.01));
       } else if (frame <= frame9) {
         const x = -1.75;
         const y = 0.75;
