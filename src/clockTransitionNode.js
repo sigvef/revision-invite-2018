@@ -1,4 +1,4 @@
-(function(global) {
+(function (global) {
   class clockTransitionNode extends NIN.ShaderNode {
     constructor(id, options) {
       options.inputs = {
@@ -6,6 +6,13 @@
         B: new NIN.TextureInput()
       };
       super(id, options);
+    }
+
+    beforeUpdate(frame) {
+      const startClock = 3662;
+      const endExpand = 3756;
+      this.inputs.A.enabled = frame < endExpand;
+      this.inputs.B.enabled = frame > startClock;
     }
 
     update(frame) {
