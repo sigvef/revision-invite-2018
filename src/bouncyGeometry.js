@@ -72,7 +72,7 @@
         for (let x = 0; x < this.numHexagonsX; x++) {
           const cylinder = new THREE.Mesh(
             cylinderGeometry,
-            this.colors[0],
+            this.colors[0]
           );
 
           cylinder.rotation.x = Math.PI / 2;
