@@ -85,13 +85,13 @@
       var inner_distance = 5;
       var outer_distance = 15;
       var star_geometry = new THREE.Geometry();
-          star_geometry.vertices.push(new THREE.Vector3(0, outer_distance, 0));
-          star_geometry.vertices.push(new THREE.Vector3(-inner_distance * r32, inner_distance / 2, 0));
-          star_geometry.vertices.push(new THREE.Vector3(-outer_distance * r32, -outer_distance / 2, 0));
-          star_geometry.vertices.push(new THREE.Vector3(0, -inner_distance, 0));
-          star_geometry.vertices.push(new THREE.Vector3(outer_distance * r32, -outer_distance / 2, 0));
-          star_geometry.vertices.push(new THREE.Vector3(inner_distance * r32, inner_distance / 2, 0));
-          star_geometry.vertices.push(new THREE.Vector3(0, outer_distance, 0));
+      star_geometry.vertices.push(new THREE.Vector3(0, outer_distance, 0));
+      star_geometry.vertices.push(new THREE.Vector3(-inner_distance * r32, inner_distance / 2, 0));
+      star_geometry.vertices.push(new THREE.Vector3(-outer_distance * r32, -outer_distance / 2, 0));
+      star_geometry.vertices.push(new THREE.Vector3(0, -inner_distance, 0));
+      star_geometry.vertices.push(new THREE.Vector3(outer_distance * r32, -outer_distance / 2, 0));
+      star_geometry.vertices.push(new THREE.Vector3(inner_distance * r32, inner_distance / 2, 0));
+      star_geometry.vertices.push(new THREE.Vector3(0, outer_distance, 0));
 
       this.three_point_star = new THREE.Object3D();
       this.three_point_star.add(new THREE.Line( star_geometry, line_material ));
@@ -122,7 +122,6 @@
       this.scene.add(this.small_claw_r);
       this.scene.add(this.small_claw_l);
 
-      var claw_inner_distance = 5;
       var claw_outer_distance = 50;
 
       var large_claw_geometry = new THREE.Geometry();
@@ -183,7 +182,7 @@
       this.spin_cube.position.set(0,0,0);
       this.scene.add(this.spin_cube);
 
-      var spin = Math.PI / 4
+      var spin = Math.PI / 4;
 
       this.spin_cube.rotation.set(spin * 0.7837 , spin , 0);
 
@@ -197,12 +196,10 @@
       this.add_lines_for_geometry(this.center_line1.children[0].geometry, this.center_line1);
       this.add_lines_for_geometry(this.center_line2.children[0].geometry, this.center_line2);
       this.add_lines_for_geometry(this.center_line3.children[0].geometry, this.center_line3);
-      console.log(this.level1_hex1);
     }
 
 
     add_lines_for_geometry(geometry, container) {
-      var material = new THREE.LineBasicMaterial( { color: 0xFFFFFF } );
       var arr = [];
       for(var i = 0; i < geometry.vertices.length;  i++) {
         var cur_x = geometry.vertices[i].x;
@@ -259,7 +256,7 @@
 
       var asmoothstep = function (start_frame, duration, frame) {
         return smoothstep(0, 1, (frame - start_frame) / duration);
-      }
+      };
 
       // Square root of three divided by two. For a hex of diameter 1 this is the distance from the center to the edge.
       var r32 = 0.86602540378;
@@ -296,7 +293,7 @@
       this.spin_cube.rotation.set(Math.PI / 4 * 0.7837 , Math.PI / 4 , 0);
 
       if ( frame > FRAME_FOR_BEAN(22 * 48)) {
-        var scale = asmoothstep(FRAME_FOR_BEAN(22 * 48), FRAME_FOR_BEAN(48), frame)
+        var scale = asmoothstep(FRAME_FOR_BEAN(22 * 48), FRAME_FOR_BEAN(48), frame);
         this.small_center_hex.scale.set(scale, scale, scale);
       } 
       if (frame > FRAME_FOR_BEAN(23 * 48)) {
@@ -320,7 +317,7 @@
         this.center_rotation_container.rotation.set(0, 0, Math.PI / 3 - 3 * Math.PI / 3 *asmoothstep(FRAME_FOR_BEAN(24*48), FRAME_FOR_BEAN(12), frame));
 
 
-        var scale = 1 + 0.5 * asmoothstep(FRAME_FOR_BEAN(24.25 * 48), FRAME_FOR_BEAN(12), frame);
+        const scale = 1 + 0.5 * asmoothstep(FRAME_FOR_BEAN(24.25 * 48), FRAME_FOR_BEAN(12), frame);
         this.small_center_hex.scale.set(scale, scale, scale);
 
 
@@ -331,8 +328,8 @@
         this.middle_center_hex.position.set(0, 0, 0);
         this.outer_center_hex.position.set(0, 0, 0);
 
-        var scale = 2 + 0.5 * asmoothstep(FRAME_FOR_BEAN(24.5 * 48), FRAME_FOR_BEAN(12), frame);
-        var scale2 = 2 + 2 * asmoothstep(FRAME_FOR_BEAN(24.5 * 48), FRAME_FOR_BEAN(12), frame);
+        let scale = 2 + 0.5 * asmoothstep(FRAME_FOR_BEAN(24.5 * 48), FRAME_FOR_BEAN(12), frame);
+        const scale2 = 2 + 2 * asmoothstep(FRAME_FOR_BEAN(24.5 * 48), FRAME_FOR_BEAN(12), frame);
 
         this.middle_center_hex.scale.set(scale, scale, scale);
         this.outer_center_hex.scale.set(scale2, scale2, scale2);
@@ -350,7 +347,7 @@
         this.center_line1.position.set(200, 0, 0);
         this.center_line2.position.set(200, 0, 0);
         this.center_line3.position.set(200, 0, 0);
-        var progress = asmoothstep(FRAME_FOR_BEAN(24.75*48), FRAME_FOR_BEAN(36), frame);
+        const progress = asmoothstep(FRAME_FOR_BEAN(24.75*48), FRAME_FOR_BEAN(36), frame);
         var spin = Math.PI / 4 + 2 * Math.PI * progress;
         this.spin_cube.rotation.set(spin -0.1698 , spin , 0);
 
@@ -388,14 +385,14 @@
 
         // Scale of the level 1 hexes.
         var scale3 = 1 + 0.5 * asmoothstep(FRAME_FOR_BEAN(26.375 * 48), FRAME_FOR_BEAN(12), frame);
-        var scale2 = 1 + 0.5 * asmoothstep(FRAME_FOR_BEAN(26.5 * 48), FRAME_FOR_BEAN(12), frame);
+        const scale2 = 1 + 0.5 * asmoothstep(FRAME_FOR_BEAN(26.5 * 48), FRAME_FOR_BEAN(12), frame);
         var scale1 = 1 + 0.5 * asmoothstep(FRAME_FOR_BEAN(26.625 * 48), FRAME_FOR_BEAN(12), frame); 
         this.level1_hex1.scale.set(scale1, scale1, scale1);
         this.level1_hex2.scale.set(scale2, scale2, scale2);
         this.level1_hex3.scale.set(scale3, scale3, scale3);
       }
       if (frame > FRAME_FOR_BEAN(26.75)) {
-        var scale = 1 + 0.67 * asmoothstep(FRAME_FOR_BEAN(26.75 * 48), FRAME_FOR_BEAN(36), frame);        
+        const scale = 1 + 0.67 * asmoothstep(FRAME_FOR_BEAN(26.75 * 48), FRAME_FOR_BEAN(36), frame);        
         this.three_point_star.scale.set(scale, scale, scale);
 
         var claw_progress1 = asmoothstep(FRAME_FOR_BEAN(26.75 * 48), FRAME_FOR_BEAN(12), frame);
