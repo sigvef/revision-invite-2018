@@ -375,16 +375,17 @@
         this.camera.lookAt(
             new THREE.Vector3(x - 2, y - .0, z + 0.01));
       } else if (frame <= frame9) {
-        const x = -1.75;
-        const y = 0.75;
-        const z = 0.32;
-        const t = (frame - frame8 + 10) / 10;
         this.camera.position.set(
-          easeIn(x, 0, t * t * t),
-          easeIn(y, 0.5, t * t * t),
-          easeIn(z, 1, t * t * t));
+          lerp(
+            easeIn(-3.2796042561328207, -1.0, (frame - frame8) / 10),
+            0,
+            (frame - frame8) / (frame9 - frame8)
+          ),
+          easeIn(1.08649525980141, 0.5, (frame - frame8) / 10),
+          easeIn(0.3240734065472578, 1, (frame - frame8) / 10)
+        );
         this.camera.lookAt(
-            new THREE.Vector3(x - 2, y, z));
+            new THREE.Vector3(-5.2796042, 1.08649525, 0.334073));
       } else if (frame <= frame10) {
         const t = (frame - frame9) / 30;
         this.camera.position.set(
@@ -393,9 +394,9 @@
           lerp(1, 1, t) + easeIn(1.8, 0, t) + easeOut(-1.8, 0, t));
         this.camera.lookAt(
             new THREE.Vector3(
-              lerp(-3.75, -4, t),
-              lerp(0.75, -1.5, t),
-              lerp(0.32, 0, t)
+              lerp(-5.2796042, -4, t),
+              lerp(1.08649525, -1.5, t),
+              lerp(0.334073, 0, t)
               ));
       } else if (frame <= frame11) {
         this.camera.position.set(

@@ -43,7 +43,7 @@
       this.scene.add(this.root);
 
       this.background = new THREE.Mesh(
-        new THREE.PlaneGeometry(80, 80, 1),
+        new THREE.PlaneGeometry(120, 120, 1),
         new THREE.MeshBasicMaterial({
           color: new THREE.Color(255 / 255, 73 / 255, 130 / 255),
         })
@@ -57,48 +57,96 @@
           bean: 0,
           x: -2,
           y: 4.5,
+          middleBean: 79,
+          middleX: -6,
+          middleY: 3.5,
+          finalBean: 123,
+          finalX: -6,
+          finalY: 2.5
         },
         {
           letter: 'E',
           bean: 9,
           x: 2,
           y: 4.5,
+          middleBean: 81,
+          middleX: -2,
+          middleY: 3.5,
+          finalBean: 125,
+          finalX: -2,
+          finalY: 2.5
         },
         {
           letter: 'V',
           bean: 24,
           x: -4,
           y: 1.5,
+          middleBean: 85,
+          middleX: 2,
+          middleY: 3.5,
+          finalBean: 127,
+          finalX: 2,
+          finalY: 2.5
         },
         {
           letter: 'I',
           bean: 33,
           x: 0,
           y: 1.5,
+          middleBean: 83,
+          middleX: 6,
+          middleY: 3.5,
+          finalBean: 129,
+          finalX: 6,
+          finalY: 2.5
         },
         {
           letter: 'S',
           bean: 42,
           x: 4,
           y: 1.5,
+          middleBean: 88,
+          middleX: -6,
+          middleY: -4.5,
+          finalBean: 132,
+          finalX: -6,
+          finalY: -2.5
         },
         {
           letter: 'I',
-          bean: 92,
+          bean: 91,
           x: -2,
-          y: -1.5,
+          y: -4.5,
+          middleBean: 132,
+          middleX: -2,
+          middleY: -2.5,
+          finalBean: 150,
+          finalX: -2,
+          finalY: -2.5
         },
         {
           letter: 'O',
-          bean: 92,
+          bean: 94,
           x: 2,
-          y: -1.5,
+          y: -4.5,
+          middleBean: 132,
+          middleX: 2,
+          middleY: -2.5,
+          finalBean: 150,
+          finalX: 2,
+          finalY: -2.5
         },
         {
           letter: 'N',
           bean: 140,
-          x: 0,
-          y: -4.5,
+          x: 6,
+          y: -2.5,
+          middleBean: 150,
+          middleX: 6,
+          middleY: -2.5,
+          finalBean: 150,
+          finalX: 6,
+          finalY: -2.5
         },
       ];
 
@@ -112,16 +160,31 @@
         output.minFilter = THREE.LinearFilter;
         output.magFilter = THREE.LinearFilter;
         output.needsUpdate = true;
+        const hexBg = new THREE.MeshStandardMaterial({
+          color: 0x77e15d,
+          metalness: 0,
+          roughness: 1,
+          shading: THREE.FlatShading,
+        });
         const ballMesh = new THREE.Mesh(
           new THREE.CylinderGeometry(1, 1, 0.5, 6),
-          new THREE.MeshStandardMaterial({
-            bumpMap: output,
-            bumpScale: -0.01,
-            metalness: 0,
-            roughness: 1,
-            map: output,
-            shading: THREE.FlatShading,
-          })
+          new THREE.MultiMaterial([
+            hexBg,
+            new THREE.MeshStandardMaterial({
+              bumpMap: output,
+              bumpScale: -0.01,
+              metalness: 0,
+              roughness: 1,
+              map: output,
+              shading: THREE.FlatShading,
+            }),
+            hexBg,
+            hexBg,
+            hexBg,
+            hexBg,
+            hexBg,
+            hexBg,
+          ])
         );
         ballMesh.output = output;
         ballMesh.canvas = canvas;
@@ -183,29 +246,158 @@
       const cameraLookAt = new THREE.Vector3(0, 0, 0);
 
       for (const [index, ball] of this.balls.entries()) {
-        const startBEAN = 84.5 * 48 + ball.bean;
-        const t = (frame - FRAME_FOR_BEAN(startBEAN) + 8) / 8;
-        this.ballMeshes[index].position.set(
-          easeIn(0, ball.x, t),
-          easeIn(0, ball.y, t),
-          easeIn(-2, 0, t)
-        );
-        this.ballMeshes[index].scale.set(
-          easeIn(0.0001, 1, t),
-          easeIn(0.0001, 1, t),
-          easeIn(0.0001, 1, t)
-        );
+        if (BEAN < 84.5 * 48 + ball.middleBean - 4) {
+          const startBEAN = 84.5 * 48 + ball.bean;
+          const t = (frame - FRAME_FOR_BEAN(startBEAN) + 8) / 8;
 
-        this.cylinders[index].position.set(
-          easeIn(0, ball.x / 2, t),
-          easeIn(0, ball.y / 2, t),
-          easeIn(-2, -1, t)
-        );
-        this.cylinders[index].scale.set(
-          lerp(0.0001, 1, frame >= FRAME_FOR_BEAN(startBEAN) - 8),
-          easeIn(0.0001, 1, t),
-          lerp(0.0001, 1, frame >= FRAME_FOR_BEAN(startBEAN) - 8)
-        );
+          this.ballMeshes[index].position.set(
+            easeIn(0, ball.x, t),
+            easeIn(0, ball.y, t),
+            easeIn(-2, 0, t)
+          );
+          this.ballMeshes[index].scale.set(
+            easeIn(0.0001, 1, t),
+            easeIn(0.0001, 1, t),
+            easeIn(0.0001, 1, t)
+          );
+
+          this.cylinders[index].position.set(
+            easeIn(0, ball.x / 2, t),
+            easeIn(0, ball.y / 2, t),
+            easeIn(-2, -1, t)
+          );
+          this.cylinders[index].scale.set(
+            lerp(0.0001, 1, frame >= FRAME_FOR_BEAN(startBEAN) - 8),
+            easeIn(0.0001, 1, t),
+            lerp(0.0001, 1, frame >= FRAME_FOR_BEAN(startBEAN) - 8)
+          );
+
+          const orientation = new THREE.Matrix4();
+          orientation.lookAt(
+            new THREE.Vector3(0, 0, -2),
+            new THREE.Vector3(
+              easeIn(0, ball.x, t),
+              easeIn(0, ball.y, t),
+              0
+            ),
+            new THREE.Object3D().up
+          );
+          const m = new THREE.Matrix4();
+          m.set(1, 0, 0, 0,
+                0, 0, 1, 0,
+                0, -1, 0, 0,
+                0, 0, 0, 1);
+          orientation.multiply(m);
+          this.cylinders[index].setRotationFromMatrix(orientation);
+        } else if (BEAN < 84.5 * 48 + ball.finalBean - 4) {
+          const startBEAN = 84.5 * 48 + ball.middleBean;
+          const t = (frame - FRAME_FOR_BEAN(startBEAN) + 4) / 4;
+
+          this.ballMeshes[index].position.set(
+            easeIn(ball.x, ball.middleX, t),
+            easeIn(ball.y, ball.middleY, t),
+            0
+          );
+
+          const orientation = new THREE.Matrix4();
+          orientation.lookAt(
+            new THREE.Vector3(0, 0, -2),
+            new THREE.Vector3(
+              easeIn(ball.x, ball.middleX, t),
+              easeIn(ball.y, ball.middleY, t),
+              0
+            ),
+            new THREE.Object3D().up
+          );
+          const m = new THREE.Matrix4();
+          m.set(1, 0, 0, 0,
+                0, 0, 1, 0,
+                0, -1, 0, 0,
+                0, 0, 0, 1);
+          orientation.multiply(m);
+          this.cylinders[index].setRotationFromMatrix(orientation);
+
+          this.cylinders[index].position.set(
+            easeIn(ball.x / 2, ball.middleX / 2, t),
+            easeIn(ball.y / 2, ball.middleY / 2, t),
+            -1
+          );
+          const oldDirection = new THREE.Vector3().subVectors(
+            new THREE.Vector3(ball.x, ball.y, 0),
+            new THREE.Vector3(0, 0, -2)
+          );
+          const direction = new THREE.Vector3().subVectors(
+            new THREE.Vector3(
+              easeIn(ball.x, ball.middleX, t),
+              easeIn(ball.y, ball.middleY, t),
+              0
+            ),
+            new THREE.Vector3(0, 0, -2)
+          );
+          this.cylinders[index].scale.set(
+            1,
+            easeIn(1, direction.length() / oldDirection.length(), t),
+            1
+          );
+        } else {
+          const startBEAN = 84.5 * 48 + ball.finalBean;
+          const t = (frame - FRAME_FOR_BEAN(startBEAN) + 4) / 4;
+
+          this.ballMeshes[index].position.set(
+            easeIn(ball.middleX, ball.finalX, t),
+            easeIn(ball.middleY, ball.finalY, t),
+            0
+          );
+
+          const orientation = new THREE.Matrix4();
+          orientation.lookAt(
+            new THREE.Vector3(0, 0, -2),
+            new THREE.Vector3(
+              easeIn(ball.middleX, ball.finalX, t),
+              easeIn(ball.middleY, ball.finalY, t),
+              0
+            ),
+            new THREE.Object3D().up
+          );
+          const m = new THREE.Matrix4();
+          m.set(1, 0, 0, 0,
+                0, 0, 1, 0,
+                0, -1, 0, 0,
+                0, 0, 0, 1);
+          orientation.multiply(m);
+          this.cylinders[index].setRotationFromMatrix(orientation);
+
+          this.cylinders[index].position.set(
+            easeIn(ball.middleX / 2, ball.finalX / 2, t),
+            easeIn(ball.middleY / 2, ball.finalY / 2, t),
+            -1
+          );
+          const oldDirection = new THREE.Vector3().subVectors(
+            new THREE.Vector3(ball.x, ball.y, 0),
+            new THREE.Vector3(0, 0, -2)
+          );
+          const middleDirection = new THREE.Vector3().subVectors(
+            new THREE.Vector3(ball.middleX, ball.middleY, 0),
+            new THREE.Vector3(0, 0, -2)
+          );
+          const direction = new THREE.Vector3().subVectors(
+            new THREE.Vector3(
+              easeIn(ball.middleX, ball.finalX, t),
+              easeIn(ball.middleY, ball.finalY, t),
+              0
+            ),
+            new THREE.Vector3(0, 0, -2)
+          );
+          this.cylinders[index].scale.set(
+            1,
+            easeIn(
+              middleDirection.length() / oldDirection.length(),
+              direction.length() / oldDirection.length(),
+              t
+            ),
+            1
+          );
+        }
       }
 
       if (BEAN < 85 * 48) {
@@ -220,41 +412,41 @@
           lerp(0, 3, t),
           lerp(0, 0, t)
         );
-      } else if (BEAN < 86.25 * 48) {
-        const t = (frame - FRAME_FOR_BEAN(85 * 48)) / (FRAME_FOR_BEAN(86.25 * 48) - FRAME_FOR_BEAN(85 * 48));
+      } else if (BEAN < 86.3125 * 48) {
+        const t = (frame - FRAME_FOR_BEAN(85 * 48)) / (FRAME_FOR_BEAN(86.3125 * 48) - FRAME_FOR_BEAN(85 * 48));
         cameraPosition.set(
-          lerp(2, 5, t),
-          lerp(2, 1, t),
-          lerp(4, 9, t)
+          easeOut(2, 6, t),
+          lerp(2, 3.5, t),
+          lerp(4, 10, t)
         );
         cameraLookAt.set(
-          lerp(-1, 1.5, t),
-          lerp(1.5, 1.5, t),
+          easeOut(-1, 2, t),
+          lerp(1.5, 3, t),
           lerp(0, 0, t)
         );
-      } else if (BEAN < 87.25 * 48) {
-        const t = (frame - FRAME_FOR_BEAN(86.25 * 48)) / (FRAME_FOR_BEAN(87.25 * 48) - FRAME_FOR_BEAN(86.25 * 48));
+      } else if (BEAN < 87.3125 * 48) {
+        const t = (frame - FRAME_FOR_BEAN(86.3125 * 48)) / (FRAME_FOR_BEAN(87.3125 * 48) - FRAME_FOR_BEAN(86.3125 * 48));
         cameraPosition.set(
           0,
-          lerp(-2, -3, t),
-          lerp(5, 6, t)
+          lerp(-4, -5, t),
+          lerp(11, 7, t)
         );
         cameraLookAt.set(
           0,
-          lerp(-2, -1, t),
+          lerp(-4, -3, t),
           0
         );
       } else {
-        const t = (frame - FRAME_FOR_BEAN(87.25 * 48)) / (FRAME_FOR_BEAN(88.5 * 48) - FRAME_FOR_BEAN(87.25 * 48));
+        const t = (frame - FRAME_FOR_BEAN(87.3125 * 48)) / (FRAME_FOR_BEAN(88.5 * 48) - FRAME_FOR_BEAN(87.3125 * 48));
         cameraPosition.set(
-          0,
-          lerp(7, 2, t),
-          lerp(10, 17, t)
+          lerp(-0.95, 0, t),
+          lerp(1.15, 0, t),
+          lerp(4, 15, t)
         );
         cameraLookAt.set(
-          0,
-          lerp(-4, 0, t),
-          lerp(0, 0, t)
+          lerp(6.25, 0, t),
+          lerp(-3, 0, t),
+          lerp(-5, 0, t)
         );
       }
 
