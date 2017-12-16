@@ -33,7 +33,7 @@ void main() {
 
     float vignette = (1. - length((uv - 0.5) * vec2(16., 9.) / 20.));
 
-    float scanlines = 0.8 + max(0., sin(uv.y * 3.14159265 * 2. * 576.)) * 0.2;
+    float scanlines = 0.8 + max(0., abs(sin(uv.y * 3.14159265 * 2. * 576.))) * 0.2;
 
     vec3 color = (original + noise * 0.1) * vignette * scanlines;
 
