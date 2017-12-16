@@ -8,6 +8,11 @@
       super(id, options);
     }
 
+    beforeUpdate(frame) {
+      this.inputs.A.enabled = true;
+      this.inputs.B.enabled = BEAN >= 2956;
+    }
+
     update(frame) {
       this.uniforms.t.value = frame;
       this.uniforms.A.value = this.inputs.A.getValue();
