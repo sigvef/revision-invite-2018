@@ -297,6 +297,7 @@
         this.ctx.lineWidth = 0.2;
         this.ctx.translate(letter.x + 0.45, 0.25);
         this.ctx.fillStyle = 'rgba(119, 225, 93, 255)';
+        this.ctx.fillStyle = 'white';
         this.ctx.fillText(letter.letter, 0, 0);
         this.ctx.restore();
       }
