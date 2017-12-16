@@ -28,7 +28,7 @@
 
       const maps = {
         'ewerk_Cylinder.002_Cylinder.003':
-          Loader.loadTexture('res/ewerk_lightmap.png'),
+          Loader.loadTexture('res/ewerk_map.jpg'),
         'newground_Plane.001':
           Loader.loadTexture('res/ground_lightmap.png'),
         'tree_Cylinder':
