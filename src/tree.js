@@ -507,6 +507,7 @@
     }
 
     resize() {
+      super.resize();
       for (const ballMesh of this.ballMeshes) {
         ballMesh.canvas.width = 2 * GU;
         ballMesh.canvas.height = 2 * GU;
