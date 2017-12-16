@@ -61,8 +61,8 @@
         2: new THREE.MeshBasicMaterial({ color: greenColor }),
         3: new THREE.MeshBasicMaterial({ color: pinkColor }),
       };
-      this.numHexagonsX = 16;
-      this.numHexagonsY = 16;
+      this.numHexagonsX = 3;
+      this.numHexagonsY = 4;
       const cylinderRadius = 0.2;
       const cylinderGeometry = new THREE.CylinderGeometry(cylinderRadius, cylinderRadius, cylinderRadius / 4, 6);
       const padding = 0.1;
@@ -678,35 +678,30 @@
 
       const cylinderRadius = 0.2 * GU;
       const padding = 0.1 * GU;
-      const distanceBetweenHexagonCores = Math.sqrt(3.0) * cylinderRadius + padding;
-      const offsetX = Math.sin(Math.PI / 6.0) * distanceBetweenHexagonCores;
-      const offsetY = Math.cos(Math.PI / 6.0) * distanceBetweenHexagonCores;
+      const distanceBetweenHexagonCores = 1.6 * cylinderRadius + padding;
+      const gridXDistance = distanceBetweenHexagonCores;
+      const gridYDistance = Math.sin(Math.PI / 3) * distanceBetweenHexagonCores;
 
       for (let y = 0; y < this.numHexagonsY; y++) {
         for (let x = 0; x < this.numHexagonsX; x++) {
-          const offset = x % 2 === 1 ? offsetX : 0;
+          const offset = y % 2 === 1 ? gridXDistance / 2 : 0;
 
+          const actualX = 4.5 * GU + x * gridXDistance + offset;
+          const actualY = 1.66 * GU + y * gridYDistance;
           this.textCtx.beginPath();
           this.textCtx.moveTo(
-            x * offsetY + cylinderRadius,
-            2 * y * offsetX + offset
+            actualX,
+            actualY + cylinderRadius
           );
           for (let i = 1; i < 6; i++) {
-            const angle = Math.PI * i / 3;
+            const angle = Math.PI / 2 + Math.PI * i / 3;
             this.textCtx.lineTo(
-              x * offsetY + cylinderRadius * Math.cos(angle),
-              2 * y * offsetX + offset + cylinderRadius * Math.sin(angle)
+              actualX + cylinderRadius * Math.cos(angle),
+              actualY + cylinderRadius * Math.sin(angle)
             );
           }
           this.textCtx.closePath();
           this.textCtx.fill();
-
-          this.textCtx.fillRect(
-            x * offsetY,
-            2 * y * offsetX + offset,
-            0.01 * GU,
-            0.01 * GU
-          );
         }
       }
 
