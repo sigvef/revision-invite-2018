@@ -423,6 +423,7 @@
           case baseBean + 24:
           case baseBean + 24 + 9:
           case baseBean + 24 + 9 + 9:
+          case 1008:
             greenMaterial.emissiveIntensity = 1;
             pinkMaterial.emissiveIntensity = 1;
             this.cameraShakeThrob = 1;
@@ -472,12 +473,12 @@
       this.racingWrapper.position.x = x;
       this.racingWrapper.position.y = y;
 
-      const morphRacingWrapperMixer = (frame - FRAME_FOR_BEAN(baseBean + 137)) / (FRAME_FOR_BEAN(baseBean + 140) - FRAME_FOR_BEAN(baseBean + 137));
+      const morphRacingWrapperMixer = (frame - FRAME_FOR_BEAN(1008 - 12)) / (FRAME_FOR_BEAN(1008) - FRAME_FOR_BEAN(1008 - 12));
 
-      this.camera.rotation.z = lerp(0, Math.PI / 2.0, morphRacingWrapperMixer);
-      this.camera.position.x = lerp(0, -21, morphRacingWrapperMixer);
-      this.camera.position.z = lerp(cameraPosition.z, 47, morphRacingWrapperMixer);
-      this.largeLettersWrapperObject.position.x = lerp(0, 10, morphRacingWrapperMixer);
+      this.camera.rotation.z = easeIn(0, Math.PI / 2.0, morphRacingWrapperMixer);
+      this.camera.position.x = easeIn(0, -21, morphRacingWrapperMixer);
+      this.camera.position.z = easeIn(cameraPosition.z, 47, morphRacingWrapperMixer);
+      this.largeLettersWrapperObject.position.x = easeIn(0, 10, morphRacingWrapperMixer);
 
       const scale = Math.max(Math.sqrt(this.throb), 0.01);
 
