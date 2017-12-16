@@ -42,6 +42,8 @@
       this.ctx.scale(GU, GU);
 
       const nudger = 0.5;
+
+      this.ctx.beginPath();
       this.ctx.moveTo(0, 0);
       this.ctx.lineTo(16 / 3 - nudger, 0);
       this.ctx.lineTo(16 / 3 + nudger, 9);
