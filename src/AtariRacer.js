@@ -129,34 +129,41 @@
       ].map(bean => FRAME_FOR_BEAN(bean + baseBean));
 
       const rawCarPositions = [
-        [0, -9],
-        [2, -9],
-        [1, -9],
-        [2, -9],
-        [1, -9],
-        [2, -9],
-        [0, -9],
-        [1, -9],
-        [0, -9],
-        [1, -9],
-        [2, -9],
-        [0, -9],
-        [2, -9],
-        [0, -9],
-        [1, -9],
-        [1, 20],
+        [0, 4, 864 - 6],
+        [0, 9, 864],
+        [0, 3, 864 + 9],
+        [2, -4, 864 + 24],
+        [1, -5, 864 + 24 + 9],
+        [0, 5, 864 + 24 + 9 + 9],
+        [1, 2, 864 + 48 + 12],
+        [2, -4, 864 + 48 + 12 + 6],
+        [2, 1, 864 + 48 + 24],
+        [0, -4, 864 + 48 + 24 + 4],
+        [0, 2, 864 + 48 + 24 + 10],
+        [1, -6, 864 + 48 + 48],
+        [2, -6, 960 + 9],
+        [2, -9, 960 + 9 + 9],
+        [0, -9, 960 + 24],
+        [1, -9, 960 + 24 + 3],
+        [1, -2, 960 + 24 + 9],
+        [0, -4, 960 + 48],
+        [2, -7, 960 + 48 + 12],
+        [0, -6, 960 + 48 + 24],
+        [1, -6, 960 + 48 + 36 + 6],
+        [1, 20, 960 + 48 + 48],
+        /*
+        [2, -9, 9999],
+        [0, -9, 9999],
+        [1, -9, 9999],
+        [1, 20, 9999],
+        */
       ];
 
       const beanWhenTheCarsTouch = 876;
       this.carPositions = [];
-      for (let [index, [x, y]] of rawCarPositions.entries()) {
+      for (let [index, [x, y, bean]] of rawCarPositions.entries()) {
         this.carPositions.push({
-          frame: FRAME_FOR_BEAN(beanWhenTheCarsTouch + 12 * index - 1),
-          x: x * 4 - 4,
-          y,
-        });
-        this.carPositions.push({
-          frame: FRAME_FOR_BEAN(beanWhenTheCarsTouch + 12 * index + 2),
+          frame: FRAME_FOR_BEAN(bean),
           x: x * 4 - 4,
           y,
         });
@@ -393,42 +400,21 @@
         switch (BEAN) {
           case baseBean:
           case baseBean + 24:
-          case baseBean + 24 + 9 + 9:
-            this.carRotationThrob = 2;
-            break;
-          case baseBean + 9:
           case baseBean + 24 + 9:
-          case baseBean + 48 + 12:
-          case baseBean + 48 + 24 + 10:
-            this.carRotationThrob = -2;
-            break;
-          case baseBean + 48 + 12 + 6:
-          case baseBean + 48 + 24 + 6:
+          case baseBean + 48 + 24:
+          case 960 + 18:
+          case 960 + 24 + 9:
+          case 960 + 48 + 12:
             this.carRotationThrob = 1;
             break;
-          case baseBean + 48 + 24:
+          case baseBean + 9:
+          case baseBean + 24 + 9 + 9:
+          case baseBean + 48 + 12:
+          case 960:
+          case 960 + 24:
+          case 960 + 48:
+          case 960 + 48 + 12 + 12 - 2:
             this.carRotationThrob = -1;
-            break;
-          case baseBean + 82:
-          case baseBean + 97:
-          case baseBean + 101:
-          case baseBean + 107:
-          case baseBean + 114:
-          case baseBean + 121:
-            this.carRotationThrob = 2;
-            break;
-          case baseBean + 126:
-          case baseBean + 131:
-          case baseBean + 137:
-          case baseBean + 139:
-          case baseBean + 145:
-            this.carRotationThrob = -1;
-            break;
-          case baseBean + 156:
-            this.carRotationThrob = -2;
-            break;
-          case baseBean + 166:
-            this.carRotationThrob = 11;
             break;
         }
         switch (BEAN) {
