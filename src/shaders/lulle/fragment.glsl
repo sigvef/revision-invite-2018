@@ -23,11 +23,21 @@ float displace(vec3 p, float d1) {
 }
 
 float rand(vec2 co){
-  return fract(sin(dot(co.xy ,vec2(12.9898,78.233))) * 43758.5453);
+  return fract(sin(dot(co.xy, vec2(12.9898,78.233))) * 43758.5453);
 }
 
 float sphere(vec3 p, float s) {
     return length(p)-s;
+}
+
+float torus(vec3 p, vec2 t) {
+    vec2 q = vec2(length(p.xy)-t.x, p.z);
+    return length(q)-t.y;
+}
+
+float hex(vec3 p, vec2 h) {
+    vec3 q = abs(p);
+    return max(q.z-h.y,max((q.x*0.866025+q.y*0.5),q.y)-h.x);
 }
 
 vec2 sdf(in vec3 p) {
@@ -35,7 +45,8 @@ vec2 sdf(in vec3 p) {
     float n = 0.;
     vec3 q = vec3(0.);
     vec2 s = vec2(sphere(p, 0.), 1.);
-    float m = 1867.;
+    vec2 v = vec2(torus(p, vec2(0.)), 1.);
+    float m = 1824.;
     float size = (sin(mod(BEAN, 12.)/10.) + 1.)/4.;
     ar[0] = vec2(1., 1.);
     ar[1] = vec2(-1., 1.);
@@ -47,19 +58,20 @@ vec2 sdf(in vec3 p) {
     ar[7] = vec2(1.5, 0.);
 
     if (BEAN > m) {
-        s = vec2(sphere(p, size * 1.5), 1.);
+         s = vec2(sphere(p, size * 1.5), 1.);
+         // s = vec2(hex(p, vec2(size, 1.)), 2.);
     }
     if (BEAN > m + 48.) {
-        n = 4.;
-    }
-    if (BEAN > m + 48. * 2.) {
         n = 8.;
     }
-    if (BEAN > m + 48. * 3.) {
+    if (BEAN > m + 48. * 2.) {
         n = 16.;
     }
-    if (BEAN > m + 48. * 4.) {
+    if (BEAN > m + 48. * 3.) {
         n = 24.;
+    }
+    if (BEAN > m + 48. * 4.) {
+        n = 33.;
     }
     if (BEAN > m + 48. * 5.) {
         n = 33.;
@@ -82,6 +94,7 @@ vec2 sdf(in vec3 p) {
         }
         s = minmin(a, s);
     }
+    s = minmin(v, s);
     return s;
 }
 
@@ -140,7 +153,7 @@ vec3 phongIllumination(vec3 k_a, vec3 k_d, vec3 k_s, float alpha, vec3 p, vec3 e
     const vec3 ambientLight = 0.5 * vec3(1.0, 1.0, 1.0);
     vec3 color = ambientLight * k_a;
     
-    vec3 light1Pos = vec3(4.0, 2.0, 50.0);
+    vec3 light1Pos = vec3(0.0, 0.0, 10.0);
     vec3 light1Intensity = vec3(0.5, 0.5, 0.5);
     
     vec3 phongContrib = phongContribForLight(k_d, k_s, alpha, p, eye, light1Pos, light1Intensity);
@@ -149,12 +162,12 @@ vec3 phongIllumination(vec3 k_a, vec3 k_d, vec3 k_s, float alpha, vec3 p, vec3 e
     vec3 light2Pos = vec3(0.0, 0.0, 10.0);
     vec3 light2Intensity = vec3(0.2, 0.2, 0.2);
     
-    phongContrib = phongContribForLight(k_d, k_s, alpha, p, eye, light2Pos, light2Intensity);
-    color +=  phongContrib;
+    //phongContrib = phongContribForLight(k_d, k_s, alpha, p, eye, light2Pos, light2Intensity);
+    //color +=  phongContrib;
    
     // color *= 2.;
     // color = floor(color);
-    // color /= 2.;
+    //color /= 2.;
     return color;
 }
 
