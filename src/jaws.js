@@ -1,10 +1,10 @@
-(function(global) {
+(function (global) {
 
   class jaws extends NIN.Node {
     constructor(id) {
       super(id, {
         outputs: {
-          render: new NIN.TextureOutput()
+          render: new NIN.TextureOutput(),
         }
       });
 
@@ -14,6 +14,28 @@
       this.output = new THREE.VideoTexture(this.canvas);
       this.output.minFilter = THREE.LinearFilter;
       this.output.magFilter = THREE.LinearFilter;
+
+      const scrollolo = 'NO SCROLLERS - JUST';
+      this.textCanvas = document.createElement('canvas');
+      const textCtx = this.textCanvas.getContext('2d');
+
+      document.fonts.load('bold 72px schmalibre').then(() => {
+        textCtx.fillStyle = '#77e15d';
+        textCtx.font = 'bold 72px schmalibre';
+        textCtx.textAlign = 'center';
+        textCtx.textBaseline = 'middle';
+
+        const scrolloloMeasured = textCtx.measureText(scrollolo);
+        this.textCanvas.height = 64;
+        this.textCanvas.width = scrolloloMeasured.width;
+
+        textCtx.fillStyle = '#77e15d';
+        textCtx.font = 'bold 72px schmalibre';
+        textCtx.textAlign = 'center';
+        textCtx.textBaseline = 'middle';
+
+        textCtx.fillText(scrollolo, this.textCanvas.width / 2, 11.5 + this.textCanvas.height / 2);
+      });
     }
 
     resize() {
@@ -55,8 +77,8 @@
         30: FRAME_FOR_BEAN(startBEAN + 70),
       };
 
-      for(let i = 0; i < 32; i+=2) {
-        if(i % 4 != 0) {
+      for (let i = 0; i < 32; i += 2) {
+        if (i % 4 != 0) {
           this.ctx.fillStyle = 'rgb(255, 73, 130)';
           this.ctx.fillStyle = '#77e15d';
           this.ctx.fillStyle = 'white';
@@ -76,7 +98,7 @@
           this.ctx.fillStyle = '#98d19b';
           this.ctx.fillStyle = 'rgb(55, 60, 63)';
         }
-        const t = 
+        const t =
           easeIn(1, 0, (this.frame - timings[i] + 15) / 15);
         this.ctx.save();
         this.ctx.translate(8, 4.5);
@@ -103,15 +125,35 @@
       this.ctx.fill();
 
       this.ctx.save();
-      this.ctx.fillStyle = '#77e15d';
-      this.ctx.font = 'bold 0.8pt schmalibre';
-      this.ctx.textAlign = 'center';
-      this.ctx.textBaseline = 'middle';
+
+      this.ctx.arc(8, 4.5, t2, 0, Math.PI * 2);
+      this.ctx.clip();
+
       this.ctx.translate(8, 4.5);
       this.ctx.scale(t2, -t2);
-      this.ctx.fillText(['NO', '', 'SC', 'RO', 'LL', 'ERS', '', ''][(BEAN - 1536) / 12 | 0], 0, -0.15);
-      this.ctx.restore();
+      this.ctx.scale(1 / 64, 1 / 64);
 
+      const scrollOffset = lerp(
+        64,
+        - this.textCanvas.width,
+        (this.frame - 4016) / (4189 - 4016)
+      );
+
+      for (let pixelOffset = 0; pixelOffset < this.textCanvas.width; pixelOffset++) {
+        this.ctx.drawImage(
+          this.textCanvas,
+          pixelOffset,
+          0,
+          1,
+          this.textCanvas.height,
+          scrollOffset + pixelOffset,
+          -this.textCanvas.height / 2 + 20 * Math.sin(pixelOffset / 100 + this.frame / 60 / 60 * 115 * Math.PI),
+          1,
+          this.textCanvas.height
+        );
+      }
+
+      this.ctx.restore();
       this.ctx.restore();
 
       this.output.needsUpdate = true;
