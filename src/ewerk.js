@@ -184,7 +184,7 @@
     }
 
     beforeUpdate(frame) {
-      this.inputs.beamer.enabled = BEAN > 500 && BEAN < 672;
+      this.inputs.beamer.enabled = BEAN > 200 && BEAN < 672;
       this.inputs.beamer2.enabled = BEAN > 3672 && BEAN < 4280;
     }
 
