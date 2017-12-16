@@ -153,8 +153,8 @@
       this.ballMeshes = [];
       for (const ball of this.balls) {
         const canvas = document.createElement('canvas');
-        canvas.width = 4 * GU;
-        canvas.height = 4 * GU;
+        canvas.width = 2 * GU;
+        canvas.height = 2 * GU;
         const ctx = canvas.getContext('2d');
         const output = new THREE.VideoTexture(canvas);
         output.minFilter = THREE.LinearFilter;
@@ -505,33 +505,43 @@
       this.camera.rotation.z += this.cameraShakeRotation.z;
     }
 
+    resize() {
+      for (const ballMesh of this.ballMeshes) {
+        ballMesh.canvas.width = 2 * GU;
+        ballMesh.canvas.height = 2 * GU;
+      }
+    }
+
     render(renderer) {
+      const offsetX = Math.sin(this.rotation) * 0.15;
+      const offsetY = -Math.cos(this.rotation) * 0.15;
       for(let i = 0; i < this.ballMeshes.length; i++) {
         const ballMesh = this.ballMeshes[i];
         const ball = this.balls[i];
+        if (BEAN < 84.5 * 48 + ball.bean - 8) {
+          continue;
+        }
         const ctx = ballMesh.ctx;
         ctx.fillStyle = '#77e15d';
         ctx.fillRect(0, 0, ballMesh.canvas.width, ballMesh.canvas.height);
         ctx.save();
         ctx.scale(GU, GU);
-        ctx.translate(2, 2);
+        ctx.translate(1, 1);
         ctx.rotate(Math.PI / 6);
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
-        ctx.font = 'bold 2pt schmalibre';
+        ctx.font = 'bold 1pt schmalibre';
         ctx.fillStyle = 'rgb(55, 60, 63)';
-        const offsetX = Math.sin(this.rotation) * 0.3;
-        const offsetY = -Math.cos(this.rotation) * 0.3;
         ctx.fillText(
           ball.letter,
           offsetX,
-          offsetY + 0.3
+          offsetY - 0.075
         );
         ctx.fillStyle = 'white';
         ctx.fillText(
           ball.letter,
           0,
-          0.3
+          -0.075
         );
         ctx.restore();
         ballMesh.output.needsUpdate = true;
