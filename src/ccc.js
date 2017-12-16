@@ -24,6 +24,7 @@
       this.NUM_TENTACLES = 30;
       this.NUM_PARTICLES = 200;
 
+      this.particleStartPos = [];
       let particleGeometry = new THREE.Geometry();
       for(let i = 0; i < this.NUM_PARTICLES; i++) {
         let color = new THREE.Color(this.random() > 0.5 ? this.pinkColor : this.greenColor);
@@ -31,7 +32,9 @@
         let px = this.random()*250 - 125;
         let py = this.random()*250 - 125;
         let pz = Math.min(50, this.random()*200 - 100);
-        particleGeometry.vertices.push(new THREE.Vector3(px, py, pz));
+        let particlePos = new THREE.Vector3(px, py, pz);
+        particleGeometry.vertices.push(particlePos);
+        this.particleStartPos.push(particlePos);
         particleGeometry.colors.push(color);
       }
 
@@ -106,11 +109,20 @@
 
         for(let j = 0; j < positions.length; j+=3) {
           let ratio = 1 - ((tentacle.radius - Math.abs(positions[j])) / tentacle.radius);
-          let y = Math.sin(frame * 10 / tentacle.speed + j*0.15) * 2 * ratio;
+          let y = 1;
+          if(BEAN > 2789) {
+            y = Math.sin(frame * 100 / tentacle.speed + j*0.15) * 2 * ratio;
+          } else {
+            y = Math.sin(frame * 10 / tentacle.speed + j*0.15) * 2 * ratio;
+          }
           positions[j+1] = y;
         }
 
         tentacle.geometry.attributes.position.needsUpdate = true;
+      }
+
+      if(BEAN > 2789) {
+        this.particleSystem.rotation.x = (frame*0.0005);
       }
     }
 
