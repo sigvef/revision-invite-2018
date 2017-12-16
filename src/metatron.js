@@ -74,9 +74,9 @@
       this.center_circle = new THREE.Line( circle_geometry, line_material );
       this.scene.add(this.center_circle);*/
       
-      var circle_geometry = new THREE.TorusGeometry( 10, this.line_width, 10, 128 );
+      var circle_geometry = new THREE.TorusGeometry( 10, this.line_width / 2, 10, 128 );
       circle_geometry.computeLineDistances();
-      this.center_circle = new THREE.Mesh( circle_geometry, new THREE.MeshBasicMaterial() );
+      this.center_circle = new THREE.Mesh( circle_geometry, new THREE.MeshBasicMaterial({color: 0x999999}) );
       this.scene.add(this.center_circle);
 
       this.middle_center_hex = new THREE.Object3D();
@@ -474,17 +474,56 @@
         this.large_claw_l.children[1].material.color.g = this.cube.material.color.g + 0.15 * claw_progress4;
         this.large_claw_l.children[1].material.color.b = this.cube.material.color.b + 0.15 * claw_progress4;
 
-
+      for(var i = 1; i<this.small_claw_r.children.length; i++) {
+        // claw 1
+        this.small_claw_r.children[i].geometry.faces[0].color.setRGB( this.cube.material.color.r + 0.15 * claw_progress1,
+                                                                      this.cube.material.color.g + 0.15 * claw_progress1,
+                                                                      this.cube.material.color.b + 0.15 * claw_progress1);
+        this.small_claw_r.children[i].geometry.colorsNeedUpdate = true;
+        this.small_claw_r.children[i].geometry.faces[1].color.setRGB( this.cube.material.color.r + 0.15 * claw_progress1,
+                                                                      this.cube.material.color.g + 0.15 * claw_progress1,
+                                                                      this.cube.material.color.b + 0.15 * claw_progress1);
+        this.small_claw_r.children[i].geometry.colorsNeedUpdate = true;
+        // claw 2
+        this.small_claw_l.children[i].geometry.faces[0].color.setRGB( this.cube.material.color.r + 0.15 * claw_progress2,
+                                                                      this.cube.material.color.g + 0.15 * claw_progress2,
+                                                                      this.cube.material.color.b + 0.15 * claw_progress2);
+        this.small_claw_l.children[i].geometry.colorsNeedUpdate = true;
+        this.small_claw_l.children[i].geometry.faces[1].color.setRGB( this.cube.material.color.r + 0.15 * claw_progress2,
+                                                                      this.cube.material.color.g + 0.15 * claw_progress2,
+                                                                      this.cube.material.color.b + 0.15 * claw_progress2);
+        this.small_claw_l.children[i].geometry.colorsNeedUpdate = true;
       }
 
-/*
+      for(var i = 1; i<this.large_claw_r.children.length; i++) {
+        // claw 3
+        this.large_claw_r.children[i].geometry.faces[0].color.setRGB( this.cube.material.color.r + 0.15 * claw_progress3,
+                                                                      this.cube.material.color.g + 0.15 * claw_progress3,
+                                                                      this.cube.material.color.b + 0.15 * claw_progress3);
+        this.large_claw_r.children[i].geometry.colorsNeedUpdate = true;
+        this.large_claw_r.children[i].geometry.faces[1].color.setRGB( this.cube.material.color.r + 0.15 * claw_progress3,
+                                                                      this.cube.material.color.g + 0.15 * claw_progress3,
+                                                                      this.cube.material.color.b + 0.15 * claw_progress3);
+        this.large_claw_r.children[i].geometry.colorsNeedUpdate = true;
+        // claw 4
+        this.large_claw_l.children[i].geometry.faces[0].color.setRGB( this.cube.material.color.r + 0.15 * claw_progress4,
+                                                                      this.cube.material.color.g + 0.15 * claw_progress4,
+                                                                      this.cube.material.color.b + 0.15 * claw_progress4);
+        this.large_claw_l.children[i].geometry.colorsNeedUpdate = true;
+        this.large_claw_l.children[i].geometry.faces[1].color.setRGB( this.cube.material.color.r + 0.15 * claw_progress4,
+                                                                      this.cube.material.color.g + 0.15 * claw_progress4,
+                                                                      this.cube.material.color.b + 0.15 * claw_progress4);
+        this.large_claw_l.children[i].geometry.colorsNeedUpdate = true;
+      }
+
+
         
         this.small_claw_r.position.set(30 * r32 - 8 * (1 - claw_progress1), 0, -1);
         this.small_claw_l.position.set(-30 * r32 + 8 * (1 - claw_progress2), 0, -1);
         this.large_claw_r.position.set(50 * r32 - 8 * (1 - claw_progress3), 0, -1);
         this.large_claw_l.position.set(-50 * r32 + 8 * (1 - claw_progress4), 0, -1);
       }
-*/
+
       //this.spin_cube.rotation.set(Math.sin(frame/100), Math.sin(frame/120), Math.sin(frame/140))
 
 
@@ -503,19 +542,6 @@
 
 
       this.three_point_star.children[1].geometry.verticesNeedUpdate = true;
-
-      for(var i = 1; i<this.small_claw_r.children.length; i++) {
-        this.small_claw_r.children[i].geometry.faces[0].color.setRGB(0,0,0);
-        this.small_claw_r.children[i].geometry.faces[1].color.setRGB(0,0,0);
-        this.small_claw_l.children[i].geometry.faces[0].color.setRGB(0,0,0);
-        this.small_claw_l.children[i].geometry.faces[1].color.setRGB(0,0,0);
-        this.small_claw_r.children[i].geometry.faces[0].color.setRGB(0,0,0);
-        //this.small_claw_r.children[i].geometry.faces[1].color.setRGB(0,0,0);
-        //this.small_claw_l.children[i].geometry.faces[0].color.setRGB(0,0,0);
-        //this.small_claw_l.children[i].geometry.faces[1].color.setRGB(0,0,0);
-      }
- 
-      console.log(this.small_claw_r);      
     }
   }
 
