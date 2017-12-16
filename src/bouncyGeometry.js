@@ -663,6 +663,53 @@
       }
     }
 
+    // 55555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555
+    updatePart5(frame) {
+      demo.nm.nodes.bloom.opacity = 0.1;
+      this.scene.add(this.textPlane);
+      this.scene.remove(this.hexagons);
+      this.ps.particles.visible = false;
+
+      const black = '#373C3F';
+
+      this.textCanvas.width = this.textCanvas.width;
+
+      const cylinderRadius = 0.2;
+      const padding = 0.1;
+      const distanceBetweenHexagonCores = (2 * Math.sqrt(3.0) / 2.0) * cylinderRadius + padding;
+      const offsetX = Math.sin(Math.PI / 6.0) * distanceBetweenHexagonCores;
+      const offsetY = Math.cos(Math.PI / 6.0) * distanceBetweenHexagonCores;
+
+      for (let y = 0; y < this.numHexagonsY; y++) {
+        for (let x = 0; x < this.numHexagonsX; x++) {
+          const cylinder = new THREE.Mesh(
+            cylinderGeometry,
+            this.colors[0]
+          );
+
+          cylinder.rotation.x = Math.PI / 2;
+          cylinder.rotation.y = Math.PI / 2;
+
+          this.textCtx.beginPath();
+          canvasContext.moveTo(x + hexRadius, y);
+          this.textCtx.closePath();
+
+          const offset = x % 2 === 1 ? offsetX : 0;
+          cylinder.position.x = x * offsetY;
+          cylinder.position.y = 2 * y * offsetX + offset;
+          cylinder.x = x;
+          cylinder.y = y;
+        }
+      }
+
+      this.textTexture.needsUpdate = true;
+
+      this.camera.position.x = 0;
+      this.camera.position.y = 0;
+      this.camera.position.z = 9;
+      this.camera.lookAt(new THREE.Vector3(0, 0, 0));
+    }
+
     // ttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttt
     updateLastTextPart(frame) {
       demo.nm.nodes.bloom.opacity = 0.1;
