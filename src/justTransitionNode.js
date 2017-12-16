@@ -60,7 +60,9 @@
       this.uniforms.B.value = this.inputs.B.getValue();
       this.uniforms.text.value = this.textTexture;
 
-      demo.nm.nodes.bloom.opacity = lerp(0.0, 0., (frame - atariSceneStart) / (animationFinished - atariSceneStart));
+      if (frame > atariSceneStart) {
+        demo.nm.nodes.bloom.opacity = lerp(0.0, 0., (frame - atariSceneStart) / (animationFinished - atariSceneStart));
+      }
     }
   }
 
