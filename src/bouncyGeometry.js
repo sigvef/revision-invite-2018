@@ -677,37 +677,40 @@
       this.textCanvas.width = this.textCanvas.width;
 
       this.textCtx.fillStyle = 'pink';
-      this.textCtx.fillRect(GU + GU * Math.sin(frame / 40), GU, GU, GU);
 
-      /*
-      const cylinderRadius = 0.2;
-      const padding = 0.1;
-      const distanceBetweenHexagonCores = (2 * Math.sqrt(3.0) / 2.0) * cylinderRadius + padding;
+      const cylinderRadius = 0.2 * GU;
+      const padding = 0.1 * GU;
+      const distanceBetweenHexagonCores = Math.sqrt(3.0) * cylinderRadius + padding;
       const offsetX = Math.sin(Math.PI / 6.0) * distanceBetweenHexagonCores;
       const offsetY = Math.cos(Math.PI / 6.0) * distanceBetweenHexagonCores;
 
       for (let y = 0; y < this.numHexagonsY; y++) {
         for (let x = 0; x < this.numHexagonsX; x++) {
-          const cylinder = new THREE.Mesh(
-            cylinderGeometry,
-            this.colors[0]
-          );
-
-          cylinder.rotation.x = Math.PI / 2;
-          cylinder.rotation.y = Math.PI / 2;
+          const offset = x % 2 === 1 ? offsetX : 0;
 
           this.textCtx.beginPath();
-          canvasContext.moveTo(x + hexRadius, y);
+          this.textCtx.moveTo(
+            x * offsetY + cylinderRadius,
+            2 * y * offsetX + offset
+          );
+          for (let i = 1; i < 6; i++) {
+            const angle = Math.PI * i / 3;
+            this.textCtx.lineTo(
+              x * offsetY + cylinderRadius * Math.cos(angle),
+              2 * y * offsetX + offset + cylinderRadius * Math.sin(angle)
+            );
+          }
           this.textCtx.closePath();
+          this.textCtx.fill();
 
-          const offset = x % 2 === 1 ? offsetX : 0;
-          cylinder.position.x = x * offsetY;
-          cylinder.position.y = 2 * y * offsetX + offset;
-          cylinder.x = x;
-          cylinder.y = y;
+          this.textCtx.fillRect(
+            x * offsetY,
+            2 * y * offsetX + offset,
+            0.01 * GU,
+            0.01 * GU
+          );
         }
       }
-      */
 
       this.textTexture.needsUpdate = true;
 
