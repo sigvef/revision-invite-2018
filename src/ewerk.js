@@ -177,9 +177,9 @@
           transparent: true,
         })
       );
-      this.revisionLogo.scale.set(0.75, 0.75, 0.75);
+      this.revisionLogo.scale.set(1.1, 1.1, 1.1);
       this.revisionLogo.rotation.x = -Math.PI / 2;
-      this.revisionLogo.position.set(0, 350, 55);
+      this.revisionLogo.position.set(0, 350, 115);
       this.scene.add(this.revisionLogo);
     }
 
@@ -431,7 +431,7 @@
         const localT = (frame - frame13) / 10;
         this.camera.position.set(
           lerp(lerp(0, 0, localT), 0, localT / 60),
-          lerp(lerp(400, 900, localT), 1600, localT / 60),
+          lerp(lerp(400, 1900, localT), 1600, localT / 60),
           lerp(lerp(100, 200, localT), 200, localT / 60)
         );
         const scale = easeIn(2.2, 1.7, (frame - frame13 + 40) / 40);
