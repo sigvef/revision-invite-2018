@@ -22,8 +22,32 @@
       this.camera.position.z = 200;
 
       this.NUM_TENTACLES = 30;
+      this.NUM_PARTICLES = 200;
 
-      this.particles = new THREE.Group();
+      let particleGeometry = new THREE.Geometry();
+      for(let i = 0; i < this.NUM_PARTICLES; i++) {
+        let color = new THREE.Color(this.random() > 0.5 ? this.pinkColor : this.greenColor);
+
+        let px = this.random()*250 - 125;
+        let py = this.random()*250 - 125;
+        let pz = Math.min(50, this.random()*200 - 100);
+        particleGeometry.vertices.push(new THREE.Vector3(px, py, pz));
+        particleGeometry.colors.push(color);
+      }
+
+      let particleTexture = new THREE.CanvasTexture(this.generateParticleSprite());
+      let particleMaterial = new THREE.PointsMaterial({
+        size: 20,
+        map: particleTexture,
+        blending: THREE.AdditiveBlending,
+        depthTest: true,
+        transparent: true,
+        opacity: 0.7,
+        vertexColors: true
+      });
+
+      this.particleSystem = new THREE.Points(particleGeometry, particleMaterial);
+      this.scene.add(this.particleSystem);
 
       this.group = new THREE.Group();
       for(let i = 0; i < this.NUM_TENTACLES; i++) {
@@ -65,12 +89,15 @@
       this.scene.add(this.group);
     }
 
-    update(frame) { super.update(frame);
+    update(frame) {
+      super.update(frame);
 
       demo.nm.nodes.bloom.opacity = .25;
 
       this.group.rotation.x = (frame*0.0001);
       this.group.rotation.y = (frame*0.0001);
+
+      this.particleSystem.rotation.z = (frame*0.0001);
 
       for(let i = 0; i < this.NUM_TENTACLES; i++) {
         let tentacle = this.group.children[i];
@@ -96,6 +123,33 @@
       super.render(renderer);
     }
 
+    generateParticleSprite() {
+      const canvas = document.createElement('canvas');
+      const size = 16;
+      canvas.width = size;
+      canvas.height = size;
+
+      const context = canvas.getContext('2d');
+      const gradient = context.createRadialGradient(
+        canvas.width / 2,
+        canvas.height / 2,
+        0,
+        canvas.width / 2,
+        canvas.height / 2,
+        canvas.width / 2
+      );
+      gradient.addColorStop(0, 'rgba(255,255,255,1)');
+      gradient.addColorStop(0.2, 'rgba(0,255,255,1)');
+      gradient.addColorStop(0.4, 'rgba(0,0,64,1)');
+      gradient.addColorStop(1, 'rgba(0,0,0,1)');
+
+      context.fillStyle = gradient;
+      context.beginPath();
+      context.arc(size/2, size/2, size/2, 0, 2*Math.PI, false);
+      context.fill();
+
+      return canvas;
+    }
   }
 
   global.ccc = ccc;
