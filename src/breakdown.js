@@ -310,17 +310,27 @@
       let textOpacity = 1;
       let textColor = 'white';
       let textShadow = true;
+      let textAlign = 'center';
+      let textX = 0;
       if(BEAN >= 3648 + 16) {
         textColor = 'white';
         textShadow = false;
-        text = 'JUST REVISION';
+        textAlign = 'left';
+        const originalText = 'JUST REVISION';
+        const t = (this.frame - FRAME_FOR_BEAN(3660 - 2 + 6)) / (
+            FRAME_FOR_BEAN(3660 - 2 + 6 + 3) - FRAME_FOR_BEAN(3660 - 2 + 6));
+        text = originalText.slice(0, easeOut(0, originalText.length, t) | 0);
+        textX = -5.4;
         cameraZoom = 1;
         cameraX = 0;
         cameraRotate = -0.05;
       } else if(BEAN >= 3648 + 10) {
         textColor = 'rgb(55, 60, 63)';
         textShadow = false;
-        text = 'JUST REVIS';
+        const originalText = 'JUST REVIS';
+        const t = (this.frame - FRAME_FOR_BEAN(3658)) / (
+            FRAME_FOR_BEAN(3660 + 4) - FRAME_FOR_BEAN(3658));
+        text = 'JUST REVIS'.slice(0, easeOut(originalText.length, 0, t));
         textOffset = -1.27;
         cameraZoom = 1.5;
         cameraX = 1.8;
@@ -344,7 +354,7 @@
       } else if(BEAN >= 3624) {
         textColor = '#373c3f';
         textShadow = false;
-        text = 'JUST KIDDING !';
+        text = 'JUST KIDDING!';
         textOffset = -0.02;
       } else if(BEAN >=  offset + 48 + 24 + 9 + 9) {
         text = 'NO PARTY';
@@ -454,18 +464,22 @@
       this.ctx.save();
 
       if(BEAN >= 3660 - 2 + 6) {
+        const t = (this.frame - FRAME_FOR_BEAN(3660 - 2 + 6)) / (
+            FRAME_FOR_BEAN(3660 - 2 + 6 + 3) - FRAME_FOR_BEAN(3660 - 2 + 6));
         this.ctx.fillStyle = 'rgb(55, 60, 63)';
         this.ctx.moveTo(-5.8, 0.3);
         this.ctx.lineTo(-5.3, 0.9);
-        this.ctx.lineTo(5.4, 1.1);
-        this.ctx.lineTo(6.1 ,-0.35);
-        this.ctx.lineTo(5.5 ,-1.15);
+        this.ctx.lineTo(easeOut(-5.2, 5.4, t), 1.1);
+        this.ctx.lineTo(easeOut(-5.2, 6.1, t), -0.35);
+        this.ctx.lineTo(easeOut(-5.2, 5.5, t), -1.15);
         this.ctx.lineTo(-5.2 ,-0.9);
         this.ctx.fill();
       }
 
       this.ctx.translate(textOffset, fontYOffset);
       this.ctx.globalAlpha = textOpacity;
+      this.ctx.textAlign = textAlign;
+      this.ctx.translate(textX, 0);
       if(textShadow) {
         this.ctx.fillStyle = 'rgb(55, 60, 63)';
         this.ctx.fillText(text, shadowOffset, shadowOffset);
