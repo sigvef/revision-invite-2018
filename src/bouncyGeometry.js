@@ -236,7 +236,7 @@
       this.stabThrob *= 0.85;
       this.throb *= 0.95;
 
-      if(BEAT && BEAN % 12 == 0) {
+      if(BEAT && BEAN % 12 === 0) {
         this.throb = 1;
       }
 
@@ -272,8 +272,10 @@
         return this.updatePart2(frame);
       } else if (BEAN >= 3072 && BEAN < 3120) {
         return this.updatePart3(frame);
-      } else if (BEAN >= 3120 && BEAN < 3312) {
+      } else if (BEAN >= 3120 && BEAN < 3168) {
         return this.updatePart4(frame);
+      } else if (BEAN >= 3168 && BEAN < 3312) {
+        return this.updatePart5(frame);
       } else if (BEAN >= 3312) {
         return this.updateLastTextPart(frame);
       }
@@ -674,6 +676,10 @@
 
       this.textCanvas.width = this.textCanvas.width;
 
+      this.textCtx.fillStyle = 'pink';
+      this.textCtx.fillRect(GU + GU * Math.sin(frame / 40), GU, GU, GU);
+
+      /*
       const cylinderRadius = 0.2;
       const padding = 0.1;
       const distanceBetweenHexagonCores = (2 * Math.sqrt(3.0) / 2.0) * cylinderRadius + padding;
@@ -701,6 +707,7 @@
           cylinder.y = y;
         }
       }
+      */
 
       this.textTexture.needsUpdate = true;
 
