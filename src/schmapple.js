@@ -51,7 +51,7 @@
         'Conspiracy',
         'Ctrl-Alt-Test',
         'Eos',
-        'Everyone at solskogen!',
+        'Everyone at Solskogen!',
         'Loonies',
         'Poo - Brain',
         'Power Rangers',
@@ -62,6 +62,7 @@
         'T-101',
         'T-Rex',
         'The Under Constructors',
+        'Woh! 7 coders!',
         'aberration creations',
         'akronyme analogiker',
         'amnesty',
@@ -82,14 +83,19 @@
         'ephidrena',
         'excess',
         'farbrausch',
+        'ferris',
         'fnuque',
         'focus design',
+        'frequent',
         'gargaj',
+        'gloom',
         'hackefuffel',
         'holon',
         'idle',
         'indigo',
         'insane',
+        'iq',
+        'kb',
         'kewlers',
         'kvasigen',
         'lemon',
@@ -98,6 +104,7 @@
         'logicoma',
         'logon system',
         'loonies',
+        'lug00ber',
         'madame',
         'mercury',
         'moqui',
@@ -128,6 +135,7 @@
         'skarla',
         'spaceballs',
         'still',
+        'stringray',
         'tbc',
         'the deadliners',
         'titan',
@@ -162,7 +170,7 @@
         }
       }
 
-      this.random = new Random(1337);
+      this.random = new Random(1337); //eslint-disable-line
 
       document.fonts.load('40pt brandontext').then(() => {
         for (let i = 0; i < this.texts.length; i++) {
@@ -223,14 +231,14 @@
       this.throb *= 0.9;
       if (BEAT) {
         switch (BEAN) {
-          case 648:
-          case 648 + 6:
-          case 648 + 12:
-          case 648 + 18:
-            this.throb = 1;
-            this.cameraDX = (Math.random() - 0.5) * 5.0;
-            this.cameraDY = (Math.random() - 0.5) * 5.0;
-            this.cameraDR = (Math.random() - 0.5) * 0.1;
+        case 648:
+        case 648 + 6:
+        case 648 + 12:
+        case 648 + 18:
+          this.throb = 1;
+          this.cameraDX = (Math.random() - 0.5) * 5.0;
+          this.cameraDY = (Math.random() - 0.5) * 5.0;
+          this.cameraDR = (Math.random() - 0.5) * 0.1;
         }
       }
 
@@ -255,12 +263,12 @@
       this.stabThrob *= 0.95;
       if (BEAT) {
         switch (BEAN - 528) {
-          case 0:
-          case 9:
-          case 24:
-          case 24 + 9:
-          case 24 + 9 + 9:
-            this.stabThrob = 1;
+        case 0:
+        case 9:
+        case 24:
+        case 24 + 9:
+        case 24 + 9 + 9:
+          this.stabThrob = 1;
         }
       }
       this.cumulativeStabThrob += this.stabThrob;
