@@ -448,9 +448,9 @@
     render(renderer) {
       renderer.setClearColor(new THREE.Color(0), 0);
       renderer.render(this.scene, this.camera, this.renderTarget1, true);
-      this.outputs.render.value = this.renderTarget1;
+      this.outputs.render.value = this.renderTarget1.texture;
       renderer.render(this.tunnelScene, this.camera, this.renderTarget2, true);
-      this.outputs.renderTunnel.value = this.renderTarget2;
+      this.outputs.renderTunnel.value = this.renderTarget2.texture;
     }
   }
 
