@@ -1,6 +1,6 @@
 (function (global) {
   class bouncyGeometry extends NIN.Node {
-    constructor(id, options) {
+    constructor(id) {
       super(id, {
         outputs: {
           render: new NIN.TextureOutput()
@@ -11,8 +11,11 @@
       Author: Iver
       */
 
+      this.stabThrob = 0;
+      this.throb = 0;
+
       // MISC
-      this.random = new Random(666);
+      this.random = new global.Random(666);
 
       // SCENE
       this.scene = new THREE.Scene();
@@ -90,19 +93,42 @@
       this.hexagons.position.y = -(this.numHexagonsY - 0.5) * offsetX;
       this.hexagons.position.z = -80;
 
+      this.directionalLight = new THREE.DirectionalLight();
+      this.directionalLight.position.set(1, 1, 1);
+      this.directionalLight.color = new THREE.Color(0x77e15d);
+      this.directionalLight.decay = 2;
+      this.scene.add(this.directionalLight);
+
+
       // BALL
       this.ballGeometry = new THREE.SphereGeometry(1, 8, 8);
       this.ballTexture = Loader.loadTexture('res/checkers_color.png');
       this.ballTexture.minFilter = THREE.LinearFilter;
       this.ballTexture.magFilter = THREE.LinearFilter;
-      this.ballMaterial = new THREE.MeshBasicMaterial(
-        {map: this.ballTexture}
-      );
+      this.ballMaterial = new THREE.MeshStandardMaterial({
+        shading: THREE.FlatShading,
+        metalness: 1,
+        map: this.ballTexture,
+        roughnessMap: Loader.loadTexture('res/metal.jpg'),
+        //bumpMap: Loader.loadTexture('res/metal.jpg'),
+        bumpScale: 0.005,
+        emissive: 0xffffff,
+        emissiveMap: this.ballTexture,
+        emissiveIntensity: 0.2,
+      });
       this.ball = new THREE.Mesh(this.ballGeometry, this.ballMaterial);
       this.scene.add(this.ball);
 
+
+
       // BEAMS
-      this.beamMaterial = new THREE.MeshBasicMaterial({color: 0xffffff});
+      this.beamMaterial = new THREE.MeshBasicMaterial({
+        color: 0x97f280,
+        roughness: 1,
+        metalness: 0,
+        emissive: 0xffffff,
+        emissiveIntensity: 1,
+      });
       this.beamGeometry = new THREE.BoxGeometry(.05, .05, 20);
       this.numBeams = 777;
       this.randomBeamNumbers = [];
@@ -126,7 +152,7 @@
         120 + 192, 124 + 192, 130 + 192, 136 + 192, 138 + 192, 130 + 192, 142 + 192,
         148 + 192, 154 + 192, 168 + 192, 172 + 192, 178 + 192,
       ];  // + 2976
-      this.updateChordStabBeans = function(frame) {
+      this.updateChordStabBeans = function() {
         for (let i = 0; i < this.beamThicknessScalers.length; i++) {
           this.beamThicknessScalers[i] = Math.max(0.8, this.beamThicknessScalers[i] * 0.95);
         }
@@ -186,8 +212,8 @@
 
         return canvas;
       };
-      this.ps = new ParticleSystem({
-        color: new THREE.Color(0xffffff),
+      this.ps = new global.ParticleSystem({
+        color: new THREE.Color(greenColor),
         amount: 3000,
         decayFactor: 0.98,
         gravity: 0,
@@ -208,6 +234,26 @@
     }
 
     update(frame) {
+
+      this.stabThrob *= 0.85;
+      this.throb *= 0.95;
+
+      if(BEAT && BEAN % 12 == 0) {
+        this.throb = 1;
+      }
+
+      this.beamMaterial.emissiveIntensity = this.throb;
+
+      if(BEAT) {
+        switch(BEAN % 24) {
+        case 0:
+        case 4:
+        case 10:
+        case 22:
+          this.stabThrob = 1;
+        }
+      }
+
       this.updateChordStabBeans(frame);
       this.updateBall(frame);
       this.updateBeams(frame);
@@ -220,6 +266,8 @@
         this.camera.position.y = 0;
         this.camera.position.z = 6;
         this.camera.lookAt(this.ball.position);
+        this.ps.particles.visible = true;
+        this.scene.add(this.ps.particles);
       } else if (BEAN >= 2976 && BEAN < 3024) {
         return this.updatePart1(frame);
       } else if (BEAN >= 3024 && BEAN < 3072) {
@@ -231,6 +279,8 @@
       } else if (BEAN >= 3312) {
         return this.updateLastTextPart(frame);
       }
+
+      this.ps.update();
     }
 
     updateBall(frame) {
@@ -266,6 +316,21 @@
           this.ball.scale.x = scaleFactor;
           this.ball.scale.y = scaleFactor;
           this.ball.scale.z = scaleFactor;
+          for(let i = 0; i < 2; i++) {
+            const radius = 1;
+            const angle = Math.random() * Math.PI * 2;
+            const x = radius * Math.cos(angle);
+            const y = radius * Math.sin(angle);
+            this.ps.spawn({
+              x,
+              y,
+              z: 0,
+            }, {
+              x: x * 0.1,
+              y: y * 0.1,
+              z: 0.3,
+            }, 0.015);
+          }
         } else {
           this.ballIntroScale = 0;
           this.scene.remove(this.ball);
@@ -277,9 +342,11 @@
         this.ball.position.z = 0;
         this.ball.rotation.x = frame / 40;
         this.ball.rotation.y = frame / 45;
-        this.ball.scale.x = 1;
-        this.ball.scale.y = 1;
-        this.ball.scale.z = 1;
+        const scale = 1 + this.stabThrob * 0.3;
+        this.ball.scale.x = scale;
+        this.ball.scale.y = scale;
+        this.ball.scale.z = scale;
+        this.ball.material.emissiveIntensity = 0.2 + this.stabThrob * 1;
 
       } else if (BEAN >= 3024 && BEAN < 3072) {
         this.scene.add(this.ball);
@@ -291,6 +358,11 @@
         this.ball.position.z = lerp(60, -60, progress);
         this.ball.rotation.x = frame / 40;
         this.ball.rotation.y = frame / 45;
+        const scale = 1 + this.stabThrob * 0.3;
+        this.ball.scale.x = scale;
+        this.ball.scale.y = scale;
+        this.ball.scale.z = scale;
+        this.ball.material.emissiveIntensity = 0.2 + this.stabThrob * .5;
 
       } else if (BEAN >= 3072 && BEAN < 3120) {
         this.scene.add(this.ball);
@@ -305,6 +377,12 @@
         this.ball.rotation.x = lerp(2, 0, progress);
         this.ball.rotation.y = lerp(2, 0, progress);
 
+        const scale = 1 + this.stabThrob * 0.3;
+        this.ball.scale.x = scale;
+        this.ball.scale.y = scale;
+        this.ball.scale.z = scale;
+        this.ball.material.emissiveIntensity = 0.2 + this.stabThrob * .5;
+
       } else if (BEAN >= 3120 && BEAN < 3312) {
         this.scene.add(this.ball);
 
@@ -317,6 +395,12 @@
         this.ball.position.z = -79 + 5 * progress;
         this.ball.rotation.x = lerp(0, 2, progress);
         this.ball.rotation.y = lerp(0, 2, progress);
+
+        const scale = 1 + this.stabThrob * 0.3;
+        this.ball.scale.x = scale;
+        this.ball.scale.y = scale;
+        this.ball.scale.z = scale;
+        this.ball.material.emissiveIntensity = 0.2 + this.stabThrob * .5;
 
       } else if (BEAN >= 3312) {
         this.scene.remove(this.ball);
@@ -397,6 +481,7 @@
       const progress = (frame - startFrame) / (endFrame - startFrame);
 
       demo.nm.nodes.bloom.opacity = lerp(0, 0.1, progress);
+      demo.nm.nodes.bloom.opacity = 0;
 
       // CAMERA
       this.camera.position.x = lerp(0, 0.8, progress);
@@ -408,6 +493,7 @@
     // 22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
     updatePart2(frame) {
       demo.nm.nodes.bloom.opacity = 0.1;
+        demo.nm.nodes.bloom.opacity = 0;
 
       this.scene.remove(this.textPlane);
       this.ps.particles.visible = true;
@@ -428,33 +514,33 @@
       this.camera.lookAt(this.ball.position);
 
       // PARTICLES
-      for(let i = 0; i < 50; i++) {
+      for(let i = 0; i < 2; i++) {
         const angle = this.random() * Math.PI * 2;
         const angle2 = this.random() * Math.PI;
-        const radius = 0.8;
+        const radius = 0.8 * Math.random();
         const velocityAngle = this.random() * Math.PI * 2;
         const velocityAngle2 = this.random() * Math.PI * 2;
-        const velocityRadius = 0.05;
+        const velocityRadius = 0.05 * Math.random();
         this.ps.spawn(
           {
             x: this.ball.position.x + Math.sin(angle) * radius,
             y: this.ball.position.y + Math.cos(angle) * radius,
-            z: this.ball.position.z + Math.sin(angle2) * radius + 2 * (1 - progress),
+            z: this.ball.position.z + 1 + Math.sin(angle2) * radius + 2 * (1 - progress),
           },
           {
             x: Math.sin(velocityAngle2) * velocityRadius,
             y: Math.sin(velocityAngle) * velocityRadius,
-            z: 0,
+            z: (Math.random() - 0.5) * 0.1,
           },
-          0.012
+          0.02
         );
       }
-      this.ps.update();
     }
 
     // 33333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333
     updatePart3(frame) {
       demo.nm.nodes.bloom.opacity = 0.1;
+        demo.nm.nodes.bloom.opacity = 0;
 
       this.scene.remove(this.textPlane);
       this.ps.particles.visible = true;
@@ -493,7 +579,6 @@
           0.012
         );
       }
-      this.ps.update();
 
 
 
@@ -519,11 +604,13 @@
       this.ps.decayFactor = 0.99999;
 
       demo.nm.nodes.bloom.opacity = Math.max(0.1, demo.nm.nodes.bloom.opacity - 0.03);
+        demo.nm.nodes.bloom.opacity = 0;
       if (BEAN === 3120) {
         this.cameraShakeAngularVelocity.x = (this.random() - 0.5) * 0.05;
         this.cameraShakeAngularVelocity.y = (this.random() - 0.5) * 0.05;
         this.cameraShakeAngularVelocity.z = (this.random() - 0.5) * 0.05;
         demo.nm.nodes.bloom.opacity = 1.99;
+        demo.nm.nodes.bloom.opacity = 0;
       }
 
       this.camera.lookAt(new THREE.Vector3(0, 0, lerp(-80, -90, progress)));
@@ -576,12 +663,12 @@
           }
         });
       }
-      this.ps.update();
     }
 
     // ttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttt
     updateLastTextPart(frame) {
       demo.nm.nodes.bloom.opacity = 0.1;
+        demo.nm.nodes.bloom.opacity = 0;
       this.scene.add(this.textPlane);
       this.scene.remove(this.hexagons);
       this.ps.particles.visible = false;
@@ -657,7 +744,11 @@
     }
 
     render(renderer) {
-      renderer.setClearColor(new THREE.Color(0x373C3F));
+      if(BEAN >= 2976) {
+        renderer.setClearColor(new THREE.Color(0x77e15d));
+      } else {
+        renderer.setClearColor(new THREE.Color(0x373c3f));
+      }
       this.ps.render();
       renderer.render(this.scene, this.camera, this.renderTarget, true);
       this.outputs.render.setValue(this.renderTarget.texture);
