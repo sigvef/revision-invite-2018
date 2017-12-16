@@ -225,9 +225,6 @@
       this.cameraY += this.cameraDY;
       this.cameraR += this.cameraDR;
 
-      this.cameraX = (Math.random() - 0.5) * this.throb * 2;
-      this.cameraY = (Math.random() - 0.5) * this.throb * 2;
-
       const cameraX = this.getPoint(this.cameraXPath, frame);
       const cameraY = this.getPoint(this.cameraYPath, frame);
       const cameraZoom = this.getPoint(this.cameraZoomPath, frame);
