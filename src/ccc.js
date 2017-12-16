@@ -24,19 +24,25 @@
       this.group = new THREE.Group();
       for(let i = 0; i < this.NUM_TENTACLES; i++) {
         let geo = new THREE.Geometry();
-        let tentacle = new THREE.Line(geo, new THREE.LineBasicMaterial({
-          color: (Math.random() > 0.5 ? this.pinkColor : this.greenColor)
-        }));
-
-        tentacle.wave = Math.random();
-        tentacle.speed = Math.random() * 1000 + 200;
-        tentacle.radius = 20;
 
         for(let j = 0; j < this.NUM_TENTACLES; j++) {
           const point = ((j / this.NUM_TENTACLES) * tentacle.radius * 2) - tentacle.radius;
           const vec = new THREE.Vector3(point, 0, 0);
           geo.vertices.push(vec);
         }
+
+        let line = new THREE.MeshLine();
+        line.setGeometry(geo);//, p => { return Math.sin(50*p)});
+
+        let lineMaterial = new THREE.MeshLineMaterial({
+          //color: (Math.random() > 0.5 ? this.pinkColor : this.greenColor)
+        });
+
+        let tentacle = new THREE.Mesh(line.geometry, lineMaterial);
+
+        tentacle.wave = Math.random();
+        tentacle.speed = Math.random() * 1000 + 200;
+        tentacle.radius = 20;
 
         tentacle.rotation.x = Math.random() * Math.PI;
         tentacle.rotation.y = Math.random() * Math.PI;
