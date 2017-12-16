@@ -137,7 +137,7 @@
 
       const t3 = lerp(0, 1, (this.frame - FRAME_FOR_BEAN(3912 - 6)) / (
           FRAME_FOR_BEAN(3912) - FRAME_FOR_BEAN(3912 - 6)));
-      this.cube.position.x = easeIn(.9, -2.3, t3);
+      this.cube.position.x = easeIn(.9, -3.3, t3);
       this.cube.position.y = easeIn(.18, 0, t3);
       const scaleX = this.cube.scale.x * easeIn(1, 0.75, clamp(0, t3, 1));
       const scaleY = this.cube.scale.y * easeIn(1, 0.75, clamp(0, t3, 1));
