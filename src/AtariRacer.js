@@ -6,8 +6,18 @@
   const greenColor = 0x77e15d;
   const pinkColor = 0xff4982;
 
-  const pinkMaterial = new THREE.MeshBasicMaterial({ color: pinkColor });
-  const greenMaterial = new THREE.MeshBasicMaterial({ color: greenColor });
+  const pinkMaterial = new THREE.MeshStandardMaterial({
+    color: pinkColor,
+    emissive: pinkColor,
+    roughness: 1,
+    metalness: 0,
+  });
+  const greenMaterial = new THREE.MeshStandardMaterial({
+    color: greenColor,
+    emissive: greenColor,
+    roughness: 1,
+    metalness: 0,
+  });
   const baseBean = 864;
 
   class AtariRacer extends NIN.THREENode {
@@ -19,8 +29,57 @@
         }
       });
 
-      this.camera = new THREE.OrthographicCamera(-32, 32, 18, -18, 1, 1000);
-      this.camera.position.z = 10;
+      this.carRotationThrob = 0;
+      const directionalLight = new THREE.DirectionalLight();
+      directionalLight.position.set(1, 1, 1);
+      directionalLight.intensity = 1;
+      this.scene.add(directionalLight);
+      const ambientLight = new THREE.AmbientLight();
+      ambientLight.intensity = 0.25;
+      this.scene.add(ambientLight);
+
+      const floodLight = new THREE.DirectionalLight();
+      floodLight.position.set(0, 0, -1);
+      floodLight.intensity = 1000;
+      this.scene.add(floodLight);
+
+      this.levelBG = new THREE.Mesh(
+        new THREE.BoxGeometry(15, 36, 0.01),
+        new THREE.MeshBasicMaterial({
+          color: 0, 
+          opacity: 0.3,
+          transparent: true,
+        }));
+
+      this.levelBG.position.x = -21;
+
+      this.scene.add(this.levelBG);
+
+      this.cameraShakeThrob = 0;
+
+      this.camera.fov = 18;
+      this.camera.updateProjectionMatrix();
+
+      this.cameraPreviousPosition = new THREE.Vector3(0, 0, 0);
+      this.cameraShakePosition = new THREE.Vector3(0, 0, 0);
+      this.cameraShakeVelocity = new THREE.Vector3(0, 0, 0);
+      this.cameraShakeAcceleration = new THREE.Vector3(0, 0, 0);
+      this.cameraShakeRotation = new THREE.Vector3(0, 0, 0);
+      this.cameraShakeAngularVelocity = new THREE.Vector3(0, 0, 0);
+      this.cameraShakeAngularAcceleration = new THREE.Vector3(0, 0, 0);
+
+      const colorfactor = 4;
+      this.ps = new ParticleSystem({
+        //color: new THREE.Color(1 / colorfactor, 73 / 255 / colorfactor, 130 / 255 / colorfactor),
+        color: new THREE.Color(1 / colorfactor, 1 / colorfactor, 1 / colorfactor),
+        decayFactor: 0.9,
+        gravity: 0.1,
+      });
+      //this.scene.add(this.ps.particles);
+
+      //this.camera = new THREE.OrthographicCamera(-32, 32, 18, -18, 1, 1000);
+      this.camera.position.z = 100;
+      this.baseQuaternion = this.camera.quaternion.clone();
 
       this.racingGridFrame = new THREE.Object3D();
       const [gridWidth, gridHeight] = [15, 36];
@@ -40,7 +99,7 @@
       this.racingGridFrame.position.x = -((gridWidth - 1) * (1 + padding)) / 2;
       this.racingGridFrame.position.y = -racingGridHeight / 2;
 
-      this.playerRacingCar = this.createRacer();
+      this.playerRacingCar = this.createRacer(1, pinkMaterial);
 
       this.importantFrames = [
         -9,
@@ -68,34 +127,34 @@
       ].map(bean => FRAME_FOR_BEAN(bean + baseBean));
 
       const rawCarPositions = [
-        [0, -9],
-        [2, -9],
-        [1, -9],
-        [2, -9],
-        [1, -9],
-        [2, -9],
-        [0, -9],
-        [1, -9],
-        [0, -9],
-        [1, -9],
-        [2, -9],
-        [0, -9],
-        [2, -9],
-        [0, -9],
-        [1, -9],
-        [1, 20],
+        [2, -9, 864],
+        [0, -9, 864 + 9],
+        [2, -9, 864 + 24],
+        [0, -9, 864 + 24 + 9],
+        [1, -9, 864 + 24 + 9 + 9],
+        [2, -9, 864 + 48 + 3],
+        [1, -9, 864 + 48 + 12],
+        [2, -9, 864 + 48 + 12 + 6],
+        [1, -9, 864 + 48 + 24],
+        [0, -9, 864 + 48 + 24 + 6],
+        [1, -9, 864 + 48 + 32 - 2],
+        [1, -9, 1864],
+        [1, -9, 1864],
+        [1, -9, 1864],
+        [1, -9, 1864],
+        [1, -9, 1864],
+        [0, 20, 1864],
       ];
 
-      const beanWhenTheCarsTouch = 876;
       this.carPositions = [];
-      for (let [index, [x, y]] of rawCarPositions.entries()) {
+      for (let [x, y, bean] of rawCarPositions) {
         this.carPositions.push({
-          frame: FRAME_FOR_BEAN(beanWhenTheCarsTouch + 12 * index - 2),
+          frame: FRAME_FOR_BEAN(bean),
           x: x * 4 - 4,
           y,
         });
         this.carPositions.push({
-          frame: FRAME_FOR_BEAN(beanWhenTheCarsTouch + 12 * index + 1),
+          frame: FRAME_FOR_BEAN(bean + 3),
           x: x * 4 - 4,
           y,
         });
@@ -131,7 +190,7 @@
       this.incomingCars = new THREE.Object3D();
       const offsetBetweenEachIncomingCar = 4 * 5;
       for (let [posX, posY] of allIncoming) {
-        const incoming = this.createRacer();
+        const incoming = this.createRacer(1, greenMaterial);
         incoming.position.y = posY * offsetBetweenEachIncomingCar;
         incoming.position.x = posX * 4 - 4;
         this.incomingCars.add(incoming);
@@ -243,6 +302,7 @@
         new THREE.ShaderMaterial(SHADERS.ataribackground));
       this.bg.position.z = -100;
       this.scene.add(this.bg);
+      this.bg.scale.set(2, 2, 2);
 
       this.throb = 0;
     }
@@ -253,9 +313,9 @@
       return star;
     }
 
-    createRacer(scale = 1.0) {
+    createRacer(scale = 1.0, material) {
       const racer = this.fromCoordinates([[1, 0], [0, -1], [1, -1], [2, -1], [1, -2], [0, -3], /*[1, -3], */[2, -3]], scale);
-      racer.traverse(obj => obj.material = pinkMaterial);
+      racer.traverse(obj => obj.material = material);
       return racer;
     }
 
@@ -275,7 +335,7 @@
       return wrapper;
     }
 
-    animate(positions, frame, easingFn) {
+    animate(positions, frame, easingFn, incomingRacecarMode) {
       const idx = positions.findIndex(point => point.frame > frame);
 
       if (idx === -1) {
@@ -290,7 +350,10 @@
       const current = positions[idx];
       const prev = positions[Math.max(0, idx - 1)];
 
-      const mixer = (frame - prev.frame) / (current.frame - prev.frame);
+      let mixer = (frame - prev.frame) / 60 / 60 * 115 / 4 * 48 / 9;
+      if(incomingRacecarMode) {
+        mixer = (frame - prev.frame) / (current.frame - prev.frame);
+      }
       const x = easingFn(prev.x, current.x, mixer);
       const y = easingFn(prev.y, current.y, mixer);
       return {
@@ -312,6 +375,89 @@
         this.throb = 1.0;
       }
 
+      this.cameraShakeThrob *= 0.9;
+      this.carRotationThrob *= 0.8;
+
+      greenMaterial.emissiveIntensity *= 0.95;
+      pinkMaterial.emissiveIntensity *= 0.95;
+      greenMaterial.emissiveIntensity = Math.max(0.5, greenMaterial.emissiveIntensity);
+      pinkMaterial.emissiveIntensity = Math.max(0.5, pinkMaterial.emissiveIntensity);
+
+      const baseBean = 864;
+      if(BEAT) {
+        switch(BEAN) {
+        case baseBean:
+        case baseBean + 24:
+        case baseBean + 24 + 9 + 9:
+          this.carRotationThrob = 2;
+          break;
+        case baseBean + 9:
+        case baseBean + 24 + 9:
+        case baseBean + 48 + 12:
+        case baseBean + 48 + 24 + 10:
+          this.carRotationThrob = -2;
+          break;
+        case baseBean + 48 + 12 + 6:
+        case baseBean + 48 + 24 + 6:
+          this.carRotationThrob = 1;
+          break;
+        case baseBean + 48 + 24:
+          this.carRotationThrob = -1;
+          break;
+
+
+        }
+        switch(BEAN) {
+        case baseBean:
+        case baseBean + 9:
+        case baseBean + 24:
+        case baseBean + 24 + 9:
+        case baseBean + 24 + 9 + 9:
+          greenMaterial.emissiveIntensity = 1;
+          pinkMaterial.emissiveIntensity = 1;
+          this.cameraShakeThrob = 1;
+          this.cameraShakeVelocity.x = (this.camera.position.x -
+            this.cameraPreviousPosition.x) * 0.5;
+          this.cameraShakeVelocity.y = (this.camera.position.y -
+            this.cameraPreviousPosition.y) * 0.5;
+          this.cameraShakeVelocity.z = (this.camera.position.z -
+            this.cameraPreviousPosition.z) * 0.5;
+          this.cameraShakeAngularVelocity.x = (Math.random() - 0.5) * 0.02;
+          this.cameraShakeAngularVelocity.y = (Math.random() - 0.5) * 0.02;
+          this.cameraShakeAngularVelocity.z = (Math.random() - 0.5) * 0.02;
+        }
+      }
+
+      const cameraPosition = new THREE.Vector3(0, 0, 110);
+      const cameraQuaternion = this.baseQuaternion;
+      this.cameraShakeVelocity.x += 2 * (Math.random() -0.5) * this.cameraShakeThrob;
+      this.cameraShakeVelocity.y += 2 * (Math.random() -0.5) * this.cameraShakeThrob;
+      this.cameraShakeVelocity.z += 2 * (Math.random() -0.5) * this.cameraShakeThrob;
+      cameraPosition.x += 20 * (Math.random() -0.5) * this.cameraShakeThrob * this.cameraShakeThrob;
+      cameraPosition.y += 20 * (Math.random() -0.5) * this.cameraShakeThrob * this.cameraShakeThrob;
+      cameraPosition.z += 20 * (Math.random() -0.5) * this.cameraShakeThrob * this.cameraShakeThrob;
+
+      this.cameraShakeAcceleration.x = -this.cameraShakePosition.x * 0.05;
+      this.cameraShakeAcceleration.y = -this.cameraShakePosition.y * 0.05;
+      this.cameraShakeAcceleration.z = -this.cameraShakePosition.z * 0.05;
+      this.cameraShakeAngularAcceleration.x = -this.cameraShakeRotation.x * 0.05;
+      this.cameraShakeAngularAcceleration.y = -this.cameraShakeRotation.y * 0.05;
+      this.cameraShakeAngularAcceleration.z = -this.cameraShakeRotation.z * 0.05;
+      this.cameraShakeVelocity.add(this.cameraShakeAcceleration);
+      this.cameraShakeAngularVelocity.add(this.cameraShakeAngularAcceleration);
+      this.cameraShakeVelocity.multiplyScalar(0.85);
+      this.cameraShakeAngularVelocity.multiplyScalar(0.85);
+      this.cameraShakePosition.add(this.cameraShakeVelocity);
+      this.cameraShakeRotation.add(this.cameraShakeAngularVelocity);
+
+      this.cameraPreviousPosition.copy(this.camera.position);
+      this.camera.position.copy(cameraPosition);
+      this.camera.position.add(this.cameraShakePosition);
+      this.camera.quaternion.copy(cameraQuaternion);
+      this.camera.rotation.x += this.cameraShakeRotation.x;
+      this.camera.rotation.y += this.cameraShakeRotation.y;
+      this.camera.rotation.z += this.cameraShakeRotation.z;
+
       var { x, y } = this.animate(this.racingWrapperPositions, frame, easeOut);
       this.racingWrapper.position.x = x;
       this.racingWrapper.position.y = y;
@@ -329,22 +475,40 @@
 
       const scale = Math.max(Math.sqrt(this.throb), 0.01);
       for (let cube of this.racingGridFrame.children) {
-        cube.scale.set(scale, scale, scale);
+        //cube.scale.set(scale, scale, scale);
+        cube.scale.set(0.8, 0.8, 0.8);
       }
 
+      this.playerRacingCar.rotation.y = 0;
       var { x, y } = this.animate(this.carPositions, frame, easeOut);
+      this.playerRacingCar.rotation.y = Math.PI * 2 * this.carRotationThrob;
       this.playerRacingCar.position.x = x;
       this.playerRacingCar.position.y = y;
+      const vector = new THREE.Vector3(0, 0, 0);
+      this.scene.updateMatrixWorld();
       for (let cube of this.playerRacingCar.children) {
         cube.scale.set(scale, scale, scale);
+        cube.scale.set(0.8, 0.8, 0.8);
       }
 
-      var { x, y } = this.animate(this.incomingCarsPosition, frame, lerp);
+      this.playerRacingCar.updateMatrixWorld();
+      vector.setFromMatrixPosition(this.playerRacingCar.matrixWorld);
+      for(let i = 0; i < this.cameraShakeThrob * 100; i++) {
+        this.ps.spawn({
+          x: (Math.random() - 0.5) * 80,
+          y: (Math.random() - 0.5) * 45,
+          z: -(Math.random()) * 10,
+        }, {x: 0, y: 2.5 * (Math.random() - .5), z: 0}, 0.5);
+      }
+      this.ps.update();
+
+      var { x, y } = this.animate(this.incomingCarsPosition, frame, lerp, 1);
       this.incomingCars.position.x = x;
       this.incomingCars.position.y = y;
       for (let incoming of this.incomingCars.children) {
         for (let cube of incoming.children) {
-          cube.scale.set(scale, scale, scale);
+          //cube.scale.set(scale, scale, scale);
+          cube.scale.set(0.8, 0.8, 0.8);
         }
       }
 
@@ -361,6 +525,7 @@
     }
 
     render(renderer) {
+      this.ps.render();
       renderer.setClearColor(0x00000, 1.0);
       super.render(renderer);
     }
