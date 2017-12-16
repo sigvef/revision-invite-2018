@@ -310,7 +310,7 @@
       this.scene.add(this.largeLettersWrapperObject);
 
       this.bg = new THREE.Mesh(
-        new THREE.BoxGeometry(64, 36 + 10, 1),
+        new THREE.BoxGeometry(64 * 1.5, 36 * 1.5, 1),
         new THREE.ShaderMaterial(SHADERS.ataribackground));
       this.bg.position.z = -100;
       this.scene.add(this.bg);
