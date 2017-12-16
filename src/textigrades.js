@@ -28,86 +28,77 @@
       this.ctx.scale(GU, GU);
       this.ctx.translate(8, 4.5);
       this.ctx.fillStyle = 'white';
-      this.ctx.font = 'bold 1pt schmalibre';
+      this.ctx.font = 'bold 0.8pt schmalibre';
       this.ctx.textAlign = 'left';
       this.ctx.textBaseline = 'middle';
 
+      const x = 0;
+      const y = -0.1;
       if (BEAN >= 84 * 48 + 4) {
         //Show nothing
-      } else if (BEAN >= 3960 + 48) {
-        this.ctx.textAlign = 'center';
-        const x = -8 + 2 * 16 / 3;
-        const y = -0.1;
+      } else if (BEAN >= 3960 + 48 + 12 + 12) {
         this.ctx.fillStyle = 'rgb(55, 60, 63)';
         this.ctx.fillText('GERMANY', x + 0.1, y + 0.1);
         this.ctx.fillStyle = 'rgb(255, 73, 130)';
         this.ctx.fillText('GERMANY', x, y);
-      } else if (BEAN >= 3960 + 24 + 9) {
-        this.ctx.textAlign = 'center';
-        const x = -8 + 2 * 16 / 3;
-        const y = -0.1;
+      } else if (BEAN >= 3960 + 48 + 12) {
         this.ctx.fillStyle = 'rgb(55, 60, 63)';
-        this.ctx.fillText('WERK', x + 0.1, y + 0.1);
+        this.ctx.fillText('GERMA', x + 0.1, y + 0.1);
         this.ctx.fillStyle = 'rgb(255, 73, 130)';
-        this.ctx.fillText('WERK', x, y);
+        this.ctx.fillText('GERMA', x, y);
+      } else if (BEAN >= 3960 + 48) {
+        this.ctx.fillStyle = 'rgb(55, 60, 63)';
+        this.ctx.fillText('GER', x + 0.1, y + 0.1);
+        this.ctx.fillStyle = 'rgb(255, 73, 130)';
+        this.ctx.fillText('GER', x, y);
+      } else if (BEAN >= 3960 + 24 + 6 + 6 + 6) {
+        this.ctx.font = 'bold 0.8pt schmalibre';
+        this.ctx.fillStyle = 'rgb(55, 60, 63)';
+        this.ctx.fillText('SAARBRÜCKEN', x + 0.1, y + 0.1);
+        this.ctx.fillStyle = 'rgb(255, 73, 130)';
+        this.ctx.fillText('SAARBRÜCKEN', x, y);
+        this.ctx.fillStyle = 'rgb(55, 60, 63)';
+      } else if (BEAN >= 3960 + 24 + 6 + 6) {
+        this.ctx.font = 'bold 0.8pt schmalibre';
+        this.ctx.fillStyle = 'rgb(55, 60, 63)';
+        this.ctx.fillText('SAARBRÜCK', x + 0.1, y + 0.1);
+        this.ctx.fillStyle = 'rgb(255, 73, 130)';
+        this.ctx.fillText('SAARBRÜCK', x, y);
+        this.ctx.fillStyle = 'rgb(55, 60, 63)';
       } else if (BEAN >= 3960 + 24 + 6) {
-        this.ctx.textAlign = 'center';
-        const x = -8 + 2 * 16 / 3;
-        const y = -0.1;
+        this.ctx.fillStyle = 'rgb(55, 60, 63)';
+        this.ctx.fillText('SAAR', x + 0.1, y + 0.1);
+        this.ctx.fillStyle = 'rgb(255, 73, 130)';
+        this.ctx.fillText('SAAR', x, y);
+        this.ctx.fillStyle = 'rgb(55, 60, 63)';
+      } else if (BEAN >= 3960 + 24) {
+        this.ctx.fillStyle = 'rgb(55, 60, 63)';
+        this.ctx.fillText('E-WERK', x + 0.1, y + 0.1);
+        this.ctx.fillStyle = 'rgb(255, 73, 130)';
+        this.ctx.fillText('E-WERK', x, y);
+      } else if (BEAN >= 3960 + 24 - 2) {
         this.ctx.fillStyle = 'rgb(55, 60, 63)';
         this.ctx.fillText('E-', x + 0.1, y + 0.1);
         this.ctx.fillStyle = 'rgb(255, 73, 130)';
         this.ctx.fillText('E-', x, y);
-      } else if (BEAN >= 3960 + 24) {
-        this.ctx.textAlign = 'center';
-        const x = -8 + 2 * 16 / 3;
-        const y = -0.1;
-        this.ctx.fillStyle = 'rgb(55, 60, 63)';
-        this.ctx.fillText('CKEN', x + 0.1, y + 0.1);
-        this.ctx.fillStyle = 'rgb(255, 73, 130)';
-        this.ctx.fillText('CKEN', x, y);
-      } else if (BEAN >= 3960 + 24 - 2) {
-        this.ctx.textAlign = 'center';
-        const x = -8 + 2 * 16 / 3;
-        const y = -0.1;
-        this.ctx.fillStyle = 'rgb(55, 60, 63)';
-        this.ctx.fillText('BRÜ-', x + 0.1, y + 0.1);
-        this.ctx.fillStyle = 'rgb(255, 73, 130)';
-        this.ctx.fillText('BRÜ-', x, y);
       } else if (BEAN >= 3960 + 24 - 6) {
-        this.ctx.textAlign = 'center';
-        const x = -8 + 2 * 16 / 3;
-        const y = -0.1;
         this.ctx.fillStyle = 'rgb(55, 60, 63)';
-        this.ctx.fillText('SAAR-', x + 0.1, y + 0.1);
+        this.ctx.fillText('E', x + 0.1, y + 0.1);
         this.ctx.fillStyle = 'rgb(255, 73, 130)';
-        this.ctx.fillText('SAAR-', x, y);
-      } else if (BEAN >= 3960 + 9 + 9) {
-        this.ctx.textAlign = 'center';
-        const x = -8 + 2 * 16 / 3;
-        const y = -0.1;
-        this.ctx.fillStyle = 'rgb(55, 60, 63)';
-        this.ctx.fillText('E WERK', x + 0.1, y + 0.1);
-        this.ctx.fillStyle = 'rgb(255, 73, 130)';
-        this.ctx.fillText('E WERK', x, y);
+        this.ctx.fillText('E', x, y);
       } else if (BEAN >= 3960 + 9) {
-        this.ctx.textAlign = 'center';
-        const x = -8 + 2 * 16 / 3;
-        const y = -0.1;
         this.ctx.fillStyle = 'rgb(55, 60, 63)';
-        this.ctx.fillText('2018', x + 0.1, y + 0.1);
+        this.ctx.fillText('EASTER 2018', x + 0.1, y + 0.1);
         this.ctx.fillStyle = 'rgb(255, 73, 130)';
-        this.ctx.fillText('2018', x, y);
+        this.ctx.fillText('EASTER 2018', x, y);
       } else if (BEAN >= 3960) {
-        this.ctx.textAlign = 'center';
-        const x = -8 + 2 * 16 / 3;
-        const y = -0.1;
         this.ctx.fillStyle = 'rgb(55, 60, 63)';
         this.ctx.fillText('EASTER', x + 0.1, y + 0.1);
         this.ctx.fillStyle = 'rgb(255, 73, 130)';
         this.ctx.fillText('EASTER', x, y);
       } else if (BEAN >= 3936) {
         this.ctx.textAlign = 'center';
+        this.ctx.font = 'bold 0.9pt schmalibre';
         this.ctx.fillStyle = 'rgb(55, 60, 63)';
         this.ctx.scale(3, 3);
         this.ctx.translate((Math.random() - 0.5) * 0.3,
