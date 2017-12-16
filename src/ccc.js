@@ -8,7 +8,7 @@
         }
       });
 
-      this.random = new Random(0x80); // eslint-disable-line
+      this.random = new Random(0x80deed); // eslint-disable-line
 
       this.whiteColor = 0xffffff;
       this.grayColor = 0x373c3f;
@@ -42,7 +42,7 @@
         blending: THREE.AdditiveBlending,
         depthTest: true,
         transparent: true,
-        opacity: 0.7,
+        opacity: 0.4,
         vertexColors: true
       });
 
@@ -108,10 +108,6 @@
           let ratio = 1 - ((tentacle.radius - Math.abs(positions[j])) / tentacle.radius);
           let y = Math.sin(frame * 10 / tentacle.speed + j*0.15) * 2 * ratio;
           positions[j+1] = y;
-          /*
-          let z = Math.cos(frame * 10 / tentacle.speed + j*0.15) * 2 * ratio;
-          positions[j+2] = z;
-          */
         }
 
         tentacle.geometry.attributes.position.needsUpdate = true;
@@ -140,7 +136,7 @@
       );
       gradient.addColorStop(0, 'rgba(255,255,255,1)');
       gradient.addColorStop(0.2, 'rgba(0,255,255,1)');
-      gradient.addColorStop(0.4, 'rgba(0,0,64,1)');
+      gradient.addColorStop(0.4, 'rgba(64,0,0,1)');
       gradient.addColorStop(1, 'rgba(0,0,0,1)');
 
       context.fillStyle = gradient;
