@@ -327,13 +327,15 @@
       } else if(BEAN >= 3648 + 10) {
         textColor = 'rgb(55, 60, 63)';
         textShadow = false;
+        textAlign = 'left';
         const originalText = 'JUST REVIS';
-        const t = (this.frame - FRAME_FOR_BEAN(3658)) / (
-            FRAME_FOR_BEAN(3660 + 4) - FRAME_FOR_BEAN(3658));
+        const t = (this.frame - FRAME_FOR_BEAN(3658 + 3)) / (
+            FRAME_FOR_BEAN(3660 + 4) - FRAME_FOR_BEAN(3658 + 3));
         text = 'JUST REVIS'.slice(0, easeOut(originalText.length, 0, t));
         textOffset = -1.27;
         cameraZoom = 1.5;
         cameraX = 1.8;
+        textX = -4;
         cameraRotate = 0.05;
       } else if(BEAN >= 3648 + 4) {
         textColor = 'rgb(55, 60, 63)';
