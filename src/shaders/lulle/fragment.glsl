@@ -4,6 +4,7 @@ uniform float BEAT;
 uniform sampler2D tDiffuse;
 
 #define PI 3.1415926535897932384626433832795
+
 varying vec2 vUv;
 
 const int MAX_STEPS = 64;
@@ -24,7 +25,7 @@ float displace(vec3 p, float d1) {
 }
 
 float rand(vec2 co){
-  return fract(sin(dot(co.xy, vec2(12.9898,78.233))) * 43758.5453);
+    return fract(sin(dot(co.xy, vec2(12.9898,78.233))) * 43758.5453);
 }
 
 float sphere(vec3 p, float s) {
@@ -46,34 +47,38 @@ vec2 sdf(in vec3 p) {
     float n = 0.;
     vec3 q = vec3(0.);
     vec2 s = vec2(sphere(p, 0.), 1.);
-    float m = 1824.;
-    float size = 0.5 + cos(mod(BEAN -1824., 12.) / 12. * PI) / 4.;
-    ar[0] = vec2(1., 1.);
-    ar[1] = vec2(-1., 1.);
-    ar[2] = vec2(1., -1.);
-    ar[3] = vec2(-1., -1.);
+    float startBEAN = 1824.;
+    ar[0] = vec2(0., 1.5);
+    ar[1] = vec2(1., 1.);
+    ar[2] = vec2(1.5, 0.);
+    ar[3] = vec2(1., -1.);
     ar[4] = vec2(0., -1.5);
-    ar[5] = vec2(-1.5, 0.);
-    ar[6] = vec2(0., 1.5);
-    ar[7] = vec2(1.5, 0.);
+    ar[5] = vec2(-1., -1.);
+    ar[6] = vec2(-1.5, 0.);
+    ar[7] = vec2(-1., 1.);
 
-    s = vec2(sphere(p, size * 1.5), 1.);
-    n = (BEAN-1824.)/12.;
+    float centerSize = 0.5 + cos(mod(BEAN - startBEAN, 12.) / 12. * PI) / 4.;
+    s = vec2(sphere(p, centerSize * 1.5), 1.);
+    n = (BEAN-startBEAN)/12.;
 
     for (float i = 0.; i < 32.; i++) {
         if (i > n) {break;}
         vec2 a = vec2(0.);
         if (i <= 7.) {
+            float size = 0.5 + cos(mod(-0.8 * (floor(i/8.) + 1.) + BEAN - startBEAN, 24.) / 24. * PI) / 4.;
             a = vec2(sphere(p-vec3(ar[int(i)], 0.), size), 2.);
         }
         if (i > 7. && i < 16.) {
-            a = vec2(sphere(p-vec3((ar[int(mod(i, 8.))])*1.5, 0.), size-0.1), 1.);
+            float size = 0.5 + cos(mod(-.8 * (floor(i/8.) + 1.) + BEAN - startBEAN, 24.) / 24. * PI) / 4.;
+            a = vec2(sphere(p-vec3((ar[int(mod(i, 8.))])*1.75, 0.), size-0.1), 1.);
         }
         if (i > 15. && i < 24.) {
-            a = vec2(sphere(p-vec3((ar[int(mod(i, 8.))])*1.75, 0.), size-0.2), 2.);
+            float size = 0.5 + cos(mod(-.8 * (floor(i/8.) + 1.) + BEAN - startBEAN, 24.) / 24. * PI) / 4.;
+            a = vec2(sphere(p-vec3((ar[int(mod(i, 8.))])*2.25, 0.), size-0.2), 2.);
         }
         if (i > 23. && i < 32.) {
-            a = vec2(sphere(p-vec3((ar[int(mod(i, 8.))])*2., 0.), size-0.3), 1.);
+            float size = 0.5 + cos(mod(-.8 * (floor(i/8.) + 1.) + BEAN - startBEAN, 24.) / 24. * PI) / 4.;
+            a = vec2(sphere(p-vec3((ar[int(mod(i, 8.))])*2.75, 0.), size-0.3), 1.);
         }
         s = minmin(a, s);
     }
@@ -104,27 +109,27 @@ vec3 rayDir(float fov, vec2 uv) {
 
 vec3 estimateNormal(vec3 p) {
     return normalize(vec3(
-        sdf(vec3(p.x + EPS, p.yz)).x - sdf(vec3(p.x - EPS, p.yz)).x,
-        sdf(vec3(p.x, p.y + EPS, p.z)).x - sdf(vec3(p.x, p.y - EPS, p.z)).x,
-        sdf(vec3(p.xy, p.z + EPS)).x - sdf(vec3(p.xy, p.z - EPS)).x
-    ));
+                sdf(vec3(p.x + EPS, p.yz)).x - sdf(vec3(p.x - EPS, p.yz)).x,
+                sdf(vec3(p.x, p.y + EPS, p.z)).x - sdf(vec3(p.x, p.y - EPS, p.z)).x,
+                sdf(vec3(p.xy, p.z + EPS)).x - sdf(vec3(p.xy, p.z - EPS)).x
+                ));
 }
 
 
 vec3 phongContribForLight(vec3 k_d, vec3 k_s, float alpha, vec3 p, vec3 eye,
-                          vec3 lightPos, vec3 lightIntensity) {
+        vec3 lightPos, vec3 lightIntensity) {
     vec3 N = estimateNormal(p);
     vec3 L = normalize(lightPos - p);
     vec3 V = normalize(eye - p);
     vec3 R = normalize(reflect(-L, N));
-    
+
     float dotLN = dot(L, N);
     float dotRV = dot(R, V);
-    
+
     if (dotLN < 0.0) {
         return vec3(0.0, 0.0, 0.0);
     } 
-    
+
     if (dotRV < 0.0) {
         return lightIntensity * (k_d * dotLN);
     }
@@ -134,19 +139,19 @@ vec3 phongContribForLight(vec3 k_d, vec3 k_s, float alpha, vec3 p, vec3 eye,
 vec3 phongIllumination(vec3 k_a, vec3 k_d, vec3 k_s, float alpha, vec3 p, vec3 eye) {
     const vec3 ambientLight = 0.5 * vec3(1.0, 1.0, 1.0);
     vec3 color = ambientLight * k_a;
-    
+
     vec3 light1Pos = vec3(0.0, 0.0, 10.0);
     vec3 light1Intensity = vec3(0.5, 0.5, 0.5);
-    
+
     vec3 phongContrib = phongContribForLight(k_d, k_s, alpha, p, eye, light1Pos, light1Intensity);
     color += phongContrib;
-    
+
     vec3 light2Pos = vec3(0.0, 0.0, 10.0);
     vec3 light2Intensity = vec3(0.2, 0.2, 0.2);
-    
+
     //phongContrib = phongContribForLight(k_d, k_s, alpha, p, eye, light2Pos, light2Intensity);
     //color +=  phongContrib;
-   
+
     // color *= 2.;
     // color = floor(color);
     //color /= 2.;
@@ -157,7 +162,7 @@ vec3 phongIllumination(vec3 k_a, vec3 k_d, vec3 k_s, float alpha, vec3 p, vec3 e
 void main() {
     vec3 eye = vec3(0.0, 0.0, 20.0);
     vec3 dir = rayDir(60.0, vUv);
-    
+
     vec2 res = march(eye, dir, START, END);
 
     if (res.x >= END-EPS) {
@@ -176,7 +181,7 @@ void main() {
         color = vec3(255./255., 73./255., 130./255.);
     }
     color = phongIllumination(color, color, vec3(1.0, 1.0, 1.0), 10.0, p, eye);
-    
+
     gl_FragColor = vec4(color, 1.0);
 
 }
