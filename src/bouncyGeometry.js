@@ -12,6 +12,7 @@
       */
 
       this.stabThrob = 0;
+      this.throb = 0;
 
       // MISC
       this.random = new global.Random(666);
@@ -94,13 +95,9 @@
 
       this.directionalLight = new THREE.DirectionalLight();
       this.directionalLight.position.set(1, 1, 1);
+      this.directionalLight.color = new THREE.Color(0x77e15d);
       this.directionalLight.decay = 2;
       this.scene.add(this.directionalLight);
-
-
-      this.cubeCamera = new THREE.CubeCamera(0.01, 1000, 2048);
-      this.cubeCamera.renderTarget.texture.minFilter = THREE.LinearMipMapLinearFilter;
-      this.scene.add(this.cubeCamera);
 
 
       // BALL
@@ -113,7 +110,7 @@
         metalness: 1,
         map: this.ballTexture,
         roughnessMap: Loader.loadTexture('res/metal.jpg'),
-        bumpMap: Loader.loadTexture('res/metal.jpg'),
+        //bumpMap: Loader.loadTexture('res/metal.jpg'),
         bumpScale: 0.005,
         emissive: 0xffffff,
         emissiveMap: this.ballTexture,
@@ -125,7 +122,13 @@
 
 
       // BEAMS
-      this.beamMaterial = new THREE.MeshBasicMaterial({color: 0xffffff});
+      this.beamMaterial = new THREE.MeshBasicMaterial({
+        color: 0x97f280,
+        roughness: 1,
+        metalness: 0,
+        emissive: 0xffffff,
+        emissiveIntensity: 1,
+      });
       this.beamGeometry = new THREE.BoxGeometry(.05, .05, 20);
       this.numBeams = 777;
       this.randomBeamNumbers = [];
@@ -233,6 +236,13 @@
     update(frame) {
 
       this.stabThrob *= 0.85;
+      this.throb *= 0.95;
+
+      if(BEAT && BEAN % 12 == 0) {
+        this.throb = 1;
+      }
+
+      this.beamMaterial.emissiveIntensity = this.throb;
 
       if(BEAT) {
         switch(BEAN % 24) {
@@ -256,6 +266,8 @@
         this.camera.position.y = 0;
         this.camera.position.z = 6;
         this.camera.lookAt(this.ball.position);
+        this.ps.particles.visible = true;
+        this.scene.add(this.ps.particles);
       } else if (BEAN >= 2976 && BEAN < 3024) {
         return this.updatePart1(frame);
       } else if (BEAN >= 3024 && BEAN < 3072) {
@@ -334,7 +346,7 @@
         this.ball.scale.x = scale;
         this.ball.scale.y = scale;
         this.ball.scale.z = scale;
-        this.ball.material.emissiveIntensity = 0.2 + this.stabThrob * .5;
+        this.ball.material.emissiveIntensity = 0.2 + this.stabThrob * 1;
 
       } else if (BEAN >= 3024 && BEAN < 3072) {
         this.scene.add(this.ball);
@@ -469,6 +481,7 @@
       const progress = (frame - startFrame) / (endFrame - startFrame);
 
       demo.nm.nodes.bloom.opacity = lerp(0, 0.1, progress);
+      demo.nm.nodes.bloom.opacity = 0;
 
       // CAMERA
       this.camera.position.x = lerp(0, 0.8, progress);
@@ -480,6 +493,7 @@
     // 22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
     updatePart2(frame) {
       demo.nm.nodes.bloom.opacity = 0.1;
+        demo.nm.nodes.bloom.opacity = 0;
 
       this.scene.remove(this.textPlane);
       this.ps.particles.visible = true;
@@ -526,6 +540,7 @@
     // 33333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333
     updatePart3(frame) {
       demo.nm.nodes.bloom.opacity = 0.1;
+        demo.nm.nodes.bloom.opacity = 0;
 
       this.scene.remove(this.textPlane);
       this.ps.particles.visible = true;
@@ -589,11 +604,13 @@
       this.ps.decayFactor = 0.99999;
 
       demo.nm.nodes.bloom.opacity = Math.max(0.1, demo.nm.nodes.bloom.opacity - 0.03);
+        demo.nm.nodes.bloom.opacity = 0;
       if (BEAN === 3120) {
         this.cameraShakeAngularVelocity.x = (this.random() - 0.5) * 0.05;
         this.cameraShakeAngularVelocity.y = (this.random() - 0.5) * 0.05;
         this.cameraShakeAngularVelocity.z = (this.random() - 0.5) * 0.05;
         demo.nm.nodes.bloom.opacity = 1.99;
+        demo.nm.nodes.bloom.opacity = 0;
       }
 
       this.camera.lookAt(new THREE.Vector3(0, 0, lerp(-80, -90, progress)));
@@ -651,6 +668,7 @@
     // ttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttt
     updateLastTextPart(frame) {
       demo.nm.nodes.bloom.opacity = 0.1;
+        demo.nm.nodes.bloom.opacity = 0;
       this.scene.add(this.textPlane);
       this.scene.remove(this.hexagons);
       this.ps.particles.visible = false;
@@ -726,7 +744,11 @@
     }
 
     render(renderer) {
-      renderer.setClearColor(new THREE.Color(0x373C3F));
+      if(BEAN >= 2976) {
+        renderer.setClearColor(new THREE.Color(0x77e15d));
+      } else {
+        renderer.setClearColor(new THREE.Color(0x373c3f));
+      }
       this.ps.render();
       renderer.render(this.scene, this.camera, this.renderTarget, true);
       this.outputs.render.setValue(this.renderTarget.texture);

@@ -31,7 +31,7 @@
       "_16_low_down_B_theme_1": "Ccc.render",
       "_17_low_down_B_theme_piano_snippet": "Ccc.render",
       "_18_low_down_B_theme_2": "holeTransition.render",
-      "_19_groovy_B_theme": "bouncyGeometry.render",
+      "_19_groovy_B_theme": "bouncyoverlayer.render",
       "_20_A_theme_breakdown_1": "breakdown.render",
       "_20_A_theme_breakdown_2": "breakdown.render",
       "_21_third_B_theme_1": "featuresfxaa.render",
@@ -517,5 +517,15 @@
   {
     "id": "pyramidsoverlay",
     "type": "pyramidsoverlay"
+  },
+  {
+    "id": "bouncyoverlayer",
+    "type": "bouncyoverlayerNode",
+    "options": {
+      "shader": "bouncyoverlayer"
+    },
+    "connected": {
+      "tDiffuse": "bouncyGeometry.render"
+    }
   }
 ]
