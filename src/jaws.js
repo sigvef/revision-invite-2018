@@ -109,24 +109,8 @@
       this.ctx.textBaseline = 'middle';
       this.ctx.translate(8, 4.5);
       this.ctx.scale(t2, -t2);
-      this.ctx.fillText(['NO', '', 'SC', 'RO', 'LL', 'ERS'][(BEAN - 1536) / 12 | 0], 0, -0.15);
+      this.ctx.fillText(['NO', '', 'SC', 'RO', 'LL', 'ERS', '', ''][(BEAN - 1536) / 12 | 0], 0, -0.15);
       this.ctx.restore();
-
-      this.ctx.fillStyle = 'rgb(0, 0, 255)';
-      const t = easeOut(0, 1, (this.frame - timings[30]) / 120);
-      this.ctx.beginPath();
-      this.ctx.arc(8, 4.5, 10 * t, 0, Math.PI * 2);
-      this.ctx.fill();
-
-      this.ctx.fillStyle = 'white';
-      this.ctx.font = 'bold 2.5pt schmalibre';
-      this.ctx.translate(8, 4.5);
-      this.ctx.scale(1, -1);
-      this.ctx.textAlign = 'center';
-      this.ctx.textBaseline = 'middle';
-      let tt = t * t * t;
-      const x = easeOut(10, -10, tt * 2) + easeOut(10, -10, tt * 2 - 1);
-      this.ctx.fillText('JUST', x, 2.1);
 
       this.ctx.restore();
 

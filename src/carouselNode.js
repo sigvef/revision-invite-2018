@@ -43,6 +43,7 @@
       this.uniforms.overlay.value = this.inputs.overlay.getValue();
       this.uniforms.overlay2.value = this.inputs.overlay2.getValue();
       this.uniforms.nextScene.value = this.inputs.nextScene.getValue();
+      this.uniforms.fadeOutT.value = easeOut(0, 1, (frame - FRAME_FOR_BEAN(32 * 48 + 70)) / 100);
       demo.nm.nodes.bloom.opacity = 0;
     }
   }
