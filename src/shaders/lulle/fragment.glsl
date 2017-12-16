@@ -3,6 +3,7 @@ uniform float BEAN;
 uniform float BEAT;
 uniform sampler2D tDiffuse;
 
+#define PI 3.1415926535897932384626433832795
 varying vec2 vUv;
 
 const int MAX_STEPS = 64;
@@ -45,9 +46,8 @@ vec2 sdf(in vec3 p) {
     float n = 0.;
     vec3 q = vec3(0.);
     vec2 s = vec2(sphere(p, 0.), 1.);
-    vec2 v = vec2(torus(p, vec2(0.)), 1.);
     float m = 1824.;
-    float size = (sin(mod(BEAN, 12.)/10.) + 1.)/4.;
+    float size = 0.5 + cos(mod(BEAN -1824., 12.) / 12. * PI) / 4.;
     ar[0] = vec2(1., 1.);
     ar[1] = vec2(-1., 1.);
     ar[2] = vec2(1., -1.);
@@ -57,44 +57,26 @@ vec2 sdf(in vec3 p) {
     ar[6] = vec2(0., 1.5);
     ar[7] = vec2(1.5, 0.);
 
-    if (BEAN > m) {
-         s = vec2(sphere(p, size * 1.5), 1.);
-         // s = vec2(hex(p, vec2(size, 1.)), 2.);
-    }
-    if (BEAN > m + 48.) {
-        n = 8.;
-    }
-    if (BEAN > m + 48. * 2.) {
-        n = 16.;
-    }
-    if (BEAN > m + 48. * 3.) {
-        n = 24.;
-    }
-    if (BEAN > m + 48. * 4.) {
-        n = 33.;
-    }
-    if (BEAN > m + 48. * 5.) {
-        n = 33.;
-    }
+    s = vec2(sphere(p, size * 1.5), 1.);
+    n = (BEAN-1824.)/12.;
 
     for (float i = 0.; i < 32.; i++) {
-        if (i >= n) {break;}
+        if (i > n) {break;}
         vec2 a = vec2(0.);
         if (i <= 7.) {
             a = vec2(sphere(p-vec3(ar[int(i)], 0.), size), 2.);
         }
-        if (i > 7. && i <= 15.) {
+        if (i > 7. && i < 16.) {
             a = vec2(sphere(p-vec3((ar[int(mod(i, 8.))])*1.5, 0.), size-0.1), 1.);
         }
-        if (i > 15. && i <= 23.) {
+        if (i > 15. && i < 24.) {
             a = vec2(sphere(p-vec3((ar[int(mod(i, 8.))])*1.75, 0.), size-0.2), 2.);
         }
-        if (i > 23. && i <= 31.) {
+        if (i > 23. && i < 32.) {
             a = vec2(sphere(p-vec3((ar[int(mod(i, 8.))])*2., 0.), size-0.3), 1.);
         }
         s = minmin(a, s);
     }
-    s = minmin(v, s);
     return s;
 }
 
