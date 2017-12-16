@@ -61,8 +61,8 @@
         2: new THREE.MeshBasicMaterial({ color: greenColor }),
         3: new THREE.MeshBasicMaterial({ color: pinkColor }),
       };
-      this.numHexagonsX = 22;
-      this.numHexagonsY = 21;
+      this.numHexagonsX = 16;
+      this.numHexagonsY = 16;
       const cylinderRadius = 0.2;
       const cylinderGeometry = new THREE.CylinderGeometry(cylinderRadius, cylinderRadius, cylinderRadius / 4, 6);
       const padding = 0.1;
@@ -580,8 +580,6 @@
         );
       }
 
-
-
       this.camera.lookAt(new THREE.Vector3(0, 0, -80));
 
       // HEXAGONS
@@ -722,8 +720,7 @@
 
     // ttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttt
     updateLastTextPart(frame) {
-      demo.nm.nodes.bloom.opacity = 0.1;
-        demo.nm.nodes.bloom.opacity = 0;
+      demo.nm.nodes.bloom.opacity = 0;
       this.scene.add(this.textPlane);
       this.scene.remove(this.hexagons);
       this.ps.particles.visible = false;
