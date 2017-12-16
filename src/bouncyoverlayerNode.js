@@ -30,7 +30,11 @@
 
     update(frame) {
       this.uniforms.frame.value = frame;
-      const t = Math.pow(T(62 * 48, 62 * 48 + 12, frame), 1.5);
+      let t = Math.pow(T(62 * 48, 62 * 48 + 12, frame), 1.5);
+
+      if (BEAN >= 3108) {
+        t = 1 - T(3108, 3108 + 12, frame);
+      }
       this.uniforms.translationOverX.value = easeIn(0.5, 0, t);
       this.uniforms.translationUnderX.value = easeIn(0, -0.15, t);
 
