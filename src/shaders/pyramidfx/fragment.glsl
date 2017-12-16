@@ -1,4 +1,5 @@
 uniform float frame;
+uniform float barSize;
 uniform sampler2D tDiffuse;
 
 varying vec2 vUv;
@@ -9,7 +10,14 @@ float rand(vec2 co){
 
 void main() {
     vec2 uv = vUv;
+
+
     vec3 original = texture2D(tDiffuse, uv).rgb;
+
+    if(uv.y < barSize || uv.y > 1. - barSize) {
+        //= vec4(vec3(55., 60., 63.) / 255. / 6., 1.);
+        original = vec3(55., 60., 63.) / 255. / 16.;
+    }
 
     vec2 fakeResolution = vec2(16., 9.) * 30.;
     vec2 pixelated = floor(uv * fakeResolution) / fakeResolution;
