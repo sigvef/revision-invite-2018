@@ -1,4 +1,5 @@
 uniform float t;
+uniform float fadeOutT;
 uniform float frame;
 uniform float width;
 uniform sampler2D overlay;
@@ -65,8 +66,10 @@ void main() {
     vec4 overlay2Color = texture2D(overlay2, vec2(vUv.x, 1. - vUv.y));
     vec4 layer2Color = mix(color, overlayColor, overlayColor.a);
     gl_FragColor = mix(layer2Color, overlay2Color, overlay2Color.a);
+    gl_FragColor = mix(gl_FragColor, vec4(0.), fadeOutT);
 
-    if (overlay2Color.rgb == vec3(0., 0., 1.)) {
+    vec4 nextSceneColor = texture2D(nextScene, vUv);
+    if (nextSceneColor.r > 0.09) {
         gl_FragColor = texture2D(nextScene, vUv);
     }
 }

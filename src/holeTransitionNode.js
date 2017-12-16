@@ -1,18 +1,11 @@
-(function (global) {
-  class clockTransitionNode extends NIN.ShaderNode {
+(function(global) {
+  class holeTransitionNode extends NIN.ShaderNode {
     constructor(id, options) {
       options.inputs = {
         A: new NIN.TextureInput(),
         B: new NIN.TextureInput()
       };
       super(id, options);
-    }
-
-    beforeUpdate(frame) {
-      const startClock = 3662;
-      const endExpand = 3756;
-      this.inputs.A.enabled = frame < endExpand;
-      this.inputs.B.enabled = frame > startClock;
     }
 
     update(frame) {
@@ -22,5 +15,5 @@
     }
   }
 
-  global.clockTransitionNode = clockTransitionNode;
+  global.holeTransitionNode = holeTransitionNode;
 })(this);

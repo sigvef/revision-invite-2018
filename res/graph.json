@@ -10,18 +10,18 @@
     "id": "sceneSwitcherNode",
     "type": "SceneSwitcherNode",
     "connected": {
-      "_00_silence": "ewerk.render",
-      "_01_pre_intro_with_car_rev_sounds": "ewerk.render",
-      "_02_intro_1": "OrthoCube.render",
+      "_00_silence": "ewerkfxaa.render",
+      "_01_pre_intro_with_car_rev_sounds": "ewerkfxaa.render",
+      "_02_intro_1": "OrthoCubeFxaa.render",
       "_03_intro_2": "schmapple.render",
       "_04_car_rev_interstitial": "schmapple.render",
       "_05_first_A_theme_1": "textout.render",
-      "_05_first_A_theme_1_2": "cubes.render",
-      "_06_first_A_theme_2": "GridShader.render",
-      "_06_first_A_theme_2_2": "textout.render",
+      "_05_first_A_theme_1_2": "justTransition.render",
+      "_06_first_A_theme_2": "justTransition.render",
+      "_06_first_A_theme_2_2": "AtariRacer.render",
       "_07_first_B_theme_1": "clockTransition.render",
       "_08_first_B_theme_2": "clockTransition.render",
-      "_09_second_A_theme_1": "clockTransition.render",
+      "_09_second_A_theme_1": "carousel.render",
       "_10_second_A_theme_2": "hexafont.render",
       "_11_illuminati_confirmed": "logotransitionquadpass.render",
       "_12_first_C_theme_1": "lulle.render",
@@ -30,17 +30,17 @@
       "_15_second_C_theme_2": "pyramidfx.render",
       "_16_low_down_B_theme_1": "Ccc.render",
       "_17_low_down_B_theme_piano_snippet": "Ccc.render",
-      "_18_low_down_B_theme_2": "Ccc.render",
+      "_18_low_down_B_theme_2": "holeTransition.render",
       "_19_groovy_B_theme": "bouncyGeometry.render",
       "_20_A_theme_breakdown_1": "breakdown.render",
       "_20_A_theme_breakdown_2": "breakdown.render",
-      "_21_third_B_theme_1": "featureblend.render",
-      "_22_third_B_theme_2": "featureblend.render",
-      "_22_third_B_theme_3": "rotataroon.render",
-      "_22_third_B_theme_4": "rotataroon.render",
-      "_22_third_B_theme_5": "rotataroon.render",
-      "_23_final_A_theme_rolldown": "tree.render",
-      "_24_outro": "ewerk.render",
+      "_21_third_B_theme_1": "featuresfxaa.render",
+      "_22_third_B_theme_2": "featuresfxaa.render",
+      "_22_third_B_theme_3": "rotablend.render",
+      "_22_third_B_theme_4": "rotablend.render",
+      "_22_third_B_theme_5": "rotablend.render",
+      "_23_final_A_theme_rolldown": "treefxaa.render",
+      "_24_outro": "ewerkfxaa.render",
       "_25_outro_2": "fadeout.render"
     }
   },
@@ -131,24 +131,17 @@
     }
   },
   {
-    "id": "GridNode",
-    "type": "gridNode"
+    "id": "AtariRacer",
+    "type": "AtariRacer",
+    "options": {
+      "shader": "ataribackground"
+    }
   },
   {
     "id": "lulle",
     "type": "lulleNode",
     "options": {
       "shader": "lulle"
-    }
-  },
-  {
-    "id": "GridShader",
-    "type": "GridShaderNode",
-    "options": {
-      "shader": "GridShader"
-    },
-    "connected": {
-      "image": "GridNode.render"
     }
   },
   {
@@ -323,7 +316,7 @@
     },
     "connected": {
       "A": "text.render",
-      "B": "GridShader.render"
+      "B": "AtariRacer.render"
     }
   },
   {
@@ -332,7 +325,10 @@
   },
   {
     "id": "cubes",
-    "type": "cubes"
+    "type": "cubes",
+    "options": {
+      "shader": "discowall"
+    }
   },
   {
     "id": "breakdown",
@@ -356,7 +352,7 @@
       "shader": "fadeout"
     },
     "connected": {
-      "A": "ewerk.render"
+      "A": "ewerkfxaa.render"
     }
   },
   {
@@ -366,7 +362,7 @@
       "shader": "pyramidfx"
     },
     "connected": {
-      "tDiffuse": "pyramids.render"
+      "tDiffuse": "pyramidsblend.render"
     }
   },
   {
@@ -378,6 +374,17 @@
     "connected": {
       "A": "Metatron.render",
       "B": "carousel.render"
+    }
+  },
+  {
+    "id": "holeTransition",
+    "type": "holeTransitionNode",
+    "options": {
+      "shader": "holeTransition"
+    },
+    "connected": {
+      "A": "Ccc.render",
+      "B": "bouncyGeometry.render"
     }
   },
   {
@@ -432,7 +439,83 @@
     }
   },
   {
+    "id": "rotablend",
+    "type": "AlphaBlendNode",
+    "options": {
+      "shader": "AlphaBlend"
+    },
+    "connected": {
+      "under": "rotataroon.render",
+      "over": "textigrades.render"
+    }
+  },
+  {
     "id": "Ccc",
     "type": "ccc"
+  },
+  {
+    "id": "textigrades",
+    "type": "textigrades"
+  },
+  {
+    "id": "pyramidfxaa",
+    "type": "FXAANode",
+    "connected": {
+      "tDiffuse": "pyramids.render"
+    }
+  },
+  {
+    "id": "OrthoCubeFxaa",
+    "type": "FXAANode",
+    "connected": {
+      "tDiffuse": "OrthoCube.render"
+    }
+  },
+  {
+    "id": "featuresfxaa",
+    "type": "FXAANode",
+    "connected": {
+      "tDiffuse": "featureblend.render"
+    }
+  },
+  {
+    "id": "treefxaa",
+    "type": "FXAANode",
+    "connected": {
+      "tDiffuse": "tree.render"
+    }
+  },
+  {
+    "id": "ewerkfxaa",
+    "type": "FXAANode",
+    "connected": {
+      "tDiffuse": "ewerk.render"
+    }
+  },
+  {
+    "id": "justTransition",
+    "type": "justTransitionNode",
+    "options": {
+      "shader": "justTransition"
+    },
+    "connected": {
+      "A": "cubes.render",
+      "B": "AtariRacer.render"
+    }
+  },
+  {
+    "id": "pyramidsblend",
+    "type": "AlphaBlendNode",
+    "options": {
+      "shader": "AlphaBlend"
+    },
+    "connected": {
+      "under": "pyramidfxaa.render",
+      "over": "pyramidsoverlay.render"
+    }
+  },
+  {
+    "id": "pyramidsoverlay",
+    "type": "pyramidsoverlay"
   }
 ]

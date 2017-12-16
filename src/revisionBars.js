@@ -74,7 +74,7 @@
           letter: 'O',
           x: 6,
           height: 4.5,
-          beanOffset: 64,
+          beanOffset: 62,
         },
         {
           letter: 'N',
@@ -255,7 +255,7 @@
 
       let i = 0;
       for (const letter of this.textScript.slice().reverse()) {
-        const t = (frame - FRAME_FOR_BEAN(30 * 12 * 4 + letter.beanOffset)) / 40;
+        const t = (frame - FRAME_FOR_BEAN(30 * 12 * 4 + letter.beanOffset) + 5) / 10;
         i++;
 
         this.ctx.save();

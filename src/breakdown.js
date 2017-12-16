@@ -127,23 +127,23 @@
 
       if(BEAN >= 3360 + 9) {
         this.ctx.fillText(
-            'THEME',
+            'AMIGA',
             - 8 / 3 + 0.25,
             fontYOffset + easeIn(0, 10, t));
       }
 
       this.ctx.fillText(
-          'BOOZE',
+          'C64',
           - 8 / 3 + 0.25,
           fontYOffset + easeIn(-10, 0, t) + easeIn(0, 10, t2));
 
       this.ctx.fillText(
-          'FOOD',
+          'ATARI',
           - 8 / 3 + 0.25,
           fontYOffset + easeIn(-10, 0, t2) + easeIn(0, 10, t3));
 
       this.ctx.fillText(
-          'FUN',
+          'PC',
           - 8 / 3 + 0.25,
           fontYOffset + easeIn(-10, 0, t3));
 
@@ -478,8 +478,8 @@
       this.ctx.save();
       this.ctx.scale(GU, GU);
 
-      const t = (this.frame - FRAME_FOR_BEAN(3660 + 6)) / (
-          FRAME_FOR_BEAN(3672) - FRAME_FOR_BEAN(3660 + 6));
+      const t = (this.frame - FRAME_FOR_BEAN(3660 + 9)) / (
+          FRAME_FOR_BEAN(3672) - FRAME_FOR_BEAN(3660 + 9));
 
       this.ctx.save();
       this.ctx.translate(

@@ -97,7 +97,9 @@
         selectedScene = this.inputs._06_first_A_theme_2_2;
       } else if (BEAN < 48 * 26) {
         selectedScene = this.inputs._07_first_B_theme_1;
-      } else if (BEAN < 48 * 30) {
+      } else if (BEAN < 48 * 30 + 1) {
+        // We add one bean here to handle the transition to the next scene
+        // properly as it ends slightly into the next one.
         selectedScene = this.inputs._08_first_B_theme_2;
       } else if (BEAN < 48 * 34) {
         selectedScene = this.inputs._09_second_A_theme_1;
@@ -133,7 +135,7 @@
         selectedScene = this.inputs._22_third_B_theme_3;
       } else if (BEAN < 48 * 81.5) {
         selectedScene = this.inputs._22_third_B_theme_4;
-      } else if (BEAN < 48 * 84.5) {
+      } else if (BEAN < 48 * 84.5 - 6) {
         selectedScene = this.inputs._22_third_B_theme_5;
       } else if (BEAN < 48 * 88.5 - 1) {
         selectedScene = this.inputs._23_final_A_theme_rolldown;

@@ -1,11 +1,14 @@
 precision mediump float; // or lowp
+#define M_PI 3.1415926535897932384626433832795
 
 uniform float frame;
 uniform float BEAN;
-uniform float BEAT;
 uniform float kickThrob;
-uniform sampler2D tDiffuse;
-
+uniform float rotX;
+uniform float rotY;
+uniform float rotZ;
+uniform float cubeSize;
+uniform sampler2D tDiffuse; 
 varying vec2 vUv;
 
 const int MAX_MARCHING_STEPS = 128;
@@ -87,40 +90,16 @@ mat4 rotateZ(float theta) {
 
 vec2 sdf(vec3 p) {
     vec3 cubeP = p;
-    float cubeSize = 1.0;
-    float nframe = frame - 425.0; //quickfix to movement in time-slice
-    if(nframe < 60.0){ //60
-        //Stand still
-    }
-    else if(nframe < 201.0){ //201
-        cubeP = (rotateZ((nframe - 60.0)/45.0) * vec4(p, 1.0)).xyz;
-    }
-    else if(nframe < 248.0){ //248
-        //Stand still
-    }
-    else if(nframe < 283.0){ //283
-        cubeP = (rotateX((nframe - 248.0)/45.0) * vec4(p, 1.0)).xyz;
-    }
-    else if(nframe < 307.0){ //307
-        cubeP = (rotateX(35.7/45.0) * vec4(p, 1.0)).xyz;
-    }
-    else if(nframe < 344.0){ //344
-        cubeP = (rotateX((nframe - 307.0 + 35.0)/45.0) * vec4(p, 1.0)).xyz;
-    }else if(BEAN < 420.0) {
-        cubeP = (rotateX((nframe - 344.0)/45.0) * vec4(p, 1.0)).xyz;
-        cubeP = (rotateY((nframe - 344.0)/45.0) * vec4(cubeP, 1.0)).xyz;
-        cubeSize = 1.0 + 0.5 * sin((16.0 + nframe) * 3.1415 / 30.0);
-    }else{
-        cubeP = (rotateX((nframe - 344.0)/45.0) * vec4(p, 1.0)).xyz;
-        cubeP = (rotateY((nframe - 344.0)/45.0) * vec4(cubeP, 1.0)).xyz;
-        cubeSize = 1.0 + 1.5 * sin((16.0 + nframe) * 3.1415 / 30.0);
-        float shrink = mix(1.0, 0.1, pow(max(0.0,(BEAN-426.0))/5.0, 1.0/3.0));
-        cubeSize *= shrink;
-    }
 
+    cubeP = (rotateX(rotX) * vec4(p, 1.0)).xyz;
+    cubeP = (rotateY(rotY) * vec4(cubeP, 1.0)).xyz;
+    cubeP = (rotateZ(rotZ) * vec4(cubeP, 1.0)).xyz;
 
-    float sphereSize = 0.3;
-   // cubeSize += kickThrob * 0.8;
+    float sphereSize = 0.6;
+
+    if(BEAN >= 240.0){
+        sphereSize += 0.15 * kickThrob;
+    }
     vec2 distoid = sphereCube(cubeP, sphereSize, cubeSize);
     return distoid;
 }
@@ -145,6 +124,14 @@ vec3 march(vec3 eye, vec3 dir, float start, float end) {
         }
     }
     return vec3(end, 0.0, MAX_MARCHING_STEPS);
+}
+
+vec3 estimateNormal(vec3 p) {
+    return normalize(vec3(
+        sdf(vec3(p.x + EPSILON, p.yz)).x - sdf(vec3(p.x - EPSILON, p.yz)).x,
+        sdf(vec3(p.x, p.y + EPSILON, p.z)).x - sdf(vec3(p.x, p.y - EPSILON, p.z)).x,
+        sdf(vec3(p.xy, p.z + EPSILON)).x - sdf(vec3(p.xy, p.z - EPSILON)).x
+    ));
 }
 
 void main() {
@@ -175,34 +162,23 @@ void main() {
         float oID = distOid.y;
 
         vec3 p = eye + dir * dist;
-        color = mod(oID, 2.0) == 0.0 ? white : color2;
-        //color += 0.3 * kickThrob;
-        //float gray = + 0.1 + 0.5 * kickThrob;
-    }
-    
-    /*  MSAA experiments. Disregard for now
-    if(distOid.z > 49.0){ //MSAA time
-        for(float x = -1.0; x <= 1.0; x+=2.0){
-            for(float y = -1.0; y <= 1.0; y+=2.0){
-                distOid = march(eye+vec3(x*0.05, y*0.05,0.0), dir, START, END);
-                dist = distOid.x;
-                if (dist >= END-EPSILON) {
-                    color += vec3(55.0/255.0, 60.0/255.0, 63.0/255.0);
-                }else{
-                    float oID = distOid.y;
-                    vec3 p = eye + dir * dist;
-                    float gray = 1.0 * mod(oID, 2.0) + 0.1 + 0.5 * kickThrob;
-                    color += vec3(gray, gray, gray);
-                }
-            }
-        }
+        vec3 normal = estimateNormal(p);
+        float fresnell = abs(dot(dir,normal));
 
-        color /= 5.0;
-        color += vec3(0.5,0.0,0.0);
+        if(fresnell < 0.5){ //border!
+            color = dark; 
+        }else{
+            float beat = (BEAN - 240.0)/12.0;
+            color = mod(oID, 2.0) == 0.0 ? white : color2;
+
+            //Morph to white at the end
+            color += vec3(1.0, 1.0, 1.0) * pow(max(0.0 , (beat-15.0) * 2.0), 2.0);
+        }
+        if(BEAN >= 240.0 && fresnell >= 0.5){
+            //color += 0.3 * kickThrob;
+        }
     }
-    */
 
     gl_FragColor = vec4(color, 1.0);
-
 }
 

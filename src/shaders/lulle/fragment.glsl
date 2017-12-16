@@ -22,25 +22,67 @@ float displace(vec3 p, float d1) {
     return d1+d2;
 }
 
+float rand(vec2 co){
+  return fract(sin(dot(co.xy ,vec2(12.9898,78.233))) * 43758.5453);
+}
+
 float sphere(vec3 p, float s) {
     return length(p)-s;
 }
+
 vec2 sdf(in vec3 p) {
-    vec2 a = vec2(sphere(p-vec3(cos(frame/15.)*2., sin(frame/15.)*2., 1.5), 0.6), 1.);
-    vec2 b = vec2(sphere(p-vec3(cos(frame/40.), sin(frame/15.), 2.), 0.4), 1.);
+    vec2 ar[8];
+    float n = 0.;
+    vec3 q = vec3(0.);
+    vec2 s = vec2(sphere(p, 0.), 1.);
+    float m = 1867.;
+    float size = (sin(mod(BEAN, 12.)/10.) + 1.)/4.;
+    ar[0] = vec2(1., 1.);
+    ar[1] = vec2(-1., 1.);
+    ar[2] = vec2(1., -1.);
+    ar[3] = vec2(-1., -1.);
+    ar[4] = vec2(0., -1.5);
+    ar[5] = vec2(-1.5, 0.);
+    ar[6] = vec2(0., 1.5);
+    ar[7] = vec2(1.5, 0.);
 
-    vec2 c = vec2(sphere(p-vec3(sin(frame/40.), cos(frame/10.), 0.5), 0.3), 2.);
-    vec2 d = vec2(sphere(p-vec3(sin(frame/20.)*2.5, cos(frame/60.)*2.5, 0.), 0.8), 2.);
+    if (BEAN > m) {
+        s = vec2(sphere(p, size * 1.5), 1.);
+    }
+    if (BEAN > m + 48.) {
+        n = 4.;
+    }
+    if (BEAN > m + 48. * 2.) {
+        n = 8.;
+    }
+    if (BEAN > m + 48. * 3.) {
+        n = 16.;
+    }
+    if (BEAN > m + 48. * 4.) {
+        n = 24.;
+    }
+    if (BEAN > m + 48. * 5.) {
+        n = 33.;
+    }
 
-    vec2 e = vec2(sphere(p-vec3(sin(frame/30.), tan(frame/30.), 0.2), 0.7), 3.);
-    vec2 f = vec2(sphere(p-vec3(tan(frame/20.), sin(frame/10.), 1.7), 0.2), 3.);
-
-    vec2 aa = minmin(a, b);
-    vec2 bb = minmin(c, d);
-    vec2 cc = minmin(e, f);
-    vec2 dd = minmin(aa, bb);
-
-    return minmin(cc, dd);
+    for (float i = 0.; i < 32.; i++) {
+        if (i >= n) {break;}
+        vec2 a = vec2(0.);
+        if (i <= 7.) {
+            a = vec2(sphere(p-vec3(ar[int(i)], 0.), size), 2.);
+        }
+        if (i > 7. && i <= 15.) {
+            a = vec2(sphere(p-vec3((ar[int(mod(i, 8.))])*1.5, 0.), size-0.1), 1.);
+        }
+        if (i > 15. && i <= 23.) {
+            a = vec2(sphere(p-vec3((ar[int(mod(i, 8.))])*1.75, 0.), size-0.2), 2.);
+        }
+        if (i > 23. && i <= 31.) {
+            a = vec2(sphere(p-vec3((ar[int(mod(i, 8.))])*2., 0.), size-0.3), 1.);
+        }
+        s = minmin(a, s);
+    }
+    return s;
 }
 
 vec2 march(vec3 eye, vec3 dir, float s, float e) {
@@ -110,15 +152,15 @@ vec3 phongIllumination(vec3 k_a, vec3 k_d, vec3 k_s, float alpha, vec3 p, vec3 e
     phongContrib = phongContribForLight(k_d, k_s, alpha, p, eye, light2Pos, light2Intensity);
     color +=  phongContrib;
    
-    color *= 2.;
-    color = floor(color);
-    color /= 2.;
+    // color *= 2.;
+    // color = floor(color);
+    // color /= 2.;
     return color;
 }
 
 
 void main() {
-    vec3 eye = vec3(0.0, 0.0, 10.0);
+    vec3 eye = vec3(0.0, 0.0, 20.0);
     vec3 dir = rayDir(60.0, vUv);
     
     vec2 res = march(eye, dir, START, END);
