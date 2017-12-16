@@ -49,20 +49,15 @@
       this.textCtx.fillRect(0, 0, 16, rectPositionY);
       this.textCtx.fillStyle = '#0000ff';
       this.textCtx.fillRect(0, 2.0 + rectPositionY, 16, 9);
-      this.textCtx.fillStyle = '#77e15d';
       this.textCtx.fillStyle = 'rgb(55, 60, 63)';
       this.textCtx.fillRect(0, rectPositionY, 16, 2);
       this.textCtx.fillStyle = 'white';
-      this.textCtx.fillText('JUST', 8, 0.94 + rectPositionY);//    easeOut(-0.6, 10.165, t));
+      this.textCtx.fillText('JUST', 8, 0.94 + rectPositionY);
       this.textCtx.restore();
       this.textTexture.needsUpdate = true;
       this.uniforms.A.value = this.inputs.A.getValue();
       this.uniforms.B.value = this.inputs.B.getValue();
       this.uniforms.text.value = this.textTexture;
-
-      if (frame > atariSceneStart) {
-        demo.nm.nodes.bloom.opacity = lerp(0.0, 0., (frame - atariSceneStart) / (animationFinished - atariSceneStart));
-      }
     }
   }
 

@@ -44,9 +44,9 @@
       this.scene.add(floodLight);
 
       this.levelBG = new THREE.Mesh(
-        new THREE.BoxGeometry(15, 36, 0.01),
+        new THREE.BoxGeometry(15, 72, 0.01),
         new THREE.MeshBasicMaterial({
-          color: 0, 
+          color: 0,
           opacity: 0.3,
           transparent: true,
         }));
@@ -77,27 +77,29 @@
       });
       //this.scene.add(this.ps.particles);
 
-      //this.camera = new THREE.OrthographicCamera(-32, 32, 18, -18, 1, 1000);
-      this.camera.position.z = 100;
       this.baseQuaternion = this.camera.quaternion.clone();
 
       this.racingGridFrame = new THREE.Object3D();
       const [gridWidth, gridHeight] = [15, 36];
-      for (let y = 0; y < gridHeight; y++) {
+      const actualGridHeight = gridHeight + 20;
+      for (let y = 0; y < actualGridHeight; y++) {
         const meshLeft = new THREE.Mesh(box, greenMaterial);
         meshLeft.position.x = 0;
         meshLeft.position.y = y * (1 + padding);
+        meshLeft.scale.set(0.8, 0.8, 0.8);
         this.racingGridFrame.add(meshLeft);
 
         const meshRight = new THREE.Mesh(box, greenMaterial);
         meshRight.position.x = gridWidth - 1;
         meshRight.position.y = y * (1 + padding);
+        meshRight.scale.set(0.8, 0.8, 0.8);
         this.racingGridFrame.add(meshRight);
       }
 
       const racingGridHeight = (gridHeight - 1) * (1 + padding);
+      const actualRacinigGridHeightAsStuffDependsOnTheOldVariableNotChanging = (actualGridHeight - 1) * (1 + padding);
       this.racingGridFrame.position.x = -((gridWidth - 1) * (1 + padding)) / 2;
-      this.racingGridFrame.position.y = -racingGridHeight / 2;
+      this.racingGridFrame.position.y = -actualRacinigGridHeightAsStuffDependsOnTheOldVariableNotChanging / 2;
 
       this.playerRacingCar = this.createRacer(1, pinkMaterial);
 
@@ -127,34 +129,34 @@
       ].map(bean => FRAME_FOR_BEAN(bean + baseBean));
 
       const rawCarPositions = [
-        [2, -9, 864],
-        [0, -9, 864 + 9],
-        [2, -9, 864 + 24],
-        [0, -9, 864 + 24 + 9],
-        [1, -9, 864 + 24 + 9 + 9],
-        [2, -9, 864 + 48 + 3],
-        [1, -9, 864 + 48 + 12],
-        [2, -9, 864 + 48 + 12 + 6],
-        [1, -9, 864 + 48 + 24],
-        [0, -9, 864 + 48 + 24 + 6],
-        [1, -9, 864 + 48 + 32 - 2],
-        [1, -9, 1864],
-        [1, -9, 1864],
-        [1, -9, 1864],
-        [1, -9, 1864],
-        [1, -9, 1864],
-        [0, 20, 1864],
+        [0, -9],
+        [2, -9],
+        [1, -9],
+        [2, -9],
+        [1, -9],
+        [2, -9],
+        [0, -9],
+        [1, -9],
+        [0, -9],
+        [1, -9],
+        [2, -9],
+        [0, -9],
+        [2, -9],
+        [0, -9],
+        [1, -9],
+        [1, 20],
       ];
 
+      const beanWhenTheCarsTouch = 876;
       this.carPositions = [];
-      for (let [x, y, bean] of rawCarPositions) {
+      for (let [index, [x, y]] of rawCarPositions.entries()) {
         this.carPositions.push({
-          frame: FRAME_FOR_BEAN(bean),
+          frame: FRAME_FOR_BEAN(beanWhenTheCarsTouch + 12 * index - 1),
           x: x * 4 - 4,
           y,
         });
         this.carPositions.push({
-          frame: FRAME_FOR_BEAN(bean + 3),
+          frame: FRAME_FOR_BEAN(beanWhenTheCarsTouch + 12 * index + 2),
           x: x * 4 - 4,
           y,
         });
@@ -190,9 +192,12 @@
       this.incomingCars = new THREE.Object3D();
       const offsetBetweenEachIncomingCar = 4 * 5;
       for (let [posX, posY] of allIncoming) {
-        const incoming = this.createRacer(1, greenMaterial);
+        const incoming = this.createRacer(1.0, greenMaterial);
         incoming.position.y = posY * offsetBetweenEachIncomingCar;
         incoming.position.x = posX * 4 - 4;
+        for (let cube of incoming.children) {
+          cube.scale.set(0.8, 0.8, 0.8);
+        }
         this.incomingCars.add(incoming);
       }
       const incomingCarsHeight = allIncoming.length * offsetBetweenEachIncomingCar;
@@ -298,7 +303,7 @@
       this.scene.add(this.largeLettersWrapperObject);
 
       this.bg = new THREE.Mesh(
-        new THREE.BoxGeometry(64 * 1.5, 36 * 1.5, 1),
+        new THREE.BoxGeometry(64, 36 + 10, 1),
         new THREE.ShaderMaterial(SHADERS.ataribackground));
       this.bg.position.z = -100;
       this.scene.add(this.bg);
@@ -340,7 +345,7 @@
 
       if (idx === -1) {
         const lastPosition = positions[positions.length - 1];
-        if (lastPosition.frame < frame) {
+        if (lastPosition.frame <= frame) {
           return lastPosition;
         } else {
           return positions[0];
@@ -351,7 +356,7 @@
       const prev = positions[Math.max(0, idx - 1)];
 
       let mixer = (frame - prev.frame) / 60 / 60 * 115 / 4 * 48 / 9;
-      if(incomingRacecarMode) {
+      if (incomingRacecarMode) {
         mixer = (frame - prev.frame) / (current.frame - prev.frame);
       }
       const x = easingFn(prev.x, current.x, mixer);
@@ -384,58 +389,77 @@
       pinkMaterial.emissiveIntensity = Math.max(0.5, pinkMaterial.emissiveIntensity);
 
       const baseBean = 864;
-      if(BEAT) {
-        switch(BEAN) {
-        case baseBean:
-        case baseBean + 24:
-        case baseBean + 24 + 9 + 9:
-          this.carRotationThrob = 2;
-          break;
-        case baseBean + 9:
-        case baseBean + 24 + 9:
-        case baseBean + 48 + 12:
-        case baseBean + 48 + 24 + 10:
-          this.carRotationThrob = -2;
-          break;
-        case baseBean + 48 + 12 + 6:
-        case baseBean + 48 + 24 + 6:
-          this.carRotationThrob = 1;
-          break;
-        case baseBean + 48 + 24:
-          this.carRotationThrob = -1;
-          break;
-
-
+      if (BEAT) {
+        switch (BEAN) {
+          case baseBean:
+          case baseBean + 24:
+          case baseBean + 24 + 9 + 9:
+            this.carRotationThrob = 2;
+            break;
+          case baseBean + 9:
+          case baseBean + 24 + 9:
+          case baseBean + 48 + 12:
+          case baseBean + 48 + 24 + 10:
+            this.carRotationThrob = -2;
+            break;
+          case baseBean + 48 + 12 + 6:
+          case baseBean + 48 + 24 + 6:
+            this.carRotationThrob = 1;
+            break;
+          case baseBean + 48 + 24:
+            this.carRotationThrob = -1;
+            break;
+          case baseBean + 82:
+          case baseBean + 97:
+          case baseBean + 101:
+          case baseBean + 107:
+          case baseBean + 114:
+          case baseBean + 121:
+            this.carRotationThrob = 2;
+            break;
+          case baseBean + 126:
+          case baseBean + 131:
+          case baseBean + 137:
+          case baseBean + 139:
+          case baseBean + 145:
+            this.carRotationThrob = -1;
+            break;
+          case baseBean + 156:
+            this.carRotationThrob = -2;
+            break;
+          case baseBean + 166:
+            this.carRotationThrob = 11;
+            break;
         }
-        switch(BEAN) {
-        case baseBean:
-        case baseBean + 9:
-        case baseBean + 24:
-        case baseBean + 24 + 9:
-        case baseBean + 24 + 9 + 9:
-          greenMaterial.emissiveIntensity = 1;
-          pinkMaterial.emissiveIntensity = 1;
-          this.cameraShakeThrob = 1;
-          this.cameraShakeVelocity.x = (this.camera.position.x -
-            this.cameraPreviousPosition.x) * 0.5;
-          this.cameraShakeVelocity.y = (this.camera.position.y -
-            this.cameraPreviousPosition.y) * 0.5;
-          this.cameraShakeVelocity.z = (this.camera.position.z -
-            this.cameraPreviousPosition.z) * 0.5;
-          this.cameraShakeAngularVelocity.x = (Math.random() - 0.5) * 0.02;
-          this.cameraShakeAngularVelocity.y = (Math.random() - 0.5) * 0.02;
-          this.cameraShakeAngularVelocity.z = (Math.random() - 0.5) * 0.02;
+        switch (BEAN) {
+          case baseBean:
+          case baseBean + 9:
+          case baseBean + 24:
+          case baseBean + 24 + 9:
+          case baseBean + 24 + 9 + 9:
+            greenMaterial.emissiveIntensity = 1;
+            pinkMaterial.emissiveIntensity = 1;
+            this.cameraShakeThrob = 1;
+            this.cameraShakeVelocity.x = (this.camera.position.x -
+              this.cameraPreviousPosition.x) * 0.5;
+            this.cameraShakeVelocity.y = (this.camera.position.y -
+              this.cameraPreviousPosition.y) * 0.5;
+            this.cameraShakeVelocity.z = (this.camera.position.z -
+              this.cameraPreviousPosition.z) * 0.5;
+            this.cameraShakeAngularVelocity.x = (Math.random() - 0.5) * 0.02;
+            this.cameraShakeAngularVelocity.y = (Math.random() - 0.5) * 0.02;
+            this.cameraShakeAngularVelocity.z = (Math.random() - 0.5) * 0.02;
         }
       }
 
       const cameraPosition = new THREE.Vector3(0, 0, 110);
       const cameraQuaternion = this.baseQuaternion;
-      this.cameraShakeVelocity.x += 2 * (Math.random() -0.5) * this.cameraShakeThrob;
-      this.cameraShakeVelocity.y += 2 * (Math.random() -0.5) * this.cameraShakeThrob;
-      this.cameraShakeVelocity.z += 2 * (Math.random() -0.5) * this.cameraShakeThrob;
-      cameraPosition.x += 20 * (Math.random() -0.5) * this.cameraShakeThrob * this.cameraShakeThrob;
-      cameraPosition.y += 20 * (Math.random() -0.5) * this.cameraShakeThrob * this.cameraShakeThrob;
-      cameraPosition.z += 20 * (Math.random() -0.5) * this.cameraShakeThrob * this.cameraShakeThrob;
+      this.cameraShakeVelocity.x += 2 * (Math.random() - 0.5) * this.cameraShakeThrob;
+      this.cameraShakeVelocity.y += 2 * (Math.random() - 0.5) * this.cameraShakeThrob;
+      this.cameraShakeVelocity.z += 2 * (Math.random() - 0.5) * this.cameraShakeThrob;
+      cameraPosition.x += 20 * (Math.random() - 0.5) * this.cameraShakeThrob * this.cameraShakeThrob;
+      cameraPosition.y += 20 * (Math.random() - 0.5) * this.cameraShakeThrob * this.cameraShakeThrob;
+      cameraPosition.z += 20 * (Math.random() - 0.5) * this.cameraShakeThrob * this.cameraShakeThrob;
 
       this.cameraShakeAcceleration.x = -this.cameraShakePosition.x * 0.05;
       this.cameraShakeAcceleration.y = -this.cameraShakePosition.y * 0.05;
@@ -466,18 +490,10 @@
 
       this.camera.rotation.z = lerp(0, Math.PI / 2.0, morphRacingWrapperMixer);
       this.camera.position.x = lerp(0, -21, morphRacingWrapperMixer);
-      this.camera.left = lerp(-32, -16, morphRacingWrapperMixer);
-      this.camera.right = lerp(32, 16, morphRacingWrapperMixer);
-      this.camera.top = lerp(18, 9, morphRacingWrapperMixer);
-      this.camera.bottom = lerp(-18, -9, morphRacingWrapperMixer);
-      this.camera.updateProjectionMatrix();
+      this.camera.position.z = lerp(cameraPosition.z, 47, morphRacingWrapperMixer);
       this.largeLettersWrapperObject.position.x = lerp(0, 10, morphRacingWrapperMixer);
 
       const scale = Math.max(Math.sqrt(this.throb), 0.01);
-      for (let cube of this.racingGridFrame.children) {
-        //cube.scale.set(scale, scale, scale);
-        cube.scale.set(0.8, 0.8, 0.8);
-      }
 
       this.playerRacingCar.rotation.y = 0;
       var { x, y } = this.animate(this.carPositions, frame, easeOut);
@@ -493,24 +509,18 @@
 
       this.playerRacingCar.updateMatrixWorld();
       vector.setFromMatrixPosition(this.playerRacingCar.matrixWorld);
-      for(let i = 0; i < this.cameraShakeThrob * 100; i++) {
+      for (let i = 0; i < this.cameraShakeThrob * 100; i++) {
         this.ps.spawn({
           x: (Math.random() - 0.5) * 80,
           y: (Math.random() - 0.5) * 45,
           z: -(Math.random()) * 10,
-        }, {x: 0, y: 2.5 * (Math.random() - .5), z: 0}, 0.5);
+        }, { x: 0, y: 2.5 * (Math.random() - .5), z: 0 }, 0.5);
       }
       this.ps.update();
 
       var { x, y } = this.animate(this.incomingCarsPosition, frame, lerp, 1);
       this.incomingCars.position.x = x;
       this.incomingCars.position.y = y;
-      for (let incoming of this.incomingCars.children) {
-        for (let cube of incoming.children) {
-          //cube.scale.set(scale, scale, scale);
-          cube.scale.set(0.8, 0.8, 0.8);
-        }
-      }
 
       for (let [i, letter] of this.largeLetters.entries()) {
         var { x, y, mixer, } = this.animate(this.largeLetterAnimationPaths[i], frame, easeOut);
