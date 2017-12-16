@@ -106,7 +106,7 @@
         this.ctx.fillText('REVISION', 0, -0.1);
       } else if (BEAN >= 3912) {
         this.ctx.textAlign = 'center';
-        this.ctx.fillText('SUP', 0, 0);
+        this.ctx.fillText('NO LIMIT', 0, 0);
       } else if (BEAN >= 3888) {
         const inT = lerp(0, 1, (frame - FRAME_FOR_BEAN(3888)) / (
           FRAME_FOR_BEAN(3888 + 3) - FRAME_FOR_BEAN(3888)));
