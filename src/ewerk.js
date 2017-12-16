@@ -90,21 +90,29 @@
       this.ps.update();
 
       this.globeContainer = new THREE.Object3D();
-      this.globeContainer.add(this.ps.particles);
+      //this.globeContainer.add(this.ps.particles);
 
       this.globe = new THREE.Mesh(
           new THREE.SphereBufferGeometry(200, 64, 64),
           new THREE.MeshStandardMaterial({
-            color: 0x888888,
+            color: 0xffffff,
             roughness: 1,
             metalness: 0,
             transparent: true,
           }));
 
+      this.globeOutline = new THREE.Mesh(
+          new THREE.SphereBufferGeometry(200, 64, 64),
+          new THREE.MeshBasicMaterial({
+            //color: 0x373c3f,
+            color: 0xc2e4b7,
+          }));
+      this.scene.add(this.globeOutline);
+
       this.globeDetail = new THREE.Mesh(
           new THREE.SphereBufferGeometry(200.1, 64, 64),
           new THREE.MeshStandardMaterial({
-            color: 0x888888,
+            color: 0xffffff,
             roughness: 1,
             metalness: 0,
           }));
@@ -128,18 +136,19 @@
           }));
 
       this.globeContainer.add(this.globe);
-      this.globeContainer.add(this.cloudGlobe);
+      //this.globeContainer.add(this.cloudGlobe);
       this.globeContainer.add(this.globeDetail);
-      this.globeContainer.add(this.cloudGlobeDetail);
+      //this.globeContainer.add(this.cloudGlobeDetail);
 
       this.globeContainer.rotation.x = -Math.PI / 2 + .8;
 
       this.globeLight = new THREE.DirectionalLight();
-      this.globeLight.position.set(0.9, 1, 1.3);
-      this.globeLight.intensity = 0.9;
-      this.globeLight.color = new THREE.Color(255 / 255, 250 / 255, 244 / 255);
+      this.globeLight.position.set(1, 2., 1);
+      this.globeLight.intensity = 0.75;
+      this.globeLight.decay = 2;
+      this.globeLight.color = new THREE.Color(255 / 255, 255 / 255, 255 / 255);
       this.scene.add(this.globeLight);
-      this.scene.add(new THREE.AmbientLight(0xffffff, 1));
+      this.scene.add(new THREE.AmbientLight(0xffffff, 0.2));
 
       this.scene.add(this.globeContainer);
 
@@ -166,7 +175,8 @@
       this.skybox = new THREE.Mesh(
           new THREE.BoxGeometry(2000, 2000, 2000),
           new THREE.MeshBasicMaterial({
-            color: 0,
+            color: 0x99da85,
+            side: THREE.BackSide,
           }));
       this.scene.add(this.skybox);
 
@@ -227,7 +237,7 @@
         this.globeDetail.material.map = globeTextures.mapDetail;
         this.cloudGlobeDetail.material.alphaMap = globeTextures.cloudMapDetail;
         this.cloudGlobeDetail.material.roughnessMap = globeTextures.cloudMapDetail;
-        this.skybox.material = globeTextures.skyboxMaterial;
+        //this.skybox.material = globeTextures.skyboxMaterial;
       }
       const frame1 = FRAME_FOR_BEAN(1 * 12 * 4);
       const frame2 = FRAME_FOR_BEAN(2 * 12 * 4);
@@ -255,12 +265,14 @@
 
       if (frame <= frame1) {
         const t = clamp(0, (frame - frame1 + 10) / 10, 1);
+        /*
         if(this.skybox.material.materials) {
           for(let i = 0; i < this.skybox.material.materials.length; i++) {
             const material = this.skybox.material.materials[i];
             material.color = new THREE.Color(t, t, t);
           }
         }
+        */
 
         this.camera.position.set(
           lerp(0, 0, t),
@@ -462,6 +474,13 @@
         this.cloudGlobe.material.opacity = easeIn(1, 0, (frame - 11350) / 150);
         this.revisionLogo.material.opacity = easeIn(0, 1, (frame - 11350) / 150);
       }
+
+      this.globeOutline.position.copy(this.globe.position);
+      this.globeOutline.position.y -= 500;
+      this.globeOutline.position.z -= 110;
+      this.globeOutline.visible = this.globeContainer.visible;
+      const scale = this.globe.scale.x * 1.7;
+      this.globeOutline.scale.set(scale, scale, scale);
     }
 
     render(renderer) {
