@@ -392,6 +392,9 @@
     "type": "tree",
     "connected": {
       "globeTextures": "globetextures.globeTextures"
+    },
+    "options": {
+      "shader": "tartan"
     }
   },
   {

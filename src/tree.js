@@ -44,9 +44,7 @@
 
       this.background = new THREE.Mesh(
         new THREE.PlaneGeometry(120, 120, 1),
-        new THREE.MeshBasicMaterial({
-          color: new THREE.Color(255 / 255, 73 / 255, 130 / 255),
-        })
+        new THREE.ShaderMaterial(SHADERS.tartan)
       );
       this.background.position.z = -5;
       this.scene.add(this.background);
@@ -503,6 +501,9 @@
       this.camera.rotation.x += this.cameraShakeRotation.x;
       this.camera.rotation.y += this.cameraShakeRotation.y;
       this.camera.rotation.z += this.cameraShakeRotation.z;
+
+      this.background.material.uniforms.frame.value = frame;
+      this.background.material.uniforms.t.value = (frame - FRAME_FOR_BEAN(84 * 48 + 18)) / 60;
     }
 
     resize() {
