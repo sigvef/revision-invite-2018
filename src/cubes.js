@@ -347,7 +347,7 @@
           this.textCtx.translate(1 + i + 0.5, 4.4);
           this.textCtx.fillStyle = '#77e15d';
           if(swipeOffset > 0) {
-            this.textCtx.fillText('  BACK TO                    '[i], 0, 0);
+            this.textCtx.fillText('THIS YEAR                       '[i], 0, 0);
             this.textCtx.rotate(Math.PI);
             //this.textCtx.fillText('    T      T     '[i], 0, -0.2);
             this.textCtx.rotate(Math.PI);
@@ -355,7 +355,7 @@
           if(reverseSwipeOffset > 0) {
             this.textCtx.translate(0, 1);
             this.textCtx.fillStyle = 'rgb(255, 73, 130)';
-            this.textCtx.fillText('   THE BASICS        '[i], 0, 0);
+            this.textCtx.fillText('BACK TO BASICS   '[i], 0, 0);
             this.textCtx.rotate(Math.PI);
             //this.textCtx.fillText('         T T    '[i], 0, -0.2);
           }
