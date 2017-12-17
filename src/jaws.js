@@ -15,7 +15,7 @@
       this.output.minFilter = THREE.LinearFilter;
       this.output.magFilter = THREE.LinearFilter;
 
-      const scrollolo = '      NO SCROLLERS         JUST     ';
+      const scrollolo = 'NO SCROLLERS                JUST';
       this.textCanvas = document.createElement('canvas');
       const textCtx = this.textCanvas.getContext('2d');
 
@@ -134,9 +134,9 @@
       this.ctx.scale(1 / 64, 1 / 64);
 
       const scrollOffset = lerp(
-        64,
-        - this.textCanvas.width,
-        (this.frame - 4016) / (4189 - 4016)
+        70,
+        -20 - this.textCanvas.width,
+        (this.frame - 4016) / (4215 - 4016)
       );
 
       for (let pixelOffset = 0; pixelOffset < this.textCanvas.width; pixelOffset++) {
