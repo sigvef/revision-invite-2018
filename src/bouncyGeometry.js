@@ -676,6 +676,23 @@
 
       this.textCtx.fillStyle = 'pink';
 
+      const hexToRectStartFrame = FRAME_FOR_BEAN(3182);
+      const hexToRectEndFrame = FRAME_FOR_BEAN(3186);
+      const hexToRectProgress = (frame - hexToRectStartFrame) / (hexToRectEndFrame - hexToRectStartFrame);
+
+      const offsetRemovalStartFrame = FRAME_FOR_BEAN(3190);
+      const offsetRemovalEndFrame = FRAME_FOR_BEAN(3196);
+      const offsetRemovalProgress = (frame - offsetRemovalStartFrame) / (offsetRemovalEndFrame - offsetRemovalStartFrame);
+
+      const hexagonRadiuses = [
+        lerp(1, 0.5, hexToRectProgress),
+        1,
+        1,
+        lerp(1, 0.5, hexToRectProgress),
+        1,
+        1,
+      ];
+      const offsetFactor = lerp(1, 0, offsetRemovalProgress);
       const cylinderRadius = 0.2 * GU;
       const padding = 0.1 * GU;
       const distanceBetweenHexagonCores = 1.6 * cylinderRadius + padding;
@@ -684,20 +701,20 @@
 
       for (let y = 0; y < this.numHexagonsY; y++) {
         for (let x = 0; x < this.numHexagonsX; x++) {
-          const offset = y % 2 === 1 ? gridXDistance / 2 : 0;
+          const offset = y % 2 === 1 ? offsetFactor * gridXDistance / 2 : 0;
 
           const actualX = 4.5 * GU + x * gridXDistance + offset;
           const actualY = 1.66 * GU + y * gridYDistance;
           this.textCtx.beginPath();
           this.textCtx.moveTo(
             actualX,
-            actualY + cylinderRadius
+            actualY + cylinderRadius * hexagonRadiuses[0]
           );
           for (let i = 1; i < 6; i++) {
             const angle = Math.PI / 2 + Math.PI * i / 3;
             this.textCtx.lineTo(
-              actualX + cylinderRadius * Math.cos(angle),
-              actualY + cylinderRadius * Math.sin(angle)
+              actualX + cylinderRadius * hexagonRadiuses[i] * Math.cos(angle),
+              actualY + cylinderRadius * hexagonRadiuses[i] * Math.sin(angle)
             );
           }
           this.textCtx.closePath();
