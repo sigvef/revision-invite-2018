@@ -159,9 +159,14 @@ vec4 background(vec2 uv) {
 
 void main() {
     float eyez = 20.;
+
     if (BEAN > 2040.) {
         eyez = min((BEAN - 2000.)/2., 95.); 
     }
+    if (frame > 5728.) {
+        eyez = mix(95., 0., clamp((frame - 5729.) / (5750. - 5728.), 0.0, 1.0));
+    }
+
     vec3 eye = vec3(0.0, 0.0, eyez);
     vec3 dir = rayDir(60.0, vUv);
 
