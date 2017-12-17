@@ -112,12 +112,12 @@
         this.ctx.fillText('E-', x, y);
       } else if (BEAN >= 3936) {
         this.ctx.textAlign = 'center';
-        this.ctx.font = 'bold 0.9pt schmalibre';
+        this.ctx.font = 'bold 0.6pt schmalibre';
         this.ctx.fillStyle = 'rgb(55, 60, 63)';
         this.ctx.scale(3, 3);
-        this.ctx.translate((Math.random() - 0.5) * 0.3,
-          (Math.random() - 0.5) * 0.3);
-        this.ctx.fillText('REVISION', 0, -0.1);
+        this.ctx.translate((Math.random() - 0.5) * 0.2,
+          (Math.random() - 0.5) * 0.2);
+        this.ctx.fillText('WELCOME TO', 0, -0.1);
       } else if (BEAN >= 3912) {
         this.ctx.textAlign = 'center';
         this.ctx.fillText('NO LIMIT', 0, 0);
