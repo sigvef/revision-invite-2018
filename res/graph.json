@@ -563,5 +563,9 @@
     "connected": {
         "tDiffuse": "AtariRacer.render"
     }
+  },
+  {
+    "id": "cccOverlay",
+    "type": "cccOverlay"
   }
 ]
