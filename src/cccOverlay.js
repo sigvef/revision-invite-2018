@@ -35,28 +35,39 @@
       this.ctx.save();
       this.ctx.scale(GU, GU);
 
-      if(frame > 7277 && frame < 7599) {
+      if(frame > 7010) {
+        const t = lerp(
+          0,
+          lerp(1, 0, (frame - 7241 + 10) / 20),
+          (frame - 7010) / 20
+        );
+
         // NO RIBBONS
-        this.ctx.fillStyle = 'rgba(8, 10, 12, .2)';
-        this.ctx.fillRect(9, 7.5, 16, 1.5);
-
-        this.ctx.textAlign = 'right';
-        this.ctx.textBaseline = 'middle';
-        this.ctx.font = '0.7pt schmalibre-light';
-        this.ctx.fillStyle = '#c2c2a0';
-
-        this.ctx.fillText('NO RIBBONS  ', 15.4, 8);
-      } else if(frame > 6761 && frame < 7100) {
-        // NO GRAS || NO STARS
-        this.ctx.fillStyle = 'rgba(8, 10, 12, .2)';
-        this.ctx.fillRect(0, 0, 7.5, 1.5);
+        this.ctx.fillStyle = 'rgba(8, 10, 12, .6)';
+        this.ctx.fillRect(easeIn(16, 9, t), 6, 16, 1.5);
 
         this.ctx.textAlign = 'left';
         this.ctx.textBaseline = 'middle';
         this.ctx.font = '0.7pt schmalibre-light';
         this.ctx.fillStyle = '#c2c2a0';
 
-        this.ctx.fillText('  NO GRASS', 1, 0.5);
+        this.ctx.fillText('NO PARTICLES', easeIn(17, 10, t), 6.5);
+      } else {
+        const t = lerp(
+          0,
+          lerp(1, 0, (frame - 6990) / 20),
+          (frame - 6761) / 20
+        );
+        // NO GRAS || NO STARS
+        this.ctx.fillStyle = 'rgba(8, 10, 12, .6)';
+        this.ctx.fillRect(easeIn(-7, 0, t), 1.5, 7, 1.5);
+
+        this.ctx.textAlign = 'left';
+        this.ctx.textBaseline = 'middle';
+        this.ctx.font = '0.7pt schmalibre-light';
+        this.ctx.fillStyle = '#c2c2a0';
+
+        this.ctx.fillText('  NO RIBBONS', easeIn(-6, 1, t), 2);
       }
 
 
