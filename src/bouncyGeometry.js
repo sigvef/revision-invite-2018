@@ -235,17 +235,17 @@
         this.ps.particles.visible = true;
         this.scene.add(this.ps.particles);
       } else if (BEAN >= 2976 && BEAN < 3024) {
-        return this.updatePart1(frame);
+        this.updatePart1(frame);
       } else if (BEAN >= 3024 && BEAN < 3072) {
-        return this.updatePart2(frame);
+        this.updatePart2(frame);
       } else if (BEAN >= 3072 && BEAN < 3120) {
-        return this.updatePart3(frame);
+        this.updatePart3(frame);
       } else if (BEAN >= 3120 && BEAN < 3168) {
-        return this.updatePart4(frame);
+        this.updatePart4(frame);
       } else if (BEAN >= 3168 && BEAN < 3312) {
-        return this.updatePart5(frame);
+        this.updatePart5(frame);
       } else if (BEAN >= 3312) {
-        return this.updateLastTextPart(frame);
+        this.updateLastTextPart(frame);
       }
 
       this.ps.update();
@@ -344,21 +344,11 @@
       } else if (BEAN >= 3120 && BEAN < 3312) {
         this.scene.add(this.ball);
 
-        const startFrame = FRAME_FOR_BEAN(3120);
-        const endFrame = FRAME_FOR_BEAN(3168);
-        const progress = (frame - startFrame) / (endFrame - startFrame);
-
-        this.ball.position.x = 0;
-        this.ball.position.y = 0;
-        this.ball.position.z = -79 + 5 * progress;
-        this.ball.rotation.x = lerp(0, 2, progress);
-        this.ball.rotation.y = lerp(0, 2, progress);
-
-        const scale = 1 + this.stabThrob * 0.3;
+        const scale = 1;
         this.ball.scale.x = scale;
         this.ball.scale.y = scale;
         this.ball.scale.z = scale;
-        this.ball.material.emissiveIntensity = 0.2 + this.stabThrob * .5;
+        this.ball.material.emissiveIntensity = 0.8;
 
       } else if (BEAN >= 3312) {
         this.scene.remove(this.ball);
@@ -529,7 +519,7 @@
       this.camera.position.z = -70;
 
       // PARTICLES
-      for(let i = 0; i < 10; i++) {
+      for(let i = 0; i < 1; i++) {
         const angle = this.random() * Math.PI * 2;
         const angle2 = this.random() * Math.PI;
         const radius = 0.8;
@@ -565,11 +555,28 @@
       const endFrame = FRAME_FOR_BEAN(3168);
       const progress = (frame - startFrame) / (endFrame - startFrame);
 
-      this.ps.decayFactor = 0.99999;
+      this.ps.decayFactor = 0.9999;
 
-      const impactBeans = [3120, 3130, 3144, 3154];
+      const impactBeans = [3120, 3130, 3144, 3154, 3160];
 
-      // TODO
+      let impactIndex = 0;
+      for (let i = 0; i < 4; i++) {
+        if (BEAN >= impactBeans[i]) {
+          impactIndex = i;
+        }
+      }
+      const impactStartFrame = FRAME_FOR_BEAN(impactBeans[impactIndex]);
+      const impactEndFrame = FRAME_FOR_BEAN(impactBeans[impactIndex + 1]);
+      const impactProgress = (frame - impactStartFrame) / (impactEndFrame - impactStartFrame);
+      const distanceFromWallFactor = impactIndex >= 3 ? impactProgress : Math.sin(impactProgress * Math.PI);
+
+      this.ball.position.x = 0;
+      this.ball.position.y = 0;
+      this.ball.position.z = -79 + 3 * distanceFromWallFactor;
+      this.ball.rotation.x = 0;
+      this.ball.rotation.y = 0;
+      this.ball.scale.z = 1 + Math.pow(1 - impactProgress, 1.5) * 0.7 * Math.sin(impactProgress * 10);
+      this.ball.material.emissiveIntensity = 0.3 + 0.7 * Math.pow(1 - impactProgress, 2);
 
       if (impactBeans.indexOf(BEAN) !== -1) {
         this.cameraShakeAngularVelocity.x = (this.random() - 0.5) * 0.03;
@@ -587,8 +594,8 @@
       this.cameraShakeAngularAcceleration.z = -this.cameraShakeRotation.z * 0.07;
       this.cameraShakeVelocity.add(this.cameraShakeAcceleration);
       this.cameraShakeAngularVelocity.add(this.cameraShakeAngularAcceleration);
-      this.cameraShakeVelocity.multiplyScalar(0.9);
-      this.cameraShakeAngularVelocity.multiplyScalar(0.9);
+      this.cameraShakeVelocity.multiplyScalar(0.8);
+      this.cameraShakeAngularVelocity.multiplyScalar(0.8);
       this.cameraShakePosition.add(this.cameraShakeVelocity);
       this.cameraShakeRotation.add(this.cameraShakeAngularVelocity);
 
