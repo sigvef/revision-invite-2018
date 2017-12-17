@@ -628,8 +628,8 @@
       this.ctx.fillStyle = '#ff4982';
       this.ctx.strokeStyle = '#ff4982';
 
-      const hexToRectStartFrame = FRAME_FOR_BEAN(3180);  // TODO: needs tweaking
-      const hexToRectEndFrame = FRAME_FOR_BEAN(3184);  // TODO: needs tweaking
+      const hexToRectStartFrame = FRAME_FOR_BEAN(3180);
+      const hexToRectEndFrame = FRAME_FOR_BEAN(3184);
       const hexToRectProgress = (frame - hexToRectStartFrame) / (hexToRectEndFrame - hexToRectStartFrame);
 
       const hexagonRadiuses = [
@@ -653,8 +653,8 @@
         const gridYDistance = Math.sin(Math.PI / 3) * distanceBetweenHexagonCores;
         const hexagonGridOffsetX = BEAN < 3168 ? 1 * GU : 1.66 * GU;
         const hexagonGridOffsetY = BEAN < 3168 ? 1 * GU : 1.2 * GU;
-        const offsetRemovalStartFrame = FRAME_FOR_BEAN(3192);  // TODO: needs tweaking
-        const offsetRemovalEndFrame = FRAME_FOR_BEAN(3196);  // TODO: needs tweaking
+        const offsetRemovalStartFrame = FRAME_FOR_BEAN(3192);
+        const offsetRemovalEndFrame = FRAME_FOR_BEAN(3196);
         const offsetRemovalProgress = (frame - offsetRemovalStartFrame) / (offsetRemovalEndFrame - offsetRemovalStartFrame);
         const offsetFactor = lerp(1, 0, offsetRemovalProgress);
 
@@ -762,8 +762,8 @@
 
       this.drawHexagons(frame);
 
-      const cameraFovStartFrame = FRAME_FOR_BEAN(3298);
-      const cameraFovEndFrame = FRAME_FOR_BEAN(3306);
+      const cameraFovStartFrame = FRAME_FOR_BEAN(3296);
+      const cameraFovEndFrame = FRAME_FOR_BEAN(3304);
       const cameraFov = easeOut(
         45, .1, (frame - cameraFovStartFrame) / (cameraFovEndFrame - cameraFovStartFrame)
       );
