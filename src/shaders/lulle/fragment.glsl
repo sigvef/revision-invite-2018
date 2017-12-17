@@ -1,6 +1,7 @@
 uniform float frame;
 uniform float BEAN;
 uniform float BEAT;
+uniform float numOfBalls;
 uniform sampler2D tDiffuse;
 
 #define PI 3.1415926535897932384626433832795
@@ -47,6 +48,13 @@ float sphere(vec3 p, float s) {
 vec2 sdf(in vec3 p) {
     float startBEAN = 1824. + 24.;
     float repeatSize = 15.;
+    float offset = 0.;
+    float loop = mod(BEAN - startBEAN, 24.);
+    if (BEAN >= 2064. && BEAN < 2184.) {
+        if (loop >= 6. && loop < 8.) offset = PI / 16.;
+        if (loop >= 10. && loop < 12.) offset = PI / 16.;
+        if (loop >= 18.) offset = PI / 8.;
+    }
     
     p.x += 5. * step(repeatSize, mod(p.y + 5., repeatSize * 2.));
     p.x = mod(p.x + repeatSize / 2., repeatSize) - repeatSize / 2.;
@@ -54,7 +62,6 @@ vec2 sdf(in vec3 p) {
 
     float centerSize = 0.5 + cos(mod(BEAN - startBEAN, 48.) / 48. * PI) / 4.;
     vec2 s = vec2(sphere(p, centerSize * 1.5), 1.);
-    float currentBean = (BEAN - startBEAN) / 6.;
 
     for (float i = 0.; i < 24.; i++) {
         float circleIndex = floor(i / 8.0);
@@ -64,9 +71,9 @@ vec2 sdf(in vec3 p) {
 
         float radius = 1.5 + circleIndex;
         float angle = 2. * PI * i/8.;
-        float visible = step(i, currentBean);
-        float x = sin(angle) * radius * visible;
-        float y = cos(angle) * radius * visible;
+        float visible = step(i+1., numOfBalls);
+        float x = sin(angle + offset) * radius * visible;
+        float y = cos(angle + offset) * radius * visible;
         vec2 a = vec2(sphere(p-vec3(x, y, 0.), size), 1.);
         s = minmin(s, a);
     }
@@ -169,7 +176,7 @@ void main() {
 
     vec3 color = vec3(.0);
     if (res.x >= END-EPS) {
-        color = background(vUv + vec2(frame / 200., frame / 220.)).xyz;
+        color = background(vUv + vec2(0., frame / 500.)).xyz;
     } else {
         vec3 p = eye + dir * res.x;
         color = mix(WHITE, WHITE, res.y - 1.);
