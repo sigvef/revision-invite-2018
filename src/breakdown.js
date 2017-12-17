@@ -89,6 +89,15 @@
 
     renderZoomer() {
       const fontYOffset = 0.3223;
+
+      let t5 = (this.frame - FRAME_FOR_BEAN(3456 - 6 + 9)) / (
+          FRAME_FOR_BEAN(3456 + 9) - FRAME_FOR_BEAN(3456 - 6 + 9));
+      t5 = Math.pow(lerp(0, 1, t5), 2);
+
+      const scale = easeIn(1, 100, t5);
+      this.ctx.translate(easeIn(0, 70, t5), 0);
+      this.ctx.scale(scale, scale);
+
       this.ctx.save();
       this.ctx.fillStyle = '#77e15d';
       this.ctx.fillRect(-8, -4.5, 16, 9);
@@ -121,10 +130,6 @@
           FRAME_FOR_BEAN(3456) - FRAME_FOR_BEAN(3456 - 6));
       t4 = Math.pow(lerp(0, 1, t4), 2);
 
-      const scale = easeIn(1, 100, t4);
-      this.ctx.translate(easeIn(0, 80, t4), 0);
-      this.ctx.scale(scale, scale);
-
       if(BEAN >= 3360 + 9) {
         this.ctx.fillText(
             'AMIGA',
@@ -143,9 +148,14 @@
           fontYOffset + easeIn(-10, 0, t2) + easeIn(0, 10, t3));
 
       this.ctx.fillText(
+          '4k',
+          - 8 / 3 + 0.25,
+          fontYOffset + easeIn(-10, 0, t3) + easeIn(0, 10, t4));
+
+      this.ctx.fillText(
           'PC',
           - 8 / 3 + 0.25,
-          fontYOffset + easeIn(-10, 0, t3));
+          fontYOffset + easeIn(-10, 0, t4));
 
       this.ctx.restore();
     }
