@@ -45,7 +45,6 @@ float sphere(vec3 p, float s) {
 }
 
 vec2 sdf(in vec3 p) {
-    float n = 0.;
     float startBEAN = 1824. + 24.;
     float repeatSize = 13.;
     
@@ -55,25 +54,19 @@ vec2 sdf(in vec3 p) {
 
     float centerSize = 0.5 + cos(mod(BEAN - startBEAN, 48.) / 48. * PI) / 4.;
     vec2 s = vec2(sphere(p, centerSize * 1.5), 1.);
-    n = (BEAN-startBEAN)/6.;
+    float currentBean = (BEAN - startBEAN) / 6.;
 
     for (float i = 0.; i < 24.; i++) {
-        if (i > n) {break;}
-        float size = 0.5 + cos(mod(-0.8 * (floor(i/8.) + 1.) + BEAN - startBEAN, 48.) / 48. * PI) / 4.;
+        float circleIndex = floor(i / 8.0);
+        float size =
+            0.5 - circleIndex * 0.1 +
+            cos(mod(-0.8 * (floor(i/8.) + 1.) + BEAN - startBEAN, 48.) / 48. * PI) / 4.;
+
+        float radius = 1.5 + circleIndex;
         float angle = 2. * PI * i/8.;
-        float radius = 1.;
-        if (i >= 16.) {
-            radius = 3.5; 
-            size -= 0.2;
-        } else if (i >= 8.) {
-            radius = 2.5; 
-            size -= 0.1;
-        } else {
-            radius = 1.5; 
-            size -= 0.;
-        }
-        float x = sin(angle) * radius;
-        float y = cos(angle) * radius;
+        float visible = step(i, currentBean);
+        float x = sin(angle) * radius * visible;
+        float y = cos(angle) * radius * visible;
         vec2 a = vec2(sphere(p-vec3(x, y, 0.), size), 1.);
         s = minmin(s, a);
     }
@@ -152,11 +145,6 @@ vec3 phongIllumination(vec3 k_a, vec3 k_d, vec3 k_s, float alpha, vec3 p, vec3 e
     lin += 0.25*fre*vec3(1.00,1.00,1.00);
     vec3 color = k_a * lin;
 
-    /*
-    color *= 8.;
-    color = floor(color);
-    color /= 7.;
-    */
     return color;
 }
 
