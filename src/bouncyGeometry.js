@@ -674,8 +674,8 @@
 
       this.textCtx.fillStyle = '#ff4982';  // le pink
 
-      const hexToRectStartFrame = FRAME_FOR_BEAN(3182);
-      const hexToRectEndFrame = FRAME_FOR_BEAN(3186);
+      const hexToRectStartFrame = FRAME_FOR_BEAN(3182);  // TODO: needs tweaking
+      const hexToRectEndFrame = FRAME_FOR_BEAN(3186);  // TODO: needs tweaking
       const hexToRectProgress = (frame - hexToRectStartFrame) / (hexToRectEndFrame - hexToRectStartFrame);
 
       const hexagonRadiuses = [
@@ -693,8 +693,8 @@
       const gridYDistance = Math.sin(Math.PI / 3) * distanceBetweenHexagonCores;
 
       if (BEAN < 3216) {
-        const offsetRemovalStartFrame = FRAME_FOR_BEAN(3190);
-        const offsetRemovalEndFrame = FRAME_FOR_BEAN(3196);
+        const offsetRemovalStartFrame = FRAME_FOR_BEAN(3190);  // TODO: needs tweaking
+        const offsetRemovalEndFrame = FRAME_FOR_BEAN(3196);  // TODO: needs tweaking
         const offsetRemovalProgress = (frame - offsetRemovalStartFrame) / (offsetRemovalEndFrame - offsetRemovalStartFrame);
         const offsetFactor = lerp(1, 0, offsetRemovalProgress);
 
@@ -724,20 +724,29 @@
         const angleAnimationStartFrame = FRAME_FOR_BEAN(3216);
         const angleAnimationEndFrame = FRAME_FOR_BEAN(3296);
         const angleAnimationProgress = (frame - angleAnimationStartFrame) / (angleAnimationEndFrame - angleAnimationStartFrame);
-        const relativeAngle = lerp(0, 0.05, angleAnimationProgress);
+        const relativeAngle = lerp(0, 2, angleAnimationProgress);
 
         for (let y = 0; y < this.numHexagonsY; y++) {
+          const circleRadius = this.numHexagonsY + 1 - y;
+          let cumulativeAngle = 0;
+          this.textCtx.save();
           for (let x = 0; x < this.numHexagonsX; x++) {
+            const thatRelativeAngle = relativeAngle / circleRadius;
             const angleTopLeft = Math.PI / 2 + Math.PI * 2 / 3;
             const angleTopRight = Math.PI / 2 + Math.PI * 4 / 3;
 
             const xLeft = 4.5 * GU + x * gridXDistance + cylinderRadius * hexagonRadiuses[2] * Math.cos(angleTopLeft);
             const xRight = 4.5 * GU + x * gridXDistance + cylinderRadius * hexagonRadiuses[4] * Math.cos(angleTopRight);
-            const actualY = 1.66 * GU + y * gridYDistance + cylinderRadius * hexagonRadiuses[2] * Math.sin(angleTopLeft);
-            this.textCtx.fillRect(xLeft, actualY, xRight - xLeft, cylinderRadius);
+            const width = (xRight - xLeft) * cylinderRadius / 8;
+            const yTop = 1.66 * GU + y * gridYDistance + cylinderRadius * hexagonRadiuses[2] * Math.sin(angleTopLeft);
+            this.textCtx.fillRect(xLeft, yTop, width, cylinderRadius);
 
-            this.textCtx.rotate(relativeAngle);
+            this.textCtx.translate(xRight, yTop - cylinderRadius / 2);
+            this.textCtx.rotate(thatRelativeAngle);
+            cumulativeAngle += thatRelativeAngle;
+            this.textCtx.translate(-xRight, -(yTop - cylinderRadius / 2));
           }
+          this.textCtx.restore();
         }
       }
 
