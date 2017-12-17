@@ -44,14 +44,23 @@
 
         // NO RIBBONS
         this.ctx.fillStyle = 'rgba(8, 10, 12, .6)';
-        this.ctx.fillRect(easeIn(16, 9, t), 6, 16, 1.5);
+        this.ctx.beginPath();
+        this.ctx.moveTo(16, 9);
+        this.ctx.lineTo(easeIn(16, 9, t), 9);
+        this.ctx.lineTo(16, easeIn(9, 2, t));
+        this.ctx.lineTo(16, 9);
+        this.ctx.fill();
 
+        this.ctx.save();
+        this.ctx.translate(16, 9);
+        this.ctx.rotate(-Math.PI / 4);
         this.ctx.textAlign = 'left';
         this.ctx.textBaseline = 'middle';
         this.ctx.font = '0.7pt schmalibre-light';
         this.ctx.fillStyle = '#c2c2a0';
 
-        this.ctx.fillText('NO PARTICLES', easeIn(17, 10, t), 6.5);
+        this.ctx.fillText('NO PARTICLES', -2.7, easeIn(1.5, -3.5, t));
+        this.ctx.restore();
       } else {
         const t = lerp(
           0,
@@ -60,14 +69,22 @@
         );
         // NO GRAS || NO STARS
         this.ctx.fillStyle = 'rgba(8, 10, 12, .6)';
-        this.ctx.fillRect(easeIn(-7, 0, t), 1.5, 7, 1.5);
+        this.ctx.beginPath();
+        this.ctx.moveTo(0, 0);
+        this.ctx.lineTo(easeIn(0, 7, t), 0);
+        this.ctx.lineTo(0, easeIn(0, 7, t));
+        this.ctx.lineTo(0, 0);
+        this.ctx.fill();
 
+        this.ctx.save();
+        this.ctx.rotate(-Math.PI / 4);
         this.ctx.textAlign = 'left';
         this.ctx.textBaseline = 'middle';
         this.ctx.font = '0.7pt schmalibre-light';
         this.ctx.fillStyle = '#c2c2a0';
 
-        this.ctx.fillText('  NO RIBBONS', easeIn(-6, 1, t), 2);
+        this.ctx.fillText('NO RIBBONS', -2.2, easeIn(-1.5, 3.5, t));
+        this.ctx.restore();
       }
 
 
