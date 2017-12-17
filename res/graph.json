@@ -28,8 +28,8 @@
       "_13_first_C_theme_2": "lulle.render",
       "_14_second_C_theme_1": "pyramidfx.render",
       "_15_second_C_theme_2": "pyramidfx.render",
-      "_16_low_down_B_theme_1": "Ccc.render",
-      "_17_low_down_B_theme_piano_snippet": "Ccc.render",
+      "_16_low_down_B_theme_1": "CccBlend.render",
+      "_17_low_down_B_theme_piano_snippet": "CccBlend.render",
       "_18_low_down_B_theme_2": "holeTransition.render",
       "_19_groovy_B_theme": "bouncyoverlayer.render",
       "_20_A_theme_breakdown_1": "breakdown.render",
@@ -387,7 +387,7 @@
       "shader": "holeTransition"
     },
     "connected": {
-      "A": "Ccc.render",
+      "A": "CccBlend.render",
       "B": "bouncyGeometry.render"
     }
   },
@@ -573,6 +573,10 @@
     "type": "CccBlendNode",
     "options": {
       "shader": "CccBlend"
+    },
+    "connected": {
+      "A": "cccOverlay.render",
+      "B": "Ccc.render"
     }
   }
 ]
