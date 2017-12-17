@@ -18,8 +18,8 @@
       "_05_first_A_theme_1": "textout.render",
       "_05_first_A_theme_1_2": "justTransition.render",
       "_06_first_A_theme_2": "justTransition.render",
-      "_06_first_A_theme_2_2": "AtariRacer.render",
-      "_07_first_B_theme_1": "clockTransition.render",
+      "_06_first_A_theme_2_2": "slideTransition.render",
+      "_07_first_B_theme_1": "slideTransition.render",
       "_08_first_B_theme_2": "clockTransition.render",
       "_09_second_A_theme_1": "carousel.render",
       "_10_second_A_theme_2": "hexafont.render",
@@ -145,7 +145,7 @@
       "shader": "lulle"
     },
     "connected": {
-        "bg": "trianglebg.render"
+      "bg": "trianglebg.render"
     }
   },
   {
@@ -542,5 +542,16 @@
   {
     "id": "trianglebg",
     "type": "trianglebg"
+  },
+  {
+    "id": "slideTransition",
+    "type": "slideTransitionNode",
+    "options": {
+      "shader": "slideTransition"
+    },
+    "connected": {
+      "A": "AtariRacer.render",
+      "B": "clockTransition.render"
+    }
   }
 ]
