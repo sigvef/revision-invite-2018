@@ -85,9 +85,12 @@
       const amount = smoothstep(0, 1, (this.frame - FRAME_FOR_BEAN(1824)) / (
             FRAME_FOR_BEAN(1824 + 48) - FRAME_FOR_BEAN(1824)));
       this.drawTriangle(0, 0, amount);
-      const offset = easeOut(0, 0.35, (this.frame - FRAME_FOR_BEAN(1848 + 48)) / (
+      var offset = easeOut(0, 0.35, (this.frame - FRAME_FOR_BEAN(1848 + 48)) / (
               FRAME_FOR_BEAN(1848 + 48 + 6) - FRAME_FOR_BEAN(1848 + 48)));
       this.drawTriangle(0, offset, amount);
+      offset = easeOut(0, 0.35, (this.frame - FRAME_FOR_BEAN(1848 + 48 + 48)) / (
+              FRAME_FOR_BEAN(1848 + 48 + 48 + 6) - FRAME_FOR_BEAN(1848 + 48 + 48)));
+      this.drawTriangle(0, offset/2, amount);
 
       this.ctx.restore();
       this.output.needsUpdate = true;
