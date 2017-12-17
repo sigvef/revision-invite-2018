@@ -206,7 +206,7 @@
       this.lowpolySkybox.visible = frame >= 250 && frame <= 11308;
 
       this.ps.update();
-      if(frame < 366) {
+      if(frame < 366 || frame > 11299) {
         this.scene.add(this.globeLight);
       } else {
         this.scene.remove(this.globeLight);
