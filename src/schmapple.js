@@ -383,16 +383,22 @@
       //this.ctx.fillStyle = '#77e15d';
       this.ctx.beginPath();
 
-      let widthT = (this.frame - FRAME_FOR_BEAN(408 + beanOffset)) / (FRAME_FOR_BEAN(408 + 9 + beanOffset) - FRAME_FOR_BEAN(408 + beanOffset));
-      let widthT2 = (this.frame - FRAME_FOR_BEAN(408 + 6 + beanOffset)) / (FRAME_FOR_BEAN(408 + 6 + 9 + beanOffset) - FRAME_FOR_BEAN(408 + 6 + beanOffset));
+      let widthT = (this.frame - FRAME_FOR_BEAN(408 + beanOffset)) / (FRAME_FOR_BEAN(408 + 12 + beanOffset) - FRAME_FOR_BEAN(408 + beanOffset));
+      let widthT2 = (this.frame - FRAME_FOR_BEAN(408 + 12 + beanOffset)) / (
+          FRAME_FOR_BEAN(408 + 12 + 6 + beanOffset) - FRAME_FOR_BEAN(
+            408 + 12 + beanOffset));
+      let widthT3 = (this.frame - FRAME_FOR_BEAN(408 + 12 +  6+beanOffset)) / (
+          FRAME_FOR_BEAN(408 + 12 + 12 + beanOffset) - FRAME_FOR_BEAN(
+            408 + 12 + 6 + beanOffset));
       let outerWidth = easeOut(31, 26, widthT);
       let innerWidth = easeOut(21, 26, widthT);
       let secondSmallestWidth = easeOut(17.6, 5, widthT2);
-      let smallestWidth = easeOut(0, 5, widthT2);
+      let smallestWidth = easeOut(0, 5, widthT3);
 
       const openingT = (this.frame - FRAME_FOR_BEAN(240 + beanOffset)) / (FRAME_FOR_BEAN(240 + 24 + beanOffset) - FRAME_FOR_BEAN(240 + beanOffset));
       let openingT2 = (this.frame - FRAME_FOR_BEAN(408 + 24)) / (FRAME_FOR_BEAN(408 + 24 + 12) - FRAME_FOR_BEAN(408 + 24));
-      /*WARNING: Explicitly added the - 6 to deal with different behaviour than expected
+      openingT2 = (this.frame - FRAME_FOR_BEAN(432 + 9)) / (FRAME_FOR_BEAN(432 + 9 + 12) - FRAME_FOR_BEAN(432 + 9));
+      /*WARNING Explicitly added the - 6 to deal with different behaviour than expected
        * from elasticOut (github.com/ninjadev/nin/issues/471). I'm not sure if it's a bug or not.
        * If that function changes, this will break */
       outerWidth = elasticOut(6, outerWidth - 6, 1, openingT);
@@ -403,15 +409,15 @@
 
       const smallThrobT = (this.frame - FRAME_FOR_BEAN(240 + beanOffset)) / (FRAME_FOR_BEAN(240 + 48 + beanOffset) - FRAME_FOR_BEAN(240 + 24 + beanOffset));
 
-      if (BEAN >= 408 + 24 && BEAN < 600) {
+      if (BEAN >= 432 + 9 && BEAN < 600) {
         secondSmallestWidth = easeOut(secondSmallestWidth * 2, 8, smallThrobT);
       }
 
-      if (BEAN >= 408 + 24 && BEAN < 600) {
+      if (BEAN >= 432 + 9 && BEAN < 600) {
         secondSmallestWidth += this.kickThrob * 8;
       }
 
-      if (BEAN < 612) {
+      if (BEAN < 624) {
         this.ctx.translate(160 / 2, 90 / 2);
         this.ctx.rotate(this.frame / 60 / 60 * 115 / 4 + 0.05 * this.cumulativeStabThrob);
         this.ctx.moveTo(outerWidth, 0);
