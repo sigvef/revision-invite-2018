@@ -1,9 +1,4 @@
 (function (global) {
-  const firstDrumBeat = FRAME_FOR_BEAN(48 * 18 - 6);
-  const secondDrumBeat = FRAME_FOR_BEAN(48 * 18 - 3);
-  const atariSceneStart = FRAME_FOR_BEAN(48 * 18);
-  const animationFinished = FRAME_FOR_BEAN(48 * 18.25);
-
   class justTransitionNode extends NIN.ShaderNode {
     constructor(id, options) {
       options.inputs = {
@@ -29,6 +24,9 @@
     }
 
     beforeUpdate(frame) {
+      const atariSceneStart = FRAME_FOR_BEAN(48 * 18);
+      const animationFinished = FRAME_FOR_BEAN(48 * 18.25);
+
       this.inputs.A.enabled = frame < animationFinished;
       this.inputs.B.enabled = frame >= atariSceneStart - 200;
     }
