@@ -333,7 +333,7 @@
             this.ctx.globalAlpha *= alphaMultiplier * (0.2 + sentence.throb * 0.8);
             const half = (sentence.canvas.width * CANVAS_SCALER + row.padding) / 2;
             sentenceOffset += half;
-            const scale = (1 + sentence.throb * 0.2);
+            const scale = (0.8 + sentence.throb * 0.3);
             this.ctx.translate(sentenceOffset, 6 + 10 * i);
             this.ctx.scale(scale, scale);
             this.ctx.scale(CANVAS_SCALER, CANVAS_SCALER);
