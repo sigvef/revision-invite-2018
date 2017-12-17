@@ -23,7 +23,7 @@
 
       // Scene background
       this.cube = new THREE.Mesh(new THREE.BoxGeometry(196, 109, 0.1),
-                                 new THREE.MeshBasicMaterial({ color: 0x77e15d }));
+                                 new THREE.MeshBasicMaterial({ color: 0x2a2b2d }));
       this.cube.position.set(0,0,-100);
       this.scene.add(this.cube);
 
@@ -272,20 +272,20 @@
       this.spin_cube.rotation.set(spin * 0.7837 , spin , 0);
 
       //prepare the actually visible geometries
-      this.star_arr = this.add_lines_for_geometry(star_geometry, this.three_point_star);
-      this.add_lines_for_geometry(this.small_center_hex.children[0].geometry, this.small_center_hex);
-      this.add_lines_for_geometry(this.level1_hex1.children[0].geometry, this.level1_hex1);
-      this.add_lines_for_geometry(this.level1_hex2.children[0].geometry, this.level1_hex2);
-      this.add_lines_for_geometry(this.level1_hex3.children[0].geometry, this.level1_hex3);
-      this.add_lines_for_geometry(this.center_line1.children[0].geometry, this.center_line1);
-      this.add_lines_for_geometry(this.center_line2.children[0].geometry, this.center_line2);
-      this.add_lines_for_geometry(this.center_line3.children[0].geometry, this.center_line3);
-      this.add_lines_for_geometry(this.middle_center_hex.children[0].geometry, this.middle_center_hex);
-      this.add_lines_for_geometry(this.outer_center_hex.children[0].geometry, this.outer_center_hex);
-      this.add_lines_for_geometry(this.small_claw_r.children[0].geometry, this.small_claw_r);
-      this.add_lines_for_geometry(this.small_claw_l.children[0].geometry, this.small_claw_l);
-      this.add_lines_for_geometry(this.large_claw_r.children[0].geometry, this.large_claw_r);
-      this.add_lines_for_geometry(this.large_claw_l.children[0].geometry, this.large_claw_l);
+      this.star_arr = this.add_lines_for_geometry(star_geometry, this.three_point_star, 1);
+      this.add_lines_for_geometry(this.small_center_hex.children[0].geometry, this.small_center_hex, 0.7);
+      this.add_lines_for_geometry(this.level1_hex1.children[0].geometry, this.level1_hex1, 1);
+      this.add_lines_for_geometry(this.level1_hex2.children[0].geometry, this.level1_hex2, 1);
+      this.add_lines_for_geometry(this.level1_hex3.children[0].geometry, this.level1_hex3, 1);
+      this.add_lines_for_geometry(this.center_line1.children[0].geometry, this.center_line1, 1);
+      this.add_lines_for_geometry(this.center_line2.children[0].geometry, this.center_line2, 1);
+      this.add_lines_for_geometry(this.center_line3.children[0].geometry, this.center_line3, 1);
+      this.add_lines_for_geometry(this.middle_center_hex.children[0].geometry, this.middle_center_hex, 0.6);
+      this.add_lines_for_geometry(this.outer_center_hex.children[0].geometry, this.outer_center_hex, 0.4);
+      this.add_lines_for_geometry(this.small_claw_r.children[0].geometry, this.small_claw_r, 1);
+      this.add_lines_for_geometry(this.small_claw_l.children[0].geometry, this.small_claw_l, 1);
+      this.add_lines_for_geometry(this.large_claw_r.children[0].geometry, this.large_claw_r, 1);
+      this.add_lines_for_geometry(this.large_claw_l.children[0].geometry, this.large_claw_l, 1);
       
 
       this.three_point_star.children[0].visible = false;
@@ -311,7 +311,7 @@
     }
 
 
-    add_lines_for_geometry(geometry, container) {
+    add_lines_for_geometry(geometry, container, scaler) {
       var arr = [];
       for(var i = 0; i < geometry.vertices.length;  i++) {
         var cur_x = geometry.vertices[i].x;
@@ -322,10 +322,10 @@
         var angle = Math.atan2(next_x - cur_x, next_y - cur_y);
 
         arr.push(new THREE.Geometry());
-        arr[i].vertices.push(new THREE.Vector3(cur_x - this.line_width * Math.sin(angle + Math.PI/2), cur_y - this.line_width * Math.cos(angle + Math.PI/2),0));
-        arr[i].vertices.push(new THREE.Vector3(next_x - this.line_width * Math.sin(angle + Math.PI/2), next_y - this.line_width * Math.cos(angle + Math.PI/2),0));
-        arr[i].vertices.push(new THREE.Vector3(next_x + this.line_width * Math.sin(angle + Math.PI/2), next_y + this.line_width * Math.cos(angle + Math.PI/2),0));
-        arr[i].vertices.push(new THREE.Vector3(cur_x + this.line_width * Math.sin(angle + Math.PI/2), cur_y + this.line_width * Math.cos(angle + Math.PI/2),0));
+        arr[i].vertices.push(new THREE.Vector3(cur_x - this.line_width * scaler * Math.sin(angle + Math.PI/2), cur_y - this.line_width * Math.cos(angle + Math.PI/2),0));
+        arr[i].vertices.push(new THREE.Vector3(next_x - this.line_width * scaler * Math.sin(angle + Math.PI/2), next_y - this.line_width * Math.cos(angle + Math.PI/2),0));
+        arr[i].vertices.push(new THREE.Vector3(next_x + this.line_width * scaler * Math.sin(angle + Math.PI/2), next_y + this.line_width * Math.cos(angle + Math.PI/2),0));
+        arr[i].vertices.push(new THREE.Vector3(cur_x + this.line_width * scaler * Math.sin(angle + Math.PI/2), cur_y + this.line_width * Math.cos(angle + Math.PI/2),0));
 
         arr[i].faces.push( new THREE.Face3( 0, 2, 1 ) );
         arr[i].faces.push( new THREE.Face3( 0, 3, 2 ) );
@@ -419,9 +419,9 @@
       } 
       if (frame >= FRAME_FOR_BEAN(22 * 48 + 9)) {
         const progress = elasticOut(0, 1, 1.1, T(base + 9, base + 9 + 12, frame));
-        this.level1_hex1.position.set(10 * r32 * progress, 10 / 2 * progress, 0);
-        this.level1_hex2.position.set(-10 * r32 * progress, 10 / 2 * progress, 0);
-        this.level1_hex3.position.set(0, -10 * progress, 0);
+        this.level1_hex1.position.set(10 * r32 * progress, 10 / 2 * progress, 100);
+        this.level1_hex2.position.set(-10 * r32 * progress, 10 / 2 * progress, 100);
+        this.level1_hex3.position.set(0, -10 * progress, 100);
 
         const progress2 = elasticOut(0, 1, 1.1, T(base + 24, base + 24 + 12, frame));
         this.center_line1.scale.set(progress2, progress2, progress2);
