@@ -1,8 +1,12 @@
 uniform float frame;
-uniform sampler2D tDiffuse;
+uniform sampler2D A;
+uniform sampler2D B;
 
 varying vec2 vUv;
 
 void main() {
-    gl_FragColor = vec4(vUv, 0.5 + 0.5 * sin(frame / 60.0), 1.0);
+    vec4 A = texture2D(A, vUv);
+    vec4 B = texture2D(B, vUv);
+
+    gl_FragColor = mix(A, B, A.a);
 }
