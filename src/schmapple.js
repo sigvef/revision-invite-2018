@@ -82,6 +82,7 @@
         'elude',
         'ephidrena',
         'excess',
+        'evilbot',
         'farbrausch',
         'ferris',
         'fnuque',
