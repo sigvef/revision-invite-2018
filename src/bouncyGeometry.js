@@ -108,10 +108,8 @@
       this.ballMaterial = new THREE.MeshStandardMaterial({
         shading: THREE.FlatShading,
         metalness: 1,
+        roughness: 0.5,
         map: this.ballTexture,
-        roughnessMap: Loader.loadTexture('res/metal.jpg'),
-        //bumpMap: Loader.loadTexture('res/metal.jpg'),
-        bumpScale: 0.005,
         emissive: 0xffffff,
         emissiveMap: this.ballTexture,
         emissiveIntensity: 0.2,
