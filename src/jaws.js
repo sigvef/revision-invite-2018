@@ -15,12 +15,12 @@
       this.output.minFilter = THREE.LinearFilter;
       this.output.magFilter = THREE.LinearFilter;
 
-      const scrollolo = 'NO SCROLLERS - JUST';
+      const scrollolo = 'NO SCROLLERS         JUST       ';
       this.textCanvas = document.createElement('canvas');
       const textCtx = this.textCanvas.getContext('2d');
 
       document.fonts.load('bold 72px schmalibre').then(() => {
-        textCtx.fillStyle = '#77e15d';
+        textCtx.fillStyle = '#99da85';
         textCtx.font = 'bold 72px schmalibre';
         textCtx.textAlign = 'center';
         textCtx.textBaseline = 'middle';
@@ -29,7 +29,7 @@
         this.textCanvas.height = 64;
         this.textCanvas.width = scrolloloMeasured.width;
 
-        textCtx.fillStyle = '#77e15d';
+        textCtx.fillStyle = '#99da85';
         textCtx.font = 'bold 72px schmalibre';
         textCtx.textAlign = 'center';
         textCtx.textBaseline = 'middle';
