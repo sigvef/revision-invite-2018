@@ -320,7 +320,7 @@
     },
     "connected": {
       "A": "text.render",
-      "B": "AtariRacer.render"
+      "B": "atarifx.render"
     }
   },
   {
@@ -507,7 +507,7 @@
     },
     "connected": {
       "A": "cubes.render",
-      "B": "AtariRacer.render"
+      "B": "atarifx.render"
     }
   },
   {
@@ -550,8 +550,18 @@
       "shader": "slideTransition"
     },
     "connected": {
-      "A": "AtariRacer.render",
+      "A": "atarifx.render",
       "B": "clockTransition.render"
+    }
+  },
+  {
+    "id": "atarifx",
+    "type": "atarifxNode",
+    "options": {
+      "shader": "atarifx"
+    },
+    "connected": {
+        "tDiffuse": "AtariRacer.render"
     }
   }
 ]
