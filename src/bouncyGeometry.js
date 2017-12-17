@@ -77,9 +77,10 @@
       this.numHexagonsX = 15;
       this.numHexagonsY = this.revisionLogoSegments.length;
 
+      // LIGHT
       this.directionalLight = new THREE.DirectionalLight();
       this.directionalLight.position.set(1, 1, 1);
-      this.directionalLight.color = new THREE.Color(0x77e15d);
+      this.directionalLight.color = new THREE.Color(0xff4982);
       this.directionalLight.decay = 2;
       this.scene.add(this.directionalLight);
 
@@ -102,7 +103,7 @@
 
       // BEAMS
       this.beamMaterial = new THREE.MeshBasicMaterial({
-        color: 0x97f280,
+        color: 0xcccccc,
         roughness: 1,
         metalness: 0,
         emissive: 0xffffff,
@@ -178,7 +179,7 @@
         return canvas;
       };
       this.ps = new global.ParticleSystem({
-        color: new THREE.Color(greenColor),
+        color: new THREE.Color(0xffffff),
         amount: 3000,
         decayFactor: 0.98,
         gravity: 0,
@@ -201,7 +202,7 @@
     update(frame) {
       demo.nm.nodes.bloom.opacity = 0;
 
-      this.stabThrob *= 0.85;
+      this.stabThrob *= 0.95;
       this.throb *= 0.95;
 
       if(BEAT && BEAN % 12 === 0) {
@@ -225,7 +226,8 @@
       this.updateBeams(frame);
       if (BEAN < 2976) {
         this.scene.remove(this.textPlane);
-        this.scene.remove(this.beams);
+        this.camera.fov = 45;
+        this.camera.updateProjectionMatrix();
         this.camera.position.x = 0;
         this.camera.position.y = 0;
         this.camera.position.z = 6;
@@ -343,11 +345,10 @@
         this.ball.rotation.x = lerp(2, 0, progress);
         this.ball.rotation.y = lerp(2, 0, progress);
 
-        const scale = 1 + this.stabThrob * 0.3;
+        const scale = 1;
         this.ball.scale.x = scale;
         this.ball.scale.y = scale;
         this.ball.scale.z = scale;
-        this.ball.material.emissiveIntensity = 0.2 + this.stabThrob * .5;
 
       } else if (BEAN >= 3120 && BEAN < 3312) {
         this.scene.add(this.ball);
@@ -375,9 +376,22 @@
 
     updateBeams(frame) {
       if (BEAN < 2976) {
+        const startFrame = FRAME_FOR_BEAN(2960);
+        const endFrame = FRAME_FOR_BEAN(2976);
+        const progress = Math.pow((frame - startFrame) / (endFrame - startFrame), 0.5);
+        const zThreshold = lerp(-180, 10, progress);
         for (let i = 0; i < this.beams.length; i++) {
           const beam = this.beams[i];
-          beam.visible = false;
+          beam.visible = true;
+          const angle = this.randomBeamNumbers[i] * 2 * Math.PI;
+          beam.position.x = 8 * Math.cos(angle);
+          beam.position.y = 8 * Math.sin(angle);
+          beam.position.z = -180 + (1.66 * frame + i) % 190;
+          if (beam.position.z > zThreshold) {
+            beam.visible = false;
+          }
+          beam.scale.z = 1;
+          beam.scale.x = beam.scale.y = this.beamThicknessScalers[i % this.beamThicknessScalers.length];
         }
       } else if (BEAN >= 2976 && BEAN < 3024) {
         for (let i = 0; i < this.beams.length; i++) {
@@ -446,6 +460,8 @@
       const progress = (frame - startFrame) / (endFrame - startFrame);
 
       // CAMERA
+      this.camera.fov = 45;
+      this.camera.updateProjectionMatrix();
       this.camera.position.x = lerp(0, 0.8, progress);
       this.camera.position.y = 0;
       this.camera.position.z = 6;
@@ -469,6 +485,8 @@
 
       // CAMERA
       const cameraMovement = Math.pow(progress + 0.1, 3);
+      this.camera.fov = 45;
+      this.camera.updateProjectionMatrix();
       this.camera.position.x = 6;
       this.camera.position.y = 0;
       this.camera.position.z = 12  - 32 * cameraMovement;
@@ -513,6 +531,8 @@
       const endFrame = FRAME_FOR_BEAN(3120);
       const progress = (frame - startFrame) / (endFrame - startFrame);
 
+      this.camera.fov = 45;
+      this.camera.updateProjectionMatrix();
       this.camera.position.x = 6 * Math.cos(frame / 85 - 1.5);
       this.camera.position.y = 6 * Math.sin(frame / 85 - 0.5);
       this.camera.position.z = -70;
@@ -577,6 +597,8 @@
       this.cameraShakePosition.add(this.cameraShakeVelocity);
       this.cameraShakeRotation.add(this.cameraShakeAngularVelocity);
 
+      this.camera.fov = 45;
+      this.camera.updateProjectionMatrix();
       this.camera.position.x = 6 * Math.cos(frame / 85 - 2);
       this.camera.position.y = 6 * Math.sin(frame / 85 - lerp(1, 2, progress));
       this.camera.position.z = -70;
@@ -589,7 +611,7 @@
     }
 
     drawHexagons(frame) {
-      // TODO: move to render loop
+      // TODO: move to render loop, for performance reasons
       this.textCtx.clearRect(0, 0, this.textCanvas.width, this.textCanvas.height);
 
       this.textCtx.fillStyle = '#ff4982';  // le pink
@@ -599,6 +621,8 @@
       const hexToRectEndFrame = FRAME_FOR_BEAN(3186);  // TODO: needs tweaking
       const hexToRectProgress = (frame - hexToRectStartFrame) / (hexToRectEndFrame - hexToRectStartFrame);
 
+      const hexagonGridOffsetX = 1.66 * GU;
+      const hexagonGridOffsetY = 1.2 * GU;
       const hexagonRadiuses = [
         lerp(1, 0.5, hexToRectProgress),
         1,
@@ -623,8 +647,8 @@
           for (let x = 0; x < this.numHexagonsX; x++) {
             const offset = y % 2 === 1 ? offsetFactor * gridXDistance / 2 : 0;
 
-            const actualX = 2 * GU + x * gridXDistance + offset;
-            const actualY = GU + y * gridYDistance;
+            const actualX = hexagonGridOffsetX + x * gridXDistance + offset;
+            const actualY = hexagonGridOffsetY + y * gridYDistance;
             this.textCtx.beginPath();
             this.textCtx.moveTo(
               actualX,
@@ -651,18 +675,18 @@
         const hexagonAngleTopLeft = Math.PI / 2 + Math.PI * 2 / 3;
         const hexagonAngleTopRight = Math.PI / 2 + Math.PI * 4 / 3;
 
-        const circleCenterX = 2 * GU + this.numHexagonsX * gridXDistance;
-        const circleCenterY = 1 * GU + this.numHexagonsY * gridYDistance;
+        const circleCenterX = hexagonGridOffsetX + this.numHexagonsX * gridXDistance;
+        const circleCenterY = hexagonGridOffsetY + this.numHexagonsY * gridYDistance;
 
         this.textCtx.lineWidth = cylinderRadius;
         for (let y = 0; y < this.numHexagonsY; y++) {
-          let yMid = 1 * GU + y * gridYDistance;
+          let yMid = hexagonGridOffsetY + y * gridYDistance;
           const circleRadius = circleCenterY - yMid;
 
           this.textCtx.save();
           for (let x = 0; x < this.numHexagonsX; x++) {
-            let xStart = 2 * GU + x * gridXDistance + cylinderRadius * hexagonRadiuses[2] * Math.cos(hexagonAngleTopLeft) + angleAnimationProgress * 9 * GU;
-            let xEnd = 2 * GU + x * gridXDistance + cylinderRadius * hexagonRadiuses[4] * Math.cos(hexagonAngleTopRight) + angleAnimationProgress * 9 * GU;
+            let xStart = hexagonGridOffsetX + x * gridXDistance + cylinderRadius * hexagonRadiuses[2] * Math.cos(hexagonAngleTopLeft) + angleAnimationProgress * 9 * GU;
+            let xEnd = hexagonGridOffsetX + x * gridXDistance + cylinderRadius * hexagonRadiuses[4] * Math.cos(hexagonAngleTopRight) + angleAnimationProgress * 9 * GU;
             let yStart = yMid;
             let yEnd = yMid;
 
@@ -703,6 +727,14 @@
 
       this.drawHexagons(frame);
 
+      const cameraFovStartFrame = FRAME_FOR_BEAN(3298);
+      const cameraFovEndFrame = FRAME_FOR_BEAN(3306);
+      const cameraFov = lerp(
+        45, .1, (frame - cameraFovStartFrame) / (cameraFovEndFrame - cameraFovStartFrame)
+      );
+
+      this.camera.fov = cameraFov;
+      this.camera.updateProjectionMatrix();
       this.camera.position.x = 0;
       this.camera.position.y = 0;
       this.camera.position.z = -70.6;
@@ -763,7 +795,6 @@
       }
       const backgroundColor = foregroundColor === white ? black: white;
 
-
       // TEXT
       this.textCanvas.width = this.textCanvas.width;
       this.textCtx.fillStyle = backgroundColor;
@@ -780,6 +811,8 @@
 
       this.textTexture.needsUpdate = true;
 
+      this.camera.fov = 45;
+      this.camera.updateProjectionMatrix();
       this.camera.position.x = 0;
       this.camera.position.y = 0;
       this.camera.position.z = 9;
@@ -787,11 +820,7 @@
     }
 
     render(renderer) {
-      if(BEAN >= 2976) {
-        renderer.setClearColor(new THREE.Color(0x77e15d));
-      } else {
-        renderer.setClearColor(new THREE.Color(0x373c3f));
-      }
+      renderer.setClearColor(new THREE.Color(0x373C3F));
       this.ps.render();
       renderer.render(this.scene, this.camera, this.renderTarget, true);
       this.outputs.render.setValue(this.renderTarget.texture);
