@@ -13,6 +13,9 @@
         }
       });
 
+      this.canvas1 = document.createElement('canvas');
+      this.canvas2 = document.createElement('canvas');
+
       const objLoader = new THREE.OBJLoader();
       this.ewerkModel = new THREE.Object3D();
       this.ewerkModel.rotation.y = Math.PI;
@@ -68,7 +71,7 @@
       this.beamer.position.y = 1.10;
       this.beamer.position.z = 0.32;
 
-      this.ps = new ParticleSystem({
+      this.ps = new ParticleSystem({ //eslint-disable-line
         color: new THREE.Color(1, 1, 1),
       });
       const lowerRadius = 205;
@@ -82,10 +85,10 @@
           y: Math.sin(angle) * Math.sin(angle2) * radius,
           z: Math.cos(angle2) * radius,
         }, {
-            x: (Math.random() - 0.5) * 0.01,
-            y: (Math.random() - 0.5) * 0.01,
-            z: (Math.random() - 0.5) * 0.01,
-          }, (2 + Math.random() * 2) * 0.005);
+          x: (Math.random() - 0.5) * 0.01,
+          y: (Math.random() - 0.5) * 0.01,
+          z: (Math.random() - 0.5) * 0.01,
+        }, (2 + Math.random() * 2) * 0.005);
       }
       this.ps.update();
 
@@ -138,9 +141,7 @@
         }));
 
       this.globeContainer.add(this.globe);
-      //this.globeContainer.add(this.cloudGlobe);
       this.globeContainer.add(this.globeDetail);
-      //this.globeContainer.add(this.cloudGlobeDetail);
 
       this.globeContainer.rotation.x = -Math.PI / 2 + .8;
 
@@ -192,10 +193,60 @@
       this.revisionLogo.scale.set(1.02, 1.02, 1.02);
       this.revisionLogo.rotation.x = -Math.PI / 2;
       this.revisionLogo.position.set(0, 350, 115);
-      this.scene.add(this.revisionLogo);
+      //this.scene.add(this.revisionLogo);
+
+      this.revisionPlaceText = new THREE.Mesh(
+        new THREE.PlaneGeometry(1920, 1080, 1, 1),
+        new THREE.MeshBasicMaterial({
+          //color: 0xff00ff,
+          map: new THREE.CanvasTexture(this.generateText(this.canvas1, 'Revision 2018', 'Saarbrücken Easter 2018')),
+          transparent: true,
+        })
+      );
+      this.scene.add(this.revisionPlaceText);
+      this.revisionPlaceText.scale.set(1.02, 1.02, 1.02);
+      this.revisionPlaceText.rotation.x = -Math.PI / 2;
+      this.revisionPlaceText.position.set(0, 350, 115);
+
+      this.byNinjadevText = new THREE.Mesh(
+        new THREE.PlaneGeometry(1920, 1080, 1, 1),
+        new THREE.MeshBasicMaterial({
+          map: new THREE.CanvasTexture(this.generateText(this.canvas2, 'No Invitation', 'by Ninjadev')),
+          transparent: true,
+        })
+      );
+
+      //this.scene.add(this.byNinjadevText);
     }
 
-    beforeUpdate(frame) {
+    generateText(canvas, title, subtitle) {
+      const ctx = canvas.getContext('2d');
+
+      ctx.save();
+      //ctx.scale(16*GU, 9*GU);
+
+      // Title
+      ctx.textAlign = 'left';
+      ctx.textBaseline = 'middle';
+      ctx.font = `${GU}px schmalibre-light`;
+      ctx.fillStyle = '#ffffff';
+
+      ctx.fillText(title, 8, 4.5);
+
+      // Subtitle
+      ctx.textAlign = 'left';
+      ctx.textBaseline = 'middle';
+      ctx.font = '2px schmalibre-light';
+      ctx.fillStyle = '#ffffff';
+
+      ctx.fillText(subtitle, 0, 2);
+
+      ctx.restore();
+
+      return canvas;
+    }
+
+    beforeUpdate() {
       this.inputs.beamer.enabled = BEAN > 200 && BEAN < 672;
       this.inputs.beamer2.enabled = BEAN > 3672 && BEAN < 4280;
     }
@@ -225,11 +276,13 @@
       this.globe.visible = frame < 248 || frame > 11317;
       this.cloudGlobe.visible = frame < 248 || frame > 11317;
       this.revisionLogo.visible = frame > 11317;
+      this.revisionPlaceText.visible = frame > 11317;
       this.ewerkModel.visible = frame >= 248 && frame <= 11317;
 
       this.globe.material.opacity = 1;
       this.cloudGlobe.material.opacity = 1;
       this.revisionLogo.material.opacity = 0;
+      this.revisionPlaceText.material.opacity = 1;
 
       const globeTextures = this.inputs.globeTextures.getValue();
       if (globeTextures) {
@@ -267,14 +320,6 @@
 
       if (frame <= frame1) {
         const t = clamp(0, (frame - frame1 + 12) / 12, 1);
-        /*
-        if(this.skybox.material.materials) {
-          for(let i = 0; i < this.skybox.material.materials.length; i++) {
-            const material = this.skybox.material.materials[i];
-            material.color = new THREE.Color(t, t, t);
-          }
-        }
-        */
 
         this.camera.position.set(
           lerp(0, 0, t),
@@ -480,6 +525,8 @@
         this.revisionLogo.material.opacity = lerp(0, 1, (frame - 11310) / 60);
       }
 
+      this.revisionPlaceText.material.opacity = 1;
+
       this.globeOutline.position.copy(this.globe.position);
       this.globeOutline.position.y -= 500;
       this.globeOutline.position.z -= 220;
@@ -491,6 +538,15 @@
     render(renderer) {
       this.ps.render();
       super.render(renderer);
+    }
+
+    resize() {
+      super.resize();
+
+      this.canvas1.width = 16*GU;
+      this.canvas1.height = 9*GU;
+      this.canvas2.width = 16*GU;
+      this.canvas2.height = 9*GU;
     }
   }
 
