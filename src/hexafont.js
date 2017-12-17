@@ -1094,6 +1094,14 @@
           item.material.emissive = this.colors[2].emissive;
           item.material.emissiveIntensity = 1;
         }
+
+        if(frame >= 4460 && frame < 4483) {
+          item.material.emissive = this.colors[3].emissive;
+        }
+        if(frame >= 4483 && frame < 4497) {
+          item.material.emissive = this.colors[2].emissive;
+        }
+
       }
 
       for(let i = 0; i < this.drawGrid.length; i++) {
