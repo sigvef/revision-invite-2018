@@ -195,28 +195,66 @@
 
       var inner_size = 9.2;
       var middle_size = 15.3;
-      var outer_size = 24.5;
+      var outer_size = 24.7;
 
+      var sizes = [inner_size, middle_size, outer_size];
+      var scalers = [1.2, 1.8, 2.2];
 
       var spin_cube_material = new THREE.MeshBasicMaterial({color: 0x999999});
-      var spin_cube_geometry = new THREE.CylinderGeometry( this.line_width * 10, this.line_width * 10, 2 * outer_size, 12);
-      var edge1 = new THREE.Mesh(spin_cube_geometry, spin_cube_material);
-      var edge2 = new THREE.Mesh(spin_cube_geometry, spin_cube_material);
-      var edge3 = new THREE.Mesh(spin_cube_geometry, spin_cube_material);
-      var edge4 = new THREE.Mesh(spin_cube_geometry, spin_cube_material);
-      edge1.position.set(outer_size, 0, outer_size);
-      edge2.position.set(outer_size, 0, -outer_size);
-      edge3.position.set(-outer_size, 0, outer_size);
-      edge4.position.set(-outer_size, 0, -outer_size);
-      this.spin_cube.add(edge1);
-      this.spin_cube.add(edge2);
-      this.spin_cube.add(edge3);
-      this.spin_cube.add(edge4);
+      
+      for (var i = 0; i < 3; i++) {  
+        var scaler = scalers[i];
+        var spin_cube_geometry = new THREE.CylinderGeometry( this.line_width * scaler, this.line_width * scaler, 2 * sizes[i], 12);
+        var edge1 = new THREE.Mesh(spin_cube_geometry, spin_cube_material);
+        var edge2 = new THREE.Mesh(spin_cube_geometry, spin_cube_material);
+        var edge3 = new THREE.Mesh(spin_cube_geometry, spin_cube_material);
+        var edge4 = new THREE.Mesh(spin_cube_geometry, spin_cube_material);
+        var edge5 = new THREE.Mesh(spin_cube_geometry, spin_cube_material);
+        var edge6 = new THREE.Mesh(spin_cube_geometry, spin_cube_material);
+        var edge7 = new THREE.Mesh(spin_cube_geometry, spin_cube_material);
+        var edge8 = new THREE.Mesh(spin_cube_geometry, spin_cube_material);
+        var edge9 = new THREE.Mesh(spin_cube_geometry, spin_cube_material);
+        var edge10 = new THREE.Mesh(spin_cube_geometry, spin_cube_material);
+        var edge11 = new THREE.Mesh(spin_cube_geometry, spin_cube_material);
+        var edge12 = new THREE.Mesh(spin_cube_geometry, spin_cube_material);
 
 
+        edge1.position.set(sizes[i], 0, sizes[i]);
+        edge2.position.set(sizes[i], 0, -sizes[i]);
+        edge3.position.set(-sizes[i], 0, sizes[i]);
+        edge4.position.set(-sizes[i], 0, -sizes[i]);
 
+        edge5.position.set(sizes[i], sizes[i], 0);
+        edge5.rotation.set(Math.PI / 2, 0, 0);
+        edge6.position.set(sizes[i], -sizes[i], 0);
+        edge6.rotation.set(Math.PI / 2, 0, 0);
+        edge7.position.set(-sizes[i], sizes[i], 0);
+        edge7.rotation.set(Math.PI / 2, 0, 0);
+        edge8.position.set(-sizes[i], -sizes[i], 0);
+        edge8.rotation.set(Math.PI / 2, 0, 0);
 
+        edge9.position.set(0, sizes[i], sizes[i]);
+        edge9.rotation.set(0, 0, Math.PI / 2);
+        edge10.position.set(0, sizes[i], -sizes[i]);
+        edge10.rotation.set(0, 0, Math.PI / 2);
+        edge11.position.set(0, -sizes[i], sizes[i]);
+        edge11.rotation.set(0, 0, Math.PI / 2);
+        edge12.position.set(0, -sizes[i], -sizes[i]);
+        edge12.rotation.set(0, 0, Math.PI / 2);
 
+        this.spin_cube.add(edge1);
+        this.spin_cube.add(edge2);
+        this.spin_cube.add(edge3);
+        this.spin_cube.add(edge4);
+        this.spin_cube.add(edge5);
+        this.spin_cube.add(edge6);
+        this.spin_cube.add(edge7);
+        this.spin_cube.add(edge8);
+        this.spin_cube.add(edge9);
+        this.spin_cube.add(edge10);
+        this.spin_cube.add(edge11);
+        this.spin_cube.add(edge12);
+      }
 
 
       this.inner_cube.scale.set(inner_size, inner_size, inner_size);
@@ -450,7 +488,7 @@
         this.center_line3.scale.set(scale, scale, scale);
       }
       if (frame >= FRAME_FOR_BEAN(25 * 48)) {
-        this.spin_cube.position.set(0, 0, 0);
+        this.spin_cube.position.set(0, 0, 200);
         this.small_center_hex.position.set(200, 0, 0);
         this.middle_center_hex.position.set(200, 0, 0);
         this.outer_center_hex.position.set(200, 0, 0);
