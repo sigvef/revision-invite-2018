@@ -61,8 +61,8 @@
         2: new THREE.MeshBasicMaterial({ color: greenColor }),
         3: new THREE.MeshBasicMaterial({ color: pinkColor }),
       };
-      this.numHexagonsX = 22;
-      this.numHexagonsY = 21;
+      this.numHexagonsX = 8;
+      this.numHexagonsY = 4;
       const cylinderRadius = 0.2;
       const cylinderGeometry = new THREE.CylinderGeometry(cylinderRadius, cylinderRadius, cylinderRadius / 4, 6);
       const padding = 0.1;
@@ -236,7 +236,7 @@
       this.stabThrob *= 0.85;
       this.throb *= 0.95;
 
-      if(BEAT && BEAN % 12 == 0) {
+      if(BEAT && BEAN % 12 === 0) {
         this.throb = 1;
       }
 
@@ -272,8 +272,10 @@
         return this.updatePart2(frame);
       } else if (BEAN >= 3072 && BEAN < 3120) {
         return this.updatePart3(frame);
-      } else if (BEAN >= 3120 && BEAN < 3312) {
+      } else if (BEAN >= 3120 && BEAN < 3168) {
         return this.updatePart4(frame);
+      } else if (BEAN >= 3168 && BEAN < 3312) {
+        return this.updatePart5(frame);
       } else if (BEAN >= 3312) {
         return this.updateLastTextPart(frame);
       }
@@ -578,8 +580,6 @@
         );
       }
 
-
-
       this.camera.lookAt(new THREE.Vector3(0, 0, -80));
 
       // HEXAGONS
@@ -663,10 +663,127 @@
       }
     }
 
+    // 55555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555
+    updatePart5(frame) {
+      demo.nm.nodes.bloom.opacity = 0.1;
+      this.scene.add(this.textPlane);
+      this.scene.remove(this.hexagons);
+      this.ps.particles.visible = false;
+
+      this.textCanvas.width = this.textCanvas.width;
+
+      this.textCtx.fillStyle = '#ff4982';  // le pink
+      this.textCtx.strokeStyle = '#ff4982';  // le pink
+
+      const hexToRectStartFrame = FRAME_FOR_BEAN(3182);  // TODO: needs tweaking
+      const hexToRectEndFrame = FRAME_FOR_BEAN(3186);  // TODO: needs tweaking
+      const hexToRectProgress = (frame - hexToRectStartFrame) / (hexToRectEndFrame - hexToRectStartFrame);
+
+      const hexagonRadiuses = [
+        lerp(1, 0.5, hexToRectProgress),
+        1,
+        1,
+        lerp(1, 0.5, hexToRectProgress),
+        1,
+        1,
+      ];
+      const cylinderRadius = 0.2 * GU;
+      const padding = 0.1 * GU;
+      const distanceBetweenHexagonCores = 1.6 * cylinderRadius + padding;
+      const gridXDistance = distanceBetweenHexagonCores;
+      const gridYDistance = Math.sin(Math.PI / 3) * distanceBetweenHexagonCores;
+
+      if (BEAN < 3216) {
+        const offsetRemovalStartFrame = FRAME_FOR_BEAN(3190);  // TODO: needs tweaking
+        const offsetRemovalEndFrame = FRAME_FOR_BEAN(3196);  // TODO: needs tweaking
+        const offsetRemovalProgress = (frame - offsetRemovalStartFrame) / (offsetRemovalEndFrame - offsetRemovalStartFrame);
+        const offsetFactor = lerp(1, 0, offsetRemovalProgress);
+
+        for (let y = 0; y < this.numHexagonsY; y++) {
+          for (let x = 0; x < this.numHexagonsX; x++) {
+            const offset = y % 2 === 1 ? offsetFactor * gridXDistance / 2 : 0;
+
+            const actualX = 4.5 * GU + x * gridXDistance + offset;
+            const actualY = 1.66 * GU + y * gridYDistance;
+            this.textCtx.beginPath();
+            this.textCtx.moveTo(
+              actualX,
+              actualY + cylinderRadius * hexagonRadiuses[0]
+            );
+            for (let i = 1; i < 6; i++) {
+              const angle = Math.PI / 2 + Math.PI * i / 3;
+              this.textCtx.lineTo(
+                actualX + cylinderRadius * hexagonRadiuses[i] * Math.cos(angle),
+                actualY + cylinderRadius * hexagonRadiuses[i] * Math.sin(angle)
+              );
+            }
+            this.textCtx.closePath();
+            this.textCtx.fill();
+          }
+        }
+      } else if (BEAN >= 3216) {
+        const angleAnimationStartFrame = FRAME_FOR_BEAN(3216);
+        const angleAnimationEndFrame = FRAME_FOR_BEAN(3296);
+        const angleAnimationProgress = (frame - angleAnimationStartFrame) / (angleAnimationEndFrame - angleAnimationStartFrame);
+        const relativeAngle = lerp(0, 6, angleAnimationProgress);
+
+        const circleCenterX = 4.5 * GU + this.numHexagonsX * gridXDistance;
+        const circleCenterY = 1.66 * GU + this.numHexagonsY * gridYDistance;
+        this.textCtx.fillRect(circleCenterX, circleCenterY, 0.05 * GU, 0.05 * GU);
+
+        this.textCtx.lineWidth = cylinderRadius;
+        for (let y = 0; y < this.numHexagonsY; y++) {
+          let yMid = 1.66 * GU + y * gridYDistance;
+          const circleRadius = circleCenterY - yMid;
+          const circumference = circleRadius * 2 * Math.PI;
+          const lengthPerSegment = circumference / this.numHexagonsX;
+
+          this.textCtx.save();
+          for (let x = 0; x < this.numHexagonsX; x++) {
+            const thatRelativeAngle = relativeAngle / circleRadius;
+            const angleTopLeft = Math.PI / 2 + Math.PI * 2 / 3;
+            const angleTopRight = Math.PI / 2 + Math.PI * 4 / 3;
+
+            let xStart = 4.5 * GU + x * gridXDistance + cylinderRadius * hexagonRadiuses[2] * Math.cos(angleTopLeft) + angleAnimationProgress * 9 * GU;
+            let xEnd = 4.5 * GU + x * gridXDistance + cylinderRadius * hexagonRadiuses[4] * Math.cos(angleTopRight) + angleAnimationProgress * 9 * GU;
+            let yEnd = yMid;
+            let yStart = yMid;
+
+            if (xEnd > circleCenterX) {
+              const overshoot = (xEnd - circleCenterX) / GU;
+              const phiEnd = overshoot - Math.PI / 2;
+              xEnd = circleCenterX + circleRadius * Math.cos(phiEnd);
+              yEnd = circleCenterY + circleRadius * Math.sin(phiEnd);
+
+              if (xStart > circleCenterX) {
+                const overshoot = (xStart - circleCenterX) / GU;
+                const phiStart = overshoot - Math.PI / 2;
+
+                xStart = circleCenterX + circleRadius * Math.cos(phiStart);
+                yStart = circleCenterY + circleRadius * Math.sin(phiStart);
+              }
+            }
+
+            this.textCtx.beginPath();
+            this.textCtx.moveTo(xStart, yStart);
+            this.textCtx.lineTo(xEnd, yEnd);
+            this.textCtx.stroke();
+          }
+          this.textCtx.restore();
+        }
+      }
+
+      this.textTexture.needsUpdate = true;
+
+      this.camera.position.x = 0;
+      this.camera.position.y = 0;
+      this.camera.position.z = 9;
+      this.camera.lookAt(new THREE.Vector3(0, 0, 0));
+    }
+
     // ttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttt
     updateLastTextPart(frame) {
-      demo.nm.nodes.bloom.opacity = 0.1;
-        demo.nm.nodes.bloom.opacity = 0;
+      demo.nm.nodes.bloom.opacity = 0;
       this.scene.add(this.textPlane);
       this.scene.remove(this.hexagons);
       this.ps.particles.visible = false;
