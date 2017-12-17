@@ -1,4 +1,4 @@
-(function(global) {
+(function (global) {
   class ewerk extends NIN.THREENode {
     constructor(id, options) {
       super(id, {
@@ -18,11 +18,11 @@
       this.ewerkModel.rotation.y = Math.PI;
 
       this.lowpolySkybox = new THREE.Mesh(
-          new THREE.BoxGeometry(500, 500, 500),
-          new THREE.MeshBasicMaterial({
-            color: 0xadccff,
-            side: THREE.BackSide,
-          }));
+        new THREE.BoxGeometry(500, 500, 500),
+        new THREE.MeshBasicMaterial({
+          color: 0xadccff,
+          side: THREE.BackSide,
+        }));
       this.scene.add(this.lowpolySkybox);
 
 
@@ -73,7 +73,7 @@
       });
       const lowerRadius = 205;
       const upperRadius = 400;
-      for(let i = 0; i < 10000; i++) {
+      for (let i = 0; i < 10000; i++) {
         const radius = lowerRadius + Math.random() * (upperRadius - lowerRadius);
         const angle = Math.random() * Math.PI * 2;
         const angle2 = Math.random() * Math.PI * 2;
@@ -82,10 +82,10 @@
           y: Math.sin(angle) * Math.sin(angle2) * radius,
           z: Math.cos(angle2) * radius,
         }, {
-          x: (Math.random() - 0.5) * 0.01,
-          y: (Math.random() - 0.5) * 0.01,
-          z: (Math.random() - 0.5) * 0.01,
-        }, (2 + Math.random() * 2) * 0.005);
+            x: (Math.random() - 0.5) * 0.01,
+            y: (Math.random() - 0.5) * 0.01,
+            z: (Math.random() - 0.5) * 0.01,
+          }, (2 + Math.random() * 2) * 0.005);
       }
       this.ps.update();
 
@@ -93,49 +93,49 @@
       //this.globeContainer.add(this.ps.particles);
 
       this.globe = new THREE.Mesh(
-          new THREE.SphereBufferGeometry(200, 64, 64),
-          new THREE.MeshStandardMaterial({
-            color: 0xffffff,
-            roughness: 1,
-            metalness: 0,
-            transparent: true,
-          }));
+        new THREE.SphereBufferGeometry(200, 64, 64),
+        new THREE.MeshStandardMaterial({
+          color: 0xffffff,
+          roughness: 1,
+          metalness: 0,
+          transparent: true,
+        }));
 
       this.globeOutline = new THREE.Mesh(
-          new THREE.SphereBufferGeometry(200, 64, 64),
-          new THREE.MeshBasicMaterial({
-            //color: 0x373c3f,
-            //color: 0xc2e4b7,
-            color: 0xb7e2a9,
-            transparent: true,
-          }));
+        new THREE.SphereBufferGeometry(200, 64, 64),
+        new THREE.MeshBasicMaterial({
+          //color: 0x373c3f,
+          //color: 0xc2e4b7,
+          color: 0xb7e2a9,
+          transparent: true,
+        }));
       this.scene.add(this.globeOutline);
 
       this.globeDetail = new THREE.Mesh(
-          new THREE.SphereBufferGeometry(200.1, 64, 64),
-          new THREE.MeshStandardMaterial({
-            color: 0xffffff,
-            roughness: 1,
-            metalness: 0,
-          }));
+        new THREE.SphereBufferGeometry(200.1, 64, 64),
+        new THREE.MeshStandardMaterial({
+          color: 0xffffff,
+          roughness: 1,
+          metalness: 0,
+        }));
 
       this.cloudGlobe = new THREE.Mesh(
-          new THREE.SphereGeometry(201, 40, 40),
-          new THREE.MeshStandardMaterial({
-            color: 0xffffff,
-            roughness: 1,
-            metalness: 0,
-            transparent: true,
-          }));
+        new THREE.SphereGeometry(201, 40, 40),
+        new THREE.MeshStandardMaterial({
+          color: 0xffffff,
+          roughness: 1,
+          metalness: 0,
+          transparent: true,
+        }));
 
       this.cloudGlobeDetail = new THREE.Mesh(
-          new THREE.SphereGeometry(201.1, 40, 40),
-          new THREE.MeshStandardMaterial({
-            color: 0xffffff,
-            roughness: 1,
-            metalness: 0,
-            transparent: true,
-          }));
+        new THREE.SphereGeometry(201.1, 40, 40),
+        new THREE.MeshStandardMaterial({
+          color: 0xffffff,
+          roughness: 1,
+          metalness: 0,
+          transparent: true,
+        }));
 
       this.globeContainer.add(this.globe);
       //this.globeContainer.add(this.cloudGlobe);
@@ -162,7 +162,7 @@
           metalness: 0,
         })
       );
-      this.map.rotation.x = -Math.PI/2;
+      this.map.rotation.x = -Math.PI / 2;
       this.map.rotation.z = 0.11;
       this.map.position.y = -0.02;
       this.map.position.x = 15;
@@ -175,11 +175,11 @@
       this.camera.lookAt(new THREE.Vector3(0, 0, 0));
 
       this.skybox = new THREE.Mesh(
-          new THREE.BoxGeometry(2000, 2000, 2000),
-          new THREE.MeshBasicMaterial({
-            color: 0x99da85,
-            side: THREE.BackSide,
-          }));
+        new THREE.BoxGeometry(2000, 2000, 2000),
+        new THREE.MeshBasicMaterial({
+          color: 0x373c3f,
+          side: THREE.BackSide,
+        }));
       this.scene.add(this.skybox);
 
       this.revisionLogo = new THREE.Mesh(
@@ -207,19 +207,19 @@
       this.lowpolySkybox.visible = frame >= 250 && frame <= 11308;
 
       this.ps.update();
-      if(frame < 366 || frame > 11299) {
+      if (frame < 366 || frame > 11299) {
         this.scene.add(this.globeLight);
       } else {
         this.scene.remove(this.globeLight);
       }
-      if(BEAN > 1000) {
+      if (BEAN > 1000) {
         this.beamer.material.map = this.inputs.beamer2.getValue();
       } else {
         this.beamer.material.map = this.inputs.beamer.getValue();
       }
       this.beamer.material.needsUpdate = true;
       demo.nm.nodes.bloom.opacity = 0;
-      this.globeContainer.rotation.y = 5 -frame / 1000;
+      this.globeContainer.rotation.y = 5 - frame / 1000;
       this.globeDetail.visible = frame >= 248 && frame <= 11317;
       this.cloudGlobeDetail.visible = frame >= 248 && frame <= 11317;
       this.globe.visible = frame < 248 || frame > 11317;
@@ -232,7 +232,7 @@
       this.revisionLogo.material.opacity = 0;
 
       const globeTextures = this.inputs.globeTextures.getValue();
-      if(globeTextures) {
+      if (globeTextures) {
         this.globe.material.map = globeTextures.map;
         this.cloudGlobe.material.alphaMap = globeTextures.cloudMap;
         this.cloudGlobe.material.roughnessMap = globeTextures.cloudMap;
@@ -259,7 +259,7 @@
       this.cloudGlobeDetail.rotation.y -= 0.0002;
       this.ps.particles.rotation.y += 0.0005;
 
-      if(frame > frame2 && frame < frame12) {
+      if (frame > frame2 && frame < frame12) {
         this.map.visible = true;
       } else {
         this.map.visible = false;
@@ -331,7 +331,7 @@
           )
         );
         this.camera.lookAt(new THREE.Vector3(0, 0, 0));
-      } else if( frame <= frame5) {
+      } else if (frame <= frame5) {
         this.camera.position.set(
           lerp(
             lerp(30, 30, (frame - frame4) / (frame5 - frame4)),
@@ -351,10 +351,10 @@
         );
         this.camera.lookAt(new THREE.Vector3(
           lerp(0, -4, (frame - frame5 + 10) / 10),
-          lerp(0, -1.5, (frame -frame5 + 10) / 10),
+          lerp(0, -1.5, (frame - frame5 + 10) / 10),
           0
         ));
-      } else if(frame <= frame6) {
+      } else if (frame <= frame6) {
         const t = (frame - 531) / (563 - 531);
         this.camera.position.set(
           lerp(
@@ -368,11 +368,11 @@
             t) + easeOut(0, -3.5, t * 2) + lerp(0, 3.5, t),
           lerp(1, 1, t) + easeOut(0, 1.6, t) + easeIn(0, -1.6, t));
         this.camera.lookAt(
-            new THREE.Vector3(
-              lerp(-4, -5.3, t),
-              lerp(-1.5, 1.1, t),
-              lerp(0, 0.42, t)
-              ));
+          new THREE.Vector3(
+            lerp(-4, -5.3, t),
+            lerp(-1.5, 1.1, t),
+            lerp(0, 0.42, t)
+          ));
       } else if (frame <= frame7) {
         const x = -3.2796042561328207;
         const y = 1.08649525980141;
@@ -387,7 +387,7 @@
           lerp(0.5, y, (frame - frame7 + 10) / 10),
           lerp(1, z, (frame - frame7 + 10) / 10));
         this.camera.lookAt(
-            new THREE.Vector3(x - 2, y - .0, z + 0.01));
+          new THREE.Vector3(x - 2, y - .0, z + 0.01));
       } else if (frame <= frame9) {
         this.camera.position.set(
           lerp(
@@ -399,7 +399,7 @@
           easeIn(0.3240734065472578, 1, (frame - frame8) / 10)
         );
         this.camera.lookAt(
-            new THREE.Vector3(-5.2796042, 1.08649525, 0.334073));
+          new THREE.Vector3(-5.2796042, 1.08649525, 0.334073));
       } else if (frame <= frame10) {
         const t = (frame - frame9) / 30;
         this.camera.position.set(
@@ -415,11 +415,11 @@
           ),
           lerp(1, 1, t) + easeIn(1.8, 0, t) + easeOut(-1.8, 0, t));
         this.camera.lookAt(
-            new THREE.Vector3(
-              lerp(-5.2796042, -4, t),
-              lerp(1.08649525, -1.5, t),
-              lerp(0.334073, 0, t)
-              ));
+          new THREE.Vector3(
+            lerp(-5.2796042, -4, t),
+            lerp(1.08649525, -1.5, t),
+            lerp(0.334073, 0, t)
+          ));
       } else if (frame <= frame11) {
         this.camera.position.set(
           lerp(
