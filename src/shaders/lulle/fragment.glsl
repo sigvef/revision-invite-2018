@@ -12,12 +12,16 @@ const float EPS = 0.001;
 const float END = 100.0;
 const float START = 0.0;
 
+const vec3 PINK = vec3(255., 73., 130.)/255.;
+const vec3 GREY = vec3(55., 60., 63.)/255.;
+const vec3 GREEN = vec3(119., 225., 130.)/255.;
+const vec3 WHITE = vec3(255., 255., 255.)/255.;
+
 vec2 smin(vec2 a, vec2 b, float k) {
     float h = clamp(0.5 + 0.5 * (b.x - a.x) / k, 0.0, 1.0);
     float material = mix(a.y, b.y, h);
     return vec2(mix(b.x, a.x, h) - k * h * (1.0 - h), material);
 }
-
 
 vec2 minmin(vec2 d1, vec2 d2) {
     float material = d1.y;
@@ -53,27 +57,31 @@ vec2 sdf(in vec3 p) {
     ar[6] = vec2(-1.5, 0.);
     ar[7] = vec2(-1., 1.);
 
+    float repeatSize = 13.;
+    
+    p.x += 5. * step(repeatSize, mod(p.y + 5., repeatSize * 2.));
+    p.x = mod(p.x + repeatSize / 2., repeatSize) - repeatSize / 2.;
+    p.y = mod(p.y + repeatSize / 2., repeatSize) - repeatSize / 2.;
+
     float centerSize = 0.5 + cos(mod(BEAN - startBEAN, 48.) / 48. * PI) / 4.;
     vec2 s = vec2(sphere(p, centerSize * 1.5), 1.);
     n = (BEAN-startBEAN)/6.;
 
+
     for (float i = 0.; i < 32.; i++) {
         if (i > n) {break;}
         vec2 a = vec2(0.);
+        float size = 0.5 + cos(mod(-0.8 * (floor(i/8.) + 1.) + BEAN - startBEAN, 48.) / 48. * PI) / 4.;
         if (i <= 7.) {
-            float size = 0.5 + cos(mod(-0.8 * (floor(i/8.) + 1.) + BEAN - startBEAN, 48.) / 48. * PI) / 4.;
             a = vec2(sphere(p-vec3(ar[int(i)], 0.), size), 2.);
         }
         if (i > 7. && i < 16.) {
-            float size = 0.5 + cos(mod(-.8 * (floor(i/8.) + 1.) + BEAN - startBEAN, 48.) / 48. * PI) / 4.;
             a = vec2(sphere(p-vec3((ar[int(mod(i, 8.))])*1.75, 0.), size-0.1), 1.);
         }
         if (i > 15. && i < 48.) {
-            float size = 0.5 + cos(mod(-.8 * (floor(i/8.) + 1.) + BEAN - startBEAN, 48.) / 48. * PI) / 4.;
             a = vec2(sphere(p-vec3((ar[int(mod(i, 8.))])*2.25, 0.), size-0.2), 2.);
         }
         if (i > 23. && i < 32.) {
-            float size = 0.5 + cos(mod(-.8 * (floor(i/8.) + 1.) + BEAN - startBEAN, 48.) / 48. * PI) / 4.;
             a = vec2(sphere(p-vec3((ar[int(mod(i, 8.))])*2.75, 0.), size-0.3), 1.);
         }
         s = minmin(s, a);
@@ -164,30 +172,35 @@ vec3 phongIllumination(vec3 k_a, vec3 k_d, vec3 k_s, float alpha, vec3 p, vec3 e
 vec4 background(vec2 uv) {
     return texture2D(tDiffuse, mod(uv * vec2(16., 9.) / 16. * 2., 1.));
     float intensity = 0.;
-    intensity = (1. + sin(uv.x * 100. + frame/5.) + sin(uv.y * 50.))/4.;
-    vec3 color = vec3(55., 60., 63.)/255.;
-    intensity = intensity * (2.9 + sin(mod(BEAN, 12.)/12.));
+    intensity = (1. + floor(sin(uv.x * 100. + frame/100.) + sin(uv.y * 50.)));
+    vec3 color = GREY;
+    intensity = intensity * (1. + floor(1. + sin(mod(BEAN, 12.)/12.)));
     return vec4(color*(0.4 + 0.2 * intensity), 1.);
 }
 
 void main() {
-    vec3 eye = vec3(0.0, 0.0, 20.0);
+    float eyez = 20.;
+    if (BEAN > 2040.) {
+        eyez = (BEAN - 2000.)/2.; 
+    }
+    if (eyez > 80.) {
+        eyez = 80.;
+    }
+    vec3 eye = vec3(0.0, 0.0, eyez);
     vec3 dir = rayDir(60.0, vUv);
 
     vec2 res = march(eye, dir, START, END);
 
     vec3 color = vec3(.0);
     if (res.x >= END-EPS) {
-        color = background(vUv + vec2(frame / 180., frame / 120.)).xyz;
+        color = background(vUv + vec2(frame / 200., frame / 220.)).xyz;
     } else {
         vec3 p = eye + dir * res.x;
-        color = mix(vec3(.0, 224./255., 79./255.),
-                    vec3(255./255., 73./255., 130./255.),
-                    res.y - 1.);
+        color = mix(WHITE, WHITE, res.y - 1.);
         color = phongIllumination(color, color, normalize(vec3(1.0, 1.0, 1.0)), 10.0, p, eye);
     }
 
-    color += 0.1 * step(0.5, (vUv.y - 0.5) + 0.5 * sin(0.75 * PI / 2. + vUv.x * PI / 4.));
+    //color += 0.1 * step(0.5, (vUv.y - 0.5) + 0.5 * sin(0.75 * PI / 2. + vUv.x * PI / 4.));
 
     vec2 uv = (vUv - 0.5) * 2.;
     color *= 0.75 + (1. - abs(uv.x * uv.y)) * 0.25;

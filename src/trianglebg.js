@@ -49,7 +49,7 @@
     drawTriangle(x, y, amount) {
       this.ctx.save();
       this.ctx.translate(x, y);
-      this.ctx.strokeStyle = 'white';
+      this.ctx.strokeStyle = 'rgb(255, 73, 130)';
       this.ctx.lineWidth = 0.05;
 
       this.ctx.beginPath();
@@ -79,7 +79,7 @@
       this.ctx.scale(GU / 2 * 8, GU / 2 * 8);
       this.ctx.translate(1, 1);
 
-      this.ctx.fillStyle = 'rgb(55, 60, 63)';
+      this.ctx.fillStyle = 'rgb(25, 25, 25)';
       this.ctx.fillRect(-1, -1, 2, 2);
 
       const amount = smoothstep(0, 1, (this.frame - FRAME_FOR_BEAN(1824)) / (
