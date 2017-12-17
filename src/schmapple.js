@@ -231,14 +231,14 @@
       this.throb *= 0.9;
       if (BEAT) {
         switch (BEAN) {
-        case 648:
-        case 648 + 6:
-        case 648 + 12:
-        case 648 + 18:
-          this.throb = 1;
-          this.cameraDX = (Math.random() - 0.5) * 5.0;
-          this.cameraDY = (Math.random() - 0.5) * 5.0;
-          this.cameraDR = (Math.random() - 0.5) * 0.1;
+          case 648:
+          case 648 + 6:
+          case 648 + 12:
+          case 648 + 18:
+            this.throb = 1;
+            this.cameraDX = (Math.random() - 0.5) * 5.0;
+            this.cameraDY = (Math.random() - 0.5) * 5.0;
+            this.cameraDR = (Math.random() - 0.5) * 0.1;
         }
       }
 
@@ -263,12 +263,12 @@
       this.stabThrob *= 0.95;
       if (BEAT) {
         switch (BEAN - 528) {
-        case 0:
-        case 9:
-        case 24:
-        case 24 + 9:
-        case 24 + 9 + 9:
-          this.stabThrob = 1;
+          case 0:
+          case 9:
+          case 24:
+          case 24 + 9:
+          case 24 + 9 + 9:
+            this.stabThrob = 1;
         }
       }
       this.cumulativeStabThrob += this.stabThrob;
@@ -478,18 +478,14 @@
         this.ctx.fillStyle = '#77e15d';
         this.ctx.translate(80, 45);
         this.ctx.translate(0, 4);
-        this.ctx.font = 'bold 20pt schmalibre';
+        this.ctx.font = 'bold 18pt schmalibre';
         this.ctx.textBaseline = 'middle';
         this.ctx.textAlign = 'center';
         let text = '';
-        if (BEAN >= 648 + 18) {
-          text = 'JUST';
-        } else if (BEAN >= 648 + 12) {
-          text = 'IT\'S';
-        } else if (BEAN >= 648 + 6) {
-          text = 'YEAR';
+        if (BEAN >= 648 + 12) {
+          text = 'IT\'S JUST';
         } else {
-          text = 'THIS';
+          text = 'THIS YEAR';
         }
         this.ctx.translate(
           (Math.random() - 0.5) * amount,
