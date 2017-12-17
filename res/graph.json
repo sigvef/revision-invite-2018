@@ -91,7 +91,8 @@
     },
     "connected": {
       "overlay": "revisionBars.render",
-      "overlay2": "jaws.render",
+      "overlay2": "revisionLogoCenter.render",
+      "overlay3": "jaws.render",
       "nextScene": "hexafont.render",
       "cameraValues": "revisionBars.cameraValues"
     }
@@ -530,5 +531,9 @@
     "connected": {
       "tDiffuse": "bouncyGeometry.render"
     }
+  },
+  {
+    "id": "revisionLogoCenter",
+    "type": "revisionLogoCenter"
   }
 ]
