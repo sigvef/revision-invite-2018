@@ -248,7 +248,7 @@
       this.ctx.scale(scale, scale);
       this.ctx.rotate(this.outputs.cameraValues.value.cameraRotate);
       this.ctx.translate(this.outputs.cameraValues.value.cameraX,
-                         this.outputs.cameraValues.value.cameraY);
+        this.outputs.cameraValues.value.cameraY);
 
       let i = 0;
       for (const letter of this.textScript.slice().reverse()) {
@@ -264,7 +264,7 @@
         );
         this.ctx.fillStyle = 'rgba(119, 225, 93, 255)';
         this.ctx.fillStyle = 'rgb(255, 73, 130)';
-        this.ctx.fillStyle = 'rgb(55, 80, 63)';
+        this.ctx.fillStyle = 'rgb(152, 209, 155)';
         this.ctx.beginPath();
         this.ctx.moveTo(letter.x, 0);
         this.ctx.lineTo(letter.x + 1, -1);
@@ -272,14 +272,13 @@
         this.ctx.lineTo(letter.x, 11);
         this.ctx.fill();
         this.ctx.beginPath();
-        this.ctx.fillStyle = 'rgb(55, 80, 63)';
+        this.ctx.fillStyle = 'rgb(152, 209, 155)';
         this.ctx.moveTo(letter.x + 1, 1);
         this.ctx.lineTo(letter.x, 2);
         this.ctx.lineTo(letter.x, 10);
         this.ctx.lineTo(letter.x + 1, 10);
         this.ctx.fill();
         this.ctx.beginPath();
-        this.ctx.fillStyle = 'rgb(55, 80, 63)';
         this.ctx.fillStyle = 'rgba(255, 255, 255, 0.2)';
         this.ctx.moveTo(letter.x + 0.85, -0.85);
         this.ctx.lineTo(letter.x + 1, -1);
