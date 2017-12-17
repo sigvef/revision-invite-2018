@@ -63,7 +63,7 @@
       this.ctx.translate(16 / 3 - nudger, 9 / 2);
       this.ctx.rotate(Math.PI / 2 - 0.11);
       this.ctx.fillStyle = 'white';
-      this.ctx.fillText('NO FREE WIFI', 0, 0);
+      this.ctx.fillText('NO TUNNELS', 0, 0);
 
       this.ctx.restore();
       this.canvasTexture.needsUpdate = true;
