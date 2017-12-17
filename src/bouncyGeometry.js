@@ -557,7 +557,7 @@
 
       this.ps.decayFactor = 0.9999;
 
-      const impactBeans = [3120, 3130, 3144, 3154, 3160];
+      const impactBeans = [3120, 3130, 3144, 3154, 3162];
 
       let impactIndex = 0;
       for (let i = 0; i < 4; i++) {
@@ -567,16 +567,18 @@
       }
       const impactStartFrame = FRAME_FOR_BEAN(impactBeans[impactIndex]);
       const impactEndFrame = FRAME_FOR_BEAN(impactBeans[impactIndex + 1]);
+      const jumpLengthInFrames = impactEndFrame - impactStartFrame;
       const framesSinceImpact = frame - impactStartFrame;
-      const impactProgress = framesSinceImpact / (impactEndFrame - impactStartFrame);
-      const distanceFromWallFactor = impactIndex >= 3 ? impactProgress : Math.sin(impactProgress * Math.PI);
+      const impactProgress = framesSinceImpact / jumpLengthInFrames;
+      const distanceFromWallFactor = impactIndex >= 3 ? 2.4 * impactProgress : Math.sin(impactProgress * Math.PI);
 
       this.ball.position.x = 0;
       this.ball.position.y = 0;
-      this.ball.position.z = -79 + 3 * distanceFromWallFactor;
+      this.ball.position.z = -79 + 0.1 * jumpLengthInFrames * distanceFromWallFactor;
       this.ball.rotation.x = 0;
       this.ball.rotation.y = 0;
-      this.ball.scale.z = 1 + Math.pow(Math.max(0, 1 - framesSinceImpact / 26), 1.1) * 0.8 * Math.sin(framesSinceImpact / 2.6);
+      this.ball.rotation.z = 0;
+      this.ball.scale.z = 1 + Math.pow(Math.max(0, 1 - framesSinceImpact / 26), 1.1) * jumpLengthInFrames * 0.02 * Math.sin(framesSinceImpact / 2.6);
       this.ball.material.emissiveIntensity = 0.3 + 0.7 * Math.pow(1 - impactProgress, 2);
 
       if (impactBeans.indexOf(BEAN) !== -1) {
