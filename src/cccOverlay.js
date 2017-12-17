@@ -35,11 +35,11 @@
       this.ctx.save();
       this.ctx.scale(GU, GU);
 
-      if(frame > 7010) {
+      if(frame > 7300) {
         const t = lerp(
           0,
-          lerp(1, 0, (frame - 7241 + 10) / 20),
-          (frame - 7010) / 20
+          lerp(1, 0, (frame - 7512) / 20),
+          (frame - 7377) / 20
         );
 
         // NO RIBBONS
@@ -64,8 +64,8 @@
       } else {
         const t = lerp(
           0,
-          lerp(1, 0, (frame - 6990) / 20),
-          (frame - 6761) / 20
+          lerp(1, 0, (frame - 7161) / 20),
+          (frame - 7010) / 20
         );
         // NO GRAS || NO STARS
         this.ctx.fillStyle = 'rgba(8, 10, 12, .6)';

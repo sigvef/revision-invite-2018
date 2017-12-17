@@ -344,8 +344,6 @@
     update(frame) {
       super.update(frame);
 
-      demo.nm.nodes.bloom.opacity = .25;
-
       this.group.rotation.x = (frame*0.0001);
       this.group.rotation.y = (frame*0.0001);
 
