@@ -289,15 +289,6 @@
             const angle = Math.random() * Math.PI * 2;
             const x = radius * Math.cos(angle);
             const y = radius * Math.sin(angle);
-            this.ps.spawn({
-              x,
-              y,
-              z: 0,
-            }, {
-              x: x * 0.1,
-              y: y * 0.1,
-              z: 0.3,
-            }, 0.015);
           }
         } else {
           this.ballIntroScale = 0;
