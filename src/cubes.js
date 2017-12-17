@@ -1,4 +1,4 @@
-(function(global) {
+(function (global) {
   class cubes extends NIN.THREENode {
     constructor(id, options) {
       super(id, {
@@ -34,8 +34,8 @@
       this.scene.add(this.directionalLight);
 
       this.bg = new THREE.Mesh(
-          new THREE.BoxGeometry(16, 9, 1),
-          new THREE.ShaderMaterial(SHADERS.discowall));
+        new THREE.BoxGeometry(16, 9, 1),
+        new THREE.ShaderMaterial(SHADERS.discowall));
       this.scene.add(this.bg);
       this.bg.position.z = -100;
       const scale = 18;
@@ -53,9 +53,9 @@
       this.cubeWidth = 16 / 4 * 4;
       this.cubeHeight = 9 / 2 * 4;
       const cubeGeometry = new THREE.BoxGeometry(this.cubeWidth,
-          this.cubeHeight,
-          2);
-      for(let i = 0; i < 8; i++) {
+        this.cubeHeight,
+        2);
+      for (let i = 0; i < 8; i++) {
         const mapClone = Loader.loadTexture('res/testo.png');
         const cube = new THREE.Mesh(
           cubeGeometry,
@@ -67,8 +67,8 @@
           }));
         mapClone.repeat.set(1 / 4, 1 / 2);
         mapClone.offset.set(
-            (i % 4) / 4,
-            0.5 - (i / 4 | 0) / 2);
+          (i % 4) / 4,
+          0.5 - (i / 4 | 0) / 2);
         this.cubes[i] = cube;
         this.scene.add(cube);
       }
@@ -107,24 +107,24 @@
       this.wallCtx.globalAlpha = 1;
       this.backThrob *= 0.9;
       const start = baseBean + 48 + 24;
-      if(BEAT) {
-        switch(BEAN % 96) {
-        case 12:
-        case 36:
-        case 60:
-        case 84:
-        case 90:
-          this.backThrob = 1;
+      if (BEAT) {
+        switch (BEAN % 96) {
+          case 12:
+          case 36:
+          case 60:
+          case 84:
+          case 90:
+            this.backThrob = 1;
         }
       }
-      if(BEAT && BEAN >= start) {
+      if (BEAT && BEAN >= start) {
         const size = 2;
         const offset = BEAN - start;
-        for(let j = 0; j < 9; j++) {
+        for (let j = 0; j < 9; j++) {
           const y = j;
           const lower = y > this.wallCanvas.height / size / 2;
           let x = offset;
-          if(lower) {
+          if (lower) {
             x = 16 - offset;
           }
           const color = lower ? 'rgb(255, 73, 130)' : '#77e15d';
@@ -140,29 +140,29 @@
       this.blindLight.intensity = 10 * this.backThrob;
 
       this.blinkThrob *= 0.8;
-      if(BEAT) {
-        switch(BEAN) {
-        case baseBean:
-        case baseBean + 9:
-        case baseBean + 9 + 9:
-        case baseBean + 24:
-          this.cameraShakeAngularVelocity.x = (Math.random() - 0.5) * 0.05;
-          this.cameraShakeAngularVelocity.y = (Math.random() - 0.5) * 0.05;
-          this.cameraShakeAngularVelocity.z = (Math.random() - 0.5) * 0.05;
-        case baseBean + 24 + 12:
-        case baseBean + 24 + 12 +  6:
-        case baseBean + 48:
-        case baseBean + 48 + 6:
-        case baseBean + 48 + 12:
-        case baseBean + 48 + 12 + 3:
-        case baseBean + 48 + 24 - 3:
-          this.cameraShakeVelocity.x = (this.camera.position.x -
-            this.cameraPreviousPosition.x) * 0.1;
-          this.cameraShakeVelocity.y = (this.camera.position.y -
-            this.cameraPreviousPosition.y) * 0.1;
-          this.cameraShakeVelocity.z = (this.camera.position.z -
-            this.cameraPreviousPosition.z) * 0.1;
-          this.blinkThrob = 1;
+      if (BEAT) {
+        switch (BEAN) {
+          case baseBean:
+          case baseBean + 9:
+          case baseBean + 9 + 9:
+          case baseBean + 24:
+            this.cameraShakeAngularVelocity.x = (Math.random() - 0.5) * 0.05;
+            this.cameraShakeAngularVelocity.y = (Math.random() - 0.5) * 0.05;
+            this.cameraShakeAngularVelocity.z = (Math.random() - 0.5) * 0.05;
+          case baseBean + 24 + 12:
+          case baseBean + 24 + 12 + 6:
+          case baseBean + 48:
+          case baseBean + 48 + 6:
+          case baseBean + 48 + 12:
+          case baseBean + 48 + 12 + 3:
+          case baseBean + 48 + 24 - 3:
+            this.cameraShakeVelocity.x = (this.camera.position.x -
+              this.cameraPreviousPosition.x) * 0.1;
+            this.cameraShakeVelocity.y = (this.camera.position.y -
+              this.cameraPreviousPosition.y) * 0.1;
+            this.cameraShakeVelocity.z = (this.camera.position.z -
+              this.cameraPreviousPosition.z) * 0.1;
+            this.blinkThrob = 1;
         }
       }
 
@@ -173,7 +173,7 @@
       cameraPosition.x = 0;
       cameraPosition.y = 0;
       const scaleUpT = (frame - 2002) / (2253 - 2002);
-      for(let i = 0; i < this.cubes.length; i++) {
+      for (let i = 0; i < this.cubes.length; i++) {
         const cube = this.cubes[i];
         cube.position.x = (((i % 4) + 0.5) / this.cubes.length - 0.25) * 4 * this.cubeWidth * 2;
         cube.position.y = (0.5 - (i / 4 | 0)) * this.cubeHeight;
@@ -207,35 +207,35 @@
       }
 
       const A = easeOut(0, 3 * Math.PI * 2,
-          (frame - 2002) / (2065 - 2002)) + frame * Math.PI * 2 / 60 / 60 * 115 / 2;
+        (frame - 2002) / (2065 - 2002)) + frame * Math.PI * 2 / 60 / 60 * 115 / 2;
       const B = easeOut(0, 1 * Math.PI * 2,
-          (frame - 2026) / 40);
+        (frame - 2026) / 40);
       const D = easeOut(0, 1 * Math.PI * 2 / 2,
-          (frame - 2049) / 10);
-      const E = easeOut(1, 1.15, 
-          (frame - 2065) / 10);
-      const F = easeOut(1, 1.15, 
-          (frame - 2076) / 10);
+        (frame - 2049) / 10);
+      const E = easeOut(1, 1.15,
+        (frame - 2065) / 10);
+      const F = easeOut(1, 1.15,
+        (frame - 2076) / 10);
       this.cubes[4].rotation.y = A;
       this.cubes[0].rotation.y = A;
       this.cubes[5].rotation.y = B;
       this.cubes[1].rotation.x = B;
       this.cubes[6].rotation.z = D;
-      this.cubes[2].rotation.z = D;   
-      this.cubes[3].scale.set(E, E, E);   
-      this.cubes[3].position.y += (E - 1) * 15;   
-      this.cubes[7].scale.set(F, F, F);   
-      this.cubes[7].position.y -= (F - 1) * 15;   
-    
-      const C = easeIn(1, 0.3, (frame - 2002) / (2096 - 2002));   
-      this.cubes[2].scale.set(C, C, C);   
+      this.cubes[2].rotation.z = D;
+      this.cubes[3].scale.set(E, E, E);
+      this.cubes[3].position.y += (E - 1) * 15;
+      this.cubes[7].scale.set(F, F, F);
+      this.cubes[7].position.y -= (F - 1) * 15;
+
+      const C = easeIn(1, 0.3, (frame - 2002) / (2096 - 2002));
+      this.cubes[2].scale.set(C, C, C);
       this.cubes[6].scale.set(C, C, C);
 
       const t = (frame - 2096 + 10) / 10;
       cameraPosition.x = easeIn(0, -30, t);
       cameraPosition.y = easeIn(0, 10, t);
       cameraPosition.z = easeIn(100, 25, t);
-      if(frame >= 2096) {
+      if (frame >= 2096) {
         cameraPosition.x = -30;
         cameraPosition.y = 10;
         cameraPosition.z = 25;
@@ -245,7 +245,7 @@
         cameraPosition.y = easeIn(10, 10.5, t);
         cameraPosition.z = easeIn(25, 25, t);
       }
-      if(frame >= 2109) {
+      if (frame >= 2109) {
         cameraPosition.x = -10.5;
         cameraPosition.y = 10.5;
         cameraPosition.z = 25;
@@ -255,7 +255,7 @@
         cameraPosition.y = easeIn(10.5, 10.5, t);
         cameraPosition.z = easeIn(25, 10, t);
       }
-      if(frame >= 2128) {
+      if (frame >= 2128) {
         cameraPosition.x = 10.5;
         cameraPosition.y = 10.5;
         cameraPosition.z = 10;
@@ -265,12 +265,12 @@
         cameraPosition.y = easeIn(10.5, 13, t);
         cameraPosition.z = easeIn(10, 25, t);
       }
-      if(frame >= 2143) {
+      if (frame >= 2143) {
         cameraPosition.x = 34;
         cameraPosition.y = 13;
         cameraPosition.z = 25;
       }
-      if(frame >= 2159) {
+      if (frame >= 2159) {
         cameraPosition.x = -35;
         cameraPosition.y = -11;
         cameraPosition.z = 25;
@@ -280,7 +280,7 @@
         cameraPosition.y = easeIn(-11, -11, t);
         cameraPosition.z = easeIn(25, 20, t);
       }
-      if(frame >= 2169) {
+      if (frame >= 2169) {
         cameraPosition.x = -12;
         cameraPosition.y = -11;
         cameraPosition.z = 20;
@@ -290,12 +290,12 @@
         cameraPosition.y = easeIn(-11, 0, t);
         cameraPosition.z = easeIn(20, 100, t);
 
-        for(let i = 0; i < this.cubes.length; i++) {
+        for (let i = 0; i < this.cubes.length; i++) {
           this.cubes[i].scale.x = easeIn(this.cubes[i].scale.x, 1, t);
           this.cubes[i].scale.y = easeIn(this.cubes[i].scale.y, 1, t);
         }
       }
-      if(frame >= 2186) {
+      if (frame >= 2186) {
         cameraPosition.x = 0;
         cameraPosition.y = 0;
         cameraPosition.z = 100;
@@ -340,24 +340,15 @@
       this.textCtx.textBaseline = 'middle';
       if (BEAN >= baseBean) {
         const start = baseBean + 48 + 24;
-        for(let i = 0; i < 16; i++) {
+        for (let i = 0; i < 16; i++) {
           const swipeOffset = BEAN - start - i;
-          const reverseSwipeOffset = BEAN - start + i - 14;
           this.textCtx.save();
           this.textCtx.translate(1 + i + 0.5, 4.4);
           this.textCtx.fillStyle = '#77e15d';
-          if(swipeOffset > 0) {
-            this.textCtx.fillText('THIS YEAR                       '[i], 0, 0);
+          if (swipeOffset > 0) {
+            this.textCtx.fillText('BACK TO BASICS                 '[i], 0, 0);
             this.textCtx.rotate(Math.PI);
-            //this.textCtx.fillText('    T      T     '[i], 0, -0.2);
             this.textCtx.rotate(Math.PI);
-          }
-          if(reverseSwipeOffset > 0) {
-            this.textCtx.translate(0, 1);
-            this.textCtx.fillStyle = 'rgb(255, 73, 130)';
-            this.textCtx.fillText('BACK TO BASICS   '[i], 0, 0);
-            this.textCtx.rotate(Math.PI);
-            //this.textCtx.fillText('         T T    '[i], 0, -0.2);
           }
           this.textCtx.restore();
 
@@ -368,10 +359,10 @@
       this.bg.material.uniforms.texttexture.value = this.textTexture;
 
       renderer.setClearColor(new THREE.Color(
-          55 / 255,
-          60 / 255,
-          63 / 255));
-      super.render(renderer); 
+        55 / 255,
+        60 / 255,
+        63 / 255));
+      super.render(renderer);
     }
   }
 

@@ -104,7 +104,6 @@
       this.playerRacingCar = this.createRacer(1, pinkMaterial);
 
       this.importantFrames = [
-        -9,
         -6,
         0,
         9,
