@@ -478,14 +478,23 @@
         this.ctx.fillStyle = '#77e15d';
         this.ctx.translate(80, 45);
         this.ctx.translate(0, 4);
-        this.ctx.font = 'bold 18pt schmalibre';
+        this.ctx.font = 'bold 16pt schmalibre';
         this.ctx.textBaseline = 'middle';
-        this.ctx.textAlign = 'center';
+        this.ctx.textAlign = 'left';
         let text = '';
-        if (BEAN >= 648 + 12) {
+        let textX = 0;
+        if (BEAN >= 648 + 12 + 6) {
+          textX = 45;
           text = 'IT\'S JUST';
-        } else {
+        } else if (BEAN >= 648 + 12) {
+          textX = 45;
+          text = 'IT\'S';
+        } else if (BEAN >= 648 + 6) {
+          textX = 50;
           text = 'THIS YEAR';
+        } else {
+          textX = 50;
+          text = 'THIS';
         }
         this.ctx.translate(
           (Math.random() - 0.5) * amount,
@@ -495,9 +504,9 @@
         const scale = 1 + this.throb * 0.5;
         this.ctx.scale(scale, scale);
         this.ctx.fillStyle = 'rgba(55, 60, 63 , 0.2)';
-        this.ctx.fillText(text, 1, 1);
+        this.ctx.fillText(text, 1 - textX, 1);
         this.ctx.fillStyle = 'white';
-        this.ctx.fillText(text, 0, 0);
+        this.ctx.fillText(text, -textX, 0);
 
         this.ctx.restore();
       }
