@@ -14,7 +14,8 @@
       this.uniforms.tDiffuse.value = this.inputs.bg.getValue();
       this.uniforms.BEAN.value = BEAN;
       this.uniforms.BEAT.value = BEAT ? 1 : 0;
-      demo.nm.nodes.bloom.opacity = 2.0;
+      demo.nm.nodes.bloom.opacity = easeOut(10, 2.0, Math.pow((frame - FRAME_FOR_BEAN(1824)) / (
+            FRAME_FOR_BEAN(1824 + 24) - FRAME_FOR_BEAN(1824)), 2));
 
       if (BEAT) { 
           switch (BEAN) {
