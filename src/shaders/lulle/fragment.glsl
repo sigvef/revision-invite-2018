@@ -50,11 +50,8 @@ vec2 sdf(in vec3 p) {
     float repeatSize = 15.;
     float repeatSizeY = repeatSize * .75;
     float offset = 0.;
-    float loop = mod(BEAN - startBEAN, 24.);
     if (BEAN >= 2064. && BEAN < 2184.) {
-        if (loop >= 6. && loop < 8.) offset = PI / 16.;
-        if (loop >= 10. && loop < 12.) offset = PI / 16.;
-        if (loop >= 18.) offset = PI / 8.;
+        offset = mod(BEAN - startBEAN, 24.);
     }
     
     p.x += repeatSize / 2. * step(repeatSizeY, mod(p.y + 5., repeatSizeY * 2.));
