@@ -513,8 +513,6 @@
 
       this.ps.update(frame);
 
-      demo.nm.nodes.bloom.opacity = 1.5;
-
       const globeTextures = this.inputs.globeTextures.getValue();
       if(globeTextures) {
         this.skybox.material = globeTextures.skyboxMaterial;
