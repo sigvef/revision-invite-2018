@@ -636,7 +636,7 @@
         1,
         1,
       ];
-      const cylinderRadius = 0.2 * GU;
+      const cylinderRadius = 0.4 * GU;
       const padding = 0.1 * GU;
       const distanceBetweenHexagonCores = 1.6 * cylinderRadius + padding;
       const gridXDistance = distanceBetweenHexagonCores;
