@@ -153,6 +153,7 @@ vec3 phongIllumination(vec3 k_a, vec3 k_d, vec3 k_s, float alpha, vec3 p, vec3 e
 }
 
 vec4 background(vec2 uv) {
+    return texture2D(tDiffuse, mod(uv * vec2(16., 9.) / 16. * 2., 1.));
     float intensity = 0.;
     intensity = (1. + sin(uv.x * 100. + frame/5.) + sin(uv.y * 50.))/4.;
     vec3 color = vec3(55., 60., 63.)/255.;
@@ -167,7 +168,7 @@ void main() {
     vec2 res = march(eye, dir, START, END);
 
     if (res.x >= END-EPS) {
-        gl_FragColor = background(vUv);
+        gl_FragColor = background(vUv + vec2(frame / 180., frame / 120.));
         return;
     }
 
