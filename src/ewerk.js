@@ -106,6 +106,7 @@
           new THREE.MeshBasicMaterial({
             //color: 0x373c3f,
             color: 0xc2e4b7,
+            transparent: true,
           }));
       this.scene.add(this.globeOutline);
 
@@ -205,7 +206,7 @@
       this.lowpolySkybox.visible = frame >= 250 && frame <= 11308;
 
       this.ps.update();
-      if(frame < 366) {
+      if(frame < 366 || frame > 11299) {
         this.scene.add(this.globeLight);
       } else {
         this.scene.remove(this.globeLight);
@@ -472,6 +473,7 @@
 
         this.globe.material.opacity = easeIn(1, 0, (frame - 11350) / 150);
         this.cloudGlobe.material.opacity = easeIn(1, 0, (frame - 11350) / 150);
+        this.globeOutline.material.opacity = easeIn(1, 0, (frame - 11350) / 150);
         this.revisionLogo.material.opacity = easeIn(0, 1, (frame - 11350) / 150);
       }
 
