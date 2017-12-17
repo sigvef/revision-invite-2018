@@ -799,7 +799,7 @@
         const endFrame = FRAME_FOR_BEAN(3332);
         const progress = (frame - startFrame) / (endFrame - startFrame);
         throbFactor = lerp(2, 0, progress);
-        shakeAmount = 5 * throbFactor;
+        //shakeAmount = 5 * throbFactor;
         fontScaler = 1.4;
       } else if (BEAN >= 3336 && BEAN < 3340) {
         text = 'THINGS';
@@ -811,14 +811,15 @@
       } else if (BEAN >= 3346) {
         foregroundColor = black;
         text = 'DIFFERENT';
-        fontScaler = 2.2;
+        fontScaler = 1.8;
         const startFrame = FRAME_FOR_BEAN(3346);
         const endFrame = FRAME_FOR_BEAN(3357);
         const progress = (frame - startFrame) / (endFrame - startFrame);
         throbFactor = lerp(2, 0, progress);
-        shakeAmount = 8 * throbFactor;
+        //shakeAmount = 8 * throbFactor;
       }
-      const backgroundColor = foregroundColor === white ? black: white;
+      const pink = 'rgb(255, 73, 130)';
+      const backgroundColor = foregroundColor === white ? pink : white;
 
       // TEXT
       this.textCanvas.width = this.textCanvas.width;
