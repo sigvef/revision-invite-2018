@@ -30,7 +30,7 @@
       this.tunnelScene = new THREE.Scene();
 
       this.bg = new THREE.Mesh(
-          new THREE.BoxGeometry(160, 90, 1), 
+          new THREE.BoxGeometry(160 * 2, 90 * 2, 1), 
           new THREE.MeshBasicMaterial());
       this.bg.material.transparent = true;
       this.scene.add(this.bg);
@@ -433,6 +433,12 @@
       this.textball.position.copy(this.ball.position);
 
       this.bg.material.map = this.inputs.featurebg.getValue();
+      if(this.bg.material.map) {
+        /*
+        this.bg.material.map.repeat.set(1.5, 1.5);
+        this.bg.material.map.offset.set(-0.25, -0.25);
+        */
+      }
       this.bg.material.needsUpdate = true;
 
       this.cameraPreviousPosition.copy(this.camera.position);

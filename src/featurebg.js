@@ -37,72 +37,84 @@
 
       this.ctx.save();
       this.ctx.scale(GU, GU);
+      this.ctx.translate(16 / 2, 9 / 2);
 
       let t = (this.frame - FRAME_FOR_BEAN(3720 - 6)) / (
           FRAME_FOR_BEAN(3720) - FRAME_FOR_BEAN(3720 - 6));
 
-      this.ctx.save();
-      this.ctx.translate(
-        easeIn(0, -16, t),
-        easeIn(0, -9 / 3 / 2, t));
-      this.ctx.fillStyle = '#82052c';
-      const fudge = 0.05;
-      this.ctx.beginPath();
-      this.ctx.moveTo(0, 0);
-      this.ctx.lineTo(16, 0);
-      this.ctx.lineTo(16 + (9 / 3 / 2) * 16 / 9, fudge);
-      this.ctx.lineTo(16 / 3 / 2, 9 + fudge);
-      this.ctx.lineTo(0, 9 + fudge);
-      this.ctx.lineTo(0, 0);
-      this.ctx.fill();
-      this.ctx.restore();
+      if(t < 0.9999) {
+        this.ctx.save();
+        this.ctx.translate(
+          easeIn(0, -16, t),
+          easeIn(0, -9 / 3 / 2, t));
+        this.ctx.fillStyle = '#82052c';
+        const fudge = 0.05;
+        this.ctx.translate(8, 4.5);
+        this.ctx.scale(2, 2);
+        this.ctx.beginPath();
+        this.ctx.moveTo(-8 + 0, -4.5 + 0);
+        this.ctx.lineTo(-8 + 16, -4.5 + 0);
+        this.ctx.lineTo(-8 + 16 + (9 / 3 / 2) * 16 / 9, -4.5 + fudge);
+        this.ctx.lineTo(-8 + 16 / 3 / 2, -4.5 + 9 + fudge);
+        this.ctx.lineTo(-8 + 0, -4.5 + 9 + fudge);
+        this.ctx.lineTo(-8 + 0, -4.5 + 0);
+        this.ctx.fill();
+        this.ctx.restore();
 
-      this.ctx.translate(
-        easeIn(0, 16, t),
-        0);
-      this.ctx.fillStyle = '#500019';
-      if(BEAN > 3750) {
-        this.ctx.fillStyle = 'rgb(55, 60, 63)';
+        this.ctx.translate(
+          easeIn(0, 16, t),
+          0);
+        this.ctx.fillStyle = '#500019';
+        if(BEAN > 3750) {
+          this.ctx.fillStyle = 'rgb(55, 60, 63)';
+        }
+        this.ctx.save();
+        this.ctx.beginPath();
+        this.ctx.translate(8, 4.5);
+        this.ctx.scale(2, 2);
+        this.ctx.moveTo(-8 + 16, -4.5 + 9 / 3 / 2);
+        this.ctx.lineTo(-8 + 16, -4.5 + 9);
+        this.ctx.lineTo(-8 + 16 / 3 / 2, -4.5 + 9);
+        this.ctx.lineTo(-8 + 16, -4.5 + 9 / 3 / 2);
+        this.ctx.fill();
+        this.ctx.restore();
       }
-      this.ctx.beginPath();
-      this.ctx.moveTo(16, 9 / 3 / 2);
-      this.ctx.lineTo(16, 9);
-      this.ctx.lineTo(16 / 3 / 2, 9);
-      this.ctx.lineTo(16, 9 / 3 / 2);
-      this.ctx.fill();
 
       t = (this.frame - FRAME_FOR_BEAN(3672)) / (
           FRAME_FOR_BEAN(3672 + 6) - FRAME_FOR_BEAN(3672));
 
-      this.ctx.fillStyle = 'white';
-      this.ctx.font = 'bold 1pt schmalibre';
-      this.ctx.textBaseline = 'middle';
-      this.ctx.textAlign = 'center';
-      this.ctx.translate(easeIn(-4, 4.22, t), 4.5);
-      const scaleT = (this.frame - FRAME_FOR_BEAN(3672 + 6)) /
-        (FRAME_FOR_BEAN(3672 + 12) - FRAME_FOR_BEAN(3672 + 6));
-      let scaleX = easeIn(1.5, 1, t * t);
-      let scaleY = easeIn(0.5, 1, t * t * t);
-      if(BEAN >= 3672 + 6) {
-        scaleX *= easeOut(1.2, 1, scaleT);
-        scaleY *= easeOut(1.2, 1, scaleT);
-      }
-      this.ctx.scale(scaleX, scaleY);
-      if(BEAN < 3750) {
-        this.ctx.fillText('JUST', 0, 0);
+      if(BEAN < 3720) {
+        this.ctx.fillStyle = 'white';
+        this.ctx.font = 'bold 1pt schmalibre';
+        this.ctx.textBaseline = 'middle';
+        this.ctx.textAlign = 'center';
+        this.ctx.translate(easeIn(-4, 4.22, t), 4.5);
+        const scaleT = (this.frame - FRAME_FOR_BEAN(3672 + 6)) /
+          (FRAME_FOR_BEAN(3672 + 12) - FRAME_FOR_BEAN(3672 + 6));
+        let scaleX = easeIn(1.5, 1, t * t);
+        let scaleY = easeIn(0.5, 1, t * t * t);
+        if(BEAN >= 3672 + 6) {
+          scaleX *= easeOut(1.2, 1, scaleT);
+          scaleY *= easeOut(1.2, 1, scaleT);
+        }
+        this.ctx.scale(scaleX, scaleY);
+        if(BEAN < 3750) {
+          this.ctx.fillText('JUST', 0, 0);
+        }
       }
       this.ctx.restore();
 
 
       this.ctx.save();
       this.ctx.scale(GU, GU);
+      this.ctx.translate(16 / 2, 9 / 2);
       if(BEAN >= 3768 - 6) {
         t = (this.frame - FRAME_FOR_BEAN(3768 - 6)) / (
           FRAME_FOR_BEAN(3768) - FRAME_FOR_BEAN(3768 - 6));
         this.ctx.fillStyle = '#ff4982';
         this.ctx.fillStyle = 'rgb(55, 60, 63)';
-        this.ctx.fillRect(0, easeIn(-9, 0, t), 8, 9);
-        this.ctx.fillRect(8, easeIn(9, 0, t), 8, 9);
+        this.ctx.fillRect(-16, easeIn(-18, -9, t), 16 + 8, 9 * 2);
+        this.ctx.fillRect(8, easeIn(9, -9, t), 16 + 8, 18);
 
         this.ctx.fillStyle = 'white';
         this.ctx.fillStyle = '#77e15d';
@@ -127,8 +139,8 @@
     }
 
     resize() {
-      this.canvas.width = 16 * GU;
-      this.canvas.height = 9 * GU;
+      this.canvas.width = 16 * GU * 2;
+      this.canvas.height = 9 * GU* 2;
     }
   }
 
