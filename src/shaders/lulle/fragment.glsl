@@ -48,6 +48,7 @@ float sphere(vec3 p, float s) {
 vec2 sdf(in vec3 p) {
     float startBEAN = 1824. + 24.;
     float repeatSize = 15.;
+    float repeatSizeY = repeatSize * .75;
     float offset = 0.;
     float loop = mod(BEAN - startBEAN, 24.);
     if (BEAN >= 2064. && BEAN < 2184.) {
@@ -56,9 +57,13 @@ vec2 sdf(in vec3 p) {
         if (loop >= 18.) offset = PI / 8.;
     }
     
-    p.x += 5. * step(repeatSize, mod(p.y + 5., repeatSize * 2.));
+    p.x += repeatSize / 2. * step(repeatSizeY, mod(p.y + 5., repeatSizeY * 2.));
     p.x = mod(p.x + repeatSize / 2., repeatSize) - repeatSize / 2.;
-    p.y = mod(p.y + repeatSize / 2., repeatSize) - repeatSize / 2.;
+    p.y = mod(p.y + repeatSizeY / 2., repeatSizeY) - repeatSizeY / 2.;
+
+    if(frame < 4820.) {
+        return vec2(999999., 1.);
+    }
 
     float centerSize = 0.5 + cos(mod(BEAN - startBEAN, 48.) / 48. * PI) / 4.;
     vec2 s = vec2(sphere(p, centerSize * 1.5), 1.);
@@ -71,7 +76,7 @@ vec2 sdf(in vec3 p) {
 
         float radius = 1.5 + circleIndex;
         float angle = 2. * PI * i/8.;
-        float visible = step(i+1., numOfBalls);
+        float visible = step(i+4., numOfBalls);
         float x = sin(angle + offset) * radius * visible;
         float y = cos(angle + offset) * radius * visible;
         vec2 a = vec2(sphere(p-vec3(x, y, 0.), size), 1.);
@@ -181,7 +186,7 @@ void main() {
 
     vec3 color = vec3(.0);
     if (res.x >= END-EPS) {
-        color = background(vUv + vec2(0., frame / 500.)).xyz;
+        color = background((vUv + vec2(-.5, frame / 800.)) * (1. + (frame - 4726.) / 1000.)).xyz;
     } else {
         vec3 p = eye + dir * res.x;
         color = mix(WHITE, WHITE, res.y - 1.);
