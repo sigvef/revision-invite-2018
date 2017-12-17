@@ -378,7 +378,7 @@
           beam.position.x = 8 * Math.cos(angle);
           beam.position.y = 8 * Math.sin(angle);
           beam.position.z = -180 + (1.66 * frame + i) % 190;
-          if (beam.position.z > zThreshold) {
+          if (beam.position.z > zThreshold || BEAN < 2960) {
             beam.visible = false;
           }
           beam.scale.z = 1;
@@ -567,24 +567,28 @@
 
       this.ps.decayFactor = 0.99999;
 
-      if (BEAN === 3120) {
-        this.cameraShakeAngularVelocity.x = (this.random() - 0.5) * 0.05;
-        this.cameraShakeAngularVelocity.y = (this.random() - 0.5) * 0.05;
-        this.cameraShakeAngularVelocity.z = (this.random() - 0.5) * 0.05;
+      const impactBeans = [3120, 3130, 3144, 3154];
+
+      // TODO
+
+      if (impactBeans.indexOf(BEAN) !== -1) {
+        this.cameraShakeAngularVelocity.x = (this.random() - 0.5) * 0.03;
+        this.cameraShakeAngularVelocity.y = (this.random() - 0.5) * 0.03;
+        this.cameraShakeAngularVelocity.z = (this.random() - 0.5) * 0.03;
       }
 
       this.camera.lookAt(new THREE.Vector3(0, 0, lerp(-80, -90, progress)));
 
-      this.cameraShakeAcceleration.x = -this.cameraShakePosition.x * 0.05;
-      this.cameraShakeAcceleration.y = -this.cameraShakePosition.y * 0.05;
-      this.cameraShakeAcceleration.z = -this.cameraShakePosition.z * 0.05;
-      this.cameraShakeAngularAcceleration.x = -this.cameraShakeRotation.x * 0.05;
-      this.cameraShakeAngularAcceleration.y = -this.cameraShakeRotation.y * 0.05;
-      this.cameraShakeAngularAcceleration.z = -this.cameraShakeRotation.z * 0.05;
+      this.cameraShakeAcceleration.x = -this.cameraShakePosition.x * 0.07;
+      this.cameraShakeAcceleration.y = -this.cameraShakePosition.y * 0.07;
+      this.cameraShakeAcceleration.z = -this.cameraShakePosition.z * 0.07;
+      this.cameraShakeAngularAcceleration.x = -this.cameraShakeRotation.x * 0.07;
+      this.cameraShakeAngularAcceleration.y = -this.cameraShakeRotation.y * 0.07;
+      this.cameraShakeAngularAcceleration.z = -this.cameraShakeRotation.z * 0.07;
       this.cameraShakeVelocity.add(this.cameraShakeAcceleration);
       this.cameraShakeAngularVelocity.add(this.cameraShakeAngularAcceleration);
-      this.cameraShakeVelocity.multiplyScalar(0.95);
-      this.cameraShakeAngularVelocity.multiplyScalar(0.95);
+      this.cameraShakeVelocity.multiplyScalar(0.9);
+      this.cameraShakeAngularVelocity.multiplyScalar(0.9);
       this.cameraShakePosition.add(this.cameraShakeVelocity);
       this.cameraShakeRotation.add(this.cameraShakeAngularVelocity);
 
