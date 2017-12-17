@@ -32,8 +32,8 @@
       this.uniforms.frame.value = frame;
       let t = Math.pow(T(62 * 48, 62 * 48 + 12, frame), 1.5);
 
-      if (BEAN >= 3108) {
-        t = 1 - T(3108, 3108 + 12, frame);
+      if (BEAN >= 3018) {
+        t = 1 - T(3018, 3018 + 12, frame);
       }
       this.uniforms.translationOverX.value = easeIn(0.5, 0, t);
       this.uniforms.translationUnderX.value = easeIn(0, -0.15, t);
@@ -59,8 +59,8 @@
 
       this.ctx.font = 'bold 1pt schmalibre';
       this.ctx.textAlign = 'center';
-      this.ctx.textBaseline = 'bottom';
-      this.ctx.translate(16 / 3, 9 / 2);
+      this.ctx.textBaseline = 'top';
+      this.ctx.translate(16 / 3 - nudger, 9 / 2);
       this.ctx.rotate(Math.PI / 2 - 0.11);
       this.ctx.fillStyle = 'white';
       this.ctx.fillText('NO FREE WIFI', 0, 0);
