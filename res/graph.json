@@ -143,6 +143,9 @@
     "type": "lulleNode",
     "options": {
       "shader": "lulle"
+    },
+    "connected": {
+        "bg": "trianglebg.render"
     }
   },
   {
@@ -535,5 +538,9 @@
   {
     "id": "revisionLogoCenter",
     "type": "revisionLogoCenter"
+  },
+  {
+    "id": "trianglebg",
+    "type": "trianglebg"
   }
 ]
