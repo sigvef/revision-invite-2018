@@ -23,7 +23,7 @@
 
       // Scene background
       this.cube = new THREE.Mesh(new THREE.BoxGeometry(196, 109, 0.1),
-                                 new THREE.MeshBasicMaterial({ color: 0x373c3f }));
+                                 new THREE.MeshBasicMaterial({ color: 0x77e15d }));
       this.cube.position.set(0,0,-100);
       this.scene.add(this.cube);
 

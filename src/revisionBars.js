@@ -273,6 +273,8 @@
         this.ctx.fillStyle = 'rgba(119, 225, 93, 255)';
         this.ctx.fillStyle = 'rgb(255, 73, 130)';
         this.ctx.fillStyle = 'rgb(152, 209, 155)';
+        this.ctx.fillStyle = 'rgba(119, 225, 93, 255)';
+        this.ctx.fillStyle = 'rgb(153, 218, 133)';
         this.ctx.beginPath();
         this.ctx.moveTo(letter.x, 0);
         this.ctx.lineTo(letter.x + 1, -1);
@@ -281,6 +283,8 @@
         this.ctx.fill();
         this.ctx.beginPath();
         this.ctx.fillStyle = 'rgb(152, 209, 155)';
+        this.ctx.fillStyle = 'rgba(119, 225, 93, 255)';
+        this.ctx.fillStyle = 'rgb(153, 218, 133)';
         this.ctx.moveTo(letter.x + 1, 1);
         this.ctx.lineTo(letter.x, 2);
         this.ctx.lineTo(letter.x, 10);
@@ -300,7 +304,7 @@
         this.ctx.fillStyle = 'white';
         this.ctx.lineWidth = 0.2;
         this.ctx.translate(letter.x + 0.45, 0.35);
-        this.ctx.fillStyle = 'rgba(119, 225, 93, 255)';
+        this.ctx.fillStyle = 'rgba(119, 225, 93, 1)';
         this.ctx.fillStyle = 'white';
         this.ctx.fillText(letter.letter, 0, 0);
         this.ctx.restore();

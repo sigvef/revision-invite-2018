@@ -12,17 +12,19 @@ const float EPS = 0.001;
 const float END = 100.0;
 const float START = 0.0;
 
-vec2 minmin(vec2 d1, vec2 d2) {
-    if (d1.x > d2.x) {
-        return d2;
-    }
-    return d1;
+vec2 smin(vec2 a, vec2 b, float k) {
+    float h = clamp(0.5 + 0.5 * (b.x - a.x) / k, 0.0, 1.0);
+    float material = mix(a.y, b.y, h);
+    return vec2(mix(b.x, a.x, h) - k * h * (1.0 - h), material);
 }
 
-vec2 smin(vec2 a, vec2 b, float k){
-    float ax = pow(a.x, k);
-    float bx = pow(b.x, k);
-    return vec2(pow((ax * bx)/(ax + bx), 1.0/k), a.y);
+
+vec2 minmin(vec2 d1, vec2 d2) {
+    float material = d1.y;
+    if (d1.x > d2.x) {
+        material = d2.y;
+    }
+    return vec2(smin(d1, d2, 1.).x, material);
 }
 
 float displace(vec3 p, float d1) {
@@ -41,7 +43,7 @@ float sphere(vec3 p, float s) {
 vec2 sdf(in vec3 p) {
     vec2 ar[8];
     float n = 0.;
-    float startBEAN = 1824.;
+    float startBEAN = 1824. + 24.;
     ar[0] = vec2(0., 1.5);
     ar[1] = vec2(1., 1.);
     ar[2] = vec2(1.5, 0.);
@@ -51,27 +53,27 @@ vec2 sdf(in vec3 p) {
     ar[6] = vec2(-1.5, 0.);
     ar[7] = vec2(-1., 1.);
 
-    float centerSize = 0.5 + cos(mod(BEAN - startBEAN, 24.) / 24. * PI) / 4.;
+    float centerSize = 0.5 + cos(mod(BEAN - startBEAN, 48.) / 48. * PI) / 4.;
     vec2 s = vec2(sphere(p, centerSize * 1.5), 1.);
-    n = (BEAN-startBEAN)/12.;
+    n = (BEAN-startBEAN)/6.;
 
     for (float i = 0.; i < 32.; i++) {
         if (i > n) {break;}
         vec2 a = vec2(0.);
         if (i <= 7.) {
-            float size = 0.5 + cos(mod(-0.8 * (floor(i/8.) + 1.) + BEAN - startBEAN, 24.) / 24. * PI) / 4.;
+            float size = 0.5 + cos(mod(-0.8 * (floor(i/8.) + 1.) + BEAN - startBEAN, 48.) / 48. * PI) / 4.;
             a = vec2(sphere(p-vec3(ar[int(i)], 0.), size), 2.);
         }
         if (i > 7. && i < 16.) {
-            float size = 0.5 + cos(mod(-.8 * (floor(i/8.) + 1.) + BEAN - startBEAN, 24.) / 24. * PI) / 4.;
+            float size = 0.5 + cos(mod(-.8 * (floor(i/8.) + 1.) + BEAN - startBEAN, 48.) / 48. * PI) / 4.;
             a = vec2(sphere(p-vec3((ar[int(mod(i, 8.))])*1.75, 0.), size-0.1), 1.);
         }
-        if (i > 15. && i < 24.) {
-            float size = 0.5 + cos(mod(-.8 * (floor(i/8.) + 1.) + BEAN - startBEAN, 24.) / 24. * PI) / 4.;
+        if (i > 15. && i < 48.) {
+            float size = 0.5 + cos(mod(-.8 * (floor(i/8.) + 1.) + BEAN - startBEAN, 48.) / 48. * PI) / 4.;
             a = vec2(sphere(p-vec3((ar[int(mod(i, 8.))])*2.25, 0.), size-0.2), 2.);
         }
         if (i > 23. && i < 32.) {
-            float size = 0.5 + cos(mod(-.8 * (floor(i/8.) + 1.) + BEAN - startBEAN, 24.) / 24. * PI) / 4.;
+            float size = 0.5 + cos(mod(-.8 * (floor(i/8.) + 1.) + BEAN - startBEAN, 48.) / 48. * PI) / 4.;
             a = vec2(sphere(p-vec3((ar[int(mod(i, 8.))])*2.75, 0.), size-0.3), 1.);
         }
         s = minmin(s, a);
@@ -131,24 +133,31 @@ vec3 phongContribForLight(vec3 k_d, vec3 k_s, float alpha, vec3 p, vec3 eye,
 }
 
 vec3 phongIllumination(vec3 k_a, vec3 k_d, vec3 k_s, float alpha, vec3 p, vec3 eye) {
-    const vec3 ambientLight = 1. * vec3(1.0, 1.0, 1.0);
-    vec3 color = ambientLight * k_a;
 
-    vec3 light1Pos = vec3(0.0, 0.0, 10.0);
-    vec3 light1Intensity = vec3(0.5, 0.5, 0.5);
+    vec3 pos = p;
+    vec3 nor = estimateNormal(p);
+    vec3 rd = eye;
+    vec3 ref = reflect( rd, nor );
+    vec3  lig = normalize( vec3(-0.4, 0.7, -0.6) );
+    float amb = clamp( 0.5+0.5*nor.y, 0.0, 1.0 );
+    float dif = clamp( dot( nor, lig ), 0.0, 1.0 );
+    float bac = clamp( dot( nor, normalize(vec3(-lig.x,0.0,-lig.z))), 0.0, 1.0 )*clamp( 1.0-pos.y,0.0,1.0);
+    float fre = pow( clamp(1.0+dot(nor,rd),0.0,1.0), 2.0 );
+    float spe = pow(clamp( dot( ref, lig ), 0.0, 1.0 ),16.0);
 
-    //vec3 phongContrib = phongContribForLight(k_d, k_s, alpha, p, eye, light1Pos, light1Intensity);
-    //color += phongContrib;
+    vec3 lin = vec3(0.0);
+    lin += 1.30*dif*vec3(1.00,0.80,0.55);
+    lin += 2.00*spe*vec3(1.00,0.90,0.70)*dif;
+    lin += 0.40*amb*vec3(0.40,0.60,1.00);
+    lin += 0.50*bac*vec3(0.25,0.25,0.25);
+    lin += 0.25*fre*vec3(1.00,1.00,1.00);
+    vec3 color = k_a * lin;
 
-    vec3 light2Pos = vec3(0.0, 0.0, 10.0);
-    vec3 light2Intensity = vec3(0.2, 0.2, 0.2);
-
-    //phongContrib = phongContribForLight(k_d, k_s, alpha, p, eye, light2Pos, light2Intensity);
-    //color +=  phongContrib;
-
-    // color *= 2.;
-    // color = floor(color);
-    //color /= 2.;
+    /*
+    color *= 8.;
+    color = floor(color);
+    color /= 7.;
+    */
     return color;
 }
 
@@ -167,20 +176,21 @@ void main() {
 
     vec2 res = march(eye, dir, START, END);
 
-    if (res.x >= END-EPS) {
-        gl_FragColor = background(vUv + vec2(frame / 180., frame / 120.));
-        return;
-    }
-
-    vec3 p = eye + dir * res.x;
-
     vec3 color = vec3(.0);
-    if (res.y == 2.) {
-        color = vec3(.0, 224./255., 79./255.);
+    if (res.x >= END-EPS) {
+        color = background(vUv + vec2(frame / 180., frame / 120.)).xyz;
     } else {
-        color = vec3(255./255., 73./255., 130./255.);
+        vec3 p = eye + dir * res.x;
+        color = mix(vec3(.0, 224./255., 79./255.),
+                    vec3(255./255., 73./255., 130./255.),
+                    res.y - 1.);
+        color = phongIllumination(color, color, normalize(vec3(1.0, 1.0, 1.0)), 10.0, p, eye);
     }
-    color = phongIllumination(color, color, vec3(1.0, 1.0, 1.0), 10.0, p, eye);
+
+    color += 0.1 * step(0.5, (vUv.y - 0.5) + 0.5 * sin(0.75 * PI / 2. + vUv.x * PI / 4.));
+
+    vec2 uv = (vUv - 0.5) * 2.;
+    color *= 0.75 + (1. - abs(uv.x * uv.y)) * 0.25;
 
     gl_FragColor = vec4(color, 1.0);
 

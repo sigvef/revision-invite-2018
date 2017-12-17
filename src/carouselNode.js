@@ -35,7 +35,7 @@
       this.uniforms.radiusMultiplier.value = easeIn(0, 50, t * 0.05);
       //this.uniforms.thirdColor.value = new THREE.Color(171 / 255, 12 / 255, 62 / 255);
       this.uniforms.thirdColor.value = new THREE.Color(204 / 255, 38 / 255, 90 / 255);
-      this.uniforms.thirdColor.value = new THREE.Color(0x98d19b);
+      this.uniforms.thirdColor.value = new THREE.Color(153 / 255, 218 / 255, 133 / 255);
       this.uniforms.thirdColorRadius.value = lerp(
         0.075,
         10,
