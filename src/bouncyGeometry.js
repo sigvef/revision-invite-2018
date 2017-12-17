@@ -117,8 +117,6 @@
       this.ball = new THREE.Mesh(this.ballGeometry, this.ballMaterial);
       this.scene.add(this.ball);
 
-
-
       // BEAMS
       this.beamMaterial = new THREE.MeshBasicMaterial({
         color: 0x97f280,
@@ -232,6 +230,7 @@
     }
 
     update(frame) {
+      demo.nm.nodes.bloom.opacity = 0;
 
       this.stabThrob *= 0.85;
       this.throb *= 0.95;
@@ -257,8 +256,6 @@
       this.updateBeams(frame);
       if (BEAN < 2976) {
         this.scene.remove(this.textPlane);
-        demo.nm.nodes.bloom.opacity = 0;
-
         this.scene.remove(this.beams);
         this.camera.position.x = 0;
         this.camera.position.y = 0;
@@ -470,7 +467,7 @@
 
     // 11111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111
     updatePart1(frame) {
-      this.scene.remove(this.textPlane);
+      this.scene.add(this.textPlane);
       this.ps.particles.visible = false;
       this.scene.remove(this.hexagons);
 
@@ -479,9 +476,6 @@
       const startFrame = FRAME_FOR_BEAN(2976);
       const endFrame = FRAME_FOR_BEAN(3024);
       const progress = (frame - startFrame) / (endFrame - startFrame);
-
-      demo.nm.nodes.bloom.opacity = lerp(0, 0.1, progress);
-      demo.nm.nodes.bloom.opacity = 0;
 
       // CAMERA
       this.camera.position.x = lerp(0, 0.8, progress);
@@ -492,10 +486,7 @@
 
     // 22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
     updatePart2(frame) {
-      demo.nm.nodes.bloom.opacity = 0.1;
-        demo.nm.nodes.bloom.opacity = 0;
-
-      this.scene.remove(this.textPlane);
+      this.scene.add(this.textPlane);
       this.ps.particles.visible = true;
       this.setBeamsVisibility(true);
       this.scene.remove(this.hexagons);
@@ -539,9 +530,6 @@
 
     // 33333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333
     updatePart3(frame) {
-      demo.nm.nodes.bloom.opacity = 0.1;
-        demo.nm.nodes.bloom.opacity = 0;
-
       this.scene.remove(this.textPlane);
       this.ps.particles.visible = true;
       this.setBeamsVisibility(true);
@@ -601,14 +589,10 @@
 
       this.ps.decayFactor = 0.99999;
 
-      demo.nm.nodes.bloom.opacity = Math.max(0.1, demo.nm.nodes.bloom.opacity - 0.03);
-        demo.nm.nodes.bloom.opacity = 0;
       if (BEAN === 3120) {
         this.cameraShakeAngularVelocity.x = (this.random() - 0.5) * 0.05;
         this.cameraShakeAngularVelocity.y = (this.random() - 0.5) * 0.05;
         this.cameraShakeAngularVelocity.z = (this.random() - 0.5) * 0.05;
-        demo.nm.nodes.bloom.opacity = 1.99;
-        demo.nm.nodes.bloom.opacity = 0;
       }
 
       this.camera.lookAt(new THREE.Vector3(0, 0, lerp(-80, -90, progress)));
@@ -665,7 +649,6 @@
 
     // 55555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555
     updatePart5(frame) {
-      demo.nm.nodes.bloom.opacity = 0.1;
       this.scene.add(this.textPlane);
       this.scene.remove(this.hexagons);
       this.ps.particles.visible = false;
@@ -724,30 +707,27 @@
       } else if (BEAN >= 3216) {
         const angleAnimationStartFrame = FRAME_FOR_BEAN(3216);
         const angleAnimationEndFrame = FRAME_FOR_BEAN(3296);
-        const angleAnimationProgress = (frame - angleAnimationStartFrame) / (angleAnimationEndFrame - angleAnimationStartFrame);
-        const relativeAngle = lerp(0, 6, angleAnimationProgress);
+        const angleAnimationProgress = lerp(
+          0, 1, (frame - angleAnimationStartFrame) / (angleAnimationEndFrame - angleAnimationStartFrame)
+        );
+
+        const hexagonAngleTopLeft = Math.PI / 2 + Math.PI * 2 / 3;
+        const hexagonAngleTopRight = Math.PI / 2 + Math.PI * 4 / 3;
 
         const circleCenterX = 4.5 * GU + this.numHexagonsX * gridXDistance;
         const circleCenterY = 1.66 * GU + this.numHexagonsY * gridYDistance;
-        this.textCtx.fillRect(circleCenterX, circleCenterY, 0.05 * GU, 0.05 * GU);
 
         this.textCtx.lineWidth = cylinderRadius;
         for (let y = 0; y < this.numHexagonsY; y++) {
           let yMid = 1.66 * GU + y * gridYDistance;
           const circleRadius = circleCenterY - yMid;
-          const circumference = circleRadius * 2 * Math.PI;
-          const lengthPerSegment = circumference / this.numHexagonsX;
 
           this.textCtx.save();
           for (let x = 0; x < this.numHexagonsX; x++) {
-            const thatRelativeAngle = relativeAngle / circleRadius;
-            const angleTopLeft = Math.PI / 2 + Math.PI * 2 / 3;
-            const angleTopRight = Math.PI / 2 + Math.PI * 4 / 3;
-
-            let xStart = 4.5 * GU + x * gridXDistance + cylinderRadius * hexagonRadiuses[2] * Math.cos(angleTopLeft) + angleAnimationProgress * 9 * GU;
-            let xEnd = 4.5 * GU + x * gridXDistance + cylinderRadius * hexagonRadiuses[4] * Math.cos(angleTopRight) + angleAnimationProgress * 9 * GU;
-            let yEnd = yMid;
+            let xStart = 4.5 * GU + x * gridXDistance + cylinderRadius * hexagonRadiuses[2] * Math.cos(hexagonAngleTopLeft) + angleAnimationProgress * 9 * GU;
+            let xEnd = 4.5 * GU + x * gridXDistance + cylinderRadius * hexagonRadiuses[4] * Math.cos(hexagonAngleTopRight) + angleAnimationProgress * 9 * GU;
             let yStart = yMid;
+            let yEnd = yMid;
 
             if (xEnd > circleCenterX) {
               const overshoot = (xEnd - circleCenterX) / GU;
@@ -783,7 +763,6 @@
 
     // ttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttt
     updateLastTextPart(frame) {
-      demo.nm.nodes.bloom.opacity = 0;
       this.scene.add(this.textPlane);
       this.scene.remove(this.hexagons);
       this.ps.particles.visible = false;
