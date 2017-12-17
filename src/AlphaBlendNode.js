@@ -1,4 +1,4 @@
-(function(global) {
+(function (global) {
   class AlphaBlendNode extends NIN.ShaderNode {
     constructor(id, options) {
       options.inputs = options.inputs || {};

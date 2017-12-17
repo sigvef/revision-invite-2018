@@ -3,7 +3,7 @@
     "id": "root",
     "type": "NIN.RootNode",
     "connected": {
-      "screen": "bloom.render"
+      "screen": "metaballBlend.render"
     }
   },
   {
@@ -435,6 +435,21 @@
     }
   },
   {
+    "id": "metaballBlend",
+    "type": "AlphaBlendNode",
+    "options": {
+      "shader": "AlphaBlend"
+    },
+    "connected": {
+      "under": "bloom.render",
+      "over": "lulleOverlay.render"
+    }
+  },
+  {
+    "id": "lulleOverlay",
+    "type": "LulleOverlay"
+  },
+  {
     "id": "featureblend",
     "type": "AlphaBlendNode",
     "options": {
@@ -561,7 +576,7 @@
       "shader": "atarifx"
     },
     "connected": {
-        "tDiffuse": "AtariRacer.render"
+      "tDiffuse": "AtariRacer.render"
     }
   },
   {
