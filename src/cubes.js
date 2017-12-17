@@ -118,14 +118,15 @@
         }
       }
       if (BEAT && BEAN >= start) {
-        const size = 2;
+        const size = 4;
         const offset = BEAN - start;
         for (let j = 0; j < 9; j++) {
           const y = j;
-          const lower = y > this.wallCanvas.height / size / 2;
+          let lower = y > this.wallCanvas.height / size / 2;
+          lower = false;
           let x = offset;
           if (lower) {
-            x = 16 - offset;
+            x = 8 - offset;
           }
           const color = lower ? 'rgb(255, 73, 130)' : '#77e15d';
           this.wallCtx.fillStyle = color;
@@ -271,23 +272,23 @@
         cameraPosition.z = 25;
       }
       if (frame >= 2159) {
-        cameraPosition.x = -35;
-        cameraPosition.y = -11;
+        cameraPosition.x = 50;
+        cameraPosition.y = 13;
         cameraPosition.z = 25;
 
         const t = (frame - 2169 + 7) / 7;
-        cameraPosition.x = easeIn(-35, -12, t);
-        cameraPosition.y = easeIn(-11, -11, t);
+        cameraPosition.x = easeIn(45, 70, t);
+        cameraPosition.y = easeIn(13, 13, t);
         cameraPosition.z = easeIn(25, 20, t);
       }
       if (frame >= 2169) {
-        cameraPosition.x = -12;
-        cameraPosition.y = -11;
+        cameraPosition.x = 70;
+        cameraPosition.y = 13;
         cameraPosition.z = 20;
 
         const t = (frame - 2186 + 10) / 10;
-        cameraPosition.x = easeIn(-12, 0, t);
-        cameraPosition.y = easeIn(-11, 0, t);
+        cameraPosition.x = easeIn(70, 0, t);
+        cameraPosition.y = easeIn(13, 13, t);
         cameraPosition.z = easeIn(20, 100, t);
 
         for (let i = 0; i < this.cubes.length; i++) {
@@ -341,33 +342,36 @@
       if (BEAN >= baseBean) {
         const start = baseBean + 48 + 24;
         for (let i = 0; i < 16; i++) {
-          const swipeOffset = BEAN - start - i;
+          const swipeOffset = 2 * (BEAN - start) - i;
           this.textCtx.save();
           this.textCtx.translate(1 + i + 0.5, 4.4);
-          this.textCtx.fillStyle = '#77e15d';
-          if(BEAN <= 840) {
-            if(BEAN >= 816 - 12) {
-              this.textCtx.fillText('     T               '[i], 0, -1);
-            }
-            if(BEAN >= 816 - 6) {
-              this.textCtx.fillText('     TH             '[i], 0, -1);
-            }
-            if(BEAN >= 816) {
-              this.textCtx.fillText('     THI             '[i], 0, -1);
-            }
-            if(BEAN >= 816 + 6) {
-              this.textCtx.fillText('     THIS             '[i], 0, -1);
-            }
-            if(BEAN >= 816 + 12) {
-              this.textCtx.fillText('     THIS             '[i], 0, -1);
-            }
-            if(BEAN >= 816 + 12) {
-              this.textCtx.fillText('     YEAR             '[i], 0, 0);
-            }
-            if(BEAN >= 816 + 12 + 3) {
-              this.textCtx.fillText('     IT\'S            '[i], 0, 1);
+          this.textCtx.fillStyle = 'rgb(255, 73, 130)';
+          if(BEAN <= 8400) {
+            if(-swipeOffset * 2 > 0) {
+              if(BEAN >= 816 - 12) {
+                this.textCtx.fillText('     T               '[i], 0, -1);
+              }
+              if(BEAN >= 816 - 6) {
+                this.textCtx.fillText('      H             '[i], 0, -1);
+              }
+              if(BEAN >= 816) {
+                this.textCtx.fillText('       I             '[i], 0, -1);
+              }
+              if(BEAN >= 816 + 6) {
+                this.textCtx.fillText('        S             '[i], 0, -1);
+              }
+              if(BEAN >= 816 + 12) {
+                this.textCtx.fillText('                      '[i], 0, -1);
+              }
+              if(BEAN >= 816 + 12) {
+                this.textCtx.fillText('          YE               '[i], 0, -1);
+              }
+              if(BEAN >= 816 + 12 + 4) {
+                this.textCtx.fillText('            AR                '[i], 0, -1);
+              }
             }
           }
+          this.textCtx.fillStyle = '#77e15d';
           if (swipeOffset > 0) {
             this.textCtx.fillText('BACK TO BASICS                 '[i], 0, 0);
             this.textCtx.rotate(Math.PI);
