@@ -669,7 +669,7 @@
               Math.pow(actualX - circleCenterX, 2) + Math.pow(actualY - circleCenterY, 2)
             );
 
-            if (BEAN >= this.impactBeans[0] && BEAN < this.impactBeans[4]) {
+            if (BEAN >= this.impactBeans[0] && BEAN < 3168) {
               const timeSinceImpact = Math.abs(this.framesSinceImpact - 3 * distanceToCenter / GU) / 15;
               const intensity = 3 * Math.max(
                 0,
