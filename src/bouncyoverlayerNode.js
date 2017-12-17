@@ -18,6 +18,11 @@
       this.canvasTexture = new THREE.CanvasTexture(this.canvas);
       this.canvasTexture.magFilter = THREE.LinearFilter;
       this.canvasTexture.minFilter = THREE.LinearFilter;
+
+      this.textCanvas = document.createElement('canvas');
+      this.textCtx = this.textCanvas.getContext('2d');
+      
+      this.resize();
     }
 
     resize() {
@@ -26,9 +31,23 @@
         this.canvas.width = 16 * GU;
         this.canvas.height = 9 * GU;
       }
+      if(this.textCanvas) {
+        this.textCanvas.width = 9 * GU;
+        this.textCanvas.height = 2 * GU;
+        this.textCtx.save();
+        this.textCtx.scale(GU, GU);
+        this.textCtx.translate(4.5, 1);
+        this.textCtx.textAlign = 'center';
+        this.textCtx.textBaseline = 'middle';
+        this.textCtx.font = 'bold 1pt schmalibre';
+        this.textCtx.fillStyle = 'white';
+        this.textCtx.fillText('NO TUNNELS', 0, 0);
+        this.textCtx.restore();
+      }
     }
 
     update(frame) {
+      this.frame = frame;
       this.uniforms.frame.value = frame;
       let t = Math.pow(T(62 * 48, 62 * 48 + 12, frame), 1.5);
 
@@ -66,7 +85,23 @@
       this.ctx.translate(16 / 3 - nudger, 9 / 2);
       this.ctx.rotate(Math.PI / 2 - 0.11);
       this.ctx.fillStyle = 'white';
-      this.ctx.fillText('NO TUNNELS', 0, 0);
+      this.ctx.translate(-4.5, -.5);
+      this.ctx.translate(0, -2.5);
+      const bouncyScale = 1 + 0.5 * Math.sin(this.frame / 60 / 60 * 115 * Math.PI * 2);
+      this.ctx.scale(1 / GU, 1 / GU * bouncyScale);
+      this.ctx.translate(0, 2.5 * GU);
+      for(let i  = 0; i < this.textCanvas.height; i++) {
+        this.ctx.drawImage(
+          this.textCanvas,
+          0,
+          i,
+          this.textCanvas.width,
+          2,
+          (1 - i / this.textCanvas.height) * 10 * Math.sin(this.frame / 60 / 60 * 115 * Math.PI),
+          i,
+          this.textCanvas.width,
+          2);
+      }
 
       this.ctx.restore();
       this.canvasTexture.needsUpdate = true;
