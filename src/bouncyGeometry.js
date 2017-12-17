@@ -37,7 +37,7 @@
 
       // TEXT
       this.textCanvas = document.createElement('canvas');
-      this.textCtx = this.textCanvas.getContext('2d');
+      this.ctx = this.textCanvas.getContext('2d');
       this.textTexture = new THREE.Texture(this.textCanvas);
       this.textTexture.minFilter = THREE.LinearFilter;
       this.textTexture.magFilter = THREE.LinearFilter;
@@ -623,17 +623,17 @@
 
     drawHexagons(frame) {
       // TODO: move to render loop, for performance reasons
-      this.textCtx.clearRect(0, 0, this.textCanvas.width, this.textCanvas.height);
+      this.ctx.clearRect(0, 0, this.textCanvas.width, this.textCanvas.height);
 
-      this.textCtx.fillStyle = '#ff4982';  // le pink
-      this.textCtx.strokeStyle = '#ff4982';  // le pink
+      this.ctx.fillStyle = '#ff4982';  // le pink
+      this.ctx.strokeStyle = '#ff4982';  // le pink
 
       const hexToRectStartFrame = FRAME_FOR_BEAN(3182);  // TODO: needs tweaking
       const hexToRectEndFrame = FRAME_FOR_BEAN(3186);  // TODO: needs tweaking
       const hexToRectProgress = (frame - hexToRectStartFrame) / (hexToRectEndFrame - hexToRectStartFrame);
 
-      const hexagonGridOffsetX = 1.66 * GU;
-      const hexagonGridOffsetY = 1.2 * GU;
+      const hexagonGridOffsetX = 1 * GU;
+      const hexagonGridOffsetY = 1 * GU;
       const hexagonRadiuses = [
         lerp(1, 0.5, hexToRectProgress),
         1,
@@ -642,7 +642,7 @@
         1,
         1,
       ];
-      const cylinderRadius = 0.4 * GU;
+      const cylinderRadius = 0.5 * GU;
       const padding = 0.1 * GU;
       const distanceBetweenHexagonCores = 1.6 * cylinderRadius + padding;
       const gridXDistance = distanceBetweenHexagonCores;
@@ -650,6 +650,7 @@
 
       const circleCenterX = 8 * GU;
       const circleCenterY = 4.5 * GU;
+      const R = (r, g, b) => `rgba(${0 | Math.min(r, 255)},${0 | Math.min(g, 255)},${0 | Math.min(b, 255)},1)`;
 
       if (BEAN < 3216) {
         const offsetRemovalStartFrame = FRAME_FOR_BEAN(3190);  // TODO: needs tweaking
@@ -657,28 +658,41 @@
         const offsetRemovalProgress = (frame - offsetRemovalStartFrame) / (offsetRemovalEndFrame - offsetRemovalStartFrame);
         const offsetFactor = lerp(1, 0, offsetRemovalProgress);
 
+        this.ctx.save();
         for (let y = 0; y < this.numHexagonsY; y++) {
           for (let x = 0; x < this.numHexagonsX; x++) {
             const offset = y % 2 === 1 ? offsetFactor * gridXDistance / 2 : 0;
 
             const actualX = hexagonGridOffsetX + x * gridXDistance + offset;
             const actualY = hexagonGridOffsetY + y * gridYDistance;
-            this.textCtx.beginPath();
-            this.textCtx.moveTo(
+            const distanceToCenter = Math.sqrt(
+              Math.pow(actualX - circleCenterX, 2) + Math.pow(actualY - circleCenterY, 2)
+            );
+
+            const timeSinceImpact = Math.abs(this.framesSinceImpact - 3 * distanceToCenter / GU) / 15;
+
+            const intensity = 3 * Math.max(
+              0,
+              1 - Math.min(1, timeSinceImpact)
+            );
+            this.ctx.fillStyle = R(255 * intensity, 73 * intensity, 130 * intensity);
+            this.ctx.beginPath();
+            this.ctx.moveTo(
               actualX,
               actualY + cylinderRadius * hexagonRadiuses[0]
             );
             for (let i = 1; i < 6; i++) {
               const angle = Math.PI / 2 + Math.PI * i / 3;
-              this.textCtx.lineTo(
+              this.ctx.lineTo(
                 actualX + cylinderRadius * hexagonRadiuses[i] * Math.cos(angle),
                 actualY + cylinderRadius * hexagonRadiuses[i] * Math.sin(angle)
               );
             }
-            this.textCtx.closePath();
-            this.textCtx.fill();
+            this.ctx.closePath();
+            this.ctx.fill();
           }
         }
+        this.ctx.restore();
       } else if (BEAN >= 3216) {
         const angleAnimationStartFrame = FRAME_FOR_BEAN(3216);
         const angleAnimationEndFrame = FRAME_FOR_BEAN(3296);
@@ -689,12 +703,12 @@
         const hexagonAngleTopLeft = Math.PI / 2 + Math.PI * 2 / 3;
         const hexagonAngleTopRight = Math.PI / 2 + Math.PI * 4 / 3;
 
-        this.textCtx.lineWidth = cylinderRadius;
+        this.ctx.lineWidth = cylinderRadius;
         for (let y = 0; y < this.numHexagonsY; y++) {
           let yMid = hexagonGridOffsetY + y * gridYDistance;
           const circleRadius = circleCenterY - yMid;
 
-          this.textCtx.save();
+          this.ctx.save();
           for (let x = 0; x < this.numHexagonsX; x++) {
             let xStart = hexagonGridOffsetX + x * gridXDistance + cylinderRadius * hexagonRadiuses[2] * Math.cos(hexagonAngleTopLeft) + angleAnimationProgress * 9 * GU;
             let xEnd = hexagonGridOffsetX + x * gridXDistance + cylinderRadius * hexagonRadiuses[4] * Math.cos(hexagonAngleTopRight) + angleAnimationProgress * 9 * GU;
@@ -716,12 +730,12 @@
               }
             }
 
-            this.textCtx.beginPath();
-            this.textCtx.moveTo(xStart, yStart);
-            this.textCtx.lineTo(xEnd, yEnd);
-            this.textCtx.stroke();
+            this.ctx.beginPath();
+            this.ctx.moveTo(xStart, yStart);
+            this.ctx.lineTo(xEnd, yEnd);
+            this.ctx.stroke();
           }
-          this.textCtx.restore();
+          this.ctx.restore();
         }
       }
 
@@ -808,13 +822,13 @@
 
       // TEXT
       this.textCanvas.width = this.textCanvas.width;
-      this.textCtx.fillStyle = backgroundColor;
-      this.textCtx.fillRect(0, 0, this.textCanvas.width, this.textCanvas.height);
-      this.textCtx.font = `bold ${GU * fontScaler}px schmalibre`;
-      this.textCtx.textAlign = 'center';
-      this.textCtx.textBaseline = 'middle';
-      this.textCtx.fillStyle = foregroundColor;
-      this.textCtx.fillText(
+      this.ctx.fillStyle = backgroundColor;
+      this.ctx.fillRect(0, 0, this.textCanvas.width, this.textCanvas.height);
+      this.ctx.font = `bold ${GU * fontScaler}px schmalibre`;
+      this.ctx.textAlign = 'center';
+      this.ctx.textBaseline = 'middle';
+      this.ctx.fillStyle = foregroundColor;
+      this.ctx.fillText(
         text,
         GU * 8 + (0.5 - this.random()) * shakeAmount,
         GU * 4.665 + (0.5 - this.random()) * shakeAmount
