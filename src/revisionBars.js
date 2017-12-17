@@ -19,6 +19,8 @@
       this.cameraDDX = 0;
       this.cameraDDY = 0;
       this.cameraDDR = 0;
+      this.cameraPreviousX = 0;
+      this.cameraPreviousY = 0;
 
       this.canvas = document.createElement('canvas');
       this.ctx = this.canvas.getContext('2d');
@@ -209,6 +211,10 @@
         case 48 + 12:
         case 48 + 24:
           this.throb = 1;
+          this.cameraDX = (this.outputs.cameraValues.value.cameraX -
+            this.cameraPreviousX) * 0.5;
+          this.cameraDY = (this.outputs.cameraValues.value.cameraY -
+            this.cameraPreviousY) * 0.5;
         }
       }
 
@@ -229,6 +235,8 @@
       const cameraY = this.getPoint(this.cameraYPath, frame);
       const cameraZoom = this.getPoint(this.cameraZoomPath, frame);
       const cameraRotate = this.getPoint(this.cameraRotatePath, frame);
+      this.cameraPreviousX = this.outputs.cameraValues.value.cameraX;
+      this.cameraPreviousY = this.outputs.cameraValues.value.cameraY;
       this.outputs.cameraValues.value.cameraX = cameraX + this.cameraX;
       this.outputs.cameraValues.value.cameraY = cameraY + this.cameraY;
       this.outputs.cameraValues.value.cameraZoom = cameraZoom;
