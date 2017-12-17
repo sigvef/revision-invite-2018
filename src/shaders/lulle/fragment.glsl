@@ -45,18 +45,8 @@ float sphere(vec3 p, float s) {
 }
 
 vec2 sdf(in vec3 p) {
-    vec2 ar[8];
     float n = 0.;
     float startBEAN = 1824. + 24.;
-    ar[0] = vec2(0., 1.5);
-    ar[1] = vec2(1., 1.);
-    ar[2] = vec2(1.5, 0.);
-    ar[3] = vec2(1., -1.);
-    ar[4] = vec2(0., -1.5);
-    ar[5] = vec2(-1., -1.);
-    ar[6] = vec2(-1.5, 0.);
-    ar[7] = vec2(-1., 1.);
-
     float repeatSize = 13.;
     
     p.x += 5. * step(repeatSize, mod(p.y + 5., repeatSize * 2.));
@@ -67,23 +57,24 @@ vec2 sdf(in vec3 p) {
     vec2 s = vec2(sphere(p, centerSize * 1.5), 1.);
     n = (BEAN-startBEAN)/6.;
 
-
-    for (float i = 0.; i < 32.; i++) {
+    for (float i = 0.; i < 24.; i++) {
         if (i > n) {break;}
-        vec2 a = vec2(0.);
         float size = 0.5 + cos(mod(-0.8 * (floor(i/8.) + 1.) + BEAN - startBEAN, 48.) / 48. * PI) / 4.;
-        if (i <= 7.) {
-            a = vec2(sphere(p-vec3(ar[int(i)], 0.), size), 2.);
+        float angle = 2. * PI * i/8.;
+        float radius = 1.;
+        if (i >= 16.) {
+            radius = 3.5; 
+            size -= 0.2;
+        } else if (i >= 8.) {
+            radius = 2.5; 
+            size -= 0.1;
+        } else {
+            radius = 1.5; 
+            size -= 0.;
         }
-        if (i > 7. && i < 16.) {
-            a = vec2(sphere(p-vec3((ar[int(mod(i, 8.))])*1.75, 0.), size-0.1), 1.);
-        }
-        if (i > 15. && i < 48.) {
-            a = vec2(sphere(p-vec3((ar[int(mod(i, 8.))])*2.25, 0.), size-0.2), 2.);
-        }
-        if (i > 23. && i < 32.) {
-            a = vec2(sphere(p-vec3((ar[int(mod(i, 8.))])*2.75, 0.), size-0.3), 1.);
-        }
+        float x = sin(angle) * radius;
+        float y = cos(angle) * radius;
+        vec2 a = vec2(sphere(p-vec3(x, y, 0.), size), 1.);
         s = minmin(s, a);
     }
     return s;
@@ -183,8 +174,8 @@ void main() {
     if (BEAN > 2040.) {
         eyez = (BEAN - 2000.)/2.; 
     }
-    if (eyez > 80.) {
-        eyez = 80.;
+    if (eyez > 95.) {
+        eyez = 95.;
     }
     vec3 eye = vec3(0.0, 0.0, eyez);
     vec3 dir = rayDir(60.0, vUv);
