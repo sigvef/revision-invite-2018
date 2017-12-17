@@ -15,6 +15,28 @@
         }
       });
 
+      this.transparentMaterial = new THREE.MeshBasicMaterial({
+        transparent: true,
+        opacity: 0,
+        depthTest: true,
+        depthWrite: true,
+      });
+
+      this.canvas = document.createElement('canvas');
+      this.ctx = this.canvas.getContext('2d');
+      this.canvasTexture = new THREE.CanvasTexture(this.canvas);
+      this.canvasTexture.minFilter = THREE.LinearFilter;
+      this.canvasTexture.magFilter = THREE.LinearFilter;
+      this.resize();
+
+      this.canvasCube = new THREE.Mesh(
+          new THREE.BoxGeometry(105, 105, 1),
+          new THREE.MeshBasicMaterial({
+            map: this.canvasTexture,
+            transparent: true,
+          }));
+      this.canvasCube.skipOverlayDrawing = true;
+      this.scene.add(this.canvasCube);
 
       //Camera
       var zoom = 5.8;
@@ -23,13 +45,14 @@
 
       // Scene background
       this.cube = new THREE.Mesh(new THREE.BoxGeometry(196, 109, 0.1),
-                                 new THREE.MeshBasicMaterial({ color: 0x2a2b2d }));
+                                 new THREE.MeshBasicMaterial({ color: 0x77e15d }));
+      this.cube.skipOverlayDrawing = true;
       this.cube.position.set(0,0,-100);
       this.scene.add(this.cube);
 
       this.line_width = .20;
 
-      var line_material = new THREE.LineBasicMaterial( { color: 0x999999 } );
+      var line_material = this.transparentMaterial;
       var small_radius  = 10;
       var hex_segments = 6;
       var small_geometry = new THREE.CircleGeometry( small_radius, hex_segments );
@@ -77,7 +100,7 @@
             
       var circle_geometry = new THREE.TorusGeometry( 10, this.line_width / 2, 10, 128 );
       circle_geometry.computeLineDistances();
-      this.center_circle = new THREE.Mesh( circle_geometry, new THREE.MeshBasicMaterial({color: 0x999999}) );
+      this.center_circle = new THREE.Mesh( circle_geometry, this.transparentMaterial);
       this.scene.add(this.center_circle);
 
       this.middle_center_hex = new THREE.Object3D();
@@ -86,11 +109,13 @@
       this.outer_center_hex.add(new THREE.Line( small_geometry, line_material ));
       this.middle_center_hex.rotation.set(0, 0, Math.PI / 6);
       this.outer_center_hex.rotation.set(0, 0, Math.PI / 6);
+      this.outer_center_hex.lineWidth = 7.5;
       this.scene.add(this.middle_center_hex);
       this.scene.add(this.outer_center_hex);
       
       // Square root of three divided by two. For a hex of diameter 1 this is the distance from the center to the edge.
       var r32 = 0.86602540378;
+      r32 = Math.sqrt(3 / 2);
 
       var inner_distance = 5;
       var outer_distance = 15;
@@ -104,13 +129,14 @@
       star_geometry.vertices.push(new THREE.Vector3(0, outer_distance, 0));
 
       this.three_point_star = new THREE.Object3D();
+      this.three_point_star.lineWidth = 1.5;
       this.three_point_star.add(new THREE.Line( star_geometry, line_material ));
       this.scene.add(this.three_point_star);
 
-      var darker_line_material = new THREE.LineBasicMaterial( { color: 0x373c3f } );
-      var darker_line_material2 = new THREE.LineBasicMaterial( { color: 0x373c3f } );
-      var darker_line_material3 = new THREE.LineBasicMaterial( { color: 0x373c3f } );
-      var darker_line_material4 = new THREE.LineBasicMaterial( { color: 0x373c3f } );
+      var darker_line_material = line_material;
+      var darker_line_material2 = line_material;
+      var darker_line_material3 = line_material;
+      var darker_line_material4 = line_material;
 
       var horizontal_distance1 = 15;
       var horizontal_distance2 = 10;
@@ -187,11 +213,22 @@
       
       this.spin_cube = new THREE.Object3D();
 
-      var cube_line_material = new THREE.LineBasicMaterial( { color: 0x999999 } );
+      var cube_line_material = line_material;
 
       this.inner_cube = new THREE.Line(cube_geometry, cube_line_material);
       this.middle_cube = new THREE.Line(cube_geometry, cube_line_material);
       this.outer_cube = new THREE.Line(cube_geometry, cube_line_material);
+
+      this.middle_cube_3d = new THREE.Mesh(
+          new THREE.BoxGeometry(2, 2, 2),
+          new THREE.MeshBasicMaterial({
+            transparent: true,
+            opacity: 0,
+            depthWrite: false,
+            depthTest: false,
+          }));
+      this.scene.add(this.middle_cube_3d);
+      this.middle_cube_3d.render_3d = true;
 
       var inner_size = 9.2;
       var middle_size = 15.3;
@@ -200,7 +237,7 @@
       var sizes = [inner_size, middle_size, outer_size];
       var scalers = [1.2, 1.8, 2.2];
 
-      var spin_cube_material = new THREE.MeshBasicMaterial({color: 0x999999});
+      var spin_cube_material = this.transparentMaterial;
       
       for (var i = 0; i < 3; i++) {  
         var scaler = scalers[i];
@@ -242,18 +279,36 @@
         edge12.position.set(0, -sizes[i], -sizes[i]);
         edge12.rotation.set(0, 0, Math.PI / 2);
 
-        this.spin_cube.add(edge1);
-        this.spin_cube.add(edge2);
-        this.spin_cube.add(edge3);
-        this.spin_cube.add(edge4);
-        this.spin_cube.add(edge5);
-        this.spin_cube.add(edge6);
-        this.spin_cube.add(edge7);
-        this.spin_cube.add(edge8);
-        this.spin_cube.add(edge9);
-        this.spin_cube.add(edge10);
-        this.spin_cube.add(edge11);
-        this.spin_cube.add(edge12);
+        if(i == 2) {
+          const hack = new THREE.Object3D();
+          hack.add(edge1);
+          hack.add(edge2);
+          hack.add(edge3);
+          hack.add(edge4);
+          hack.add(edge5);
+          hack.add(edge6);
+          hack.add(edge7);
+          hack.add(edge8);
+          hack.add(edge9);
+          hack.add(edge10);
+          hack.add(edge11);
+          hack.add(edge12);
+          this.hack = hack;
+          this.scene.add(hack);
+        } else {
+          this.spin_cube.add(edge1);
+          this.spin_cube.add(edge2);
+          this.spin_cube.add(edge3);
+          this.spin_cube.add(edge4);
+          this.spin_cube.add(edge5);
+          this.spin_cube.add(edge6);
+          this.spin_cube.add(edge7);
+          this.spin_cube.add(edge8);
+          this.spin_cube.add(edge9);
+          this.spin_cube.add(edge10);
+          this.spin_cube.add(edge11);
+          this.spin_cube.add(edge12);
+        }
       }
 
 
@@ -261,9 +316,9 @@
       this.middle_cube.scale.set(middle_size, middle_size, middle_size);
       this.outer_cube.scale.set(outer_size, outer_size, outer_size);
 
-      this.spin_cube.add(this.inner_cube);
-      this.spin_cube.add(this.middle_cube);
-      this.spin_cube.add(this.outer_cube);
+      //this.spin_cube.add(this.inner_cube);
+      //this.spin_cube.add(this.middle_cube);
+      //this.spin_cube.add(this.outer_cube);
       this.spin_cube.position.set(0,0,0);
       this.scene.add(this.spin_cube);
 
@@ -273,9 +328,10 @@
 
 
       //var ico_material = new THREE.MeshBasicMaterial({color: 0x999999});
-      var ico_material = new THREE.MeshNormalMaterial({wireframe: true});
+      var ico_material = this.transparentMaterial;
       var ico_geometry = new THREE.IcosahedronGeometry(1, 0);
       this.ico = new THREE.Mesh(ico_geometry, ico_material);
+      this.ico.render_3d = true;
       this.ico.rotation.set(1.015, 0, 0);
       this.ico.position.set(200, 0, 0);
       var scale = 23.5;
@@ -286,6 +342,7 @@
 
       //prepare the actually visible geometries
       this.star_arr = this.add_lines_for_geometry(star_geometry, this.three_point_star, 1);
+      /*
       this.add_lines_for_geometry(this.small_center_hex.children[0].geometry, this.small_center_hex, 0.7);
       this.add_lines_for_geometry(this.level1_hex1.children[0].geometry, this.level1_hex1, 1);
       this.add_lines_for_geometry(this.level1_hex2.children[0].geometry, this.level1_hex2, 1);
@@ -299,8 +356,9 @@
       this.add_lines_for_geometry(this.small_claw_l.children[0].geometry, this.small_claw_l, 1);
       this.add_lines_for_geometry(this.large_claw_r.children[0].geometry, this.large_claw_r, 1);
       this.add_lines_for_geometry(this.large_claw_l.children[0].geometry, this.large_claw_l, 1);
-      
+      */
 
+      /*
       this.three_point_star.children[0].visible = false;
       this.small_center_hex.children[0].visible = false;
       this.level1_hex1.children[0].visible = false;
@@ -316,6 +374,7 @@
       this.small_claw_l.children[0].visible = false;
       this.large_claw_r.children[0].visible = false;
       this.large_claw_l.children[0].visible = false;
+      */
       this.small_claw_r.children[0].position.set(200,0,0);
       this.small_claw_l.children[0].position.set(200,0,0);
       this.large_claw_r.children[0].position.set(200,0,0);
@@ -347,7 +406,7 @@
         arr[i].faces[1].color = new THREE.Color(0x999999);
 
         //container.add(new THREE.Mesh( arr[i], new THREE.MeshBasicMaterial({side: THREE.DoubleSide, vertexColors: THREE.FaceColors})));
-        container.add(new THREE.Mesh( arr[i], new THREE.MeshBasicMaterial({side: THREE.DoubleSide, vertexColors: THREE.FaceColors})));
+        container.add(new THREE.Mesh( arr[i], this.transparentMaterial));
       }
 
       return arr;
@@ -383,6 +442,7 @@
 
     update(frame) {
       super.update(frame);
+      demo.nm.nodes.bloom.opacity = 0;
 
       var asmoothstep = function (start_frame, duration, frame) {
         return smoothstep(0, 1, (frame - start_frame) / duration);
@@ -424,6 +484,9 @@
       this.three_point_star.position.set(200, 0, 0);
       this.spin_cube.position.set(200, 0, 0);
       this.spin_cube.rotation.set(Math.PI / 4 * 0.7837 , Math.PI / 4 , 0);
+      this.hack.rotation.copy(this.spin_cube.rotation);
+      this.hack.scale.copy(this.spin_cube.scale);
+      this.hack.position.copy(this.spin_cube.position);
       this.ico.position.set(200, 0, 0);
 
       const base = 22 * 48;
@@ -505,7 +568,7 @@
         this.spin_cube.position.set(0, 0, 200);
         this.small_center_hex.position.set(200, 0, 0);
         this.middle_center_hex.position.set(200, 0, 0);
-        this.outer_center_hex.position.set(200, 0, 0);
+        //this.outer_center_hex.position.set(200, 0, 0);
         this.center_line1.position.set(200, 0, 0);
         this.center_line2.position.set(200, 0, 0);
         this.center_line3.position.set(200, 0, 0);
@@ -568,6 +631,7 @@
         var claw_progress3 = asmoothstep(FRAME_FOR_BEAN(27 * 48), FRAME_FOR_BEAN(12), frame);
         var claw_progress4 = asmoothstep(FRAME_FOR_BEAN(27.125 * 48), FRAME_FOR_BEAN(12), frame);
 
+        /*
         this.small_claw_r.children[1].material.color.r = this.cube.material.color.r + 0.15 * claw_progress1;
         this.small_claw_r.children[1].material.color.g = this.cube.material.color.g + 0.15 * claw_progress1;
         this.small_claw_r.children[1].material.color.b = this.cube.material.color.b + 0.15 * claw_progress1;
@@ -625,6 +689,7 @@
                                                                         this.cube.material.color.b + 0.15 * claw_progress4);
           this.large_claw_l.children[i].geometry.colorsNeedUpdate = true;
         }
+        */
 
 
         
@@ -656,6 +721,119 @@
 
 
       this.three_point_star.children[1].geometry.verticesNeedUpdate = true;
+
+      this.middle_cube_3d.scale.copy(this.middle_cube.scale);
+      this.middle_cube_3d.rotation.copy(this.spin_cube.rotation);
+    }
+
+    draw3d(child) {
+      this.ctx.fillStyle = 'rgb(255, 73, 130)';
+      const lightVector = new THREE.Vector3(1, 1, 1);
+      lightVector.normalize();
+      const viewVector = new THREE.Vector3(-1, 1, 1);
+      viewVector.normalize();
+      for(let i = 0; i < child.geometry.faces.length; i++) {
+        const face = child.geometry.faces[i];
+        const a = child.geometry.vertices[face.a].clone();
+        const b = child.geometry.vertices[face.b].clone();
+        const c = child.geometry.vertices[face.c].clone();
+        a.applyMatrix4(child.matrixWorld);
+        b.applyMatrix4(child.matrixWorld);
+        c.applyMatrix4(child.matrixWorld);
+        const u = b.clone();
+        u.sub(a);
+        const v = c.clone();
+        v.sub(a);
+        const normal = new THREE.Vector3(
+          u.y * v.z - u.z * v.y, 
+          u.z * v.x - u.x * v.z, 
+          u.x * v.y - u.y * v.x);
+        normal.normalize();
+
+        if(normal.z <= 0) {
+          continue;
+        }
+
+        let light = clamp(0, normal.dot(lightVector), 1);
+        light += 0.3;
+        light = clamp(0, light, 1);
+        this.ctx.fillStyle = `rgb(${255 * light | 0}, ${73 * light | 0}, ${130 * light | 0})`;
+        this.ctx.strokeStyle = this.ctx.fillStyle;
+        this.ctx.lineWidth = 0.3;
+        this.ctx.beginPath();
+        this.ctx.moveTo(a.x, -a.y);
+        this.ctx.lineTo(b.x, -b.y);
+        this.ctx.lineTo(c.x, -c.y);
+        this.ctx.lineTo(a.x, -a.y);
+        this.ctx.lineTo(b.x, -b.y);
+        this.ctx.fill();
+        this.ctx.stroke();
+      }
+    }
+
+    draw(object, method) {
+      this.ctx.strokeStyle = 'white';
+      this.ctx.fillStyle = 'rgb(55, 60, 63)';
+      this.ctx.lineWidth = 1.5;
+      object.traverseVisible(child => {
+        if(child.lineWidth) {
+          this.ctx.lineWidth = child.lineWidth;
+        }
+        if(child.skipOverlayDrawing) {
+          return;
+        }
+        if(child.render_3d) {
+          return;
+        }
+        if(!(child.geometry && child.geometry.vertices.length)) {
+          return;
+        }
+        this.ctx.beginPath();
+        child.updateMatrix();
+        for(let j = 0; j < child.geometry.vertices.length + 2; j++) {
+          const vertex = child.geometry.vertices[
+            j % child.geometry.vertices.length].clone();
+          vertex.applyMatrix4(child.matrixWorld);
+          const x = vertex.x;
+          const y = -(vertex.y);
+          if(j == 0) {
+            this.ctx.moveTo(x, y);
+          } else {
+            this.ctx.lineTo(x, y);
+          }
+        }
+        if(method == 'stroke') {
+          this.ctx.stroke();
+        } else {
+          this.ctx.fill();
+        }
+      });
+    }
+
+    render(renderer) {
+      this.scene.updateMatrixWorld();
+      this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+      this.ctx.save();
+      this.ctx.scale(GU, GU);
+      this.ctx.translate(4.5, 4.5);
+      this.ctx.scale(1 / 12, 1 / 12);
+      this.draw(this.scene, 'fill');
+      this.draw(this.scene, 'stroke');
+      if(BEAN >= 1200 && BEAN < 1248 + 9) {
+        this.draw3d(this.middle_cube_3d);
+      }
+      if(BEAN >= 1344) {
+        this.draw3d(this.ico);
+      }
+      this.ctx.restore();
+      this.canvasTexture.needsUpdate = true;
+      super.render(renderer);
+    }
+
+    resize() {
+      super.resize();
+      this.canvas.width = 9 * GU;
+      this.canvas.height = 9 * GU;
     }
   }
 
