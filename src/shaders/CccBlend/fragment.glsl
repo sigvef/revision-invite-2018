@@ -8,5 +8,5 @@ void main() {
     vec4 A = texture2D(A, vUv);
     vec4 B = texture2D(B, vUv);
 
-    gl_FragColor = mix(A, B, A.a);
+    gl_FragColor = mix(B, A, A.a);
 }
