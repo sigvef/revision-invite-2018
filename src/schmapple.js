@@ -237,9 +237,9 @@
           case 648 + 12:
           case 648 + 18:
             this.throb = 1;
-            this.cameraDX = (Math.random() - 0.5) * 5.0;
-            this.cameraDY = (Math.random() - 0.5) * 5.0;
-            this.cameraDR = (Math.random() - 0.5) * 0.1;
+            this.cameraDX = (Math.random() - 0.5) * 2.0;
+            this.cameraDY = (Math.random() - 0.5) * 2.0;
+            this.cameraDR = (Math.random() - 0.5) * 0.025;
         }
       }
 
