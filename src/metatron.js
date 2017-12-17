@@ -23,7 +23,7 @@
 
       // Scene background
       this.cube = new THREE.Mesh(new THREE.BoxGeometry(196, 109, 0.1),
-                                 new THREE.MeshBasicMaterial({ color: 0x77e15d }));
+                                 new THREE.MeshBasicMaterial({ color: 0x2a2b2d }));
       this.cube.position.set(0,0,-100);
       this.scene.add(this.cube);
 
@@ -74,13 +74,7 @@
       this.scene.add(this.center_line1);
       this.scene.add(this.center_line2);
       this.scene.add(this.center_line3);
-      
-      /*var circle_geometry = new THREE.CircleGeometry( 10, 128 );
-      circle_geometry.vertices.shift();
-      circle_geometry.computeLineDistances();
-      this.center_circle = new THREE.Line( circle_geometry, line_material );
-      this.scene.add(this.center_circle);*/
-      
+            
       var circle_geometry = new THREE.TorusGeometry( 10, this.line_width / 2, 10, 128 );
       circle_geometry.computeLineDistances();
       this.center_circle = new THREE.Mesh( circle_geometry, new THREE.MeshBasicMaterial({color: 0x999999}) );
@@ -201,7 +195,67 @@
 
       var inner_size = 9.2;
       var middle_size = 15.3;
-      var outer_size = 24.5;
+      var outer_size = 24.7;
+
+      var sizes = [inner_size, middle_size, outer_size];
+      var scalers = [1.2, 1.8, 2.2];
+
+      var spin_cube_material = new THREE.MeshBasicMaterial({color: 0x999999});
+      
+      for (var i = 0; i < 3; i++) {  
+        var scaler = scalers[i];
+        var spin_cube_geometry = new THREE.CylinderGeometry( this.line_width * scaler, this.line_width * scaler, 2 * sizes[i], 12);
+        var edge1 = new THREE.Mesh(spin_cube_geometry, spin_cube_material);
+        var edge2 = new THREE.Mesh(spin_cube_geometry, spin_cube_material);
+        var edge3 = new THREE.Mesh(spin_cube_geometry, spin_cube_material);
+        var edge4 = new THREE.Mesh(spin_cube_geometry, spin_cube_material);
+        var edge5 = new THREE.Mesh(spin_cube_geometry, spin_cube_material);
+        var edge6 = new THREE.Mesh(spin_cube_geometry, spin_cube_material);
+        var edge7 = new THREE.Mesh(spin_cube_geometry, spin_cube_material);
+        var edge8 = new THREE.Mesh(spin_cube_geometry, spin_cube_material);
+        var edge9 = new THREE.Mesh(spin_cube_geometry, spin_cube_material);
+        var edge10 = new THREE.Mesh(spin_cube_geometry, spin_cube_material);
+        var edge11 = new THREE.Mesh(spin_cube_geometry, spin_cube_material);
+        var edge12 = new THREE.Mesh(spin_cube_geometry, spin_cube_material);
+
+
+        edge1.position.set(sizes[i], 0, sizes[i]);
+        edge2.position.set(sizes[i], 0, -sizes[i]);
+        edge3.position.set(-sizes[i], 0, sizes[i]);
+        edge4.position.set(-sizes[i], 0, -sizes[i]);
+
+        edge5.position.set(sizes[i], sizes[i], 0);
+        edge5.rotation.set(Math.PI / 2, 0, 0);
+        edge6.position.set(sizes[i], -sizes[i], 0);
+        edge6.rotation.set(Math.PI / 2, 0, 0);
+        edge7.position.set(-sizes[i], sizes[i], 0);
+        edge7.rotation.set(Math.PI / 2, 0, 0);
+        edge8.position.set(-sizes[i], -sizes[i], 0);
+        edge8.rotation.set(Math.PI / 2, 0, 0);
+
+        edge9.position.set(0, sizes[i], sizes[i]);
+        edge9.rotation.set(0, 0, Math.PI / 2);
+        edge10.position.set(0, sizes[i], -sizes[i]);
+        edge10.rotation.set(0, 0, Math.PI / 2);
+        edge11.position.set(0, -sizes[i], sizes[i]);
+        edge11.rotation.set(0, 0, Math.PI / 2);
+        edge12.position.set(0, -sizes[i], -sizes[i]);
+        edge12.rotation.set(0, 0, Math.PI / 2);
+
+        this.spin_cube.add(edge1);
+        this.spin_cube.add(edge2);
+        this.spin_cube.add(edge3);
+        this.spin_cube.add(edge4);
+        this.spin_cube.add(edge5);
+        this.spin_cube.add(edge6);
+        this.spin_cube.add(edge7);
+        this.spin_cube.add(edge8);
+        this.spin_cube.add(edge9);
+        this.spin_cube.add(edge10);
+        this.spin_cube.add(edge11);
+        this.spin_cube.add(edge12);
+      }
+
 
       this.inner_cube.scale.set(inner_size, inner_size, inner_size);
       this.middle_cube.scale.set(middle_size, middle_size, middle_size);
@@ -218,20 +272,20 @@
       this.spin_cube.rotation.set(spin * 0.7837 , spin , 0);
 
       //prepare the actually visible geometries
-      this.star_arr = this.add_lines_for_geometry(star_geometry, this.three_point_star);
-      this.add_lines_for_geometry(this.small_center_hex.children[0].geometry, this.small_center_hex);
-      this.add_lines_for_geometry(this.level1_hex1.children[0].geometry, this.level1_hex1);
-      this.add_lines_for_geometry(this.level1_hex2.children[0].geometry, this.level1_hex2);
-      this.add_lines_for_geometry(this.level1_hex3.children[0].geometry, this.level1_hex3);
-      this.add_lines_for_geometry(this.center_line1.children[0].geometry, this.center_line1);
-      this.add_lines_for_geometry(this.center_line2.children[0].geometry, this.center_line2);
-      this.add_lines_for_geometry(this.center_line3.children[0].geometry, this.center_line3);
-      this.add_lines_for_geometry(this.middle_center_hex.children[0].geometry, this.middle_center_hex);
-      this.add_lines_for_geometry(this.outer_center_hex.children[0].geometry, this.outer_center_hex);
-      this.add_lines_for_geometry(this.small_claw_r.children[0].geometry, this.small_claw_r);
-      this.add_lines_for_geometry(this.small_claw_l.children[0].geometry, this.small_claw_l);
-      this.add_lines_for_geometry(this.large_claw_r.children[0].geometry, this.large_claw_r);
-      this.add_lines_for_geometry(this.large_claw_l.children[0].geometry, this.large_claw_l);
+      this.star_arr = this.add_lines_for_geometry(star_geometry, this.three_point_star, 1);
+      this.add_lines_for_geometry(this.small_center_hex.children[0].geometry, this.small_center_hex, 0.7);
+      this.add_lines_for_geometry(this.level1_hex1.children[0].geometry, this.level1_hex1, 1);
+      this.add_lines_for_geometry(this.level1_hex2.children[0].geometry, this.level1_hex2, 1);
+      this.add_lines_for_geometry(this.level1_hex3.children[0].geometry, this.level1_hex3, 1);
+      this.add_lines_for_geometry(this.center_line1.children[0].geometry, this.center_line1, 1);
+      this.add_lines_for_geometry(this.center_line2.children[0].geometry, this.center_line2, 1);
+      this.add_lines_for_geometry(this.center_line3.children[0].geometry, this.center_line3, 1);
+      this.add_lines_for_geometry(this.middle_center_hex.children[0].geometry, this.middle_center_hex, 0.6);
+      this.add_lines_for_geometry(this.outer_center_hex.children[0].geometry, this.outer_center_hex, 0.4);
+      this.add_lines_for_geometry(this.small_claw_r.children[0].geometry, this.small_claw_r, 1);
+      this.add_lines_for_geometry(this.small_claw_l.children[0].geometry, this.small_claw_l, 1);
+      this.add_lines_for_geometry(this.large_claw_r.children[0].geometry, this.large_claw_r, 1);
+      this.add_lines_for_geometry(this.large_claw_l.children[0].geometry, this.large_claw_l, 1);
       
 
       this.three_point_star.children[0].visible = false;
@@ -257,7 +311,7 @@
     }
 
 
-    add_lines_for_geometry(geometry, container) {
+    add_lines_for_geometry(geometry, container, scaler) {
       var arr = [];
       for(var i = 0; i < geometry.vertices.length;  i++) {
         var cur_x = geometry.vertices[i].x;
@@ -268,10 +322,10 @@
         var angle = Math.atan2(next_x - cur_x, next_y - cur_y);
 
         arr.push(new THREE.Geometry());
-        arr[i].vertices.push(new THREE.Vector3(cur_x - this.line_width * Math.sin(angle + Math.PI/2), cur_y - this.line_width * Math.cos(angle + Math.PI/2),0));
-        arr[i].vertices.push(new THREE.Vector3(next_x - this.line_width * Math.sin(angle + Math.PI/2), next_y - this.line_width * Math.cos(angle + Math.PI/2),0));
-        arr[i].vertices.push(new THREE.Vector3(next_x + this.line_width * Math.sin(angle + Math.PI/2), next_y + this.line_width * Math.cos(angle + Math.PI/2),0));
-        arr[i].vertices.push(new THREE.Vector3(cur_x + this.line_width * Math.sin(angle + Math.PI/2), cur_y + this.line_width * Math.cos(angle + Math.PI/2),0));
+        arr[i].vertices.push(new THREE.Vector3(cur_x - this.line_width * scaler * Math.sin(angle + Math.PI/2), cur_y - this.line_width * Math.cos(angle + Math.PI/2),0));
+        arr[i].vertices.push(new THREE.Vector3(next_x - this.line_width * scaler * Math.sin(angle + Math.PI/2), next_y - this.line_width * Math.cos(angle + Math.PI/2),0));
+        arr[i].vertices.push(new THREE.Vector3(next_x + this.line_width * scaler * Math.sin(angle + Math.PI/2), next_y + this.line_width * Math.cos(angle + Math.PI/2),0));
+        arr[i].vertices.push(new THREE.Vector3(cur_x + this.line_width * scaler * Math.sin(angle + Math.PI/2), cur_y + this.line_width * Math.cos(angle + Math.PI/2),0));
 
         arr[i].faces.push( new THREE.Face3( 0, 2, 1 ) );
         arr[i].faces.push( new THREE.Face3( 0, 3, 2 ) );
@@ -365,9 +419,9 @@
       } 
       if (frame >= FRAME_FOR_BEAN(22 * 48 + 9)) {
         const progress = elasticOut(0, 1, 1.1, T(base + 9, base + 9 + 12, frame));
-        this.level1_hex1.position.set(10 * r32 * progress, 10 / 2 * progress, 0);
-        this.level1_hex2.position.set(-10 * r32 * progress, 10 / 2 * progress, 0);
-        this.level1_hex3.position.set(0, -10 * progress, 0);
+        this.level1_hex1.position.set(10 * r32 * progress, 10 / 2 * progress, 100);
+        this.level1_hex2.position.set(-10 * r32 * progress, 10 / 2 * progress, 100);
+        this.level1_hex3.position.set(0, -10 * progress, 100);
 
         const progress2 = elasticOut(0, 1, 1.1, T(base + 24, base + 24 + 12, frame));
         this.center_line1.scale.set(progress2, progress2, progress2);
@@ -434,7 +488,7 @@
         this.center_line3.scale.set(scale, scale, scale);
       }
       if (frame >= FRAME_FOR_BEAN(25 * 48)) {
-        this.spin_cube.position.set(0, 0, 0);
+        this.spin_cube.position.set(0, 0, 200);
         this.small_center_hex.position.set(200, 0, 0);
         this.middle_center_hex.position.set(200, 0, 0);
         this.outer_center_hex.position.set(200, 0, 0);
