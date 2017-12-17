@@ -256,6 +256,8 @@
 
       this.skybox.visible = frame < 250 || frame > 11308;
       this.lowpolySkybox.visible = frame >= 250 && frame <= 11308;
+      this.byNinjadevText.visible = frame < 250;
+      this.byNinjadevText.material.opacity = (frame < 250) ? 1 : 0;
 
       this.ps.update();
       if (frame < 366 || frame > 11299) {
