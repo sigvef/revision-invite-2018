@@ -63,6 +63,10 @@
         [[2, 61], [-135, -127]]
       ];
 
+      // IMPACT
+      this.impactBeans = [3120, 3130, 3144, 3154, 3162];
+      this.framesSinceImpact = 9999;
+
       // HEXAGONS
       const whiteColor = 0xffffff;
       const grayColor = 0x373c3f;
@@ -557,19 +561,17 @@
 
       this.ps.decayFactor = 0.9999;
 
-      const impactBeans = [3120, 3130, 3144, 3154, 3162];
-
       let impactIndex = 0;
       for (let i = 0; i < 4; i++) {
-        if (BEAN >= impactBeans[i]) {
+        if (BEAN >= this.impactBeans[i]) {
           impactIndex = i;
         }
       }
-      const impactStartFrame = FRAME_FOR_BEAN(impactBeans[impactIndex]);
-      const impactEndFrame = FRAME_FOR_BEAN(impactBeans[impactIndex + 1]);
+      const impactStartFrame = FRAME_FOR_BEAN(this.impactBeans[impactIndex]);
+      const impactEndFrame = FRAME_FOR_BEAN(this.impactBeans[impactIndex + 1]);
       const jumpLengthInFrames = impactEndFrame - impactStartFrame;
-      const framesSinceImpact = frame - impactStartFrame;
-      const impactProgress = framesSinceImpact / jumpLengthInFrames;
+      this.framesSinceImpact = frame - impactStartFrame;
+      const impactProgress = this.framesSinceImpact / jumpLengthInFrames;
       const distanceFromWallFactor = impactIndex >= 3 ? 2.4 * impactProgress : Math.sin(impactProgress * Math.PI);
 
       this.ball.position.x = 0;
@@ -578,10 +580,14 @@
       this.ball.rotation.x = 0;
       this.ball.rotation.y = 0;
       this.ball.rotation.z = 0;
-      this.ball.scale.z = 1 + Math.pow(Math.max(0, 1 - framesSinceImpact / 26), 1.1) * jumpLengthInFrames * 0.02 * Math.sin(framesSinceImpact / 2.6);
+      this.ball.scale.z = (
+        1 +
+        Math.pow(Math.max(0, 1 - this.framesSinceImpact / 26), 1.1) *
+        jumpLengthInFrames * 0.02 * Math.sin(this.framesSinceImpact / 2.6)
+      );
       this.ball.material.emissiveIntensity = 0.3 + 0.7 * Math.pow(1 - impactProgress, 2);
 
-      if (impactBeans.indexOf(BEAN) !== -1) {
+      if (this.impactBeans.indexOf(BEAN) !== -1) {
         this.cameraShakeAngularVelocity.x = (this.random() - 0.5) * 0.03;
         this.cameraShakeAngularVelocity.y = (this.random() - 0.5) * 0.03;
         this.cameraShakeAngularVelocity.z = (this.random() - 0.5) * 0.03;
@@ -642,6 +648,9 @@
       const gridXDistance = distanceBetweenHexagonCores;
       const gridYDistance = Math.sin(Math.PI / 3) * distanceBetweenHexagonCores;
 
+      const circleCenterX = 8 * GU;
+      const circleCenterY = 4.5 * GU;
+
       if (BEAN < 3216) {
         const offsetRemovalStartFrame = FRAME_FOR_BEAN(3190);  // TODO: needs tweaking
         const offsetRemovalEndFrame = FRAME_FOR_BEAN(3196);  // TODO: needs tweaking
@@ -680,9 +689,6 @@
         const hexagonAngleTopLeft = Math.PI / 2 + Math.PI * 2 / 3;
         const hexagonAngleTopRight = Math.PI / 2 + Math.PI * 4 / 3;
 
-        const circleCenterX = hexagonGridOffsetX + this.numHexagonsX * gridXDistance;
-        const circleCenterY = hexagonGridOffsetY + this.numHexagonsY * gridYDistance;
-
         this.textCtx.lineWidth = cylinderRadius;
         for (let y = 0; y < this.numHexagonsY; y++) {
           let yMid = hexagonGridOffsetY + y * gridYDistance;
@@ -703,7 +709,7 @@
 
               if (xStart > circleCenterX) {
                 const overshoot = (xStart - circleCenterX) / GU;
-                const phiStart = overshoot - Math.PI / 2;
+                const phiStart = overshoot - Math.PI / 2;  // TODO: normalize to one exact fraction of the circle
 
                 xStart = circleCenterX + circleRadius * Math.cos(phiStart);
                 yStart = circleCenterY + circleRadius * Math.sin(phiStart);
