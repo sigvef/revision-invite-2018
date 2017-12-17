@@ -46,6 +46,9 @@
                   break;
             }
       }
+      if(BEAN >= 2016) {
+        this.balls = 9999;
+      }
       this.uniforms.numOfBalls.value = this.balls;
     }
   }
