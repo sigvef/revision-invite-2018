@@ -90,6 +90,127 @@
       }
 
       this.scene.add(this.group);
+
+      this.easings = {
+        lerp,
+        smoothstep,
+        easeIn,
+        easeOut,
+        step: (a, b, t) => (t >= 1 ? b : a),
+      };
+
+      this.cameraPositionPath = this.path([{
+        bean: 54 * 48,
+        easing: 'step',
+        value: {
+          x: -0.68,
+          y: 0.54,
+          z: 10.01,
+        },
+      }, {
+        bean: 55 * 48 + 47,
+        easing: 'lerp',
+        value: {
+          x: 4.35,
+          y: -3.44,
+          z: 54.51,
+        }
+      }, {
+        bean: 56 * 48,
+        easing: 'step',
+        value: {
+          x: 0.2,
+          y: 6.07,
+          z: -1.36,
+        }
+      }, {
+        bean: 57 * 48 + 47,
+        easing: 'lerp',
+        value: {
+          x: -3.2796042561328207,
+          y: 1.027845733821269,
+          z: 0.391666065892532,
+        }
+      }, {
+        bean: 58 * 48,
+        easing: 'step',
+        value: {
+          x: 14.34,
+          y: 0.49,
+          z: 30.91,
+        }
+      }, {
+        bean: 59 * 48 + 47,
+        easing: 'lerp',
+        value: {
+          x: -3.2796042561328207,
+          y: 1.027845733821269,
+          z: 0.391666065892532,
+        }
+      }, {
+        bean: 60 * 48,
+        easing: 'step',
+        value: {
+          x: 94.1516206921957,
+          y: -1.8293145279889624,
+          z: 3.197342814319596,
+        }
+      }, {
+        bean: 61 * 48 + 47,
+        easing: 'lerp',
+        value: {
+          x: 125.46020800462132,
+          y: 13.425828352204901,
+          z: 4.098919570353122,
+        }
+      }]);
+
+      this.cameraQuaternionPath = this.path([{
+        bean: 54 * 48,
+        easing: 'step',
+        value: {
+          x: 0,
+          y: 0,
+          z: -0.3285825385939043,
+          w: 0.9444752592477927,
+        }
+      }, {
+        bean: 55 * 48 + 47,
+        easing: 'lerp',
+        value: {
+          x: 0.6,
+          y: 0,
+          z: -0.3285825385939043,
+          w: 0.9444752592477927,
+        }
+      }, {
+        bean: 56 * 48,
+        easing: 'step',
+        value: {
+          x: 0.010508284556547358,
+          y: 0.6967808433088046,
+          z: -0.010210040495897459,
+          w: 0.7171344199437335,
+        }
+      }, {
+        bean: 57 * 48 + 47,
+        easing: 'lerp',
+        value: {
+          x: 0.010508284556547358,
+          y: 0.2967808433088046,
+          z: -0.010210040495897459,
+          w: 0.7171344199437335,
+        }
+      }, {
+        bean: 60 * 48,
+        easing: 'lerp',
+        value: {
+          x: 0.010508284556547358,
+          y: 0.6967808433088046,
+          z: -0.010210040495897459,
+          w: 0.7171344199437335,
+        }
+      }]);
     }
 
     update(frame) {
@@ -124,6 +245,9 @@
       if(BEAN > 2789) {
         this.particleSystem.rotation.x = (frame*0.0005);
       }
+
+      this.camera.position.copy(this.getPoint(this.cameraPositionPath, frame));
+      this.camera.quaternion.copy(this.getPoint(this.cameraQuaternionPath, frame));
     }
 
     render(renderer) {
@@ -157,6 +281,43 @@
       context.fill();
 
       return canvas;
+    }
+
+    path(points) {
+      for(let i = 0; i < points.length; i++) {
+        const point = points[i];
+        if(!point.value) {
+          point.value = points[i - 1].value;
+        }
+        point.frame = FRAME_FOR_BEAN(point.bean);
+      }
+      return points;
+    }
+
+    getPoint(path, frame) {
+      let from = path[0];
+      let to = path[0];
+      for(let i = 0; i < path.length; i++) {
+        const current = path[i];
+        if(current.frame <= frame) {
+          from = current; 
+          if(path[i + 1]) {
+            to = path[i + 1];
+          } else {
+            return to.value;
+          }
+        } else {
+          break;
+        }
+      }
+      const t = (frame - from.frame) / (to.frame - from.frame);
+      const easing = this.easings[to.easing];
+      return {
+        x: easing(from.value.x, to.value.x, t),
+        y: easing(from.value.y, to.value.y, t),
+        z: easing(from.value.z, to.value.z, t),
+        w: easing(from.value.w, to.value.w, t),
+      };
     }
   }
 
