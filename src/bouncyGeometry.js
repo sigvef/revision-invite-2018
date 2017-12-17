@@ -61,7 +61,7 @@
         2: new THREE.MeshBasicMaterial({ color: greenColor }),
         3: new THREE.MeshBasicMaterial({ color: pinkColor }),
       };
-      this.numHexagonsX = 3;
+      this.numHexagonsX = 8;
       this.numHexagonsY = 4;
       const cylinderRadius = 0.2;
       const cylinderGeometry = new THREE.CylinderGeometry(cylinderRadius, cylinderRadius, cylinderRadius / 4, 6);
