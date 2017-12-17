@@ -45,6 +45,7 @@
         case 3408 + 9 + 9:
         case 3456:
         case 3456 + 9:
+        case 3480:
         case 3498:
         case 3522:
         case 3546:
@@ -148,12 +149,12 @@
           fontYOffset + easeIn(-10, 0, t2) + easeIn(0, 10, t3));
 
       this.ctx.fillText(
-          '4k',
+          'PC',
           - 8 / 3 + 0.25,
           fontYOffset + easeIn(-10, 0, t3) + easeIn(0, 10, t4));
 
       this.ctx.fillText(
-          'PC',
+          'SCENE',
           - 8 / 3 + 0.25,
           fontYOffset + easeIn(-10, 0, t4));
 

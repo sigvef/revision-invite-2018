@@ -145,7 +145,7 @@ void main() {
     vec3 dir = normalize(-pos);
 
     vec2 propUV = vUv - vec2(0.5, 0.5);
-    propUV = propUV * vec2(16, 9);
+    propUV = propUV * vec2(16, 9) * 1.4;
 
     //NOTE: Math assumes camera is always pointing in Z+
     //do not rotate the camera without fixing math
