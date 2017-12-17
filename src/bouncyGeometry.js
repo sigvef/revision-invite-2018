@@ -673,6 +673,7 @@
       this.textCanvas.width = this.textCanvas.width;
 
       this.textCtx.fillStyle = '#ff4982';  // le pink
+      this.textCtx.strokeStyle = '#ff4982';  // le pink
 
       const hexToRectStartFrame = FRAME_FOR_BEAN(3182);  // TODO: needs tweaking
       const hexToRectEndFrame = FRAME_FOR_BEAN(3186);  // TODO: needs tweaking
@@ -726,6 +727,7 @@
         const angleAnimationProgress = (frame - angleAnimationStartFrame) / (angleAnimationEndFrame - angleAnimationStartFrame);
         const relativeAngle = lerp(0, 2, angleAnimationProgress);
 
+        this.textCtx.lineWidth = cylinderRadius;
         for (let y = 0; y < this.numHexagonsY; y++) {
           const circleRadius = this.numHexagonsY + 1 - y;
           let cumulativeAngle = 0;
@@ -738,13 +740,18 @@
             const xLeft = 4.5 * GU + x * gridXDistance + cylinderRadius * hexagonRadiuses[2] * Math.cos(angleTopLeft);
             const xRight = 4.5 * GU + x * gridXDistance + cylinderRadius * hexagonRadiuses[4] * Math.cos(angleTopRight);
             const width = (xRight - xLeft) * cylinderRadius / 8;
-            const yTop = 1.66 * GU + y * gridYDistance + cylinderRadius * hexagonRadiuses[2] * Math.sin(angleTopLeft);
-            this.textCtx.fillRect(xLeft, yTop, width, cylinderRadius);
+            const yMid = 1.66 * GU + y * gridYDistance;
+            //this.textCtx.fillRect(xLeft, yTop, width, cylinderRadius);
 
-            this.textCtx.translate(xRight, yTop - cylinderRadius / 2);
+            this.textCtx.beginPath();
+            this.textCtx.moveTo(xLeft, yMid);
+            this.textCtx.lineTo(xRight, yMid);
+            this.textCtx.stroke();
+
+            this.textCtx.translate(xRight, yMid);
             this.textCtx.rotate(thatRelativeAngle);
             cumulativeAngle += thatRelativeAngle;
-            this.textCtx.translate(-xRight, -(yTop - cylinderRadius / 2));
+            this.textCtx.translate(-xRight, -yMid);
           }
           this.textCtx.restore();
         }
