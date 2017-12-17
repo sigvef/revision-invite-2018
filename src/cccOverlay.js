@@ -56,7 +56,7 @@
         this.ctx.font = '0.7pt schmalibre-light';
         this.ctx.fillStyle = '#c2c2a0';
 
-        this.ctx.fillText('   NO GRAS', 1, 0.5);
+        this.ctx.fillText('  NO GRASS', 1, 0.5);
       }
 
 
