@@ -7,7 +7,7 @@ uniform sampler2D tDiffuse;
 
 varying vec2 vUv;
 
-const int MAX_STEPS = 64;
+const int MAX_STEPS = 16;
 const float EPS = 0.001;
 const float END = 100.0;
 const float START = 0.0;
@@ -46,7 +46,7 @@ float sphere(vec3 p, float s) {
 
 vec2 sdf(in vec3 p) {
     float startBEAN = 1824. + 24.;
-    float repeatSize = 13.;
+    float repeatSize = 15.;
     
     p.x += 5. * step(repeatSize, mod(p.y + 5., repeatSize * 2.));
     p.x = mod(p.x + repeatSize / 2., repeatSize) - repeatSize / 2.;
@@ -160,10 +160,7 @@ vec4 background(vec2 uv) {
 void main() {
     float eyez = 20.;
     if (BEAN > 2040.) {
-        eyez = (BEAN - 2000.)/2.; 
-    }
-    if (eyez > 95.) {
-        eyez = 95.;
+        eyez = min((BEAN - 2000.)/2., 95.); 
     }
     vec3 eye = vec3(0.0, 0.0, eyez);
     vec3 dir = rayDir(60.0, vUv);
@@ -179,11 +176,8 @@ void main() {
         color = phongIllumination(color, color, normalize(vec3(1.0, 1.0, 1.0)), 10.0, p, eye);
     }
 
-    //color += 0.1 * step(0.5, (vUv.y - 0.5) + 0.5 * sin(0.75 * PI / 2. + vUv.x * PI / 4.));
-
     vec2 uv = (vUv - 0.5) * 2.;
     color *= 0.75 + (1. - abs(uv.x * uv.y)) * 0.25;
 
     gl_FragColor = vec4(color, 1.0);
-
 }
