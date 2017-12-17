@@ -35,15 +35,30 @@
       this.ctx.save();
       this.ctx.scale(GU, GU);
 
-      this.ctx.fillStyle = 'red';
-      this.ctx.fillRect(
-        16 / 4 + Math.sin(frame / 60) * 16 / 4,
-        9 / 4 + Math.sin(frame / 60) * 9 / 4,
-        16 / 2,
-        9 / 2);
+      // NO RIBBONS
+      this.ctx.fillStyle = 'rgba(8, 10, 12, .2)';
+      this.ctx.fillRect(9, 7.5, 16, 1.5);
+
+      this.ctx.textAlign = 'right';
+      this.ctx.textBaseline = 'middle';
+      this.ctx.font = '0.7pt schmalibre-light';
+      this.ctx.fillStyle = '#c2c2a0';
+
+      this.ctx.fillText('NO RIBBONS  ', 15.4, 8);
+
+      // NO GRAS || NO STARS
+      this.ctx.fillStyle = 'rgba(8, 10, 12, .2)';
+      this.ctx.fillRect(0, 0, 7.5, 1.5);
+
+      this.ctx.textAlign = 'left';
+      this.ctx.textBaseline = 'middle';
+      this.ctx.font = '0.7pt schmalibre-light';
+      this.ctx.fillStyle = '#c2c2a0';
+
+      this.ctx.fillText('   NO GRAS', 1, 0.5);
+
 
       this.ctx.restore();
-
       this.output.needsUpdate = true;
       this.outputs.render.setValue(this.output);
     }
