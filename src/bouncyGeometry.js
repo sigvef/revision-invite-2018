@@ -725,33 +725,49 @@
         const angleAnimationStartFrame = FRAME_FOR_BEAN(3216);
         const angleAnimationEndFrame = FRAME_FOR_BEAN(3296);
         const angleAnimationProgress = (frame - angleAnimationStartFrame) / (angleAnimationEndFrame - angleAnimationStartFrame);
-        const relativeAngle = lerp(0, 2, angleAnimationProgress);
+        const relativeAngle = lerp(0, 6, angleAnimationProgress);
+
+        const circleCenterX = 4.5 * GU + this.numHexagonsX * gridXDistance;
+        const circleCenterY = 1.66 * GU + this.numHexagonsY * gridYDistance;
+        this.textCtx.fillRect(circleCenterX, circleCenterY, 0.05 * GU, 0.05 * GU);
 
         this.textCtx.lineWidth = cylinderRadius;
         for (let y = 0; y < this.numHexagonsY; y++) {
-          const circleRadius = this.numHexagonsY + 1 - y;
-          let cumulativeAngle = 0;
+          let yMid = 1.66 * GU + y * gridYDistance;
+          const circleRadius = circleCenterY - yMid;
+          const circumference = circleRadius * 2 * Math.PI;
+          const lengthPerSegment = circumference / this.numHexagonsX;
+
           this.textCtx.save();
           for (let x = 0; x < this.numHexagonsX; x++) {
             const thatRelativeAngle = relativeAngle / circleRadius;
             const angleTopLeft = Math.PI / 2 + Math.PI * 2 / 3;
             const angleTopRight = Math.PI / 2 + Math.PI * 4 / 3;
 
-            const xLeft = 4.5 * GU + x * gridXDistance + cylinderRadius * hexagonRadiuses[2] * Math.cos(angleTopLeft);
-            const xRight = 4.5 * GU + x * gridXDistance + cylinderRadius * hexagonRadiuses[4] * Math.cos(angleTopRight);
-            const width = (xRight - xLeft) * cylinderRadius / 8;
-            const yMid = 1.66 * GU + y * gridYDistance;
-            //this.textCtx.fillRect(xLeft, yTop, width, cylinderRadius);
+            let xStart = 4.5 * GU + x * gridXDistance + cylinderRadius * hexagonRadiuses[2] * Math.cos(angleTopLeft) + angleAnimationProgress * 9 * GU;
+            let xEnd = 4.5 * GU + x * gridXDistance + cylinderRadius * hexagonRadiuses[4] * Math.cos(angleTopRight) + angleAnimationProgress * 9 * GU;
+            let yEnd = yMid;
+            let yStart = yMid;
+
+            if (xEnd > circleCenterX) {
+              const overshoot = (xEnd - circleCenterX) / GU;
+              const phiEnd = overshoot - Math.PI / 2;
+              xEnd = circleCenterX + circleRadius * Math.cos(phiEnd);
+              yEnd = circleCenterY + circleRadius * Math.sin(phiEnd);
+
+              if (xStart > circleCenterX) {
+                const overshoot = (xStart - circleCenterX) / GU;
+                const phiStart = overshoot - Math.PI / 2;
+
+                xStart = circleCenterX + circleRadius * Math.cos(phiStart);
+                yStart = circleCenterY + circleRadius * Math.sin(phiStart);
+              }
+            }
 
             this.textCtx.beginPath();
-            this.textCtx.moveTo(xLeft, yMid);
-            this.textCtx.lineTo(xRight, yMid);
+            this.textCtx.moveTo(xStart, yStart);
+            this.textCtx.lineTo(xEnd, yEnd);
             this.textCtx.stroke();
-
-            this.textCtx.translate(xRight, yMid);
-            this.textCtx.rotate(thatRelativeAngle);
-            cumulativeAngle += thatRelativeAngle;
-            this.textCtx.translate(-xRight, -yMid);
           }
           this.textCtx.restore();
         }
