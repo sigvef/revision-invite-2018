@@ -8,6 +8,9 @@
         }
       });
 
+      this.camera.near = 0.001;
+      this.camera.updateProjectionMatrix();
+
       this.random = new Random(0x80deed); // eslint-disable-line
 
       this.whiteColor = 0xffffff;
@@ -108,60 +111,124 @@
           z: 10.01,
         },
       }, {
+        bean: 54 * 48 + 47,
+        easing: 'lerp',
+        value: {
+          x: 2.35,
+          y: -2.44,
+          z: 34.51,
+        }
+      }, {
+        bean: 55 * 48,
+        easing: 'step',
+        value: {
+          x: 3.2,
+          y: 4.07,
+          z: -4.56,
+        }
+      }, {
         bean: 55 * 48 + 47,
         easing: 'lerp',
         value: {
-          x: 4.35,
-          y: -3.44,
-          z: 54.51,
+          x: 2.2796042561328207,
+          y: 18.527845733821269,
+          z: -22.391666065892532,
         }
       }, {
         bean: 56 * 48,
         easing: 'step',
         value: {
-          x: 0.2,
-          y: 6.07,
-          z: -1.36,
+          x: 14.34,
+          y: 2.49,
+          z: 30.91,
+        }
+      }, {
+        bean: 56 * 48 + 47,
+        easing: 'lerp',
+        value: {
+          x: 8.9796042561328207,
+          y: 3.7027845733821269,
+          z: 21.391666065892532,
+        }
+      }, {
+        bean: 57 * 48,
+        easing: 'step',
+        value: {
+          x: 110.1516206921957,
+          y: 1.8293145279889624,
+          z: 3.197342814319596,
         }
       }, {
         bean: 57 * 48 + 47,
         easing: 'lerp',
         value: {
-          x: -3.2796042561328207,
-          y: 1.027845733821269,
-          z: 0.391666065892532,
+          x: 125.46020800462132,
+          y: 23.425828352204901,
+          z: 14.098919570353122,
         }
       }, {
         bean: 58 * 48,
         easing: 'step',
         value: {
-          x: 14.34,
-          y: 0.49,
-          z: 30.91,
+          x: 26.501035175479608,
+          y: 73.69544870521025,
+          z: 29.47197116284984,
         }
       }, {
-        bean: 59 * 48 + 47,
+        bean: 58 * 48 + 23,
         easing: 'lerp',
         value: {
-          x: -3.2796042561328207,
-          y: 1.027845733821269,
-          z: 0.391666065892532,
+          x: 26.501035175479608,
+          y: 63.69544870521025,
+          z: 29.47197116284984,
         }
       }, {
-        bean: 60 * 48,
+        bean: 58 * 48 + 24,
         easing: 'step',
         value: {
-          x: 94.1516206921957,
-          y: -1.8293145279889624,
-          z: 3.197342814319596,
+          x: 20.501035175479608,
+          y: 53.69544870521025,
+          z: 39.47197116284984,
         }
       }, {
-        bean: 61 * 48 + 47,
+        bean: 58 * 48 + 47,
         easing: 'lerp',
         value: {
-          x: 125.46020800462132,
-          y: 13.425828352204901,
-          z: 4.098919570353122,
+          x: 20.501035175479608,
+          y: 43.69544870521025,
+          z: 39.47197116284984,
+        }
+      }, {
+        bean: 59 * 48,
+        easing: 'step',
+        value: {
+          x: -20.501035175479608,
+          y: 43.69544870521025,
+          z: 39.47197116284984,
+        }
+      }, {
+        bean: 59 * 48 + 23,
+        easing: 'lerp',
+        value: {
+          x: -20.501035175479608,
+          y: 23.69544870521025,
+          z: 39.47197116284984,
+        }
+      }, {
+        bean: 59 * 48 + 24,
+        easing: 'step',
+        value: {
+          x: -20.501035175479608,
+          y: 23.69544870521025,
+          z: 19.47197116284984,
+        }
+      }, {
+        bean: 61 * 48 + 23,
+        easing: 'lerp',
+        value: {
+          x: -20.501035175479608,
+          y: 4.69544870521025,
+          z: 0.47197116284984,
         }
       }]);
 
@@ -175,13 +242,31 @@
           w: 0.9444752592477927,
         }
       }, {
-        bean: 55 * 48 + 47,
+        bean: 54 * 48 + 47,
         easing: 'lerp',
         value: {
           x: 0.6,
           y: 0,
           z: -0.3285825385939043,
           w: 0.9444752592477927,
+        }
+      }, {
+        bean: 55 * 48,
+        easing: 'step',
+        value: {
+          x: 0.010508284556547358,
+          y: 0.2967808433088046,
+          z: -0.010210040495897459,
+          w: 0.7171344199437335,
+        }
+      }, {
+        bean: 55 * 48 + 47,
+        easing: 'lerp',
+        value: {
+          x: 0.010508284556547358,
+          y: 0.4967808433088046,
+          z: -0.010210040495897459,
+          w: 0.7171344199437335,
         }
       }, {
         bean: 56 * 48,
@@ -193,22 +278,40 @@
           w: 0.7171344199437335,
         }
       }, {
-        bean: 57 * 48 + 47,
+        bean: 56 * 48 + 47,
         easing: 'lerp',
         value: {
           x: 0.010508284556547358,
-          y: 0.2967808433088046,
+          y: 0.5567808433088046,
           z: -0.010210040495897459,
           w: 0.7171344199437335,
         }
       }, {
-        bean: 60 * 48,
-        easing: 'lerp',
+        bean: 57 * 48,
+        easing: 'step',
         value: {
-          x: 0.010508284556547358,
-          y: 0.6967808433088046,
-          z: -0.010210040495897459,
-          w: 0.7171344199437335,
+          x: -0.03978915818515377,
+          y: 0.6755398303524284,
+          z: 0.04306063490160267,
+          w: 0.7349888041461586,
+        }
+      }, {
+        bean: 58 * 48,
+        easing: 'step',
+        value: {
+          x: -0.4633656868350794,
+          y: 0.5232045804656599,
+          z: 0.35662867819782085,
+          w: 0.6199719293084835,
+        }
+      }, {
+        bean: 59 * 48,
+        easing: 'step',
+        value: {
+          x: -0.4633656868350794,
+          y: -0.5232045804656599,
+          z: 0.35662867819782085,
+          w: 0.6199719293084835,
         }
       }]);
     }
@@ -231,7 +334,7 @@
         for(let j = 0; j < positions.length; j+=3) {
           let ratio = 1 - ((tentacle.radius - Math.abs(positions[j])) / tentacle.radius);
           let y = 1;
-          if(BEAN > 2789) {
+          if(BEAN >= 2784) {
             y = Math.sin(frame * 100 / tentacle.speed + j*0.15) * 2 * ratio;
           } else {
             y = Math.sin(frame * 10 / tentacle.speed + j*0.15) * 2 * ratio;
@@ -242,12 +345,14 @@
         tentacle.geometry.attributes.position.needsUpdate = true;
       }
 
-      if(BEAN > 2789) {
+      if(BEAN > 2784) {
         this.particleSystem.rotation.x = (frame*0.0005);
       }
 
-      this.camera.position.copy(this.getPoint(this.cameraPositionPath, frame));
-      this.camera.quaternion.copy(this.getPoint(this.cameraQuaternionPath, frame));
+      if (!this.camera.isOverriddenByFlyControls) {
+        this.camera.position.copy(this.getPoint(this.cameraPositionPath, frame));
+        this.camera.quaternion.copy(this.getPoint(this.cameraQuaternionPath, frame));
+      }
     }
 
     render(renderer) {
