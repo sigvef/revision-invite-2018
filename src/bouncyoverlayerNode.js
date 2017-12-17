@@ -86,21 +86,22 @@
       this.ctx.rotate(Math.PI / 2 - 0.11);
       this.ctx.fillStyle = 'white';
       this.ctx.translate(-4.5, -.5);
-      this.ctx.translate(0, -2.5);
-      const bouncyScale = 1 + 0.5 * Math.sin(this.frame / 60 / 60 * 115 * Math.PI * 2);
+      this.ctx.translate(0, 1.5);
+      const bouncyScale = 1 + 0.1 * Math.cos(this.frame / 60 / 60 * 115 * Math.PI * 2);
       this.ctx.scale(1 / GU, 1 / GU * bouncyScale);
-      this.ctx.translate(0, 2.5 * GU);
-      for(let i  = 0; i < this.textCanvas.height; i++) {
+      this.ctx.translate(0, -1.5 * GU);
+      const step = 4;
+      for(let i  = 0; i < this.textCanvas.height; i+=step) {
         this.ctx.drawImage(
           this.textCanvas,
           0,
           i,
           this.textCanvas.width,
-          2,
-          (1 - i / this.textCanvas.height) * 10 * Math.sin(this.frame / 60 / 60 * 115 * Math.PI),
+          step + 1,
+          (1 - i / this.textCanvas.height) * 12 * Math.cos(this.frame / 60 / 60 * 115 * Math.PI),
           i,
           this.textCanvas.width,
-          2);
+          step + 1);
       }
 
       this.ctx.restore();
