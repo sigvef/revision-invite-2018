@@ -15,7 +15,7 @@
       this.scene.add(ambient);
 
       var light = new THREE.PointLight(0xffffff, 1, 100);
-      light.position.set(0, 0, 20);
+      light.position.set(0, 0, 80);
       this.scene.add(light);
 
       const backlight = new THREE.PointLight(0x555555, 1, 100);
@@ -533,13 +533,12 @@
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
         ctx.font = 'bold 1pt schmalibre';
-        ctx.fillStyle = 'rgb(55, 60, 63)';
         ctx.fillText(
           ball.letter,
           offsetX,
           offsetY - 0.075
         );
-        ctx.fillStyle = 'white';
+        ctx.fillStyle = '#373c3f';
         ctx.fillText(
           ball.letter,
           0,
