@@ -189,9 +189,9 @@
           transparent: true,
         })
       );
-      this.revisionLogo.scale.set(1.05, 1.05, 1.05);
+      this.revisionLogo.scale.set(1.02, 1.02, 1.02);
       this.revisionLogo.rotation.x = -Math.PI / 2;
-      this.revisionLogo.position.set(0, 350, 105);
+      this.revisionLogo.position.set(0, 350, 115);
       this.scene.add(this.revisionLogo);
     }
 
@@ -266,7 +266,7 @@
       }
 
       if (frame <= frame1) {
-        const t = clamp(0, (frame - frame1 + 10) / 10, 1);
+        const t = clamp(0, (frame - frame1 + 12) / 12, 1);
         /*
         if(this.skybox.material.materials) {
           for(let i = 0; i < this.skybox.material.materials.length; i++) {
@@ -279,7 +279,7 @@
         this.camera.position.set(
           lerp(0, 0, t),
           lerp(1200, 900, t),
-          lerp(300, 200, t)
+          lerp(500, 400, t)
         );
 
         this.globeContainer.visible = t > 0.00001;
@@ -287,13 +287,15 @@
         const scale = easeOut(0.00001, 1, t);
         this.globeContainer.scale.set(scale, scale, scale);
 
+        this.globeOutline.material.opacity = easeIn(0.3, 1, t);
+
         this.globeContainer.rotation.x = -Math.PI / 2 + .8;
         this.camera.lookAt(new THREE.Vector3(0, 0, 0));
       } else if (frame <= frame2) {
         this.camera.position.set(
           lerp(0, 0, (frame - frame2 + 10) / 10),
           lerp(900, 390, (frame - frame2 + 10) / 10),
-          lerp(200, 110, (frame - frame2 + 10) / 10)
+          lerp(400, 110, (frame - frame2 + 10) / 10)
         );
 
         this.camera.lookAt(new THREE.Vector3(0, 0, 0));
@@ -472,15 +474,15 @@
           easeOut(0, 100, localT / 30)
         ));
 
-        this.globe.material.opacity = easeIn(1, 0, (frame - 11350) / 150);
-        this.cloudGlobe.material.opacity = easeIn(1, 0, (frame - 11350) / 150);
-        this.globeOutline.material.opacity = easeIn(1, 0, (frame - 11350) / 150);
-        this.revisionLogo.material.opacity = easeIn(0, 1, (frame - 11350) / 150);
+        this.globe.material.opacity = easeIn(1, 0, (frame - 11315) / 80);
+        this.cloudGlobe.material.opacity = easeIn(1, 0, (frame - 11315) / 60);
+        this.globeOutline.material.opacity = easeIn(1, 0, (frame - 11315) / 40);
+        this.revisionLogo.material.opacity = lerp(0, 1, (frame - 11310) / 60);
       }
 
       this.globeOutline.position.copy(this.globe.position);
       this.globeOutline.position.y -= 500;
-      this.globeOutline.position.z -= 110;
+      this.globeOutline.position.z -= 220;
       this.globeOutline.visible = this.globeContainer.visible;
       const scale = this.globe.scale.x * 1.7;
       this.globeOutline.scale.set(scale, scale, scale);
