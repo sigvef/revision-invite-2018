@@ -12,8 +12,8 @@
       const endBean = 2400 + 4;
       this.uniforms.barSize.value = elasticOut(
         0,
-        0.13,
-        1.1,
+        0.15,
+        1.2,
         (frame - FRAME_FOR_BEAN(startBean)) / (
           FRAME_FOR_BEAN(endBean) - FRAME_FOR_BEAN(startBean)));
       this.uniforms.tDiffuse.value = this.inputs.tDiffuse.getValue();
