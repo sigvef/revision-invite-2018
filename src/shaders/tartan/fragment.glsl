@@ -13,8 +13,7 @@ vec2 rotate(vec2 point, float angle) {
 }
 
 void main() {
-    vec4 pink = vec4(175. / 255., 50. / 255., 89. / 255., 1.);
-    pink *= clamp(1. + t / 5., 0., 1.5);
+    vec4 pink = vec4(255. / 255., 73. / 255., 130. / 255., 1.);
     vec4 green = vec4(119. / 255., 225. / 255., 93. / 255., 1.);
 
     float fadeIn = clamp(t / 2., 0., 1.);
@@ -26,5 +25,6 @@ void main() {
     vec2 mod_uv2 = mod(small_stripe_vUv, 0.05);
     color = mix(color, green, fadeIn * .5 * step(mod_uv2.x, .003));
     color = mix(color, green, fadeIn * .5 * step(mod_uv2.y, .003));
+
     gl_FragColor = vec4(color);
 }
