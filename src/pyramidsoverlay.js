@@ -38,7 +38,7 @@
       this.ctx.scale(GU, GU);
 
       this.ctx.fillStyle = 'rgb(8, 10, 12)';
-      this.ctx.fillRect(9, 9 / 3 * 2 - this.snareThrob * 0.25, 16, 1.5 + this.snareThrob * 0.5);
+      this.ctx.fillRect(10.5, 9 / 3 * 2 - this.snareThrob * 0.25, 16, 1.5 + this.snareThrob * 0.5);
       this.ctx.textAlign = 'right';
       this.ctx.textBaseline = 'middle';
       this.ctx.font = '0.7pt schmalibre-light';
@@ -49,7 +49,7 @@
       this.ctx.fillText('NO LASERS', 15.4 + easeIn(2, 0, t) - easeIn(0, -3, t2), 6.5);
 
       this.ctx.globalAlpha = 1;
-      this.ctx.clearRect(9, 0, easeIn(7, 0, t) + easeIn(0, 7, t2), 9);
+      this.ctx.clearRect(10.5, 0, easeIn(5.5, 0, t) + easeIn(0, 5.5, t2), 9);
 
       this.ctx.fillStyle = 'rgb(8, 10, 12)';
       this.ctx.fillRect(0, 2.5 - this.snareThrob * 0.25, 7, 1.5 + this.snareThrob * 0.5);

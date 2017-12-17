@@ -32,11 +32,14 @@
       this.uniforms.frame.value = frame;
       let t = Math.pow(T(62 * 48, 62 * 48 + 12, frame), 1.5);
 
-      if (BEAN >= 3018) {
-        t = 1 - T(3018, 3018 + 12, frame);
-      }
       this.uniforms.translationOverX.value = easeIn(0.5, 0, t);
       this.uniforms.translationUnderX.value = easeIn(0, -0.15, t);
+
+      if (BEAN >= 3024) {
+        t = 1 - T(3024 + 12 - 2, 3024 + 12 - 2 + 10, frame);
+        this.uniforms.translationOverX.value = easeIn(0.5, 0, t);
+        this.uniforms.translationUnderX.value = easeIn(0, -0.15, t);
+      }
 
       this.uniforms.tDiffuse.value = this.inputs.tDiffuse.getValue();
     }
