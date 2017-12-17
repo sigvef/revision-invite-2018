@@ -34,15 +34,10 @@
     }
 
     update(frame) {
-      const rectPositionY = easeOut(
-        easeOut(-2, 0, (frame - firstDrumBeat) / (secondDrumBeat - firstDrumBeat)),
-        9, (frame - atariSceneStart) / (animationFinished - atariSceneStart));
+      const rectPositionY = easeOut(-2, 9, (frame - atariSceneStart) / (animationFinished - atariSceneStart));
 
       this.textCtx.save();
       this.textCtx.scale(GU, GU);
-      this.textCtx.font = '1pt schmalibre';
-      this.textCtx.textAlign = 'center';
-
 
       this.textCtx.textBaseline = 'middle';
       this.textCtx.fillStyle = '#ff0000';
@@ -51,8 +46,7 @@
       this.textCtx.fillRect(0, 2.0 + rectPositionY, 16, 9);
       this.textCtx.fillStyle = 'rgb(55, 60, 63)';
       this.textCtx.fillRect(0, rectPositionY, 16, 2);
-      this.textCtx.fillStyle = 'white';
-      this.textCtx.fillText('JUST', 8, 0.94 + rectPositionY);
+
       this.textCtx.restore();
       this.textTexture.needsUpdate = true;
       this.uniforms.A.value = this.inputs.A.getValue();
