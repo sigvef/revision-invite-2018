@@ -567,7 +567,8 @@
       }
       const impactStartFrame = FRAME_FOR_BEAN(impactBeans[impactIndex]);
       const impactEndFrame = FRAME_FOR_BEAN(impactBeans[impactIndex + 1]);
-      const impactProgress = (frame - impactStartFrame) / (impactEndFrame - impactStartFrame);
+      const framesSinceImpact = frame - impactStartFrame;
+      const impactProgress = framesSinceImpact / (impactEndFrame - impactStartFrame);
       const distanceFromWallFactor = impactIndex >= 3 ? impactProgress : Math.sin(impactProgress * Math.PI);
 
       this.ball.position.x = 0;
@@ -575,7 +576,7 @@
       this.ball.position.z = -79 + 3 * distanceFromWallFactor;
       this.ball.rotation.x = 0;
       this.ball.rotation.y = 0;
-      this.ball.scale.z = 1 + Math.pow(1 - impactProgress, 1.5) * 0.7 * Math.sin(impactProgress * 10);
+      this.ball.scale.z = 1 + Math.pow(Math.max(0, 1 - framesSinceImpact / 26), 1.1) * 0.8 * Math.sin(framesSinceImpact / 2.6);
       this.ball.material.emissiveIntensity = 0.3 + 0.7 * Math.pow(1 - impactProgress, 2);
 
       if (impactBeans.indexOf(BEAN) !== -1) {
