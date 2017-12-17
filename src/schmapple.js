@@ -318,7 +318,7 @@
         (Math.random() - 0.5) * amount,
         (Math.random() - 0.5) * amount);
       const alphaMultiplier = Math.max(0.0, Math.min(1.0, (this.frame - 1126) / (1627 - 1126)));
-      if (BEAN < 612) {
+      if (BEAN < 600) {
         this.ctx.globalAlpha = smoothstep(1, 0,
           (this.frame - FRAME_FOR_BEAN(600)) / (
             FRAME_FOR_BEAN(612) - FRAME_FOR_BEAN(600)));
@@ -353,7 +353,7 @@
         }
       }
 
-      if (BEAN >= 420 + beanOffset) {
+      if (BEAN >= 600) {
         this.ctx.save();
         let scaler = 65 / this.revisionLogoOuter.width;
         this.ctx.translate(160 / 2, 90 / 2);
@@ -383,15 +383,15 @@
       //this.ctx.fillStyle = '#77e15d';
       this.ctx.beginPath();
 
-      let widthT = (this.frame - FRAME_FOR_BEAN(420 + beanOffset)) / (FRAME_FOR_BEAN(420 + 9 + beanOffset) - FRAME_FOR_BEAN(420 + beanOffset));
-      let widthT2 = (this.frame - FRAME_FOR_BEAN(420 + 6 + beanOffset)) / (FRAME_FOR_BEAN(420 + 6 + 9 + beanOffset) - FRAME_FOR_BEAN(420 + 6 + beanOffset));
+      let widthT = (this.frame - FRAME_FOR_BEAN(408 + beanOffset)) / (FRAME_FOR_BEAN(408 + 9 + beanOffset) - FRAME_FOR_BEAN(408 + beanOffset));
+      let widthT2 = (this.frame - FRAME_FOR_BEAN(408 + 6 + beanOffset)) / (FRAME_FOR_BEAN(408 + 6 + 9 + beanOffset) - FRAME_FOR_BEAN(408 + 6 + beanOffset));
       let outerWidth = easeOut(31, 26, widthT);
       let innerWidth = easeOut(21, 26, widthT);
       let secondSmallestWidth = easeOut(17.6, 5, widthT2);
       let smallestWidth = easeOut(0, 5, widthT2);
 
       const openingT = (this.frame - FRAME_FOR_BEAN(240 + beanOffset)) / (FRAME_FOR_BEAN(240 + 24 + beanOffset) - FRAME_FOR_BEAN(240 + beanOffset));
-      let openingT2 = (this.frame - FRAME_FOR_BEAN(420 + 24)) / (FRAME_FOR_BEAN(420 + 24 + 12) - FRAME_FOR_BEAN(420 + 24));
+      let openingT2 = (this.frame - FRAME_FOR_BEAN(408 + 24)) / (FRAME_FOR_BEAN(408 + 24 + 12) - FRAME_FOR_BEAN(408 + 24));
       /*WARNING: Explicitly added the - 6 to deal with different behaviour than expected
        * from elasticOut (github.com/ninjadev/nin/issues/471). I'm not sure if it's a bug or not.
        * If that function changes, this will break */
@@ -403,15 +403,15 @@
 
       const smallThrobT = (this.frame - FRAME_FOR_BEAN(240 + beanOffset)) / (FRAME_FOR_BEAN(240 + 48 + beanOffset) - FRAME_FOR_BEAN(240 + 24 + beanOffset));
 
-      if (BEAN >= 420 + 24 && BEAN < 612) {
+      if (BEAN >= 408 + 24 && BEAN < 600) {
         secondSmallestWidth = easeOut(secondSmallestWidth * 2, 8, smallThrobT);
       }
 
-      if (BEAN >= 420 + 24 && BEAN < 612) {
+      if (BEAN >= 408 + 24 && BEAN < 600) {
         secondSmallestWidth += this.kickThrob * 8;
       }
 
-      if (BEAN < 624) {
+      if (BEAN < 612) {
         this.ctx.translate(160 / 2, 90 / 2);
         this.ctx.rotate(this.frame / 60 / 60 * 115 / 4 + 0.05 * this.cumulativeStabThrob);
         this.ctx.moveTo(outerWidth, 0);
