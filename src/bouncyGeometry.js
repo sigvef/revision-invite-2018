@@ -731,7 +731,7 @@
 
       const cameraFovStartFrame = FRAME_FOR_BEAN(3298);
       const cameraFovEndFrame = FRAME_FOR_BEAN(3306);
-      const cameraFov = lerp(
+      const cameraFov = easeOut(
         45, .1, (frame - cameraFovStartFrame) / (cameraFovEndFrame - cameraFovStartFrame)
       );
 
