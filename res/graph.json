@@ -567,5 +567,12 @@
   {
     "id": "cccOverlay",
     "type": "cccOverlay"
+  },
+  {
+    "id": "CccBlend",
+    "type": "CccBlendNode",
+    "options": {
+      "shader": "CccBlend"
+    }
   }
 ]
