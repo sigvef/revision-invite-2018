@@ -28,7 +28,6 @@
         }));
       this.scene.add(this.lowpolySkybox);
 
-
       const maps = {
         'ewerk_Cylinder.002_Cylinder.003':
           Loader.loadTexture('res/ewerk_map.jpg'),
@@ -155,6 +154,18 @@
 
       this.scene.add(this.globeContainer);
 
+      this.byNinjadevText = new THREE.Mesh(
+        new THREE.PlaneGeometry(1920, 1080, 1, 1),
+        new THREE.MeshBasicMaterial({
+          map: new THREE.CanvasTexture(this.canvas2),
+          transparent: true,
+          side: THREE.DoubleSide,
+        })
+      );
+
+      this.byNinjadevText.rotation.x = -Math.PI/2+.5;
+      this.scene.add(this.byNinjadevText);
+
       this.map = new THREE.Mesh(
         new THREE.PlaneGeometry(700, 700),
         new THREE.MeshStandardMaterial({
@@ -193,13 +204,12 @@
       this.revisionLogo.scale.set(1.02, 1.02, 1.02);
       this.revisionLogo.rotation.x = -Math.PI / 2;
       this.revisionLogo.position.set(0, 350, 115);
-      //this.scene.add(this.revisionLogo);
+      this.scene.add(this.revisionLogo);
 
       this.revisionPlaceText = new THREE.Mesh(
         new THREE.PlaneGeometry(1920, 1080, 1, 1),
         new THREE.MeshBasicMaterial({
-          //color: 0xff00ff,
-          map: new THREE.CanvasTexture(this.generateText(this.canvas1, 'Revision 2018', 'Saarbrücken Easter 2018')),
+          map: new THREE.CanvasTexture(this.canvas1),
           transparent: true,
         })
       );
@@ -208,42 +218,32 @@
       this.revisionPlaceText.rotation.x = -Math.PI / 2;
       this.revisionPlaceText.position.set(0, 350, 115);
 
-      this.byNinjadevText = new THREE.Mesh(
-        new THREE.PlaneGeometry(1920, 1080, 1, 1),
-        new THREE.MeshBasicMaterial({
-          map: new THREE.CanvasTexture(this.generateText(this.canvas2, 'No Invitation', 'by Ninjadev')),
-          transparent: true,
-        })
-      );
-
-      //this.scene.add(this.byNinjadevText);
+      this.resize();
     }
 
     generateText(canvas, title, subtitle) {
       const ctx = canvas.getContext('2d');
 
       ctx.save();
-      //ctx.scale(16*GU, 9*GU);
+      ctx.scale(GU, GU);
 
       // Title
-      ctx.textAlign = 'left';
+      ctx.textAlign = 'center';
       ctx.textBaseline = 'middle';
-      ctx.font = `${GU}px schmalibre-light`;
+      ctx.font = '1pt schmalibre-light';
       ctx.fillStyle = '#ffffff';
 
-      ctx.fillText(title, 8, 4.5);
+      ctx.fillText(title, 8, 7);
 
       // Subtitle
-      ctx.textAlign = 'left';
+      ctx.textAlign = 'center';
       ctx.textBaseline = 'middle';
-      ctx.font = '2px schmalibre-light';
+      ctx.font = '0.7pt schmalibre-light';
       ctx.fillStyle = '#ffffff';
 
-      ctx.fillText(subtitle, 0, 2);
+      ctx.fillText(subtitle, 8, 8);
 
       ctx.restore();
-
-      return canvas;
     }
 
     beforeUpdate() {
@@ -542,11 +542,20 @@
 
     resize() {
       super.resize();
-
       this.canvas1.width = 16*GU;
       this.canvas1.height = 9*GU;
       this.canvas2.width = 16*GU;
       this.canvas2.height = 9*GU;
+
+      this.generateText(this.canvas1, 'Revision 2018', 'Saarbrücken March 30th - April 2nd');
+      if(this.revisionPlaceText) {
+        this.revisionPlaceText.material.map.needsUpdate = true;
+      }
+
+      this.generateText(this.canvas2, 'No Invitation', 'by Ninjadev');
+      if(this.byNinjadevText) {
+        this.byNinjadevText.material.map.needsUpdate = true;
+      }
     }
   }
 
