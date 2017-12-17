@@ -201,7 +201,7 @@
         2011 + 96 + 96,
       ];
       for (const [index, cube] of this.cubes.entries()) {
-        const localT = easeIn(0, 100, (frame - this.frames[index]) / 40);
+        const localT = easeIn(0, 100, (frame - this.frames[index] + 96) / 40);
         cube.position.y -= localT;
         cube.rotation.z = localT / 60;
       }
@@ -345,6 +345,29 @@
           this.textCtx.save();
           this.textCtx.translate(1 + i + 0.5, 4.4);
           this.textCtx.fillStyle = '#77e15d';
+          if(BEAN <= 840) {
+            if(BEAN >= 816 - 12) {
+              this.textCtx.fillText('     T               '[i], 0, -1);
+            }
+            if(BEAN >= 816 - 6) {
+              this.textCtx.fillText('     TH             '[i], 0, -1);
+            }
+            if(BEAN >= 816) {
+              this.textCtx.fillText('     THI             '[i], 0, -1);
+            }
+            if(BEAN >= 816 + 6) {
+              this.textCtx.fillText('     THIS             '[i], 0, -1);
+            }
+            if(BEAN >= 816 + 12) {
+              this.textCtx.fillText('     THIS             '[i], 0, -1);
+            }
+            if(BEAN >= 816 + 12) {
+              this.textCtx.fillText('     YEAR             '[i], 0, 0);
+            }
+            if(BEAN >= 816 + 12 + 3) {
+              this.textCtx.fillText('     IT\'S            '[i], 0, 1);
+            }
+          }
           if (swipeOffset > 0) {
             this.textCtx.fillText('BACK TO BASICS                 '[i], 0, 0);
             this.textCtx.rotate(Math.PI);

@@ -105,7 +105,8 @@
           new THREE.SphereBufferGeometry(200, 64, 64),
           new THREE.MeshBasicMaterial({
             //color: 0x373c3f,
-            color: 0xc2e4b7,
+            //color: 0xc2e4b7,
+            color: 0xb7e2a9,
             transparent: true,
           }));
       this.scene.add(this.globeOutline);
@@ -145,9 +146,9 @@
 
       this.globeLight = new THREE.DirectionalLight();
       this.globeLight.position.set(1, 2., 1);
-      this.globeLight.intensity = 0.75;
+      this.globeLight.intensity = 1.15;
       this.globeLight.decay = 2;
-      this.globeLight.color = new THREE.Color(255 / 255, 255 / 255, 255 / 255);
+      this.globeLight.color = new THREE.Color(255 / 255, 244 / 255, 230 / 255);
       this.scene.add(this.globeLight);
       this.scene.add(new THREE.AmbientLight(0xffffff, 0.2));
 

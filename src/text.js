@@ -452,8 +452,12 @@
 
       this.ctx.translate(8, 4.5);
       this.ctx.rotate(this.cameraR);
+      const scale = 1 / easeOut(8, 1, (frame - FRAME_FOR_BEAN(672)) / (
+            FRAME_FOR_BEAN(672 + 3) - FRAME_FOR_BEAN(672)));
+      this.ctx.scale(scale, scale);
       this.ctx.translate(-8, -4.5);
       this.ctx.translate(this.cameraX, this.cameraY);
+
 
       let letterIndex = -1;
       for (const letter of this.letters) {

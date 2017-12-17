@@ -30,11 +30,13 @@
 
     beforeUpdate(frame) {
       this.inputs.A.enabled = frame < animationFinished;
-      this.inputs.B.enabled = frame >= atariSceneStart;
+      this.inputs.B.enabled = frame >= atariSceneStart - 200;
     }
 
     update(frame) {
-      const rectPositionY = easeOut(-2, 9, (frame - atariSceneStart) / (animationFinished - atariSceneStart));
+      const t3 = (frame - FRAME_FOR_BEAN(864)) / (
+          FRAME_FOR_BEAN(864 + 6) - FRAME_FOR_BEAN(864));
+      const rectPositionY = easeOut(-2, 9, t3);
 
       this.textCtx.save();
       this.textCtx.scale(GU, GU);
@@ -44,8 +46,14 @@
       this.textCtx.fillRect(0, 0, 16, rectPositionY);
       this.textCtx.fillStyle = '#0000ff';
       this.textCtx.fillRect(0, 2.0 + rectPositionY, 16, 9);
-      this.textCtx.fillStyle = 'rgb(55, 60, 63)';
-      this.textCtx.fillRect(0, rectPositionY, 16, 2);
+      this.textCtx.fillStyle = '#ff0000';
+      const t = (frame - FRAME_FOR_BEAN(864 - 12)) / (
+          FRAME_FOR_BEAN(864 + 6 - 12) - FRAME_FOR_BEAN(864 - 12));
+      this.textCtx.fillRect(0, easeOut(-9, 0, t), 16 / 3, 9);
+
+      const t2 = (frame - FRAME_FOR_BEAN(864 - 6)) / (
+          FRAME_FOR_BEAN(864 + 6 - 6) - FRAME_FOR_BEAN(864 - 6));
+      this.textCtx.fillRect(16 / 3, easeOut(-9, 0, t2), 16 / 3, 9);
 
       this.textCtx.restore();
       this.textTexture.needsUpdate = true;
