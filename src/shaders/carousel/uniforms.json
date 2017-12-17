@@ -2,6 +2,7 @@
     "tDiffuse": { "type": "t", "value": null },
     "overlay": { "type": "t", "value": null },
     "overlay2": { "type": "t", "value": null },
+    "overlay3": { "type": "t", "value": null },
     "nextScene": { "type": "t", "value": null },
     "t": { "type": "f", "value": 0.0 },
     "fadeOutT": { "type": "f", "value": 0.0 },

@@ -4,6 +4,7 @@ uniform float frame;
 uniform float width;
 uniform sampler2D overlay;
 uniform sampler2D overlay2;
+uniform sampler2D overlay3;
 uniform sampler2D nextScene;
 uniform float divisions;
 uniform vec3 foregroundColor;
@@ -63,9 +64,11 @@ void main() {
                 backgroundColor,
                 step(mod_angle + 0.5 * (1. - width) * M_PI / divisions, M_PI / (divisions * 2.))), 1.);
     vec4 overlayColor = texture2D(overlay, vUv);
-    vec4 overlay2Color = texture2D(overlay2, vec2(vUv.x, 1. - vUv.y));
-    vec4 layer2Color = mix(color, overlayColor, overlayColor.a);
-    gl_FragColor = mix(layer2Color, overlay2Color, overlay2Color.a);
+    vec4 overlay2Color = texture2D(overlay2, clamp(1. - thirdColorRadius, 0., 1.) * 6. * vec2(coords.x, coords.y) + .5);
+    vec4 overlay3Color = texture2D(overlay3, vec2(vUv.x, 1. - vUv.y));
+    vec4 layer2Color = mix(color, overlay2Color, overlay2Color.a);
+    vec4 layer3Color = mix(layer2Color, overlayColor, overlayColor.a);
+    gl_FragColor = mix(layer3Color, overlay3Color, overlay3Color.a);
     gl_FragColor = mix(gl_FragColor, vec4(0.), fadeOutT);
 
     vec4 nextSceneColor = texture2D(nextScene, vUv);
