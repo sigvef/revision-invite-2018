@@ -45,6 +45,7 @@
         new THREE.PlaneGeometry(16, 9),
         new THREE.MeshBasicMaterial({
           map: this.textTexture,
+          transparent: true
         })
       );
       this.scene.add(this.textPlane);
@@ -589,7 +590,7 @@
 
     drawHexagons(frame) {
       // TODO: move to render loop
-      this.textCanvas.width = this.textCanvas.width;
+      this.textCtx.clearRect(0, 0, this.textCanvas.width, this.textCanvas.height);
 
       this.textCtx.fillStyle = '#ff4982';  // le pink
       this.textCtx.strokeStyle = '#ff4982';  // le pink
@@ -688,6 +689,8 @@
           this.textCtx.restore();
         }
       }
+
+      this.textTexture.needsUpdate = true;
     }
 
     // 55555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555
@@ -699,8 +702,6 @@
       this.ps.particles.visible = false;
 
       this.drawHexagons(frame);
-
-      this.textTexture.needsUpdate = true;
 
       this.camera.position.x = 0;
       this.camera.position.y = 0;
