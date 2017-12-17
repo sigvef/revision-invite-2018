@@ -676,10 +676,10 @@
             29.48526056137387,
             t * t),
           lerp(position.y,
-            40.629444705590565,
+            60.629444705590565,
             t * t * t),
           easeIn(position.z,
-            44.94734287697881,
+            40.94734287697881,
             t)
         );
         this.camera.quaternion.set(
@@ -699,53 +699,47 @@
         );
 
         if(frame >= 6322) {
-          t = clamp(0, (frame - 6322) / (6510 - 6322), 1);
+          t = clamp(0, (frame - 6322) / (6572 - 6322), 1);
           position.set(
-            25.450525545916232,
-            4.176978449524743,
-            66.29971622560141
-          );
-          position.set(
-            lerp(position.x,
+            lerp(
+              25.450525545916232,
               84.29672878275879,
               t),
-            easeIn(position.y,
-              30.7537489823345,
-              t * t * t),
-            lerp(position.z,
-              57.931533464535605,
+            lerp(
+              2,
+              9,
+              t),
+            lerp(
+              66.29971622560141,
+              61.931533464535605,
               t)
           );
           quaternion.set(
             -0.07784756581525434,
             -0.6023211701415451,
-            -0.027595680369875086,
+            -0.047595680369875086,
             0.7939694219054555);
           quaternion.set(
-            easeIn(quaternion.x, -0.5661388475838134, t),
-            easeIn(quaternion.y, -0.3525695174641078, t),
-            easeIn(quaternion.z, 0.08535741284411338, t),
+            easeIn(quaternion.x, -0.19, t),
+            easeIn(quaternion.y, -0.5525695174641078, t),
+            easeIn(quaternion.z, -0.07535741284411338, t),
             easeIn(quaternion.w, 0.7401997383707709, t)
           );
+        }
 
-          t = clamp(0, (frame - 6444) / (6680 - 6444), 1);
+        if (frame >= 6573) {
+          t = easeOut(0, 1, (frame - 6573) / (6760 - 6573));
           position.set(
-            smoothstep(position.x, -3.9, t),
-            smoothstep(position.y, 62.11, t),
-            smoothstep(position.z, 64.24, t)
+            80.23663475501766,
+            lerp(80, 124.45170796782712, t),
+            57.94665184861699
           );
+
           quaternion.set(
-            lerp(quaternion.x, -0.604121491240459, t),
-            lerp(quaternion.y, -0.29624726853791394, t),
-            lerp(quaternion.z, 0.18852166063286604, t),
-            lerp(quaternion.w, 0.7153561093451678, t)
-          );
-
-          t = clamp(0, (frame - 6600) / (6760 - 6600), 1);
-          position.set(
-            smoothstep(position.x, -3.34, t),
-            smoothstep(position.y, 70.32, t),
-            smoothstep(position.z, 65.07, t)
+            -0.6942563169058162,
+            lerp(-0.15712347526530384, -0.02712347526530384, t),
+            0.02833570303862777,
+            0.7186581742798239
           );
         }
 
