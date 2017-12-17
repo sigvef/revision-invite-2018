@@ -532,7 +532,7 @@
       this.globeOutline.position.copy(this.globe.position);
       this.globeOutline.position.y -= 500;
       this.globeOutline.position.z -= 220;
-      this.globeOutline.visible = this.globeContainer.visible;
+        this.globeOutline.visible = frame > frame3 - 24. ? false : this.globeContainer.visible;
       const scale = this.globe.scale.x * 1.7;
       this.globeOutline.scale.set(scale, scale, scale);
     }
