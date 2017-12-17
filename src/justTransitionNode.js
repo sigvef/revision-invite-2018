@@ -35,7 +35,7 @@
 
     update(frame) {
       const t3 = (frame - FRAME_FOR_BEAN(864)) / (
-          FRAME_FOR_BEAN(864 + 6) - FRAME_FOR_BEAN(864));
+          FRAME_FOR_BEAN(864 + 0) - FRAME_FOR_BEAN(864));
       const rectPositionY = easeOut(-2, 9, t3);
 
       this.textCtx.save();
@@ -48,12 +48,17 @@
       this.textCtx.fillRect(0, 2.0 + rectPositionY, 16, 9);
       this.textCtx.fillStyle = '#ff0000';
       const t = (frame - FRAME_FOR_BEAN(864 - 12)) / (
-          FRAME_FOR_BEAN(864 + 6 - 12) - FRAME_FOR_BEAN(864 - 12));
+          FRAME_FOR_BEAN(864 + 0 - 12) - FRAME_FOR_BEAN(864 - 12));
       this.textCtx.fillRect(0, easeOut(-9, 0, t), 16 / 3, 9);
 
       const t2 = (frame - FRAME_FOR_BEAN(864 - 6)) / (
-          FRAME_FOR_BEAN(864 + 6 - 6) - FRAME_FOR_BEAN(864 - 6));
+          FRAME_FOR_BEAN(864 + 0 - 6) - FRAME_FOR_BEAN(864 - 6));
       this.textCtx.fillRect(16 / 3, easeOut(-9, 0, t2), 16 / 3, 9);
+
+      const t4 = (frame - FRAME_FOR_BEAN(864 + 9)) / (
+          FRAME_FOR_BEAN(864 + 9 + 3) - FRAME_FOR_BEAN(864 + 9));
+      this.textCtx.fillStyle = '#0000ff';
+      this.textCtx.fillRect(0, easeOut(3, 4.5, t4), 16, easeOut(3, 0, t4));
 
       this.textCtx.restore();
       this.textTexture.needsUpdate = true;
