@@ -18,6 +18,17 @@
     update(frame) {
       super.update(frame);
 
+      this.frame = frame;
+    }
+
+    resize() {
+      this.canvas.width = 16 * GU;
+      this.canvas.height = 9 * GU;
+    }
+
+    render() {
+      const frame = this.frame;
+
       // This clears the canvas
       this.canvas.width += 0;
 
@@ -32,14 +43,7 @@
         9 / 2);
 
       this.ctx.restore();
-    }
 
-    resize() {
-      this.canvas.width = 16 * GU;
-      this.canvas.height = 9 * GU;
-    }
-
-    render() {
       this.output.needsUpdate = true;
       this.outputs.render.setValue(this.output);
     }
