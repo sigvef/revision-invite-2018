@@ -625,15 +625,13 @@
       // TODO: move to render loop, for performance reasons
       this.ctx.clearRect(0, 0, this.textCanvas.width, this.textCanvas.height);
 
-      this.ctx.fillStyle = '#ff4982';  // le pink
-      this.ctx.strokeStyle = '#ff4982';  // le pink
+      this.ctx.fillStyle = '#ff4982';
+      this.ctx.strokeStyle = '#ff4982';
 
-      const hexToRectStartFrame = FRAME_FOR_BEAN(3182);  // TODO: needs tweaking
-      const hexToRectEndFrame = FRAME_FOR_BEAN(3186);  // TODO: needs tweaking
+      const hexToRectStartFrame = FRAME_FOR_BEAN(3180);
+      const hexToRectEndFrame = FRAME_FOR_BEAN(3184);
       const hexToRectProgress = (frame - hexToRectStartFrame) / (hexToRectEndFrame - hexToRectStartFrame);
 
-      const hexagonGridOffsetX = 1 * GU;
-      const hexagonGridOffsetY = 1 * GU;
       const hexagonRadiuses = [
         lerp(1, 0.5, hexToRectProgress),
         1,
@@ -642,19 +640,21 @@
         1,
         1,
       ];
-      const cylinderRadius = 0.5 * GU;
-      const padding = 0.1 * GU;
-      const distanceBetweenHexagonCores = 1.6 * cylinderRadius + padding;
-      const gridXDistance = distanceBetweenHexagonCores;
-      const gridYDistance = Math.sin(Math.PI / 3) * distanceBetweenHexagonCores;
 
       const circleCenterX = 8 * GU;
       const circleCenterY = 4.5 * GU;
       const R = (r, g, b) => `rgba(${0 | Math.min(r, 255)},${0 | Math.min(g, 255)},${0 | Math.min(b, 255)},1)`;
 
       if (BEAN < 3216) {
-        const offsetRemovalStartFrame = FRAME_FOR_BEAN(3190);  // TODO: needs tweaking
-        const offsetRemovalEndFrame = FRAME_FOR_BEAN(3196);  // TODO: needs tweaking
+        const cylinderRadius = BEAN < 3168 ? 0.5 * GU : 0.2 * GU;
+        const padding = 0.1 * GU;
+        const distanceBetweenHexagonCores = 1.6 * cylinderRadius + padding;
+        const gridXDistance = distanceBetweenHexagonCores;
+        const gridYDistance = Math.sin(Math.PI / 3) * distanceBetweenHexagonCores;
+        const hexagonGridOffsetX = BEAN < 3168 ? 1 * GU : 1.66 * GU;
+        const hexagonGridOffsetY = BEAN < 3168 ? 1 * GU : 1.2 * GU;
+        const offsetRemovalStartFrame = FRAME_FOR_BEAN(3192);
+        const offsetRemovalEndFrame = FRAME_FOR_BEAN(3196);
         const offsetRemovalProgress = (frame - offsetRemovalStartFrame) / (offsetRemovalEndFrame - offsetRemovalStartFrame);
         const offsetFactor = lerp(1, 0, offsetRemovalProgress);
 
@@ -669,13 +669,16 @@
               Math.pow(actualX - circleCenterX, 2) + Math.pow(actualY - circleCenterY, 2)
             );
 
-            const timeSinceImpact = Math.abs(this.framesSinceImpact - 3 * distanceToCenter / GU) / 15;
-
-            const intensity = 3 * Math.max(
-              0,
-              1 - Math.min(1, timeSinceImpact)
-            );
-            this.ctx.fillStyle = R(255 * intensity, 73 * intensity, 130 * intensity);
+            if (BEAN >= this.impactBeans[0] && BEAN < this.impactBeans[4]) {
+              const timeSinceImpact = Math.abs(this.framesSinceImpact - 3 * distanceToCenter / GU) / 15;
+              const intensity = 3 * Math.max(
+                0,
+                1 - Math.min(1, timeSinceImpact)
+              );
+              this.ctx.fillStyle = R(255 * intensity, 73 * intensity, 130 * intensity);
+            } else {
+              this.ctx.fillStyle = R(255, 73, 130);
+            }
             this.ctx.beginPath();
             this.ctx.moveTo(
               actualX,
@@ -694,6 +697,13 @@
         }
         this.ctx.restore();
       } else if (BEAN >= 3216) {
+        const cylinderRadius = 0.2 * GU;
+        const padding = 0.1 * GU;
+        const distanceBetweenHexagonCores = 1.6 * cylinderRadius + padding;
+        const gridXDistance = distanceBetweenHexagonCores;
+        const gridYDistance = Math.sin(Math.PI / 3) * distanceBetweenHexagonCores;
+        const hexagonGridOffsetX = 1.66 * GU;
+        const hexagonGridOffsetY = 1.2 * GU;
         const angleAnimationStartFrame = FRAME_FOR_BEAN(3216);
         const angleAnimationEndFrame = FRAME_FOR_BEAN(3296);
         const angleAnimationProgress = lerp(
@@ -752,8 +762,8 @@
 
       this.drawHexagons(frame);
 
-      const cameraFovStartFrame = FRAME_FOR_BEAN(3298);
-      const cameraFovEndFrame = FRAME_FOR_BEAN(3306);
+      const cameraFovStartFrame = FRAME_FOR_BEAN(3296);
+      const cameraFovEndFrame = FRAME_FOR_BEAN(3304);
       const cameraFov = easeOut(
         45, .1, (frame - cameraFovStartFrame) / (cameraFovEndFrame - cameraFovStartFrame)
       );
