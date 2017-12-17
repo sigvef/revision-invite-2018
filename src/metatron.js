@@ -74,13 +74,7 @@
       this.scene.add(this.center_line1);
       this.scene.add(this.center_line2);
       this.scene.add(this.center_line3);
-      
-      /*var circle_geometry = new THREE.CircleGeometry( 10, 128 );
-      circle_geometry.vertices.shift();
-      circle_geometry.computeLineDistances();
-      this.center_circle = new THREE.Line( circle_geometry, line_material );
-      this.scene.add(this.center_circle);*/
-      
+            
       var circle_geometry = new THREE.TorusGeometry( 10, this.line_width / 2, 10, 128 );
       circle_geometry.computeLineDistances();
       this.center_circle = new THREE.Mesh( circle_geometry, new THREE.MeshBasicMaterial({color: 0x999999}) );
@@ -202,6 +196,28 @@
       var inner_size = 9.2;
       var middle_size = 15.3;
       var outer_size = 24.5;
+
+
+      var spin_cube_material = new THREE.MeshBasicMaterial({color: 0x999999});
+      var spin_cube_geometry = new THREE.CylinderGeometry( this.line_width * 10, this.line_width * 10, 2 * outer_size, 12);
+      var edge1 = new THREE.Mesh(spin_cube_geometry, spin_cube_material);
+      var edge2 = new THREE.Mesh(spin_cube_geometry, spin_cube_material);
+      var edge3 = new THREE.Mesh(spin_cube_geometry, spin_cube_material);
+      var edge4 = new THREE.Mesh(spin_cube_geometry, spin_cube_material);
+      edge1.position.set(outer_size, 0, outer_size);
+      edge2.position.set(outer_size, 0, -outer_size);
+      edge3.position.set(-outer_size, 0, outer_size);
+      edge4.position.set(-outer_size, 0, -outer_size);
+      this.spin_cube.add(edge1);
+      this.spin_cube.add(edge2);
+      this.spin_cube.add(edge3);
+      this.spin_cube.add(edge4);
+
+
+
+
+
+
 
       this.inner_cube.scale.set(inner_size, inner_size, inner_size);
       this.middle_cube.scale.set(middle_size, middle_size, middle_size);
