@@ -29,8 +29,10 @@ void main() {
 
         color = vec3(55. + 100. * sin(uv.x + 5. * uv.y), 60., 63.) / 255. * 0.5;
 
-        color = vec3(55., 60., 63.) / 255. / 8. * 
+        color = 0.25 + 0.4 * vec3(119., 225., 93.) / 255. * 
             (1. - 0.2 * (1. + vec3(sin(uv.x * 16. * 16. * 2.) - sin(2. * uv.y * 16. * 9.))));
+
+        color *= 0.8;
 
         color += 0.2 * mix(vec3(0.), vec3(1.), clamp(vec3(1.35 - squircleHighlight), 0., 1.));
 
@@ -45,7 +47,7 @@ void main() {
 
             vec2 knobUv = uv * vec2(16., 9.)  + vec2(-15. + i * 1.5, 10.0);
             float knob = length(knobUv);
-            color = mix(color, vec3(0.02) * 2., 1. - step(.5, knob));
+            color = mix(color, vec3(0.5), 1. - step(.5, knob));
             color *= 0.5 + 0.5 * clamp(15. * knob, 0., 1.);
 
         }
@@ -96,8 +98,8 @@ void main() {
 
 
     /* outer vignette */
-    vec2 vignetteUv2 = (vUv - 0.5) * 1.75;
-    color *= mix(1., (1. - abs(vignetteUv2.x * vignetteUv2.y) * .75), mixer);
+    vec2 vignetteUv2 = (vUv - 0.5) * 1.85;
+    color *= mix(1., (1. - abs(vignetteUv2.x * vignetteUv2.y) * .8), mixer);
 
     /* color grading */
     color = mix(color, pow(color, vec3(1.25)), vec3(mixer));
