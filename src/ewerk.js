@@ -246,6 +246,31 @@
       ctx.restore();
     }
 
+    generateNinjadevText(canvas, title, subtitle) {
+      const ctx = canvas.getContext('2d');
+
+      ctx.save();
+      ctx.scale(GU, GU);
+
+      // Title
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.font = '1pt schmalibre-light';
+      ctx.fillStyle = '#ffffff';
+
+      ctx.fillText(title, 8, 2);
+
+      // Subtitle
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.font = '0.7pt schmalibre-light';
+      ctx.fillStyle = '#ffffff';
+
+      ctx.fillText(subtitle, 8, 7);
+
+      ctx.restore();
+    }
+
     beforeUpdate() {
       this.inputs.beamer.enabled = BEAN > 200 && BEAN < 672;
       this.inputs.beamer2.enabled = BEAN > 3672 && BEAN < 4280;
@@ -554,7 +579,7 @@
         this.revisionPlaceText.material.map.needsUpdate = true;
       }
 
-      this.generateText(this.canvas2, 'No Invitation', 'by Ninjadev');
+      this.generateNinjadevText(this.canvas2, 'No Invitation', 'by Ninjadev');
       if(this.byNinjadevText) {
         this.byNinjadevText.material.map.needsUpdate = true;
       }
