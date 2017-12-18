@@ -115,7 +115,7 @@
       
       // Square root of three divided by two. For a hex of diameter 1 this is the distance from the center to the edge.
       var r32 = 0.86602540378;
-      r32 = Math.sqrt(3 / 2);
+      r32 = Math.sqrt(3) / 2;
 
       var inner_distance = 5;
       var outer_distance = 15;
@@ -500,12 +500,12 @@
         this.level1_hex2.position.set(-10 * r32 * progress, 10 / 2 * progress, 100);
         this.level1_hex3.position.set(0, -10 * progress, 100);
 
-        const progress2 = elasticOut(0, 1, 1.1, T(base + 24, base + 24 + 12, frame));
+        const progress2 = elasticOut(0, 1, 1, T(base + 24, base + 24 + 12, frame));
         this.center_line1.scale.set(progress2, progress2, progress2);
         this.center_line2.scale.set(progress2, progress2, progress2);
         this.center_line3.scale.set(progress2, progress2, progress2);
 
-        const progress3 = elasticOut(0, 1, 1.1, T(base + 24 + 9, base + 24 + 9 + 12, frame));
+        const progress3 = elasticOut(0, 1, 1, T(base + 24 + 9, base + 24 + 9 + 12, frame));
         this.center_line2.rotation.set(0, 0, progress3 * 2 * Math.PI / 3);
         this.center_line3.rotation.set(0, 0, -progress3 * 2 * Math.PI / 3);
 
@@ -544,7 +544,7 @@
         this.small_center_hex.scale.set(scale, scale, scale);
 
 
-        var scale2 = 1.5 + 2.5 * elasticOut(0, 1, 1.1, T(24 * 48, 24 * 48 + 9, frame));
+        var scale2 = 1.5 + 2.55  * elasticOut(0, 1, 1.1, T(24 * 48, 24 * 48 + 9, frame));
         this.center_circle.scale.set(scale2, scale2, scale2);
 
 
@@ -568,7 +568,7 @@
         this.spin_cube.position.set(0, 0, 200);
         this.small_center_hex.position.set(200, 0, 0);
         this.middle_center_hex.position.set(200, 0, 0);
-        //this.outer_center_hex.position.set(200, 0, 0);
+        this.outer_center_hex.position.set(200, 0, 0);
         this.center_line1.position.set(200, 0, 0);
         this.center_line2.position.set(200, 0, 0);
         this.center_line3.position.set(200, 0, 0);
