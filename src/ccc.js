@@ -47,6 +47,7 @@
         map: particleTexture,
         blending: THREE.AdditiveBlending,
         depthTest: true,
+        depthWrite: false,
         transparent: true,
         opacity: 0.4,
         vertexColors: true
