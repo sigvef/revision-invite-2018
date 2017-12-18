@@ -85,8 +85,13 @@
         let row = [];
         for (let x = 0; x < this.numHexagonsX; x++) {
           row.push({
-            position: {x: 0, y: 0},
-            velocity: {x: 0, y: 0}
+            start: {
+              position: {x: 0, y: 0},
+              velocity: {x: 0, y: 0}
+            }, end: {
+              position: {x: 0, y: 0},
+              velocity: {x: 0, y: 0}
+            }
           })
         }
         this.hexagonRows.push(row);
@@ -731,13 +736,7 @@
         const gridYDistance = Math.sin(Math.PI / 3) * distanceBetweenHexagonCores;
         const hexagonGridOffsetX = 1.66 * GU;
         const hexagonGridOffsetY = 1.2 * GU;
-        if (BEAN === 3216) {
 
-          for (let row of this.hexagonRows) {
-
-          }
-
-        }
         const angleAnimationStartFrame = FRAME_FOR_BEAN(3216);
         const angleAnimationEndFrame = FRAME_FOR_BEAN(3296);
         const angleAnimationProgress = lerp(
@@ -763,7 +762,8 @@
             let yStart = yMid;
             let yEnd = yMid;
 
-            if (angleAnimationProgress > 0.3) {
+            this.ctx.fillRect(circleCenterX - 0.05 * GU, circleCenterY - 0.05 * GU, 0.1 * GU, 0.1 * GU);
+            if (xEnd > circleCenterX) {
               const overshoot = (xEnd - circleCenterX) / GU;
               const phiEnd = overshoot - Math.PI / 2;
               xEnd = circleCenterX + circleRadius * Math.cos(phiEnd);
@@ -778,9 +778,41 @@
               }
             }
 
+            if (frame === FRAME_FOR_BEAN(3216)) {
+              this.hexagonRows[y][x].start.position.x = xStart;
+              this.hexagonRows[y][x].start.position.y = yStart;
+              this.hexagonRows[y][x].end.position.x = xEnd;
+              this.hexagonRows[y][x].end.position.y = yEnd;
+              this.hexagonRows[y][x].start.velocity.x = 0;
+              this.hexagonRows[y][x].start.velocity.y = 0;
+              this.hexagonRows[y][x].end.velocity.x = 0;
+              this.hexagonRows[y][x].end.velocity.y = 0;
+            }
+
+            const forceFactor = 0.01;
+            const velocityFactor = 0.95;
+
+            const startXDiff = xStart - this.hexagonRows[y][x].start.position.x;
+            const startYDiff = yStart - this.hexagonRows[y][x].start.position.y;
+            this.hexagonRows[y][x].start.velocity.x += startXDiff * forceFactor;
+            this.hexagonRows[y][x].start.velocity.y += startYDiff * forceFactor;
+            this.hexagonRows[y][x].start.velocity.x *= velocityFactor;
+            this.hexagonRows[y][x].start.velocity.y *= velocityFactor;
+            this.hexagonRows[y][x].start.position.x += this.hexagonRows[y][x].start.velocity.x;
+            this.hexagonRows[y][x].start.position.y += this.hexagonRows[y][x].start.velocity.y;
+
+            const endXDiff = xEnd - this.hexagonRows[y][x].end.position.x;
+            const endYDiff = yEnd - this.hexagonRows[y][x].end.position.y;
+            this.hexagonRows[y][x].end.velocity.x += endXDiff * forceFactor;
+            this.hexagonRows[y][x].end.velocity.y += endYDiff * forceFactor;
+            this.hexagonRows[y][x].end.velocity.x *= velocityFactor;
+            this.hexagonRows[y][x].end.velocity.y *= velocityFactor;
+            this.hexagonRows[y][x].end.position.x += this.hexagonRows[y][x].end.velocity.x;
+            this.hexagonRows[y][x].end.position.y += this.hexagonRows[y][x].end.velocity.y;
+
             this.ctx.beginPath();
-            this.ctx.moveTo(xStart, yStart);
-            this.ctx.lineTo(xEnd, yEnd);
+            this.ctx.moveTo(this.hexagonRows[y][x].start.position.x, this.hexagonRows[y][x].start.position.y);
+            this.ctx.lineTo(this.hexagonRows[y][x].end.position.x, this.hexagonRows[y][x].end.position.y);
             this.ctx.stroke();
           }
           this.ctx.restore();
