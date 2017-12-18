@@ -765,16 +765,15 @@
             let yStart = yMid;
             let yEnd = yMid;
 
-            this.ctx.fillRect(circleCenterX - 0.05 * GU, circleCenterY - 0.05 * GU, 0.1 * GU, 0.1 * GU);
             if (xEnd > circleCenterX) {
               const overshoot = (xEnd - circleCenterX) / GU;
-              const phiEnd = overshoot - Math.PI / 2;
+              const phiEnd = Math.min(1, 0.6 + 0.75 * angleAnimationProgress - 0.1 * y * (1 - 0.65 * angleAnimationProgress)) * overshoot - Math.PI / 2;
               xEnd = circleCenterX + circleRadius * Math.cos(phiEnd);
               yEnd = circleCenterY + circleRadius * Math.sin(phiEnd);
 
               if (xStart > circleCenterX) {
                 const overshoot = (xStart - circleCenterX) / GU;
-                const phiStart = overshoot - Math.PI / 2;  // TODO: normalize to one exact fraction of the circle
+                const phiStart = Math.min(1, 0.6 + 0.75 * angleAnimationProgress - 0.1 * y * (1 - 0.65 * angleAnimationProgress)) * overshoot - Math.PI / 2;  // TODO: normalize to one exact fraction of the circle
 
                 xStart = circleCenterX + circleRadius * Math.cos(phiStart);
                 yStart = circleCenterY + circleRadius * Math.sin(phiStart);
@@ -792,8 +791,8 @@
               this.hexagonRows[y][x].end.velocity.y = 0;
             }
 
-            const forceFactor = 0.01;
-            const velocityFactor = 0.95;
+            const forceFactor = 0.5;
+            const velocityFactor = 0.5;
 
             const startXDiff = xStart - this.hexagonRows[y][x].start.position.x;
             const startYDiff = yStart - this.hexagonRows[y][x].start.position.y;
