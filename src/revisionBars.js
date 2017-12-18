@@ -141,7 +141,7 @@
       ]);
       this.cameraZoomPath = this.path([
         {bean: 1440 + 48 + 12, easing: 'step', value: 3},
-        {bean: 1440 + 48 + 24 + 24, easing: 'easeOut', value: 1},
+        {bean: 1440 + 48 + 24 + 6, easing: 'easeOut', value: 1},
       ]);
       this.cameraRotatePath = this.path([
         {bean: 1440, easing: 'step', value: -0.1},
@@ -161,7 +161,7 @@
         {bean: 1440 + 48 + 12 - 3, easing: 'step', value: -0.1},
         {bean: 1440 + 48 + 12, easing: 'easeIn', value: 0.1},
 
-        {bean: 1440 + 48 + 24 + 24, easing: 'easeOut', value: 0},
+        {bean: 1440 + 48 + 24, easing: 'easeOut', value: 0},
       ]);
     }
 
