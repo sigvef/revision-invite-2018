@@ -329,8 +329,9 @@
 
       //var ico_material = new THREE.MeshBasicMaterial({color: 0x999999});
       var ico_material = this.transparentMaterial;
-      var ico_geometry = new THREE.IcosahedronGeometry(1, 0);
-      this.ico = new THREE.Mesh(ico_geometry, ico_material);
+      var central_ico_geometry = new THREE.IcosahedronGeometry(1, 0);
+      central_ico_geometry.faces.splice(0,19);
+      this.ico = new THREE.Mesh(central_ico_geometry, ico_material);
       this.ico.render_3d = true;
       this.ico.rotation.set(1.015, 0, 0);
       this.ico.position.set(200, 0, 0);
@@ -339,6 +340,27 @@
       this.ico_container = new THREE.Object3D();
       this.ico_container.add(this.ico);
       this.scene.add(this.ico_container);
+
+      this.slam_icos = [];
+      this.slam_ico_containers = [];
+      var ico_geometry = new THREE.IcosahedronGeometry(1, 0);
+      for (var i = 0; i < 20; i++)
+      {
+        var slam_ico_geometry = new THREE.IcosahedronGeometry(1, 0);
+        slam_ico_geometry.faces.splice(0,20);
+        slam_ico_geometry.faces.push(ico_geometry.faces[i]);
+
+        this.slam_icos.push(new THREE.Mesh(slam_ico_geometry, ico_material));
+        this.slam_icos[i].render_3d = true;
+        this.slam_icos[i].rotation.set(1.015, 0, 0);
+        this.slam_icos[i].position.set(Math.sin(i) * 70, Math.cos(i) * 30, 0);
+        var scale = 23.5;
+        this.slam_icos[i].scale.set(scale, scale, scale);
+        this.slam_ico_containers.push(new THREE.Object3D());
+        this.slam_ico_containers[i].add(this.slam_icos[i]);
+        //this.slam_ico_containers[i].position.set(i,0,0);
+        this.scene.add(this.slam_ico_containers[i]);
+      }
 
       //prepare the actually visible geometries
       this.star_arr = this.add_lines_for_geometry(star_geometry, this.three_point_star, 1);
@@ -721,6 +743,12 @@
       if (frame >= FRAME_FOR_BEAN(27.5 * 48)) {
         this.ico.position.set(0, 0, 0);
         this.ico_container.rotation.set(0, frame / 50, 0);
+
+        for(var i = 0; i < 20; i++)
+        {
+          //this.slam_icos[i].position.set(0, 0, 0);
+          this.slam_ico_containers[i].rotation.set(0, frame / 50, 0);
+        }
       }
       //this.spin_cube.rotation.set(Math.sin(frame/100), Math.sin(frame/120), Math.sin(frame/140))
 
@@ -843,6 +871,10 @@
       }*/
       if(BEAN >= 1344) {
         this.draw3d(this.ico);
+        for(var i = 0; i < 20; i++)
+        {
+          this.draw3d(this.slam_icos[i]);
+        }
       }
       this.ctx.restore();
       this.canvasTexture.needsUpdate = true;
