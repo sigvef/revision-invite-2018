@@ -30,7 +30,7 @@
       this.resize();
 
       this.canvasCube = new THREE.Mesh(
-          new THREE.BoxGeometry(105, 105, 1),
+          new THREE.BoxGeometry(175, 105, 1),
           new THREE.MeshBasicMaterial({
             map: this.canvasTexture,
             transparent: true,
@@ -352,11 +352,12 @@
       this.add_lines_for_geometry(this.center_line3.children[0].geometry, this.center_line3, 1);
       this.add_lines_for_geometry(this.middle_center_hex.children[0].geometry, this.middle_center_hex, 0.6);
       this.add_lines_for_geometry(this.outer_center_hex.children[0].geometry, this.outer_center_hex, 0.4);
-      this.add_lines_for_geometry(this.small_claw_r.children[0].geometry, this.small_claw_r, 1);
+      */
+      /*this.add_lines_for_geometry(this.small_claw_r.children[0].geometry, this.small_claw_r, 1);
       this.add_lines_for_geometry(this.small_claw_l.children[0].geometry, this.small_claw_l, 1);
       this.add_lines_for_geometry(this.large_claw_r.children[0].geometry, this.large_claw_r, 1);
-      this.add_lines_for_geometry(this.large_claw_l.children[0].geometry, this.large_claw_l, 1);
-      */
+      this.add_lines_for_geometry(this.large_claw_l.children[0].geometry, this.large_claw_l, 1);*/
+      
 
       /*
       this.three_point_star.children[0].visible = false;
@@ -375,10 +376,10 @@
       this.large_claw_r.children[0].visible = false;
       this.large_claw_l.children[0].visible = false;
       */
-      this.small_claw_r.children[0].position.set(200,0,0);
-      this.small_claw_l.children[0].position.set(200,0,0);
-      this.large_claw_r.children[0].position.set(200,0,0);
-      this.large_claw_l.children[0].position.set(200,0,0);
+      this.small_claw_r.children[0].position.set(0,0,0);
+      this.small_claw_l.children[0].position.set(0,0,0);
+      this.large_claw_r.children[0].position.set(0,0,0);
+      this.large_claw_l.children[0].position.set(0,0,0);
 
     }
 
@@ -626,13 +627,18 @@
         const scale = 1 + 0.67 * easeOut(0, 1, T(27 * 48 + 6 -3, 27 * 48 + 6, frame));
         this.three_point_star.scale.set(scale, scale, scale);
 
-        var claw_progress1 = asmoothstep(FRAME_FOR_BEAN(26.75 * 48), FRAME_FOR_BEAN(12), frame);
+
+        var claw_progress1 = asmoothstep(FRAME_FOR_BEAN(1322), FRAME_FOR_BEAN(9), frame);
+        var claw_progress2 = asmoothstep(FRAME_FOR_BEAN(1322), FRAME_FOR_BEAN(9), frame);
+        var claw_progress3 = asmoothstep(FRAME_FOR_BEAN(1330), FRAME_FOR_BEAN(7), frame);
+        var claw_progress4 = asmoothstep(FRAME_FOR_BEAN(1330), FRAME_FOR_BEAN(7), frame);
+        /*var claw_progress1 = asmoothstep(FRAME_FOR_BEAN(26.75 * 48), FRAME_FOR_BEAN(12), frame);
         var claw_progress2 = asmoothstep(FRAME_FOR_BEAN(26.875 * 48), FRAME_FOR_BEAN(12), frame);
         var claw_progress3 = asmoothstep(FRAME_FOR_BEAN(27 * 48), FRAME_FOR_BEAN(12), frame);
-        var claw_progress4 = asmoothstep(FRAME_FOR_BEAN(27.125 * 48), FRAME_FOR_BEAN(12), frame);
+        var claw_progress4 = asmoothstep(FRAME_FOR_BEAN(27.125 * 48), FRAME_FOR_BEAN(12), frame);*/
 
-        /*
-        this.small_claw_r.children[1].material.color.r = this.cube.material.color.r + 0.15 * claw_progress1;
+        
+        /*this.small_claw_r.children[1].material.color.r = this.cube.material.color.r + 0.15 * claw_progress1;
         this.small_claw_r.children[1].material.color.g = this.cube.material.color.g + 0.15 * claw_progress1;
         this.small_claw_r.children[1].material.color.b = this.cube.material.color.b + 0.15 * claw_progress1;
 
@@ -688,15 +694,28 @@
                                                                         this.cube.material.color.g + 0.15 * claw_progress4,
                                                                         this.cube.material.color.b + 0.15 * claw_progress4);
           this.large_claw_l.children[i].geometry.colorsNeedUpdate = true;
-        }
-        */
+        }*/
+        
 
 
         
-        this.small_claw_r.position.set(30 * r32 - 8 * (1 - claw_progress1), 0, -1);
+        /*this.small_claw_r.position.set(30 * r32 - 8 * (1 - claw_progress1), 0, -1);
         this.small_claw_l.position.set(-30 * r32 + 8 * (1 - claw_progress2), 0, -1);
         this.large_claw_r.position.set(50 * r32 - 8 * (1 - claw_progress3), 0, -1);
-        this.large_claw_l.position.set(-50 * r32 + 8 * (1 - claw_progress4), 0, -1);
+        this.large_claw_l.position.set(-50 * r32 + 8 * (1 - claw_progress4), 0, -1);*/
+        //TODO: Elastic
+        claw_progress1 = elasticOut(0, 1, 1, claw_progress1);
+        claw_progress2 = elasticOut(0, 1, 1, claw_progress2);
+        claw_progress3 = elasticOut(0, 1, 1, claw_progress3);
+        claw_progress4 = elasticOut(0, 1, 1, claw_progress4);
+        this.small_claw_r.position.set(30 * r32 + 20  * (1 - claw_progress1), 0, -1);
+        this.small_claw_r.scale.set(claw_progress1, claw_progress1, claw_progress1);
+        this.small_claw_l.position.set(-30 * r32 - 20 * (1 - claw_progress2), 0, -1);
+        this.small_claw_l.scale.set(-claw_progress2, claw_progress2, claw_progress2);
+        this.large_claw_r.position.set(50 * r32 + 20 * (1 - claw_progress3), 0, -1);
+        this.large_claw_r.scale.set(claw_progress3, claw_progress3, claw_progress3);
+        this.large_claw_l.position.set(-50 * r32 - 20 * (1 - claw_progress4), 0, -1);
+        this.large_claw_l.scale.set(-claw_progress4, claw_progress4, claw_progress4);
       }
 
       if (frame >= FRAME_FOR_BEAN(27.5 * 48)) {
@@ -816,7 +835,7 @@
       this.ctx.save();
       this.ctx.scale(GU, GU);
       this.ctx.translate(4.5, 4.5);
-      this.ctx.scale(1 / 12, 1 / 12);
+      this.ctx.scale(1 / 20, 1 / 12);
       this.draw(this.scene, 'fill');
       this.draw(this.scene, 'stroke');
       /*if(BEAN >= 1200 && BEAN < 1248 + 9) {
