@@ -594,6 +594,12 @@
         const length = Math.max(0.001, Math.sqrt(Math.pow(next.z - coords.z, 2) + Math.pow(next.x - coords.x, 2)) / 10);
         const localT = (frame - FRAME_FOR_BEAN(edge.startBean)) / (FRAME_FOR_BEAN(edge.endBean) - FRAME_FOR_BEAN(edge.startBean));
         laser.object3d.scale.x = lerp(0.001, length, localT);
+
+        let distToCam = laser.object3d.position.distanceTo(this.camera.position);
+        let laserThickness =  Math.max(1.0, distToCam/15.0);
+        laser.object3d.scale.y = laserThickness;
+        laser.object3d.scale.z = laserThickness;
+
         laser.sprite.visible = localT > 0.05 && localT < 0.9999;
         laser.object3d.visible = localT > 0.0001;
 
