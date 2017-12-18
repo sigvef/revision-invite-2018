@@ -666,6 +666,7 @@
     }
 
     drawHexagons(frame) {
+
       this.ctx.clearRect(0, 0, this.textCanvas.width, this.textCanvas.height);
 
       this.ctx.fillStyle = '#ff4982';
@@ -684,9 +685,28 @@
         1,
       ];
 
-      const circleCenterX = 8 * GU;
-      const circleCenterY = 4.5 * GU;
+      const wholeStartFrame = FRAME_FOR_BEAN(3168);
+      const wholeEndFrame = FRAME_FOR_BEAN(3290);
+      const wholeProgress = (frame - wholeStartFrame) / (wholeEndFrame - wholeStartFrame);
+
       const R = (r, g, b) => `rgba(${0 | Math.min(r, 255)},${0 | Math.min(g, 255)},${0 | Math.min(b, 255)},1)`;
+      let zoomFactor = 1;
+      if (BEAN >= 3168) {
+        zoomFactor = 1 / lerp(0.2, 1, wholeProgress );
+      }
+      let zoomPosition = {
+        x: 8 * GU,
+        y: 4.5 * GU
+      };
+      if (BEAN >= 3168) {
+        zoomPosition.x = lerp(4 * GU, 8 * GU, Math.pow(wholeProgress, 2));
+        zoomPosition.y = lerp(2 * GU, 4.5 * GU, Math.pow(wholeProgress, 2));
+      }
+
+      const zoomedX = (x) => zoomFactor * (x - zoomPosition.x) + zoomPosition.x;
+      const zoomedY = (y) => zoomFactor * (y - zoomPosition.y) + zoomPosition.y;
+      const circleCenterX = (8 * GU);
+      const circleCenterY = (4.5 * GU);
 
       if (BEAN < 3216) {
         const cylinderRadius = BEAN < 3168 ? 0.5 * GU : 0.2 * GU;
@@ -724,14 +744,14 @@
             }
             this.ctx.beginPath();
             this.ctx.moveTo(
-              actualX,
-              actualY + cylinderRadius * hexagonRadiuses[0]
+              zoomedX(actualX),
+              zoomedY(actualY + cylinderRadius * hexagonRadiuses[0])
             );
             for (let i = 1; i < 6; i++) {
               const angle = Math.PI / 2 + Math.PI * i / 3;
               this.ctx.lineTo(
-                actualX + cylinderRadius * hexagonRadiuses[i] * Math.cos(angle),
-                actualY + cylinderRadius * hexagonRadiuses[i] * Math.sin(angle)
+                zoomedX(actualX + cylinderRadius * hexagonRadiuses[i] * Math.cos(angle)),
+                zoomedY(actualY + cylinderRadius * hexagonRadiuses[i] * Math.sin(angle))
               );
             }
             this.ctx.closePath();
@@ -757,7 +777,7 @@
         const hexagonAngleTopLeft = Math.PI / 2 + Math.PI * 2 / 3;
         const hexagonAngleTopRight = Math.PI / 2 + Math.PI * 4 / 3;
 
-        this.ctx.lineWidth = cylinderRadius;
+        this.ctx.lineWidth = zoomFactor * cylinderRadius;
         for (let y = 0; y < this.numHexagonsY; y++) {
           let yMid = hexagonGridOffsetY + y * gridYDistance;
           const circleRadius = circleCenterY - yMid;
@@ -821,8 +841,14 @@
             this.hexagonRows[y][x].end.position.y += this.hexagonRows[y][x].end.velocity.y;
 
             this.ctx.beginPath();
-            this.ctx.moveTo(this.hexagonRows[y][x].start.position.x, this.hexagonRows[y][x].start.position.y);
-            this.ctx.lineTo(this.hexagonRows[y][x].end.position.x, this.hexagonRows[y][x].end.position.y);
+            this.ctx.moveTo(
+              zoomedX(this.hexagonRows[y][x].start.position.x),
+              zoomedY(this.hexagonRows[y][x].start.position.y)
+            );
+            this.ctx.lineTo(
+              zoomedX(this.hexagonRows[y][x].end.position.x),
+              zoomedY(this.hexagonRows[y][x].end.position.y)
+            );
             this.ctx.stroke();
           }
           this.ctx.restore();
