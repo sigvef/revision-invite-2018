@@ -66,7 +66,7 @@
       // IMPACT
       this.impactBeans = [3120, 3130, 3144, 3154, 3162];
       this.framesSinceImpact = 9999;
-
+ 
       // HEXAGONS
       const whiteColor = 0xffffff;
       const grayColor = 0x373c3f;
@@ -80,6 +80,22 @@
       };
       this.numHexagonsX = 15;
       this.numHexagonsY = this.revisionLogoSegments.length;
+      this.hexagonRows = [];
+      for (let y = 0; y < this.numHexagonsY; y++) {
+        let row = [];
+        for (let x = 0; x < this.numHexagonsX; x++) {
+          row.push({
+            start: {
+              position: {x: 0, y: 0},
+              velocity: {x: 0, y: 0}
+            }, end: {
+              position: {x: 0, y: 0},
+              velocity: {x: 0, y: 0}
+            }
+          })
+        }
+        this.hexagonRows.push(row);
+      }
 
       // LIGHT
       this.directionalLight = new THREE.DirectionalLight();
@@ -204,7 +220,16 @@
     }
 
     update(frame) {
-      demo.nm.nodes.bloom.opacity = 0;
+      this.frame = frame;
+      if (BEAN < 3168 || BEAN >= 3312) {
+        demo.nm.nodes.bloom.opacity = 0;
+      } else {
+        if (BEAN % 12 === 0) {
+          demo.nm.nodes.bloom.opacity = 0.5;
+        } else {
+          demo.nm.nodes.bloom.opacity *= 0.9;
+        }
+      }
 
       this.stabThrob *= 0.95;
       this.throb *= 0.95;
@@ -225,6 +250,9 @@
         }
       }
 
+      if (BEAN >= 3024 && BEAN < 3312) {
+        this.drawHexagons(this.frame);
+      }
       this.updateChordStabBeans(frame);
       this.updateBall(frame);
       this.updateBeams(frame);
@@ -460,8 +488,6 @@
       this.ps.particles.visible = true;
       this.setBeamsVisibility(true);
 
-      this.drawHexagons(frame);
-
       this.ps.decayFactor = 0.98;
 
       const startFrame = FRAME_FOR_BEAN(3024);
@@ -510,8 +536,6 @@
 
       this.ps.decayFactor = 0.98;
 
-      this.drawHexagons(frame);
-
       const startFrame = FRAME_FOR_BEAN(3072);
       const endFrame = FRAME_FOR_BEAN(3120);
       const progress = (frame - startFrame) / (endFrame - startFrame);
@@ -552,8 +576,6 @@
     updatePart4(frame) {
       this.scene.add(this.textPlane);
       this.textPlane.position.z = -80;
-
-      this.drawHexagons(frame);
 
       const startFrame = FRAME_FOR_BEAN(3120);
       const endFrame = FRAME_FOR_BEAN(3168);
@@ -621,8 +643,30 @@
       this.camera.rotation.z += this.cameraShakeRotation.z;
     }
 
+    // 55555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555
+    updatePart5(frame) {
+      this.scene.remove(this.ball);
+
+      this.scene.add(this.textPlane);
+      this.textPlane.position.z = -80;
+      this.ps.particles.visible = false;
+
+      const cameraFovStartFrame = FRAME_FOR_BEAN(3296);
+      const cameraFovEndFrame = FRAME_FOR_BEAN(3304);
+      const cameraFov = easeOut(
+        45, .1, (frame - cameraFovStartFrame) / (cameraFovEndFrame - cameraFovStartFrame)
+      );
+
+      this.camera.fov = cameraFov;
+      this.camera.updateProjectionMatrix();
+      this.camera.position.x = 0;
+      this.camera.position.y = 0;
+      this.camera.position.z = -70.6;
+      this.camera.lookAt(new THREE.Vector3(0, 0, -80));
+    }
+
     drawHexagons(frame) {
-      // TODO: move to render loop, for performance reasons
+
       this.ctx.clearRect(0, 0, this.textCanvas.width, this.textCanvas.height);
 
       this.ctx.fillStyle = '#ff4982';
@@ -641,9 +685,28 @@
         1,
       ];
 
-      const circleCenterX = 8 * GU;
-      const circleCenterY = 4.5 * GU;
+      const wholeStartFrame = FRAME_FOR_BEAN(3168);
+      const wholeEndFrame = FRAME_FOR_BEAN(3290);
+      const wholeProgress = (frame - wholeStartFrame) / (wholeEndFrame - wholeStartFrame);
+
       const R = (r, g, b) => `rgba(${0 | Math.min(r, 255)},${0 | Math.min(g, 255)},${0 | Math.min(b, 255)},1)`;
+      let zoomFactor = 1;
+      if (BEAN >= 3168) {
+        zoomFactor = 1 / lerp(0.2, 1, wholeProgress );
+      }
+      let zoomPosition = {
+        x: 8 * GU,
+        y: 4.5 * GU
+      };
+      if (BEAN >= 3168) {
+        zoomPosition.x = lerp(4 * GU, 8 * GU, Math.pow(wholeProgress, 2));
+        zoomPosition.y = lerp(2 * GU, 4.5 * GU, Math.pow(wholeProgress, 2));
+      }
+
+      const zoomedX = (x) => zoomFactor * (x - zoomPosition.x) + zoomPosition.x;
+      const zoomedY = (y) => zoomFactor * (y - zoomPosition.y) + zoomPosition.y;
+      const circleCenterX = (8 * GU);
+      const circleCenterY = (4.5 * GU);
 
       if (BEAN < 3216) {
         const cylinderRadius = BEAN < 3168 ? 0.5 * GU : 0.2 * GU;
@@ -681,14 +744,14 @@
             }
             this.ctx.beginPath();
             this.ctx.moveTo(
-              actualX,
-              actualY + cylinderRadius * hexagonRadiuses[0]
+              zoomedX(actualX),
+              zoomedY(actualY + cylinderRadius * hexagonRadiuses[0])
             );
             for (let i = 1; i < 6; i++) {
               const angle = Math.PI / 2 + Math.PI * i / 3;
               this.ctx.lineTo(
-                actualX + cylinderRadius * hexagonRadiuses[i] * Math.cos(angle),
-                actualY + cylinderRadius * hexagonRadiuses[i] * Math.sin(angle)
+                zoomedX(actualX + cylinderRadius * hexagonRadiuses[i] * Math.cos(angle)),
+                zoomedY(actualY + cylinderRadius * hexagonRadiuses[i] * Math.sin(angle))
               );
             }
             this.ctx.closePath();
@@ -704,6 +767,7 @@
         const gridYDistance = Math.sin(Math.PI / 3) * distanceBetweenHexagonCores;
         const hexagonGridOffsetX = 1.66 * GU;
         const hexagonGridOffsetY = 1.2 * GU;
+
         const angleAnimationStartFrame = FRAME_FOR_BEAN(3216);
         const angleAnimationEndFrame = FRAME_FOR_BEAN(3296);
         const angleAnimationProgress = lerp(
@@ -713,36 +777,78 @@
         const hexagonAngleTopLeft = Math.PI / 2 + Math.PI * 2 / 3;
         const hexagonAngleTopRight = Math.PI / 2 + Math.PI * 4 / 3;
 
-        this.ctx.lineWidth = cylinderRadius;
+        this.ctx.lineWidth = zoomFactor * cylinderRadius;
         for (let y = 0; y < this.numHexagonsY; y++) {
           let yMid = hexagonGridOffsetY + y * gridYDistance;
           const circleRadius = circleCenterY - yMid;
 
           this.ctx.save();
           for (let x = 0; x < this.numHexagonsX; x++) {
-            let xStart = hexagonGridOffsetX + x * gridXDistance + cylinderRadius * hexagonRadiuses[2] * Math.cos(hexagonAngleTopLeft) + angleAnimationProgress * 9 * GU;
-            let xEnd = hexagonGridOffsetX + x * gridXDistance + cylinderRadius * hexagonRadiuses[4] * Math.cos(hexagonAngleTopRight) + angleAnimationProgress * 9 * GU;
+            let xStart = hexagonGridOffsetX +
+              x * gridXDistance + cylinderRadius * hexagonRadiuses[2] * Math.cos(hexagonAngleTopLeft) +
+              angleAnimationProgress * 9 * GU;
+            let xEnd = hexagonGridOffsetX +
+              x * gridXDistance + cylinderRadius * hexagonRadiuses[4] * Math.cos(hexagonAngleTopRight) +
+              angleAnimationProgress * 9 * GU;
             let yStart = yMid;
             let yEnd = yMid;
 
             if (xEnd > circleCenterX) {
               const overshoot = (xEnd - circleCenterX) / GU;
-              const phiEnd = overshoot - Math.PI / 2;
+              const phiEnd = Math.min(1, 0.6 + 0.75 * angleAnimationProgress - 0.1 * y * (1 - 0.65 * angleAnimationProgress)) * overshoot - Math.PI / 2;
               xEnd = circleCenterX + circleRadius * Math.cos(phiEnd);
               yEnd = circleCenterY + circleRadius * Math.sin(phiEnd);
 
               if (xStart > circleCenterX) {
                 const overshoot = (xStart - circleCenterX) / GU;
-                const phiStart = overshoot - Math.PI / 2;  // TODO: normalize to one exact fraction of the circle
+                const phiStart = Math.min(1, 0.6 + 0.75 * angleAnimationProgress - 0.1 * y * (1 - 0.65 * angleAnimationProgress)) * overshoot - Math.PI / 2;  // TODO: normalize to one exact fraction of the circle
 
                 xStart = circleCenterX + circleRadius * Math.cos(phiStart);
                 yStart = circleCenterY + circleRadius * Math.sin(phiStart);
               }
             }
 
+            if (frame === FRAME_FOR_BEAN(3216)) {
+              this.hexagonRows[y][x].start.position.x = xStart;
+              this.hexagonRows[y][x].start.position.y = yStart;
+              this.hexagonRows[y][x].end.position.x = xEnd;
+              this.hexagonRows[y][x].end.position.y = yEnd;
+              this.hexagonRows[y][x].start.velocity.x = 0;
+              this.hexagonRows[y][x].start.velocity.y = 0;
+              this.hexagonRows[y][x].end.velocity.x = 0;
+              this.hexagonRows[y][x].end.velocity.y = 0;
+            }
+
+            const forceFactor = 0.5;
+            const velocityFactor = 0.5;
+
+            const startXDiff = xStart - this.hexagonRows[y][x].start.position.x;
+            const startYDiff = yStart - this.hexagonRows[y][x].start.position.y;
+            this.hexagonRows[y][x].start.velocity.x += startXDiff * forceFactor;
+            this.hexagonRows[y][x].start.velocity.y += startYDiff * forceFactor;
+            this.hexagonRows[y][x].start.velocity.x *= velocityFactor;
+            this.hexagonRows[y][x].start.velocity.y *= velocityFactor;
+            this.hexagonRows[y][x].start.position.x += this.hexagonRows[y][x].start.velocity.x;
+            this.hexagonRows[y][x].start.position.y += this.hexagonRows[y][x].start.velocity.y;
+
+            const endXDiff = xEnd - this.hexagonRows[y][x].end.position.x;
+            const endYDiff = yEnd - this.hexagonRows[y][x].end.position.y;
+            this.hexagonRows[y][x].end.velocity.x += endXDiff * forceFactor;
+            this.hexagonRows[y][x].end.velocity.y += endYDiff * forceFactor;
+            this.hexagonRows[y][x].end.velocity.x *= velocityFactor;
+            this.hexagonRows[y][x].end.velocity.y *= velocityFactor;
+            this.hexagonRows[y][x].end.position.x += this.hexagonRows[y][x].end.velocity.x;
+            this.hexagonRows[y][x].end.position.y += this.hexagonRows[y][x].end.velocity.y;
+
             this.ctx.beginPath();
-            this.ctx.moveTo(xStart, yStart);
-            this.ctx.lineTo(xEnd, yEnd);
+            this.ctx.moveTo(
+              zoomedX(this.hexagonRows[y][x].start.position.x),
+              zoomedY(this.hexagonRows[y][x].start.position.y)
+            );
+            this.ctx.lineTo(
+              zoomedX(this.hexagonRows[y][x].end.position.x),
+              zoomedY(this.hexagonRows[y][x].end.position.y)
+            );
             this.ctx.stroke();
           }
           this.ctx.restore();
@@ -750,30 +856,6 @@
       }
 
       this.textTexture.needsUpdate = true;
-    }
-
-    // 55555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555
-    updatePart5(frame) {
-      this.scene.remove(this.ball);
-
-      this.scene.add(this.textPlane);
-      this.textPlane.position.z = -80;
-      this.ps.particles.visible = false;
-
-      this.drawHexagons(frame);
-
-      const cameraFovStartFrame = FRAME_FOR_BEAN(3296);
-      const cameraFovEndFrame = FRAME_FOR_BEAN(3304);
-      const cameraFov = easeOut(
-        45, .1, (frame - cameraFovStartFrame) / (cameraFovEndFrame - cameraFovStartFrame)
-      );
-
-      this.camera.fov = cameraFov;
-      this.camera.updateProjectionMatrix();
-      this.camera.position.x = 0;
-      this.camera.position.y = 0;
-      this.camera.position.z = -70.6;
-      this.camera.lookAt(new THREE.Vector3(0, 0, -80));
     }
 
     // ttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttt
