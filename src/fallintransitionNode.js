@@ -29,7 +29,7 @@
       this.uniforms.A.value = this.inputs.A.getValue();
       this.uniforms.B.value = this.inputs.B.getValue();
 
-      demo.nm.nodes.bloom.opacity = lerp(1.5, .25, (frame - 6745) / 20);
+      demo.nm.nodes.bloom.opacity = lerp(2, .25, (frame - 6745) / 20);
     }
   }
 
