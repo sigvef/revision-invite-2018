@@ -242,6 +242,9 @@
         }
       }
 
+      if (BEAN >= 3024 && BEAN < 3312) {
+        this.drawHexagons(this.frame);
+      }
       this.updateChordStabBeans(frame);
       this.updateBall(frame);
       this.updateBeams(frame);
@@ -903,9 +906,6 @@
 
     render(renderer) {
       renderer.setClearColor(new THREE.Color(0x373C3F));
-      if (BEAN >= 3024 && BEAN < 3312) {
-        this.drawHexagons(this.frame);
-      }
       this.ps.render();
       renderer.render(this.scene, this.camera, this.renderTarget, true);
       this.outputs.render.setValue(this.renderTarget.texture);
