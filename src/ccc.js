@@ -12,7 +12,7 @@
       this.camera.updateProjectionMatrix();
 
       this.random = new Random(0x80deed); // eslint-disable-line
-      this.colorRandom = new Random(0xcafebabe);
+      this.colorRandom = new Random(0xcafebabe); // eslint-disable-line
 
       this.whiteColor = 0xffffff;
       this.grayColor = 0x400040;
