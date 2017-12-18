@@ -58,7 +58,7 @@
         this.ctx.font = '0.7pt schmalibre-light';
         this.ctx.fillStyle = '#c2c2a0';
 
-        this.ctx.fillText('JUST REVISION', -2.7, easeIn(1.5, -3.5, t));
+        this.ctx.fillText('JUST REVISION', -3.0, easeIn(1.5, -4.0, t));
         this.ctx.restore();
       } else {
         const t = lerp(
@@ -83,7 +83,7 @@
         this.ctx.font = '0.7pt schmalibre-light';
         this.ctx.fillStyle = '#c2c2a0';
 
-        this.ctx.fillText('JUST REVISION', -2.7, easeIn(1.5, -3.5, t));
+        this.ctx.fillText('JUST REVISION', -3.0, easeIn(1.5, -4.0, t));
         this.ctx.restore();
       }
       if(frame > 7300) {
