@@ -20,7 +20,7 @@
       const textCtx = this.textCanvas.getContext('2d');
 
       document.fonts.load('bold 72px schmalibre').then(() => {
-        textCtx.fillStyle = '#99da85';
+        textCtx.fillStyle = 'rgba(119, 225, 93, 1)';
         textCtx.font = 'bold 72px schmalibre';
         textCtx.textAlign = 'center';
         textCtx.textBaseline = 'middle';
@@ -29,7 +29,7 @@
         this.textCanvas.height = 64;
         this.textCanvas.width = scrolloloMeasured.width;
 
-        textCtx.fillStyle = '#99da85';
+        textCtx.fillStyle = 'rgba(119, 225, 93, 1)';
         textCtx.font = 'bold 72px schmalibre';
         textCtx.textAlign = 'center';
         textCtx.textBaseline = 'middle';
@@ -144,11 +144,11 @@
           this.textCanvas,
           pixelOffset,
           0,
-          1,
+          2,
           this.textCanvas.height,
           scrollOffset + pixelOffset,
           -this.textCanvas.height / 2 + 20 * Math.sin(pixelOffset / 100 + this.frame / 60 / 60 * 115 * Math.PI),
-          1,
+          2,
           this.textCanvas.height
         );
       }

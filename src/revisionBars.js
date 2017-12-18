@@ -163,7 +163,6 @@
 
         {bean: 1440 + 48 + 24 + 24, easing: 'easeOut', value: 0},
       ]);
-      
     }
 
     path(points) {
@@ -270,11 +269,7 @@
             10 - elasticOut(0, 1.5 + i * 1, 1.2, t), 10,
             (frame - FRAME_FOR_BEAN(32 * 12 * 4)) / 20) - 4.5
         );
-        this.ctx.fillStyle = 'rgba(119, 225, 93, 255)';
-        this.ctx.fillStyle = 'rgb(255, 73, 130)';
-        this.ctx.fillStyle = 'rgb(152, 209, 155)';
-        this.ctx.fillStyle = 'rgba(119, 225, 93, 255)';
-        this.ctx.fillStyle = 'rgb(153, 218, 133)';
+        this.ctx.fillStyle = 'rgba(119, 225, 93, 1)';
         this.ctx.beginPath();
         this.ctx.moveTo(letter.x, 0);
         this.ctx.lineTo(letter.x + 1, -1);
@@ -282,9 +277,7 @@
         this.ctx.lineTo(letter.x, 11);
         this.ctx.fill();
         this.ctx.beginPath();
-        this.ctx.fillStyle = 'rgb(152, 209, 155)';
-        this.ctx.fillStyle = 'rgba(119, 225, 93, 255)';
-        this.ctx.fillStyle = 'rgb(153, 218, 133)';
+        this.ctx.fillStyle = 'rgba(119, 225, 93, 1)';
         this.ctx.moveTo(letter.x + 1, 1);
         this.ctx.lineTo(letter.x, 2);
         this.ctx.lineTo(letter.x, 10);
