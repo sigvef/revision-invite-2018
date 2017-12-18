@@ -590,6 +590,16 @@
       let rand5 = Math.random();
 
       for (let i = 0; i < this.lasers.length; i++) {
+
+        if(frame < 6573){
+          //First part of the scene each laser has a different seed
+          //Done this way because Math.random doesn't support seeds
+          let rand1 = Math.random();
+          let rand2 = Math.random();
+          let rand3 = Math.random();
+          let rand4 = Math.random();
+          let rand5 = Math.random();
+        }
         const laser = this.lasers[i];
         laser.update(rand1, rand2, rand3, rand4, rand5);
         let edge = this.edges[i];
