@@ -60,7 +60,7 @@
           middleY: 3.5,
           finalBean: 123,
           finalX: -6,
-          finalY: 2.5
+          finalY: 2
         },
         {
           letter: 'E',
@@ -72,7 +72,7 @@
           middleY: 3.5,
           finalBean: 125,
           finalX: -2,
-          finalY: 2.5
+          finalY: 2
         },
         {
           letter: 'V',
@@ -84,7 +84,7 @@
           middleY: 3.5,
           finalBean: 127,
           finalX: 2,
-          finalY: 2.5
+          finalY: 2
         },
         {
           letter: 'I',
@@ -96,7 +96,7 @@
           middleY: 3.5,
           finalBean: 129,
           finalX: 6,
-          finalY: 2.5
+          finalY: 2
         },
         {
           letter: 'S',
@@ -108,7 +108,7 @@
           middleY: -4.5,
           finalBean: 132,
           finalX: -6,
-          finalY: -2.5
+          finalY: -2
         },
         {
           letter: 'I',
@@ -117,10 +117,10 @@
           y: -4.5,
           middleBean: 132,
           middleX: -2,
-          middleY: -2.5,
+          middleY: -2,
           finalBean: 150,
           finalX: -2,
-          finalY: -2.5
+          finalY: -2
         },
         {
           letter: 'O',
@@ -129,22 +129,22 @@
           y: -4.5,
           middleBean: 132,
           middleX: 2,
-          middleY: -2.5,
+          middleY: -2,
           finalBean: 150,
           finalX: 2,
-          finalY: -2.5
+          finalY: -2
         },
         {
           letter: 'N',
           bean: 140,
           x: 6,
-          y: -2.5,
+          y: -2,
           middleBean: 150,
           middleX: 6,
-          middleY: -2.5,
+          middleY: -2,
           finalBean: 150,
           finalX: 6,
-          finalY: -2.5
+          finalY: -2
         },
       ];
 
@@ -426,12 +426,12 @@
         const t = (frame - FRAME_FOR_BEAN(86.3125 * 48)) / (FRAME_FOR_BEAN(87.3125 * 48) - FRAME_FOR_BEAN(86.3125 * 48));
         cameraPosition.set(
           0,
-          lerp(-4, -5, t),
-          lerp(11, 7, t)
+          lerp(-4, -3, t),
+          lerp(13, 11.5, t)
         );
         cameraLookAt.set(
           0,
-          lerp(-4, -3, t),
+          lerp(-3.5, -0.5, t),
           0
         );
       } else {
@@ -439,11 +439,11 @@
         cameraPosition.set(
           lerp(-0.95, 0, t),
           lerp(1.15, 0, t),
-          lerp(4, 15, t)
+          lerp(3, 15, t)
         );
         cameraLookAt.set(
           lerp(6.25, 0, t),
-          lerp(-3, 0, t),
+          lerp(-2, 0, t),
           lerp(-5, 0, t)
         );
       }
