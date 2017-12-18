@@ -30,7 +30,7 @@
       this.resize();
 
       this.canvasCube = new THREE.Mesh(
-          new THREE.BoxGeometry(105, 105, 1),
+          new THREE.BoxGeometry(175, 105, 1),
           new THREE.MeshBasicMaterial({
             map: this.canvasTexture,
             transparent: true,
@@ -109,13 +109,13 @@
       this.outer_center_hex.add(new THREE.Line( small_geometry, line_material ));
       this.middle_center_hex.rotation.set(0, 0, Math.PI / 6);
       this.outer_center_hex.rotation.set(0, 0, Math.PI / 6);
-      this.outer_center_hex.lineWidth = 7.5;
+      this.outer_center_hex.lineWidth = 2;
       this.scene.add(this.middle_center_hex);
       this.scene.add(this.outer_center_hex);
       
       // Square root of three divided by two. For a hex of diameter 1 this is the distance from the center to the edge.
       var r32 = 0.86602540378;
-      r32 = Math.sqrt(3 / 2);
+      r32 = Math.sqrt(3) / 2;
 
       var inner_distance = 5;
       var outer_distance = 15;
@@ -227,8 +227,8 @@
             depthWrite: false,
             depthTest: false,
           }));
-      this.scene.add(this.middle_cube_3d);
-      this.middle_cube_3d.render_3d = true;
+      //this.scene.add(this.middle_cube_3d);
+      //this.middle_cube_3d.render_3d = true;
 
       var inner_size = 9.2;
       var middle_size = 15.3;
@@ -316,9 +316,9 @@
       this.middle_cube.scale.set(middle_size, middle_size, middle_size);
       this.outer_cube.scale.set(outer_size, outer_size, outer_size);
 
-      //this.spin_cube.add(this.inner_cube);
-      //this.spin_cube.add(this.middle_cube);
-      //this.spin_cube.add(this.outer_cube);
+      this.spin_cube.add(this.inner_cube);
+      this.spin_cube.add(this.middle_cube);
+      this.spin_cube.add(this.outer_cube);
       this.spin_cube.position.set(0,0,0);
       this.scene.add(this.spin_cube);
 
@@ -352,11 +352,12 @@
       this.add_lines_for_geometry(this.center_line3.children[0].geometry, this.center_line3, 1);
       this.add_lines_for_geometry(this.middle_center_hex.children[0].geometry, this.middle_center_hex, 0.6);
       this.add_lines_for_geometry(this.outer_center_hex.children[0].geometry, this.outer_center_hex, 0.4);
-      this.add_lines_for_geometry(this.small_claw_r.children[0].geometry, this.small_claw_r, 1);
+      */
+      /*this.add_lines_for_geometry(this.small_claw_r.children[0].geometry, this.small_claw_r, 1);
       this.add_lines_for_geometry(this.small_claw_l.children[0].geometry, this.small_claw_l, 1);
       this.add_lines_for_geometry(this.large_claw_r.children[0].geometry, this.large_claw_r, 1);
-      this.add_lines_for_geometry(this.large_claw_l.children[0].geometry, this.large_claw_l, 1);
-      */
+      this.add_lines_for_geometry(this.large_claw_l.children[0].geometry, this.large_claw_l, 1);*/
+      
 
       /*
       this.three_point_star.children[0].visible = false;
@@ -375,10 +376,10 @@
       this.large_claw_r.children[0].visible = false;
       this.large_claw_l.children[0].visible = false;
       */
-      this.small_claw_r.children[0].position.set(200,0,0);
-      this.small_claw_l.children[0].position.set(200,0,0);
-      this.large_claw_r.children[0].position.set(200,0,0);
-      this.large_claw_l.children[0].position.set(200,0,0);
+      this.small_claw_r.children[0].position.set(0,0,0);
+      this.small_claw_l.children[0].position.set(0,0,0);
+      this.large_claw_r.children[0].position.set(0,0,0);
+      this.large_claw_l.children[0].position.set(0,0,0);
 
     }
 
@@ -500,12 +501,12 @@
         this.level1_hex2.position.set(-10 * r32 * progress, 10 / 2 * progress, 100);
         this.level1_hex3.position.set(0, -10 * progress, 100);
 
-        const progress2 = elasticOut(0, 1, 1.1, T(base + 24, base + 24 + 12, frame));
+        const progress2 = elasticOut(0, 1, 1, T(base + 24, base + 24 + 12, frame));
         this.center_line1.scale.set(progress2, progress2, progress2);
         this.center_line2.scale.set(progress2, progress2, progress2);
         this.center_line3.scale.set(progress2, progress2, progress2);
 
-        const progress3 = elasticOut(0, 1, 1.1, T(base + 24 + 9, base + 24 + 9 + 12, frame));
+        const progress3 = elasticOut(0, 1, 1, T(base + 24 + 9, base + 24 + 9 + 12, frame));
         this.center_line2.rotation.set(0, 0, progress3 * 2 * Math.PI / 3);
         this.center_line3.rotation.set(0, 0, -progress3 * 2 * Math.PI / 3);
 
@@ -544,7 +545,7 @@
         this.small_center_hex.scale.set(scale, scale, scale);
 
 
-        var scale2 = 1.5 + 1.95 * elasticOut(0, 1, 1.1, T(24 * 48, 24 * 48 + 9, frame));
+        var scale2 = 1.5 + 2.55  * elasticOut(0, 1, 1.1, T(24 * 48, 24 * 48 + 9, frame));
         this.center_circle.scale.set(scale2, scale2, scale2);
 
 
@@ -568,7 +569,7 @@
         this.spin_cube.position.set(0, 0, 200);
         this.small_center_hex.position.set(200, 0, 0);
         this.middle_center_hex.position.set(200, 0, 0);
-        //this.outer_center_hex.position.set(200, 0, 0);
+        this.outer_center_hex.position.set(200, 0, 0);
         this.center_line1.position.set(200, 0, 0);
         this.center_line2.position.set(200, 0, 0);
         this.center_line3.position.set(200, 0, 0);
@@ -626,13 +627,18 @@
         const scale = 1 + 0.67 * easeOut(0, 1, T(27 * 48 + 6 -3, 27 * 48 + 6, frame));
         this.three_point_star.scale.set(scale, scale, scale);
 
-        var claw_progress1 = asmoothstep(FRAME_FOR_BEAN(26.75 * 48), FRAME_FOR_BEAN(12), frame);
+
+        var claw_progress1 = asmoothstep(FRAME_FOR_BEAN(1322), FRAME_FOR_BEAN(9), frame);
+        var claw_progress2 = asmoothstep(FRAME_FOR_BEAN(1322), FRAME_FOR_BEAN(9), frame);
+        var claw_progress3 = asmoothstep(FRAME_FOR_BEAN(1330), FRAME_FOR_BEAN(7), frame);
+        var claw_progress4 = asmoothstep(FRAME_FOR_BEAN(1330), FRAME_FOR_BEAN(7), frame);
+        /*var claw_progress1 = asmoothstep(FRAME_FOR_BEAN(26.75 * 48), FRAME_FOR_BEAN(12), frame);
         var claw_progress2 = asmoothstep(FRAME_FOR_BEAN(26.875 * 48), FRAME_FOR_BEAN(12), frame);
         var claw_progress3 = asmoothstep(FRAME_FOR_BEAN(27 * 48), FRAME_FOR_BEAN(12), frame);
-        var claw_progress4 = asmoothstep(FRAME_FOR_BEAN(27.125 * 48), FRAME_FOR_BEAN(12), frame);
+        var claw_progress4 = asmoothstep(FRAME_FOR_BEAN(27.125 * 48), FRAME_FOR_BEAN(12), frame);*/
 
-        /*
-        this.small_claw_r.children[1].material.color.r = this.cube.material.color.r + 0.15 * claw_progress1;
+        
+        /*this.small_claw_r.children[1].material.color.r = this.cube.material.color.r + 0.15 * claw_progress1;
         this.small_claw_r.children[1].material.color.g = this.cube.material.color.g + 0.15 * claw_progress1;
         this.small_claw_r.children[1].material.color.b = this.cube.material.color.b + 0.15 * claw_progress1;
 
@@ -688,15 +694,28 @@
                                                                         this.cube.material.color.g + 0.15 * claw_progress4,
                                                                         this.cube.material.color.b + 0.15 * claw_progress4);
           this.large_claw_l.children[i].geometry.colorsNeedUpdate = true;
-        }
-        */
+        }*/
+        
 
 
         
-        this.small_claw_r.position.set(30 * r32 - 8 * (1 - claw_progress1), 0, -1);
+        /*this.small_claw_r.position.set(30 * r32 - 8 * (1 - claw_progress1), 0, -1);
         this.small_claw_l.position.set(-30 * r32 + 8 * (1 - claw_progress2), 0, -1);
         this.large_claw_r.position.set(50 * r32 - 8 * (1 - claw_progress3), 0, -1);
-        this.large_claw_l.position.set(-50 * r32 + 8 * (1 - claw_progress4), 0, -1);
+        this.large_claw_l.position.set(-50 * r32 + 8 * (1 - claw_progress4), 0, -1);*/
+        //TODO: Elastic
+        claw_progress1 = elasticOut(0, 1, 1, claw_progress1);
+        claw_progress2 = elasticOut(0, 1, 1, claw_progress2);
+        claw_progress3 = elasticOut(0, 1, 1, claw_progress3);
+        claw_progress4 = elasticOut(0, 1, 1, claw_progress4);
+        this.small_claw_r.position.set(30 * r32 + 20  * (1 - claw_progress1), 0, -1);
+        this.small_claw_r.scale.set(claw_progress1, claw_progress1, claw_progress1);
+        this.small_claw_l.position.set(-30 * r32 - 20 * (1 - claw_progress2), 0, -1);
+        this.small_claw_l.scale.set(-claw_progress2, claw_progress2, claw_progress2);
+        this.large_claw_r.position.set(50 * r32 + 20 * (1 - claw_progress3), 0, -1);
+        this.large_claw_r.scale.set(claw_progress3, claw_progress3, claw_progress3);
+        this.large_claw_l.position.set(-50 * r32 - 20 * (1 - claw_progress4), 0, -1);
+        this.large_claw_l.scale.set(-claw_progress4, claw_progress4, claw_progress4);
       }
 
       if (frame >= FRAME_FOR_BEAN(27.5 * 48)) {
@@ -816,12 +835,12 @@
       this.ctx.save();
       this.ctx.scale(GU, GU);
       this.ctx.translate(4.5, 4.5);
-      this.ctx.scale(1 / 12, 1 / 12);
+      this.ctx.scale(1 / 20, 1 / 12);
       this.draw(this.scene, 'fill');
       this.draw(this.scene, 'stroke');
-      if(BEAN >= 1200 && BEAN < 1248 + 9) {
+      /*if(BEAN >= 1200 && BEAN < 1248 + 9) {
         this.draw3d(this.middle_cube_3d);
-      }
+      }*/
       if(BEAN >= 1344) {
         this.draw3d(this.ico);
       }
