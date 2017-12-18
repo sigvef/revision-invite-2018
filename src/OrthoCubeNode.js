@@ -16,17 +16,17 @@
             this.uniforms.frame.value = frame;
             this.uniforms.BEAN.value = BEAN;
 
-            var lastBeanFrame = FRAME_FOR_BEAN(BEAN);
-            var nextBeanFrame = FRAME_FOR_BEAN(BEAN+1);
+            let lastBeanFrame = FRAME_FOR_BEAN(BEAN);
+            let nextBeanFrame = FRAME_FOR_BEAN(BEAN+1);
 
-            var f = (frame - lastBeanFrame)/(nextBeanFrame - lastBeanFrame)
-            var interBean = lerp(BEAN, BEAN+1, f);
-            var beat = (interBean - 240.0)/12.0; 
-            //var beat = (INTERBEAN - 240.0)/12.0; For new nin
-            var rotX = 0.0;
-            var rotY = 0.0;
-            var rotZ = 0.0;
-            var cubeSize = 2.1;
+            let f = (frame - lastBeanFrame)/(nextBeanFrame - lastBeanFrame)
+            let interBean = lerp(BEAN, BEAN+1, f);
+            let beat = (interBean - 240.0)/12.0; 
+            //let beat = (INTERBEAN - 240.0)/12.0; For new nin
+            let rotX = 0.0;
+            let rotY = 0.0;
+            let rotZ = 0.0;
+            let cubeSize = 2.1;
 
             //Pre-scene
             if(beat < 0.0){ //Pre-scene (begins at 208)
