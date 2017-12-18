@@ -26,7 +26,7 @@
       });
 
       // CAMERA
-      this.camera = new THREE.PerspectiveCamera(45, 16 / 9, 1, 10000);
+      this.camera = new THREE.PerspectiveCamera(45, 16 / 9, 0.1, 10000);
       this.cameraPreviousPosition = new THREE.Vector3(0, 0, 0);
       this.cameraShakePosition = new THREE.Vector3(0, 0, 0);
       this.cameraShakeVelocity = new THREE.Vector3(0, 0, 0);
@@ -496,12 +496,14 @@
 
       // CAMERA
       const cameraMovement = Math.pow(progress + 0.1, 3);
-      this.camera.fov = 45;
+      this.camera.fov = easeOut(95, 35, progress);
       this.camera.updateProjectionMatrix();
       this.camera.position.x = 6;
       this.camera.position.y = 0;
       this.camera.position.z = 12  - 32 * cameraMovement;
       this.camera.lookAt(this.ball.position);
+      this.camera.rotateOnAxis(new THREE.Vector3(0, 0, 1),
+                               easeOut(0, Math.PI / 2, progress));
 
       // PARTICLES
       for(let i = 0; i < 2; i++) {
@@ -542,9 +544,22 @@
 
       this.camera.fov = 45;
       this.camera.updateProjectionMatrix();
-      this.camera.position.x = 6 * Math.cos(frame / 85 - 1.5);
-      this.camera.position.y = 6 * Math.sin(frame / 85 - 0.5);
-      this.camera.position.z = -70;
+      this.camera.position.set(
+        lerp(2, 9, progress),
+        0,
+        easeOut(
+          -72,
+          -73,
+          progress
+        )
+      );
+
+      this.camera.lookAt(new THREE.Vector3(
+        0,
+        0,
+        lerp(-70, -80, progress)
+      ));
+      this.camera.rotateOnAxis(new THREE.Vector3(0, 0, 1), Math.PI / 2);
 
       // PARTICLES
       for(let i = 0; i < 1; i++) {
@@ -568,8 +583,6 @@
           0.012
         );
       }
-
-      this.camera.lookAt(new THREE.Vector3(0, 0, -80));
     }
 
     // 44444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444
@@ -635,6 +648,23 @@
       this.camera.position.x = 6 * Math.cos(frame / 85 - 2);
       this.camera.position.y = 6 * Math.sin(frame / 85 - lerp(1, 2, progress));
       this.camera.position.z = -70;
+      this.camera.position.set(
+        lerp(9, 0, progress),
+        lerp(0, -0.1, progress),
+        easeIn(
+          -73,
+          -70,
+          progress
+        )
+      );
+
+      this.camera.lookAt(new THREE.Vector3(
+        0,
+        0,
+        lerp(-80, -78, progress)
+      ));
+      this.camera.rotateOnAxis(new THREE.Vector3(0, 0, 1),
+                               easeIn(Math.PI / 2, 0, progress));
 
       this.cameraPreviousPosition.copy(this.camera.position);
       this.camera.position.add(this.cameraShakePosition);
