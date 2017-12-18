@@ -29,7 +29,7 @@ void main() {
 
         color = vec3(55. + 100. * sin(uv.x + 5. * uv.y), 60., 63.) / 255. * 0.5;
 
-        color = vec3(52., 29., 8.) / 255. / 4. * 
+        color = vec3(55., 60., 63.) / 255. / 8. * 
             (1. - 0.2 * (1. + vec3(sin(uv.x * 16. * 16. * 2.) - sin(2. * uv.y * 16. * 9.))));
 
         color += 0.2 * mix(vec3(0.), vec3(1.), clamp(vec3(1.35 - squircleHighlight), 0., 1.));
