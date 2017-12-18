@@ -14,10 +14,10 @@
         easeOut(
           0,
           easeIn(
-            -.33,
+            -.12,
             easeOut(
               0,
-              easeIn(-.12, 0, (frame - 6790) / 7),
+              easeIn(-.06, 0, (frame - 6790) / 7),
               (frame - 6785) / 7
             ),
             (frame - 6775) / 10
