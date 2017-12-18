@@ -582,9 +582,16 @@
         mesh.rotation.y += easeOut(0, Math.PI, (frame - FRAME_FOR_BEAN(pyramid.spinBean || pyramid.lowerFromBean)) / 35);
       }
 
+      //Use same random numbers for all lasers
+      let rand1 = Math.random();
+      let rand2 = Math.random();
+      let rand3 = Math.random();
+      let rand4 = Math.random();
+      let rand5 = Math.random();
+
       for (let i = 0; i < this.lasers.length; i++) {
         const laser = this.lasers[i];
-        laser.update();
+        laser.update(rand1, rand2, rand3, rand4, rand5);
         let edge = this.edges[i];
         if(!edge.from) {
           edge = this.edges[0];
