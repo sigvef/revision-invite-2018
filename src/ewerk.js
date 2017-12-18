@@ -13,9 +13,6 @@
         }
       });
 
-      this.canvas1 = document.createElement('canvas');
-      this.canvas2 = document.createElement('canvas');
-
       const objLoader = new THREE.OBJLoader();
       this.ewerkModel = new THREE.Object3D();
       this.ewerkModel.rotation.y = Math.PI;
@@ -154,18 +151,6 @@
 
       this.scene.add(this.globeContainer);
 
-      this.byNinjadevText = new THREE.Mesh(
-        new THREE.PlaneGeometry(1920, 1080, 1, 1),
-        new THREE.MeshBasicMaterial({
-          map: new THREE.CanvasTexture(this.canvas2),
-          transparent: true,
-          side: THREE.DoubleSide,
-        })
-      );
-
-      this.byNinjadevText.rotation.x = -Math.PI/2+.5;
-      this.scene.add(this.byNinjadevText);
-
       this.map = new THREE.Mesh(
         new THREE.PlaneGeometry(700, 700),
         new THREE.MeshStandardMaterial({
@@ -184,7 +169,7 @@
       this.camera.near = 0.1;
       this.camera.updateProjectionMatrix();
       this.camera.position.z = 50;
-      this.camera.lookAt(new THREE.Vector3(0, 0, 0));
+      this.camera.lookAt(new THREE.Vector3(0, -200, 0));
 
       this.skybox = new THREE.Mesh(
         new THREE.BoxGeometry(2000, 2000, 2000),
@@ -205,70 +190,7 @@
       this.revisionLogo.rotation.x = -Math.PI / 2;
       this.revisionLogo.position.set(0, 350, 115);
       this.scene.add(this.revisionLogo);
-
-      this.revisionPlaceText = new THREE.Mesh(
-        new THREE.PlaneGeometry(1920, 1080, 1, 1),
-        new THREE.MeshBasicMaterial({
-          map: new THREE.CanvasTexture(this.canvas1),
-          transparent: true,
-        })
-      );
-      this.scene.add(this.revisionPlaceText);
-      this.revisionPlaceText.scale.set(1.02, 1.02, 1.02);
-      this.revisionPlaceText.rotation.x = -Math.PI / 2;
-      this.revisionPlaceText.position.set(0, 350, 115);
-
       this.resize();
-    }
-
-    generateText(canvas, title, subtitle) {
-      const ctx = canvas.getContext('2d');
-
-      ctx.save();
-      ctx.scale(GU, GU);
-
-      // Title
-      ctx.textAlign = 'center';
-      ctx.textBaseline = 'middle';
-      ctx.font = '1pt schmalibre-light';
-      ctx.fillStyle = '#ffffff';
-
-      ctx.fillText(title, 8, 7);
-
-      // Subtitle
-      ctx.textAlign = 'center';
-      ctx.textBaseline = 'middle';
-      ctx.font = '0.7pt schmalibre-light';
-      ctx.fillStyle = '#ffffff';
-
-      ctx.fillText(subtitle, 8, 8);
-
-      ctx.restore();
-    }
-
-    generateNinjadevText(canvas, title, subtitle) {
-      const ctx = canvas.getContext('2d');
-
-      ctx.save();
-      ctx.scale(GU, GU);
-
-      // Title
-      ctx.textAlign = 'center';
-      ctx.textBaseline = 'middle';
-      ctx.font = '1pt schmalibre-light';
-      ctx.fillStyle = '#ffffff';
-
-      ctx.fillText(title, 8, 2);
-
-      // Subtitle
-      ctx.textAlign = 'center';
-      ctx.textBaseline = 'middle';
-      ctx.font = '0.7pt schmalibre-light';
-      ctx.fillStyle = '#ffffff';
-
-      ctx.fillText(subtitle, 8, 7);
-
-      ctx.restore();
     }
 
     beforeUpdate() {
@@ -281,8 +203,6 @@
 
       this.skybox.visible = frame < 250 || frame > 11308;
       this.lowpolySkybox.visible = frame >= 250 && frame <= 11308;
-      this.byNinjadevText.visible = frame < 250;
-      this.byNinjadevText.material.opacity = (frame < 250) ? 1 : 0;
 
       this.ps.update();
       if (frame < 366 || frame > 11299) {
@@ -303,13 +223,11 @@
       this.globe.visible = frame < 248 || frame > 11317;
       this.cloudGlobe.visible = frame < 248 || frame > 11317;
       this.revisionLogo.visible = frame > 11317;
-      this.revisionPlaceText.visible = frame > 11317;
       this.ewerkModel.visible = frame >= 248 && frame <= 11317;
 
       this.globe.material.opacity = 1;
       this.cloudGlobe.material.opacity = 1;
       this.revisionLogo.material.opacity = 0;
-      this.revisionPlaceText.material.opacity = 1;
 
       const globeTextures = this.inputs.globeTextures.getValue();
       if (globeTextures) {
@@ -362,7 +280,7 @@
         this.globeOutline.material.opacity = easeIn(0.3, 1, t);
 
         this.globeContainer.rotation.x = -Math.PI / 2 + .8;
-        this.camera.lookAt(new THREE.Vector3(0, 0, 0));
+        this.camera.lookAt(new THREE.Vector3(0, -200, 0));
       } else if (frame <= frame2) {
         this.camera.position.set(
           lerp(0, 0, (frame - frame2 + 10) / 10),
@@ -376,7 +294,7 @@
         const scale = lerp(1, 1.7, (frame - frame2 + 10) / 10);
         this.globeContainer.scale.set(scale, scale, scale);
 
-        this.camera.lookAt(new THREE.Vector3(0, 0, 0));
+        this.camera.lookAt(new THREE.Vector3(0, -200, 0));
       } else if (frame <= frame3) {
         this.camera.position.set(
           lerp(0, 122.27, (frame - frame3 + 10) / 10),
@@ -543,21 +461,21 @@
         this.camera.lookAt(new THREE.Vector3(
           0,
           0,
-          easeOut(0, 100, localT / 30)
+          easeOut(0, 150, localT / 30)
         ));
 
-        this.globe.material.opacity = easeIn(1, 0, (frame - 11315) / 80);
-        this.cloudGlobe.material.opacity = easeIn(1, 0, (frame - 11315) / 60);
-        this.globeOutline.material.opacity = easeIn(1, 0, (frame - 11315) / 40);
-        this.revisionLogo.material.opacity = lerp(0, 1, (frame - 11310) / 60);
-      }
+        this.revisionLogo.lookAt(this.camera.position);
 
-      this.revisionPlaceText.material.opacity = 1;
+        this.globe.material.opacity = easeIn(1, 0, (frame - 11315) / 10);
+        this.cloudGlobe.material.opacity = easeIn(1, 0, (frame - 11315) / 10);
+        this.globeOutline.material.opacity = easeIn(1, 0, (frame - 11315) / 10);
+        this.revisionLogo.material.opacity = lerp(0, 1, (frame - 11315) / 10);
+      }
 
       this.globeOutline.position.copy(this.globe.position);
       this.globeOutline.position.y -= 500;
       this.globeOutline.position.z -= 220;
-        this.globeOutline.visible = frame > frame3 - 24. ? false : this.globeContainer.visible;
+      this.globeOutline.visible = frame > frame3 - 24. ? false : this.globeContainer.visible;
       const scale = this.globe.scale.x * 1.7;
       this.globeOutline.scale.set(scale, scale, scale);
     }
@@ -565,24 +483,6 @@
     render(renderer) {
       this.ps.render();
       super.render(renderer);
-    }
-
-    resize() {
-      super.resize();
-      this.canvas1.width = 16*GU;
-      this.canvas1.height = 9*GU;
-      this.canvas2.width = 16*GU;
-      this.canvas2.height = 9*GU;
-
-      this.generateText(this.canvas1, 'Revision 2018', 'Saarbrücken March 30th - April 2nd');
-      if(this.revisionPlaceText) {
-        this.revisionPlaceText.material.map.needsUpdate = true;
-      }
-
-      this.generateNinjadevText(this.canvas2, 'No Invitation', 'by Ninjadev');
-      if(this.byNinjadevText) {
-        this.byNinjadevText.material.map.needsUpdate = true;
-      }
     }
   }
 

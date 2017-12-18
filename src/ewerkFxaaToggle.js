@@ -15,11 +15,7 @@
 
     beforeUpdate() {
       let selectedOutput;
-      if(BEAN < 94){
-        selectedOutput = this.inputs.noFxaa;
-      }else{
-        selectedOutput = this.inputs.fxaa;
-      }
+      selectedOutput = this.inputs.fxaa;
 
       this.outputs.render.setValue(selectedOutput.getValue());
 
