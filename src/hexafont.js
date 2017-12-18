@@ -164,8 +164,7 @@
         from: {x: 20, y: 1},
         to: {x: 20, y: 9},
         startBean: 1632 + 24 + 9,
-        endBean: 1632 + 24 + 9 + 6,
-        easing: easeOut,
+        endBean: 1632 + 24 + 9 + 6, easing: easeOut,
       }, {
         color: WHITE,
         from: {x: 21, y: 1},
@@ -444,7 +443,24 @@
       this.cameraShakeAngularVelocity = new THREE.Vector3(0, 0, 0);
       this.cameraShakeAngularAcceleration = new THREE.Vector3(0, 0, 0);
 
-      this.cameraPositionPath = this.path([{
+      this.cameraPositionPath = this.path([
+          {
+        bean: 1607,
+        easing: 'step',
+        value: {
+          x: -6.394326333240326,
+          y: 2.376763542579813,
+          z: -15.855111388561976,
+        },
+      }, {
+        bean: 1632 + 6 - 3,
+        easing: 'easeOut',
+        value: {
+          x: -6.394326333240326,
+          y: 2.376763542579813,
+          z: -10.855111388561976,
+        },
+      }, {
         bean: 1632 + 6 - 3,
         easing: 'step',
         value: {
@@ -1084,10 +1100,14 @@
           item.startPosition.y,
           item.targetPosition.y,
           t);
-        item.position.z = easeOut(
-          item.startPosition.z,
+        //Start nearby tiles at different Z values to reduce clipping
+        let startZ = item.position.y ;
+        item.position.z = easeIn(
+          item.targetPosition.z - 0.9 * startZ,
+        //item.position.z = easeOut(
+         // item.startPosition.z,
           item.targetPosition.z,
-          t);
+          t*t);
         item.rotation.x = easeOut(-Math.PI * 4, Math.PI / 2, Math.pow(0.75 + t - i / this.allgons.length, 2));
 
         if(t >= 0 && t < 0.5) {
