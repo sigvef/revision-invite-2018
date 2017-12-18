@@ -221,7 +221,15 @@
 
     update(frame) {
       this.frame = frame;
-      demo.nm.nodes.bloom.opacity = 0;
+      if (BEAN < 3168 || BEAN >= 3312) {
+        demo.nm.nodes.bloom.opacity = 0;
+      } else {
+        if (BEAN % 12 === 0) {
+          demo.nm.nodes.bloom.opacity = 0.5;
+        } else {
+          demo.nm.nodes.bloom.opacity *= 0.9;
+        }
+      }
 
       this.stabThrob *= 0.95;
       this.throb *= 0.95;
