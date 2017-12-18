@@ -707,10 +707,10 @@
       const hexToRectProgress = (frame - hexToRectStartFrame) / (hexToRectEndFrame - hexToRectStartFrame);
 
       const hexagonRadiuses = [
-        lerp(1, 0.5, hexToRectProgress),
+        1 - 0.5 * elasticOut(0, 1, 1.2, hexToRectProgress),
         1,
         1,
-        lerp(1, 0.5, hexToRectProgress),
+        1 - 0.5 * elasticOut(0, 1, 1.2, hexToRectProgress),
         1,
         1,
       ];
@@ -721,15 +721,29 @@
 
       const R = (r, g, b) => `rgba(${0 | Math.min(r, 255)},${0 | Math.min(g, 255)},${0 | Math.min(b, 255)},1)`;
       let zoomFactor = 1;
-      if (BEAN >= 3168) {
-        zoomFactor = 1 / lerp(0.2, 1, wholeProgress );
-      }
       let zoomPosition = {
         x: 8 * GU,
         y: 4.5 * GU
       };
       if (BEAN >= 3168) {
-        zoomPosition.x = lerp(4 * GU, 8 * GU, Math.pow(wholeProgress, 2));
+        if (BEAN < 3203) {
+          const firstHitsStartFrame = FRAME_FOR_BEAN(3168);
+          const firstHitsEndFrame = FRAME_FOR_BEAN(3202);
+          const firstHitsProgress = (frame - firstHitsStartFrame) / (firstHitsEndFrame - firstHitsStartFrame);
+          zoomFactor = lerp(1 / 0.08, 1 / 0.12, firstHitsProgress);
+        } else if (BEAN >= 3203 && BEAN < 3206) {
+          const thirdHitStartFrame = FRAME_FOR_BEAN(3203);
+          const thirdHitEndFrame = FRAME_FOR_BEAN(3206);
+          const thirdHitProgress = (frame - thirdHitStartFrame) / (thirdHitEndFrame -  thirdHitStartFrame);
+          zoomFactor = lerp(1 / 0.12, 1 / 0.8, thirdHitProgress);
+        } else {
+          const restStartFrame = FRAME_FOR_BEAN(3206);
+          const restEndFrame = FRAME_FOR_BEAN(3290);
+          const restProgress = (frame - restStartFrame) / (restEndFrame - restStartFrame);
+          zoomFactor = lerp(1 / 0.8, 1, restProgress)
+        }
+
+        zoomPosition.x = lerp(4 * GU, 8 * GU, Math.pow(wholeProgress, 2.5));
         zoomPosition.y = lerp(2 * GU, 4.5 * GU, Math.pow(wholeProgress, 2));
       }
 
@@ -749,7 +763,7 @@
         const offsetRemovalStartFrame = FRAME_FOR_BEAN(3192);
         const offsetRemovalEndFrame = FRAME_FOR_BEAN(3196);
         const offsetRemovalProgress = (frame - offsetRemovalStartFrame) / (offsetRemovalEndFrame - offsetRemovalStartFrame);
-        const offsetFactor = lerp(1, 0, offsetRemovalProgress);
+        const offsetFactor = 1 - elasticOut(0, 1, 1.2, offsetRemovalProgress);
 
         this.ctx.save();
         for (let y = 0; y < this.numHexagonsY; y++) {
