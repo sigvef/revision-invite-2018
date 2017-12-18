@@ -354,7 +354,7 @@
         this.slam_icos[i].render_3d = true;
         this.slam_icos[i].rotation.set(1.015, 0, 0);
         this.slam_icos[i].position.set(Math.sin(i) * 70, Math.cos(i) * 30, 0);
-        var scale = 23.5;
+        var scale = 23.5 - 10 + i;
         this.slam_icos[i].scale.set(scale, scale, scale);
         this.slam_ico_containers.push(new THREE.Object3D());
         this.slam_ico_containers[i].add(this.slam_icos[i]);
@@ -511,6 +511,10 @@
       this.hack.scale.copy(this.spin_cube.scale);
       this.hack.position.copy(this.spin_cube.position);
       this.ico.position.set(200, 0, 0);
+      for(var i = 0; i < 20; i++)
+      {
+        this.slam_icos[i].position.set(200, 0, 0);
+      }
 
       const base = 22 * 48;
       if ( frame >= FRAME_FOR_BEAN(22 * 48)) {
@@ -746,7 +750,7 @@
 
         for(var i = 0; i < 20; i++)
         {
-          //this.slam_icos[i].position.set(0, 0, 0);
+          this.slam_icos[i].position.set(0, 0, 0);
           this.slam_ico_containers[i].rotation.set(0, frame / 50, 0);
         }
       }
