@@ -109,7 +109,7 @@
       this.outer_center_hex.add(new THREE.Line( small_geometry, line_material ));
       this.middle_center_hex.rotation.set(0, 0, Math.PI / 6);
       this.outer_center_hex.rotation.set(0, 0, Math.PI / 6);
-      this.outer_center_hex.lineWidth = 7.5;
+      this.outer_center_hex.lineWidth = 2;
       this.scene.add(this.middle_center_hex);
       this.scene.add(this.outer_center_hex);
       
@@ -227,8 +227,8 @@
             depthWrite: false,
             depthTest: false,
           }));
-      this.scene.add(this.middle_cube_3d);
-      this.middle_cube_3d.render_3d = true;
+      //this.scene.add(this.middle_cube_3d);
+      //this.middle_cube_3d.render_3d = true;
 
       var inner_size = 9.2;
       var middle_size = 15.3;
@@ -316,9 +316,9 @@
       this.middle_cube.scale.set(middle_size, middle_size, middle_size);
       this.outer_cube.scale.set(outer_size, outer_size, outer_size);
 
-      //this.spin_cube.add(this.inner_cube);
-      //this.spin_cube.add(this.middle_cube);
-      //this.spin_cube.add(this.outer_cube);
+      this.spin_cube.add(this.inner_cube);
+      this.spin_cube.add(this.middle_cube);
+      this.spin_cube.add(this.outer_cube);
       this.spin_cube.position.set(0,0,0);
       this.scene.add(this.spin_cube);
 
@@ -544,7 +544,7 @@
         this.small_center_hex.scale.set(scale, scale, scale);
 
 
-        var scale2 = 1.5 + 1.95 * elasticOut(0, 1, 1.1, T(24 * 48, 24 * 48 + 9, frame));
+        var scale2 = 1.5 + 2.5 * elasticOut(0, 1, 1.1, T(24 * 48, 24 * 48 + 9, frame));
         this.center_circle.scale.set(scale2, scale2, scale2);
 
 
@@ -819,9 +819,9 @@
       this.ctx.scale(1 / 12, 1 / 12);
       this.draw(this.scene, 'fill');
       this.draw(this.scene, 'stroke');
-      if(BEAN >= 1200 && BEAN < 1248 + 9) {
+      /*if(BEAN >= 1200 && BEAN < 1248 + 9) {
         this.draw3d(this.middle_cube_3d);
-      }
+      }*/
       if(BEAN >= 1344) {
         this.draw3d(this.ico);
       }
