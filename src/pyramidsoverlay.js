@@ -25,8 +25,17 @@
     update(frame) {
       this.snareThrob *= 0.95;
       this.frame = frame;
-      if(BEAT && BEAN % 48 == 24) {
-        this.snareThrob = 1;
+      if(BEAT) {
+        switch(BEAN) {
+        case 2208:
+        case 2232:
+        case 2280:
+        case 2328:
+        case 2400:
+        case 2424:
+        case 2472:
+          this.snareThrob = 1;
+        }
       }
     }
 

@@ -773,7 +773,6 @@
         this.camera.rotation.z += this.cameraShakeRotation.z;
         this.cameraLight.position.copy(this.camera.position);
       }
-      demo.nm.nodes.bloom.opacity = 2;
     }
 
     render(renderer) {
