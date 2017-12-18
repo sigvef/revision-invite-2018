@@ -744,16 +744,33 @@
       }
 
       if (frame >= FRAME_FOR_BEAN(27.5 * 48)) {
-        this.ico.position.set(0, 0, 0);
+        this.ico.position.set(200, 0, 0);
         this.ico_container.rotation.set(0, frame / 50, 0);
 
         for(var i = 0; i < 20; i++)
         {
+          this.slam_icos[i].scale.set(23.5, 23.5, 23.5);
           this.slam_icos[i].position.set(0, 0, 0);
           var slam_progress = asmoothstep(FRAME_FOR_BEAN(28 * 48 + i * 2), FRAME_FOR_BEAN(12), frame);
           slam_progress = elasticOut(0, 1, 1, slam_progress);
           var direction = (i % 2) * 2 - 1
           this.slam_ico_containers[i].position.set((120 - slam_progress * 120) * direction, 0, 0);
+          this.slam_ico_containers[i].rotation.set(0, frame / 50, 0);
+        }
+      }
+
+      if (frame >= FRAME_FOR_BEAN(29 * 48)) {
+
+        for(var i = 0; i < 20; i++)
+        {
+          this.slam_icos[i].position.set(0, 0, 0);
+          var scale = 23.5;
+          var slam_progress = asmoothstep(FRAME_FOR_BEAN(29 * 48), FRAME_FOR_BEAN(12), frame);
+          slam_progress = elasticOut(0, 1, 1, slam_progress);
+          slam_progress = slam_progress * 10  + scale;
+          this.slam_icos[i].scale.set(slam_progress, slam_progress, slam_progress);
+          var direction = (i % 2) * 2 - 1
+          //this.slam_ico_containers[i].position.set((120 - slam_progress * 120) * direction, 0, 0);
           this.slam_ico_containers[i].rotation.set(0, frame / 50, 0);
         }
       }
