@@ -330,7 +330,7 @@
       //var ico_material = new THREE.MeshBasicMaterial({color: 0x999999});
       var ico_material = this.transparentMaterial;
       var central_ico_geometry = new THREE.IcosahedronGeometry(1, 0);
-      central_ico_geometry.faces.splice(0,19);
+      central_ico_geometry.faces.splice(0,20);
       this.ico = new THREE.Mesh(central_ico_geometry, ico_material);
       this.ico.render_3d = true;
       this.ico.rotation.set(1.015, 0, 0);
@@ -353,12 +353,11 @@
         this.slam_icos.push(new THREE.Mesh(slam_ico_geometry, ico_material));
         this.slam_icos[i].render_3d = true;
         this.slam_icos[i].rotation.set(1.015, 0, 0);
-        this.slam_icos[i].position.set(Math.sin(i) * 70, Math.cos(i) * 30, 0);
-        var scale = 23.5 - 10 + i;
+        //this.slam_icos[i].position.set(Math.sin(i) * 70, Math.cos(i) * 30, 0);
+        var scale = 23.5;
         this.slam_icos[i].scale.set(scale, scale, scale);
         this.slam_ico_containers.push(new THREE.Object3D());
         this.slam_ico_containers[i].add(this.slam_icos[i]);
-        //this.slam_ico_containers[i].position.set(i,0,0);
         this.scene.add(this.slam_ico_containers[i]);
       }
 
@@ -751,6 +750,10 @@
         for(var i = 0; i < 20; i++)
         {
           this.slam_icos[i].position.set(0, 0, 0);
+          var slam_progress = asmoothstep(FRAME_FOR_BEAN(28 * 48 + i * 2), FRAME_FOR_BEAN(12), frame);
+          slam_progress = elasticOut(0, 1, 1, slam_progress);
+          var direction = (i % 2) * 2 - 1
+          this.slam_ico_containers[i].position.set((120 - slam_progress * 120) * direction, 0, 0);
           this.slam_ico_containers[i].rotation.set(0, frame / 50, 0);
         }
       }
