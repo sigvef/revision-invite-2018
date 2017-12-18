@@ -12,9 +12,10 @@
       this.camera.updateProjectionMatrix();
 
       this.random = new Random(0x80deed); // eslint-disable-line
+      this.colorRandom = new Random(0xcafebabe);
 
       this.whiteColor = 0xffffff;
-      this.grayColor = 0x373c3f;
+      this.grayColor = 0x400040;
       this.greenColor = 0x77e15d;
       this.pinkColor = 0xff4982;
 
@@ -27,18 +28,25 @@
       this.NUM_TENTACLES = 30;
       this.NUM_PARTICLES = 200;
 
+      this.circle = new THREE.Mesh(
+        new THREE.SphereGeometry(7, 32, 32),
+        new THREE.MeshBasicMaterial({color: 0xffffff})
+      );
+      this.scene.add(this.circle);
+
       this.particleStartPos = [];
-      let particleGeometry = new THREE.Geometry();
+      this.particleGeometry = new THREE.Geometry();
       for(let i = 0; i < this.NUM_PARTICLES; i++) {
-        let color = new THREE.Color(this.random() > 0.5 ? this.pinkColor : this.greenColor);
+        this.random();
+        let color = new THREE.Color(i % 2 ? this.pinkColor : this.greenColor);
 
         let px = this.random()*250 - 125;
         let py = this.random()*250 - 125;
         let pz = Math.min(50, this.random()*200 - 100);
         let particlePos = new THREE.Vector3(px, py, pz);
-        particleGeometry.vertices.push(particlePos);
+        this.particleGeometry.vertices.push(particlePos);
         this.particleStartPos.push(particlePos);
-        particleGeometry.colors.push(color);
+        this.particleGeometry.colors.push(color);
       }
 
       let particleTexture = new THREE.CanvasTexture(this.generateParticleSprite());
@@ -49,11 +57,11 @@
         depthTest: true,
         depthWrite: false,
         transparent: true,
-        opacity: 0.4,
+        opacity: 1,
         vertexColors: true
       });
 
-      this.particleSystem = new THREE.Points(particleGeometry, particleMaterial);
+      this.particleSystem = new THREE.Points(this.particleGeometry, particleMaterial);
       this.scene.add(this.particleSystem);
 
       this.group = new THREE.Group();
@@ -367,6 +375,7 @@
         }
 
         tentacle.geometry.attributes.position.needsUpdate = true;
+
       }
 
       if(BEAN > 2784) {
@@ -377,6 +386,51 @@
         this.camera.position.copy(this.getPoint(this.cameraPositionPath, frame));
         this.camera.quaternion.copy(this.getPoint(this.cameraQuaternionPath, frame));
       }
+      this.throb *= 0.95;
+      if (BEAN >= 58 * 48) {
+        if (BEAT && BEAN % 12 == 0) {
+          this.throb = 1;
+        }
+      }
+
+      if (BEAT) {
+        switch (BEAN) {
+        case 2736:
+        case 2736 + 9:
+        case 2736 + 18:
+        case 2736 + 22:
+        case 2736 + 24:
+        case 2736 + 30:
+        case 2736 + 33:
+          this.throb = 0.5;
+          for (let i = 0; i < 50; i++) {
+            const index = (this.colorRandom() * this.particleGeometry.colors.length) | 0;
+            this.particleGeometry.colors[index].r = 1;
+            this.particleGeometry.colors[index].g = 1;
+            this.particleGeometry.colors[index].b = 1;
+          }
+        }
+      }
+      for (const [index, color] of this.particleGeometry.colors.entries()) {
+        if (index % 2) {
+          color.r = lerp(color.r, 0.4 * 119 / 255, 0.1);
+          color.g = lerp(color.g, 0.4 * 225 / 255, 0.1);
+          color.b = lerp(color.b, 0.4 * 93 / 255, 0.1);
+        } else {
+          color.r = lerp(color.r, 0.4 * 255 / 255, 0.1);
+          color.g = lerp(color.g, 0.4 * 73 / 255, 0.1);
+          color.b = lerp(color.b, 0.4 * 130 / 255, 0.1);
+        }
+      }
+      this.particleGeometry.colorsNeedUpdate = true;
+      this.particleGeometry.verticesNeedUpdate = true;
+
+      this.circle.scale.set(1 + 0.5 * this.throb, 1 + 0.5 * this.throb, 1 + 0.5 * this.throb);
+      this.circle.material.color = new THREE.Color(
+        lerp(119 / 255, 1, 0.2 + 0.5 * this.throb),
+        lerp(225 / 255, 1, 0.2 + 0.5 * this.throb),
+        lerp(93 / 255, 1, 0.2 + 0.5 * this.throb)
+      );
     }
 
     render(renderer) {
@@ -400,8 +454,8 @@
         canvas.width / 2
       );
       gradient.addColorStop(0, 'rgba(255,255,255,1)');
-      gradient.addColorStop(0.2, 'rgba(0,255,255,1)');
-      gradient.addColorStop(0.4, 'rgba(64,0,0,1)');
+      gradient.addColorStop(0.2, 'rgba(255,255,255,1)');
+      gradient.addColorStop(0.4, 'rgba(64,64,64,1)');
       gradient.addColorStop(1, 'rgba(0,0,0,1)');
 
       context.fillStyle = gradient;
