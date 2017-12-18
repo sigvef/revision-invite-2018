@@ -12,6 +12,10 @@
       this.uniforms.t.value = lerp(0, 1, (frame - FRAME_FOR_BEAN(21 * 48 + 42)) / 11);
       this.uniforms.A.value = this.inputs.A.getValue();
       this.uniforms.B.value = this.inputs.B.getValue();
+
+      if(frame < 2739){ //Force AtariRace bloom
+          demo.nm.nodes.bloom.opacity = 0.5;
+      }
     }
   }
 
