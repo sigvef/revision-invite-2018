@@ -392,7 +392,7 @@
 
         this.ball.position.x = 0;
         this.ball.position.y = 0;
-        this.ball.position.z = lerp(-70, -79, progress / 2);
+        this.ball.position.z = lerp(-70, -79, progress / 2 + easeIn(0, 0.5, Math.pow(progress, 6)));
         this.ball.rotation.x = lerp(2, 0, progress);
         this.ball.rotation.y = lerp(2, 0, progress);
         demo.nm.nodes.bloom.opacity = 0.5 + 1.5 * (1 - (progress * progress));
@@ -588,8 +588,7 @@
 
       const startFrame = FRAME_FOR_BEAN(3072);
       const endFrame = FRAME_FOR_BEAN(3120);
-      const progress = (frame - startFrame) / (endFrame - startFrame) / 2;
-
+      const progress = (frame - startFrame) / (endFrame - startFrame) / 2 + easeIn(0, 0.5, Math.pow((frame - startFrame) / (endFrame - startFrame), 4));
       this.camera.fov = 45;
       this.camera.updateProjectionMatrix();
       this.camera.position.set(
@@ -1034,7 +1033,7 @@
       renderer.setClearColor(new THREE.Color(
             lerp(55 / 255, 1, this.throb * 0.4),
             lerp(60 / 255, 1, this.throb * 0.4),
-            lerp(63 / 255, 1, this.throb * 0.4),
+            lerp(63 / 255, 1, this.throb * 0.4)
             ));
       this.ps.render();
       renderer.render(this.scene, this.camera, this.renderTarget, true);
