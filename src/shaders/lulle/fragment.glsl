@@ -3,6 +3,8 @@ uniform float BEAN;
 uniform float BEAT;
 uniform float numOfBalls;
 uniform sampler2D tDiffuse;
+uniform vec3 cameraDirection;
+uniform vec3 myCameraPosition;
 
 #define PI 3.1415926535897932384626433832795
 
@@ -176,7 +178,7 @@ void main() {
         eyez = mix(95., 1., clamp((frame - 5729.) / (5750. - 5728.), 0.0, 1.0));
     }
 
-    vec3 eye = vec3(0.0, 0.0, eyez);
+    vec3 eye = myCameraPosition;
     vec3 dir = rayDir(60.0, vUv);
 
     vec2 res = march(eye, dir, START, END);
@@ -186,7 +188,7 @@ void main() {
         color = background((vUv + vec2(-.5, frame / 800.)) * (1. + (frame - 4726.) / 1000.)).xyz;
     } else {
         vec3 p = eye + dir * res.x;
-        color = mix(WHITE, WHITE, res.y - 1.);
+        color = vec3(0.75);
         color = phongIllumination(color, color, normalize(vec3(1.0, 1.0, 1.0)), 10.0, p, eye);
     }
 
