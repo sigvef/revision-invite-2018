@@ -33,15 +33,15 @@
       this.ctx.textBaseline = 'middle';
 
       const x = 0;
-      const y = -0.1;
+      const y = -0.18;
       if (BEAN >= 84 * 48 + 4) {
         //Show nothing
-      } else if (BEAN >= 3960 + 48 + 12 + 9) {
+      } else if (BEAN >= 3960 + 48 + 12 + 10) {
         this.ctx.fillStyle = 'rgb(55, 60, 63)';
         this.ctx.fillText('GERMANY', x + 0.1, y + 0.1);
         this.ctx.fillStyle = 'rgb(255, 73, 130)';
         this.ctx.fillText('GERMANY', x, y);
-      } else if (BEAN >= 3960 + 48 + 12 + 5) {
+      } else if (BEAN >= 3960 + 48 + 12 + 4) {
         this.ctx.fillStyle = 'rgb(55, 60, 63)';
         this.ctx.fillText('GERMA', x + 0.1, y + 0.1);
         this.ctx.fillStyle = 'rgb(255, 73, 130)';
@@ -51,28 +51,50 @@
         this.ctx.fillText('GER', x + 0.1, y + 0.1);
         this.ctx.fillStyle = 'rgb(255, 73, 130)';
         this.ctx.fillText('GER', x, y);
-      } else if (BEAN >= 3960 + 24 + 18 + 6 + 3) {
+      } else if (BEAN >= 3960 + 48 + 4) {
         this.ctx.font = 'bold 0.8pt schmalibre';
         this.ctx.fillStyle = 'rgb(55, 60, 63)';
         this.ctx.fillText('SAARBRÜCKEN', x + 0.1, y + 0.1);
         this.ctx.fillStyle = 'rgb(255, 73, 130)';
         this.ctx.fillText('SAARBRÜCKEN', x, y);
         this.ctx.fillStyle = 'rgb(55, 60, 63)';
-      } else if (BEAN >= 3960 + 24 + 18 + 6) {
+      } else if (BEAN >= 3960 + 48) {
         this.ctx.font = 'bold 0.8pt schmalibre';
         this.ctx.fillStyle = 'rgb(55, 60, 63)';
         this.ctx.fillText('SAARBRÜCK', x + 0.1, y + 0.1);
         this.ctx.fillStyle = 'rgb(255, 73, 130)';
         this.ctx.fillText('SAARBRÜCK', x, y);
         this.ctx.fillStyle = 'rgb(55, 60, 63)';
-      } else if (BEAN >= 3960 + 24 + 18) {
+        this.ctx.fillStyle = 'rgb(55, 60, 63)';
+      } else if (BEAN >= 3960 + 24 + 12 + 10) {
         this.ctx.font = 'bold 0.8pt schmalibre';
         this.ctx.fillStyle = 'rgb(55, 60, 63)';
         this.ctx.fillText('SAAR', x + 0.1, y + 0.1);
         this.ctx.fillStyle = 'rgb(255, 73, 130)';
         this.ctx.fillText('SAAR', x, y);
         this.ctx.fillStyle = 'rgb(55, 60, 63)';
-      } else if (BEAN >= 3960 + 24 + 6 + 3) {
+      } else if (BEAN >= 3960 + 24 + 12 + 8) {
+        this.ctx.font = 'bold 0.8pt schmalibre';
+        this.ctx.fillStyle = 'rgb(55, 60, 63)';
+        this.ctx.fillText('SAA', x + 0.1, y + 0.1);
+        this.ctx.fillStyle = 'rgb(255, 73, 130)';
+        this.ctx.fillText('SAA', x, y);
+        this.ctx.fillStyle = 'rgb(55, 60, 63)';
+      } else if (BEAN >= 3960 + 24 + 12 + 6) {
+        this.ctx.font = 'bold 0.8pt schmalibre';
+        this.ctx.fillStyle = 'rgb(55, 60, 63)';
+        this.ctx.fillText('SA', x + 0.1, y + 0.1);
+        this.ctx.fillStyle = 'rgb(255, 73, 130)';
+        this.ctx.fillText('SA', x, y);
+        this.ctx.fillStyle = 'rgb(55, 60, 63)';
+      } else if (BEAN >= 3960 + 24 + 12 + 4) {
+        this.ctx.font = 'bold 0.8pt schmalibre';
+        this.ctx.fillStyle = 'rgb(55, 60, 63)';
+        this.ctx.fillText('S', x + 0.1, y + 0.1);
+        this.ctx.fillStyle = 'rgb(255, 73, 130)';
+        this.ctx.fillText('S', x, y);
+        this.ctx.fillStyle = 'rgb(55, 60, 63)';
+      } else if (BEAN >= 3960 + 24 + 6 + 4) {
         this.ctx.font = 'bold 0.8pt schmalibre';
         this.ctx.fillStyle = 'rgb(55, 60, 63)';
         this.ctx.fillText('EASTER 2018', x + 0.1, y + 0.1);
