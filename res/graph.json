@@ -396,7 +396,7 @@
     "type": "tree",
     "connected": {
       "globeTextures": "globetextures.globeTextures",
-      "bg": "tarblurx.render"
+      "bg": "tartarstuff.render"
     },
     "options": {
       "shader": "tartan"

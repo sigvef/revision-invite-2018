@@ -18,13 +18,15 @@ void main() {
 
     float fadeIn = clamp(t / 2., 0., 1.);
 
-    vec2 mod_uv = mod(vUv / 2. + vec2(frame / 8000., frame / 12000.), 0.05);
+    vec2 mod_uv = mod(vUv / 5. + 0. * vec2(frame / 8000., frame / 12000.), 0.05);
     vec4 color = mix(pink, vec4(1., 1., 1., 1.), fadeIn * .6 * step(mod_uv.x, .01));
     color = mix(color, vec4(1., 1., 1., 1.), fadeIn * .6 * step(mod_uv.y, .01));
-    vec2 small_stripe_vUv = rotate(vUv, M_PI / 4.) + vec2(frame / 8000., frame / 12000.);
-    vec2 mod_uv2 = mod(small_stripe_vUv / 2., 0.05);
+    vec2 small_stripe_vUv = rotate(vUv / 2., M_PI / 4.) + 0. * vec2(frame / 8000., frame / 12000.);
+    vec2 mod_uv2 = mod(small_stripe_vUv / 5., 0.05);
     color = mix(color, green, fadeIn * .5 * step(mod_uv2.x, .003));
     color = mix(color, green, fadeIn * .5 * step(mod_uv2.y, .003));
+
+    color *= .9;
 
     gl_FragColor = vec4(color);
 }

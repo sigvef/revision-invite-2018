@@ -11,7 +11,7 @@
           bg: new NIN.TextureInput(),
         }
       });
-      this.ps = new ParticleSystem({
+      this.ps = new global.ParticleSystem({
         color: new THREE.Color(1, 1, 1),
         decayFactor: 0.999,
         gravity: 0,
@@ -264,7 +264,15 @@
       this.ps.update();
 
       this.background.material.map = this.inputs.bg.getValue();
-      this.background.needsUpdate = true;
+      if(this.background.material.map) {
+        this.background.material.map.needsUpdate = true;
+        this.background.material.needsUpdate = true;
+        this.background.material.needsUpdate = true;
+      }
+      this.background.rotation.z = Math.PI / 4;
+
+      this.background.position.x = 200;
+      this.background.position.y = -350;
 
       const scale = lerp(0.0001, 1, (frame - FRAME_FOR_BEAN(84 * 48 + 18)) / 6);
       this.root.scale.set(scale, scale, scale);
