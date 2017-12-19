@@ -169,16 +169,14 @@ vec4 background(vec2 uv) {
 }
 
 void main() {
-    float eyez = 20.;
-
+    vec3 eye = myCameraPosition;
     if (BEAN > 2040.) {
-        eyez = min((BEAN - 2000.)/2., 95.); 
+        eye.z = min((BEAN - 2000.)/2., 95.);
     }
     if (frame > 5728.) {
-        eyez = mix(95., 1., clamp((frame - 5729.) / (5750. - 5728.), 0.0, 1.0));
+        eye.z = mix(95., 1., clamp((frame - 5729.) / (5750. - 5728.), 0.0, 1.0));
     }
 
-    vec3 eye = myCameraPosition;
     vec3 dir = rayDir(60.0, vUv);
 
     vec2 res = march(eye, dir, START, END);
