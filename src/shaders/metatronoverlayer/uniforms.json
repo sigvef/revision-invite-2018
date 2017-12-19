@@ -1,0 +1,7 @@
+{
+    "tDiffuse": { "type": "t", "value": null },
+    "overlay": { "type": "t", "value": null },
+    "frame": { "type": "f", "value": 0.0 },
+    "translationUnderX": { "type": "f", "value": 0.0 },
+    "translationOverX": { "type": "f", "value": 0.0 }
+}
