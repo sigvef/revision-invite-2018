@@ -8,8 +8,37 @@
         },
         inputs: {
           globeTextures: new NIN.TextureInput(),
+          bg: new NIN.TextureInput(),
         }
       });
+      this.ps = new ParticleSystem({
+        color: new THREE.Color(1, 1, 1),
+        decayFactor: 0.999,
+        gravity: 0,
+      });
+      this.scene.add(this.ps.particles);
+      this.ps.particles.material.depthTest = true;
+      this.ps.particles.material.depthWrite = false;
+      this.ps.particles.material.needsUpdate = true;
+      for(let i = 0; i < 10000; i++) {
+        const angle = Math.random() * Math.PI * 2;
+        const angle2 = Math.random() * Math.PI * 2;
+        const angle3 = Math.random() * Math.PI * 2;
+        const angle4 = Math.random() * Math.PI * 2;
+        const radius = Math.pow(Math.random(), 0.5) * 50;
+        const radius2 = Math.random() * 0.02;
+        this.ps.spawn({
+          x: Math.cos(angle) * radius,
+          y: Math.sin(angle) * radius,
+          z: Math.cos(angle2) * radius,
+        }, {
+          x: Math.cos(angle3) * radius2,
+          y: Math.sin(angle3) * radius2,
+          z: Math.cos(angle4) * radius2,
+        }, 0.01);
+      }
+
+      this.ps.particles.position.z = -50;
 
       const ambient = new THREE.AmbientLight(0xffffff);
       this.scene.add(ambient);
@@ -43,10 +72,10 @@
       this.scene.add(this.root);
 
       this.background = new THREE.Mesh(
-        new THREE.PlaneGeometry(120, 120, 1),
-        new THREE.ShaderMaterial(SHADERS.tartan)
+        new THREE.PlaneGeometry(12000, 12000, 1),
+        new THREE.MeshBasicMaterial()
       );
-      this.background.position.z = -5;
+      this.background.position.z = -1000;
       this.scene.add(this.background);
 
       this.balls = [
@@ -232,6 +261,11 @@
     update(frame) {
       demo.nm.nodes.bloom.opacity = 0;
 
+      this.ps.update();
+
+      this.background.material.map = this.inputs.bg.getValue();
+      this.background.needsUpdate = true;
+
       const scale = lerp(0.0001, 1, (frame - FRAME_FOR_BEAN(84 * 48 + 18)) / 6);
       this.root.scale.set(scale, scale, scale);
       /*
@@ -247,6 +281,7 @@
         if (BEAN < 84.5 * 48 + ball.middleBean - 4) {
           const startBEAN = 84.5 * 48 + ball.bean;
           const t = (frame - FRAME_FOR_BEAN(startBEAN) + 8) / 8;
+
 
           this.ballMeshes[index].position.set(
             easeIn(0, ball.x, t),
@@ -502,8 +537,8 @@
       this.camera.rotation.y += this.cameraShakeRotation.y;
       this.camera.rotation.z += this.cameraShakeRotation.z;
 
-      this.background.material.uniforms.frame.value = frame;
-      this.background.material.uniforms.t.value = (frame - FRAME_FOR_BEAN(84 * 48 + 18)) / 60;
+      //this.background.material.uniforms.frame.value = frame;
+      //this.background.material.uniforms.t.value = (frame - FRAME_FOR_BEAN(84 * 48 + 18)) / 60;
     }
 
     resize() {
@@ -515,6 +550,7 @@
     }
 
     render(renderer) {
+      this.ps.render();
       const offsetX = Math.sin(this.rotation) * 0.15;
       const offsetY = -Math.cos(this.rotation) * 0.15;
       for(let i = 0; i < this.ballMeshes.length; i++) {
