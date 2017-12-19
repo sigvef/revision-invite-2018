@@ -5,6 +5,8 @@
       options.inputs.bg = new NIN.TextureInput();
       super(id, options);
       this.balls = 0;
+
+      this.myCamera = new THREE.PerspectiveCamera(45, 16 / 9, 1, 1000);
     }
 
     update(frame) { 
@@ -51,6 +53,25 @@
         this.balls = 9999;
       }
       this.uniforms.numOfBalls.value = this.balls;
+
+      let cameraDirection = new THREE.Vector3(0, 0, 0);
+      this.myCamera.position.set(0, 0, 20);
+      if(BEAN >= 1992 + 12 + 10) {
+        this.myCamera.position.set(0, 0, 20);
+      } else if(BEAN >= 1992 + 12 + 4) {
+        this.myCamera.position.set(-1, 1, 15);
+      } else if(BEAN >= 1992 + 12) {
+        this.myCamera.position.set(1, 1, 15);
+      } else if(BEAN >= 1992 + 10) {
+        this.myCamera.position.set(-1, -1, 15);
+      } else if(BEAN >= 1992 + 4) {
+        this.myCamera.position.set(1, -1, 15);
+      } else if(BEAN >= 1992) {
+        this.myCamera.position.set(-1, 0, 15);
+      } 
+      
+      this.uniforms.cameraDirection.value = cameraDirection;
+      this.uniforms.myCameraPosition.value = this.myCamera.position;
     }
   }
 

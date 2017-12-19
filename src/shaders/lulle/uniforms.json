@@ -1,6 +1,8 @@
 {
     "tDiffuse": { "type": "t", "value": null },
     "frame": { "type": "f", "value": 0.0 },
+    "myCameraPosition": { "type": "v3", "value": null },
+    "cameraDirection": { "type": "v3", "value": null },
     "BEAT": { "type": "f", "value": 0.0 },
     "BEAN": { "type": "f", "value": 0.0 },
     "numOfBalls": { "type": "f", "value": 0.0 }

@@ -11,6 +11,7 @@
       Author: Iver
       */
 
+      this.bgThrob = 0;
       this.stabThrob = 0;
       this.throb = 0;
 
@@ -234,8 +235,35 @@
       this.stabThrob *= 0.95;
       this.throb *= 0.95;
 
-      if(BEAT && BEAN % 12 === 0) {
-        this.throb = 1;
+      if(BEAT) {
+        switch(BEAN) {
+        case 2976:
+        case 2976 + 12:
+        case 2976 + 12 * 2:
+        case 2976 + 12 * 3:
+        case 2976 + 12 * 4:
+        case 2976 + 12 * 5:
+        case 2976 + 12 * 6:
+        case 2976 + 12 * 7:
+        case 2976 + 12 * 8:
+        case 65 * 48:
+        case 65.25 * 48:
+        case 65.5 * 48:
+        case 65.75 * 48:
+        case 66 * 48:
+        case 66.25 * 48:
+        case 66.5 * 48:
+        case 66.75 * 48:
+        case 67 * 48:
+        case 67.25 * 48:
+        case 67.5 * 48:
+        case 67.75 * 48:
+        case 68 * 48:
+        case 68.25 * 48:
+        case 68.5 * 48:
+        case 68.75 * 48:
+          this.throb = 1;
+        }
       }
 
       this.beamMaterial.emissiveIntensity = this.throb;
@@ -333,7 +361,7 @@
         this.ball.position.z = 0;
         this.ball.rotation.x = frame / 40;
         this.ball.rotation.y = frame / 45;
-        const scale = 1 + this.stabThrob * 0.3;
+        const scale = 1 + this.throb * 0.5;
         this.ball.scale.x = scale;
         this.ball.scale.y = scale;
         this.ball.scale.z = scale;
@@ -364,9 +392,29 @@
 
         this.ball.position.x = 0;
         this.ball.position.y = 0;
-        this.ball.position.z = lerp(-70, -79, progress);
+        this.ball.position.z = lerp(-70, -79, progress / 2);
         this.ball.rotation.x = lerp(2, 0, progress);
         this.ball.rotation.y = lerp(2, 0, progress);
+        demo.nm.nodes.bloom.opacity = 0.5 + 1.5 * (1 - (progress * progress));
+
+        for(let i = 0; i < 100; i++) {
+          const angle = Math.random() * Math.PI * 2;
+          const angle2 = Math.random() * Math.PI * 2;
+          const radius = 2.5 * Math.random();
+          this.ps.spawn(
+            {
+              x: this.ball.position.x + Math.sin(angle) * radius,
+              y: this.ball.position.y + Math.cos(angle) * radius,
+              z: this.ball.position.z -1 + Math.sin(angle2) * radius + 2 * (1 - progress),
+            },
+            {
+              x: 0, 
+              y: 0,
+              z: (Math.random() - 0.2) * 0.1,
+            },
+            0.002
+          );
+        }
 
         const scale = 1;
         this.ball.scale.x = scale;
@@ -540,7 +588,7 @@
 
       const startFrame = FRAME_FOR_BEAN(3072);
       const endFrame = FRAME_FOR_BEAN(3120);
-      const progress = (frame - startFrame) / (endFrame - startFrame);
+      const progress = (frame - startFrame) / (endFrame - startFrame) / 2;
 
       this.camera.fov = 45;
       this.camera.updateProjectionMatrix();
@@ -576,8 +624,8 @@
             z: this.ball.position.z + Math.sin(angle2) * radius + 2 * (1 - progress),
           },
           {
-            x: Math.sin(velocityAngle2) * velocityRadius,
-            y: Math.sin(velocityAngle) * velocityRadius,
+            x: Math.sin(velocityAngle2) * velocityRadius * progress,
+            y: Math.sin(velocityAngle) * velocityRadius * progress,
             z: 0,
           },
           0.012
@@ -778,10 +826,11 @@
 
             if (BEAN >= this.impactBeans[0] && BEAN < 3168) {
               const timeSinceImpact = Math.abs(this.framesSinceImpact - 3 * distanceToCenter / GU) / 15;
-              const intensity = 3 * Math.max(
+              let intensity = 3 * Math.max(
                 0,
                 1 - Math.min(1, timeSinceImpact)
               );
+              intensity = lerp(0.5, intensity, intensity);
               this.ctx.fillStyle = R(255 * intensity, 73 * intensity, 130 * intensity);
             } else {
               this.ctx.fillStyle = R(255, 73, 130);
@@ -982,7 +1031,11 @@
     }
 
     render(renderer) {
-      renderer.setClearColor(new THREE.Color(0x373C3F));
+      renderer.setClearColor(new THREE.Color(
+            lerp(55 / 255, 1, this.throb * 0.4),
+            lerp(60 / 255, 1, this.throb * 0.4),
+            lerp(63 / 255, 1, this.throb * 0.4),
+            ));
       this.ps.render();
       renderer.render(this.scene, this.camera, this.renderTarget, true);
       this.outputs.render.setValue(this.renderTarget.texture);
