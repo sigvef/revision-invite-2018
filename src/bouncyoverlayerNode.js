@@ -21,8 +21,10 @@
 
       this.textCanvas = document.createElement('canvas');
       this.textCtx = this.textCanvas.getContext('2d');
-      
-      this.resize();
+
+      document.fonts.load('bold 1pt schmalibre').then(() => {
+        this.resize();
+      });
     }
 
     resize() {
