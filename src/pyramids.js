@@ -763,6 +763,21 @@
             0.7186581742798239
           );
         }
+        if (frame >= 6632) {
+          t = easeOut(0, 1, (frame - 6632) / (6767 - 6632));
+          position.set(
+            lerp(80.23663475501766, 87.4, t),
+            lerp(124.45170796782712,0.9, t),
+            lerp(57.94665184861699, 40.97, t)
+          );
+
+          quaternion.set(
+            -0.6942563169058162,
+            -0.02712347526530384,
+            0.02833570303862777,
+            0.7186581742798239
+          );
+        }
 
         this.camera.updateProjectionMatrix();
         this.cameraPreviousPosition.copy(this.camera.position);
