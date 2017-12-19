@@ -395,7 +395,8 @@
     "id": "tree",
     "type": "tree",
     "connected": {
-      "globeTextures": "globetextures.globeTextures"
+      "globeTextures": "globetextures.globeTextures",
+      "bg": "tartarstuff.render"
     },
     "options": {
       "shader": "tartan"
@@ -628,6 +629,33 @@
     },
     "connected": {
       "tDiffuse": "Metatron.render"
+    }
+  },
+  {
+    "id": "tartarstuff",
+    "type": "tartarstuffNode",
+    "options": {
+      "shader": "tartan"
+    }
+  },
+  {
+    "id": "tarblurx",
+    "type": "BlurPassNode",
+    "options": {
+      "direction": "x"
+    },
+    "connected": {
+      "tDiffuse": "tarblury.render"
+    }
+  },
+  {
+    "id": "tarblury",
+    "type": "BlurPassNode",
+    "options": {
+      "direction": "y"
+    },
+    "connected": {
+      "tDiffuse": "tartarstuff.render"
     }
   }
 ]
