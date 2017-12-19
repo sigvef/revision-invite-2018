@@ -117,6 +117,7 @@
 
         const t2 = lerp(0, 1, (this.frame - FRAME_FOR_BEAN(3864 + 9)) / (
             FRAME_FOR_BEAN(3864 + 24) - FRAME_FOR_BEAN(3864 + 9)));
+      //this.cube.position.x = easeIn(0.9, 1.8, t2);
         this.cube.rotation.x += easeOut(0, Math.PI, t2);
         this.cube.rotation.z += easeOut(0, Math.PI, t2);
 
@@ -135,9 +136,12 @@
           1, 0, t * 4);
       }
 
+      const t2 = lerp(0, 1, (this.frame - FRAME_FOR_BEAN(3864 + 9)) / (
+          FRAME_FOR_BEAN(3864 + 24) - FRAME_FOR_BEAN(3864 + 9)));
+      this.cube.position.x = easeIn(0.9, 1.8, t2);
       const t3 = lerp(0, 1, (this.frame - FRAME_FOR_BEAN(3912 - 6)) / (
           FRAME_FOR_BEAN(3912) - FRAME_FOR_BEAN(3912 - 6)));
-      this.cube.position.x = easeIn(.9, -3.3, t3);
+      this.cube.position.x = easeIn(this.cube.position.x, -3.3, t3);
       this.cube.position.y = easeIn(.18, 0, t3);
       const scaleX = this.cube.scale.x * easeIn(1, 0.75, clamp(0, t3, 1));
       const scaleY = this.cube.scale.y * easeIn(1, 0.75, clamp(0, t3, 1));
