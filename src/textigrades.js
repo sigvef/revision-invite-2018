@@ -142,7 +142,7 @@
         this.ctx.fillText('REVISION', 0, -0.25);
       } else if (BEAN >= 3912) {
         this.ctx.textAlign = 'center';
-        this.ctx.fillText('NO LIMIT', 0, 0);
+        this.ctx.fillText('NO LIMIT', 0, -0.19);
       } else if (BEAN >= 3888) {
         const inT = lerp(0, 1, (frame - FRAME_FOR_BEAN(3888)) / (
           FRAME_FOR_BEAN(3888 + 3) - FRAME_FOR_BEAN(3888)));
@@ -152,7 +152,7 @@
         this.ctx.fillText(
           word.slice(0, lerp(0, word.length, inT - outT)),
           -7,
-          0);
+          -.19);
       } else if (BEAN >= 3864) {
         const inT = lerp(0, 1, (frame - FRAME_FOR_BEAN(3864)) / (
           FRAME_FOR_BEAN(3864 + 3) - FRAME_FOR_BEAN(3864)));
@@ -162,7 +162,7 @@
         this.ctx.fillText(
           word.slice(0, lerp(0, word.length, inT - outT)),
           -7,
-          0);
+          -0.19);
       }
 
       this.ctx.restore();
