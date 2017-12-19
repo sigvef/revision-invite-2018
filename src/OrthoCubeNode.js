@@ -30,7 +30,7 @@
 
             //Pre-scene
             if(beat < 0.0){ //Pre-scene (begins at 208)
-                cubeSize = elasticOut(0, 2.1, 1.0, clamp(0, (beat + 1.0)/1.0, 1));
+                cubeSize = elasticOut(0, 2.1, 1.0, clamp(0, (beat + 2 / 12 + 1.0)/1.0, 1));
             }
 
 
