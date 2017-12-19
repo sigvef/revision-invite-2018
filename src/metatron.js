@@ -759,6 +759,12 @@
         }
       }
 
+      if (frame >= FRAME_FOR_BEAN(28 * 48 )){
+        this.middle_center_hex.overrideColor ='rgb(255,73,130)';// 0xff4982;
+      }else{
+        this.middle_center_hex.overrideColor = 'white'; //stateless, yo!
+      }
+
       if (frame >= FRAME_FOR_BEAN(29 * 48)) {
 
         for(var i = 0; i < 20; i++)
@@ -850,6 +856,9 @@
         if(child.lineWidth) {
           this.ctx.lineWidth = child.lineWidth;
         }
+        if(child.overrideColor){
+          this.ctx.strokeStyle = child.overrideColor;
+        }
         if(child.skipOverlayDrawing) {
           return;
         }
@@ -875,6 +884,7 @@
         }
         if(method == 'stroke') {
           this.ctx.stroke();
+          this.ctx.strokeStyle = 'white'; //reset colour
         } else {
           this.ctx.fill();
         }
