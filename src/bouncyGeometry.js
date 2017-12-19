@@ -63,7 +63,7 @@
         [[0, 360]],
         [], // innermost
       ];
-      this.hexagonRows = [
+      this.revisionCircleSegments = [
         [[2, 24], [24, 48], [48, 61], [-1, -1], [-2, -2], [-2, -2], [-2, -2], [-2, -2], [-3, -3], [225, 233], [-3, -3], [-3, -3], [-4, -4], [-4, -4], [-4, -4],],
         [[0, 24], [24, 48], [48, 72], [72, 96], [96, 120], [120, 144], [144, 168], [168, 192], [192, 216], [216, 240], [240, 264], [264, 288], [288, 312], [312, 336], [336, 360],],
         [[-1, -1], [-1, -1], [62, 73], [-1, -1], [91, 115], [-2, -2], [-2, -2], [173, 192], [192, 216], [216, 234], [-3, -3], [261, 288], [-4, -4], [314, 326], [343, 360],],
@@ -915,10 +915,18 @@
 
               if (xStart > circleCenterX) {
                 const overshoot = (xStart - circleCenterX) / GU;
-                const phiStart = Math.min(1, 0.6 + 0.75 * angleAnimationProgress - 0.1 * y * (1 - 0.65 * angleAnimationProgress)) * overshoot - Math.PI / 2;  // TODO: normalize to one exact fraction of the circle
+                // TODO: normalize to one exact fraction of the circle
+                const phiStart = Math.min(
+                  1,
+                  0.6 + 0.75 * angleAnimationProgress - 0.1 * y * (1 - 0.65 * angleAnimationProgress)
+                ) * overshoot - Math.PI / 2;
 
                 xStart = circleCenterX + circleRadius * Math.cos(phiStart);
                 yStart = circleCenterY + circleRadius * Math.sin(phiStart);
+                if (this.revisionCircleSegments[y][x][0] < 0) {
+                  // WIP
+                  continue;
+                }
               }
             }
 
