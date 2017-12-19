@@ -8,7 +8,7 @@
     }
 
     update(frame) {
-      this.uniforms.t.value = clamp(0, (frame - FRAME_FOR_BEAN(93 * 12 * 4 + 24)) / 50, 1);
+      this.uniforms.t.value = clamp(0, (frame - FRAME_FOR_BEAN(94 * 12 * 4 + 24)) / 50, 1);
       this.uniforms.A.value = this.inputs.A.getValue();
     }
   }

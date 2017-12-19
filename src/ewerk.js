@@ -460,8 +460,9 @@
         const localT = (frame - frame13) / 10;
         this.camera.position.set(
           lerp(lerp(0, 0, localT), 0, localT / 60),
-          lerp(lerp(400, 1200, localT), 2000, localT / 60),
-          lerp(lerp(100, 200, localT), 200, localT / 60));
+          lerp(lerp(400, 1200, localT), 1700, Math.tanh(localT / 22)),
+          lerp(lerp(100, 200, localT), 200, localT / 60)
+        );
         const scale = easeIn(2.2, 1.7, (frame - frame13 + 40) / 40);
         this.globeContainer.scale.set(scale, scale, scale);
         this.globeContainer.rotation.y = 3.4 - frame / 1000;
