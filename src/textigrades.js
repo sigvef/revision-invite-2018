@@ -117,7 +117,7 @@
         this.ctx.scale(3, 3);
         this.ctx.translate((Math.random() - 0.5) * 0.2,
           (Math.random() - 0.5) * 0.2);
-        this.ctx.fillText('REVISION', 0, -0.1);
+        this.ctx.fillText('REVISION', 0, -0.25);
       } else if (BEAN >= 3912) {
         this.ctx.textAlign = 'center';
         this.ctx.fillText('NO LIMIT', 0, 0);
