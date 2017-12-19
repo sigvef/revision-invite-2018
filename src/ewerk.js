@@ -237,6 +237,13 @@
         this.globeDetail.material.map = globeTextures.mapDetail;
         this.cloudGlobeDetail.material.alphaMap = globeTextures.cloudMapDetail;
         this.cloudGlobeDetail.material.roughnessMap = globeTextures.cloudMapDetail;
+
+        //Set anisotropy to avoid blurry globe
+        let maxAnisotropy = demo.renderer.getMaxAnisotropy();
+        this.globe.material.map.anisotropy = maxAnisotropy;
+        this.globeDetail.material.map.anisotropy = maxAnisotropy;
+
+
         //this.skybox.material = globeTextures.skyboxMaterial;
       }
       const frame1 = FRAME_FOR_BEAN(1 * 12 * 4);
