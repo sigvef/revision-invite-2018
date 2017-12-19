@@ -34,7 +34,7 @@
       this.ctx.fillStyle = 'rgb(55, 60, 63)';
       //this.ctx.fillRect(0, 800, 1920, 1000);
       if(BEAN < 1000) {
-        this.ctx.drawImage(this.beforeImage, 0, easeIn(20, -5, t));
+        this.ctx.drawImage(this.beforeImage, 0, easeIn(20, -20, t));
       } else {
         this.ctx.drawImage(this.afterImage, 0, easeOut(100, -40, t));
       }
