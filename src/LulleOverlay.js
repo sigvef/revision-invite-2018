@@ -38,12 +38,12 @@
       this.ctx.save();
       this.ctx.scale(GU, GU);
 
-      const t = timer(1873 - 12, 1873, frame);
-      const t2 = timer(1969 - 12, 1969, frame);
+      const t = timer(1945 - 12, 1945, frame);
+      const t2 = timer(2041 - 12, 2041, frame);
       const leftOffset = easeIn(easeIn(-2, 0, t), -2, t2);
 
-      const t3 = timer(1969 - 12, 1969, frame);
-      const t4 = timer(2066 - 12, 2066, frame);
+      const t3 = timer(2041 - 9, 2041, frame);
+      const t4 = timer(2139 - 9, 2139, frame);
       const rightOffset = easeIn(easeIn(2, 0, t3), 2, t4);
 
       this.ctx.fillStyle = 'rgba(255,255,255,1.0)';
