@@ -26,7 +26,7 @@
       this.camera.position.z = 200;
 
       this.NUM_TENTACLES = 30;
-      this.NUM_PARTICLES = 200;
+      this.NUM_PARTICLES = 300;
 
       this.circle = new THREE.Mesh(
         new THREE.SphereGeometry(7, 32, 32),
