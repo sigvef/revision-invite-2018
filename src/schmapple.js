@@ -173,7 +173,7 @@
 
       this.random = new Random(1337); //eslint-disable-line
 
-      document.fonts.load('40pt brandontext').then(() => {
+      document.fonts.load('bold 40pt schmalibre').then(() => {
         for (let i = 0; i < this.texts.length; i++) {
           const row = this.texts[i];
           row.offset = this.random() * 20;
@@ -189,13 +189,13 @@
             const canvas = document.createElement('canvas');
             const ctx = canvas.getContext('2d');
             const colorCtx = colorCanvas.getContext('2d');
-            ctx.font = '40pt brandontext';
+            ctx.font = 'bold 40pt schmalibre';
             const measurement = ctx.measureText(sentence.text);
             canvas.width = measurement.width;
             canvas.height = TEXT_IMAGE_HEIGHT;
             colorCanvas.width = measurement.width;
             colorCanvas.height = TEXT_IMAGE_HEIGHT;
-            colorCtx.font = ctx.font = '40pt brandontext';
+            colorCtx.font = ctx.font = 'bold 40pt schmalibre';
             colorCtx.textBaseline = ctx.textBaseline = 'middle';
             colorCtx.textAlign = ctx.textAlign = 'center';
             ctx.clearRect(0, 0, canvas.width, canvas.height);
