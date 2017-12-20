@@ -621,7 +621,7 @@
         this.center_line3.position.set(0, 0, 0);
       }
       if (frame >= FRAME_FOR_BEAN(26 * 48 - 3)) {
-        var start = 26.25;
+        var start = 26.5;
         // Distance from main center to center of the level 1 hexes.
         var distance3 = 10 + 5 * easeIn(0, 1, T(start * 48 - 3, start * 48, frame));
         var distance2 = 10 + 5 * easeIn(0, 1, T(start * 48 + 6 -3, start * 48 + 6, frame));
@@ -632,9 +632,9 @@
 
         this.three_point_star.position.set(0, 0, 0);
 
-        this.three_point_star.children[0].geometry.vertices[1].x = -(distance2 - 10) * r32;
-        this.three_point_star.children[0].geometry.vertices[1].y = (distance2 - 10) / 2;
-        this.three_point_star.children[0].geometry.vertices[3].y = -(distance3 - 10);
+        this.three_point_star.children[0].geometry.vertices[1].x = -(distance3 - 10) * r32;
+        this.three_point_star.children[0].geometry.vertices[1].y = (distance3 - 10) / 2;
+        this.three_point_star.children[0].geometry.vertices[3].y = -(distance2 - 10);
         this.three_point_star.children[0].geometry.vertices[5].x = (distance1 - 10) * r32;
         this.three_point_star.children[0].geometry.vertices[5].y = (distance1 - 10) / 2;
 
@@ -643,7 +643,7 @@
 
         // Scale of the level 1 hexes.
         var scale3 = 1 + 0.5 * easeIn(0, 1, T(start * 48 + 24 -3, start * 48 + 24, frame));
-        const scale2 = 1 + 0.5 * easeIn(0, 1, T(start * 48 + 24 + 9 -3, start * 48 + 24 + 9, frame));
+        const scale2 = 1 + 0.5 * easeIn(0, 1, T(26 * 48 + 24 + 9 -3, start * 48 + 24 + 9, frame));
         var scale1 = 1 + 0.5 * easeIn(0, 1, T(start * 48 + 24 + 18 -3, start * 48 + 24 + 18, frame));
         this.level1_hex1.scale.set(scale1, scale1, scale1);
         this.level1_hex2.scale.set(scale2, scale2, scale2);
