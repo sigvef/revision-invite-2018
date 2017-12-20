@@ -911,14 +911,14 @@
       this.ctx.fillStyle = 'rgb(55, 60, 63)';
       const t3 = T(1320 - 6, 1320, this.frame);
       if(BEAN >= 1272) {
-        this.ctx.fillText('NO', easeOut(0, 6, t3) + 2 * 16 / 3, 3.75);
+        this.ctx.fillText('NO', easeOut(0, 7, t3) + 2 * 16 / 3 - 0.75, 3.75);
       }
       if(BEAN >= 1272 + 18) {
         this.ctx.fillStyle = 'white';
-        this.ctx.fillText('SPONSORS', easeOut(0, 6, t3) + 2 * 16 / 3, 4.75);
+        this.ctx.fillText('SPONSORS', easeOut(0, 7, t3) + 2 * 16 / 3 -0.75, 4.75);
       } else if(BEAN >= 1272 + 9) {
         this.ctx.fillStyle = 'white';
-        this.ctx.fillText('SPON', easeOut(0, 6, t3) + 2 * 16 / 3, 4.75);
+        this.ctx.fillText('SPON', easeOut(0, 7, t3) + 2 * 16 / 3 - 0.75, 4.75);
       }
 
       const t2 = T(1248 + 9 - 6, 1248 + 9, this.frame);

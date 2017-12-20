@@ -128,11 +128,11 @@
       if(BEAN >= 3264 && BEAN < 3264 + 24 + 12) {
         this.ctx.fillStyle = 'black';
         this.ctx.fillText('NO OBSOLETE HARDWARE', 0, 4.5);
-      } else if(BEAN >= 3216 && BEAN < 3264) {
+      } else if(BEAN >= 3216 && BEAN < 3264 - 24) {
         this.uniforms.translationOverX.value = 0;
         this.ctx.fillStyle = 'black';
         this.ctx.fillText('NO SUBMISSIONS', 0, 4.5);
-      } else if(BEAN >= 3168 && BEAN < 3216) {
+      } else if(BEAN >= 3168 && BEAN < 3216 - 24) {
         this.uniforms.translationOverX.value = 0;
         this.ctx.fillStyle = 'black';
         this.ctx.fillText('NO LIVE CODING', 0, 4.5);
