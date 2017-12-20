@@ -621,10 +621,11 @@
         this.center_line3.position.set(0, 0, 0);
       }
       if (frame >= FRAME_FOR_BEAN(26 * 48 - 3)) {
+        var start = 26.5;
         // Distance from main center to center of the level 1 hexes.
-        var distance3 = 10 + 5 * easeIn(0, 1, T(26 * 48 - 3, 26 * 48, frame));
-        var distance2 = 10 + 5 * easeIn(0, 1, T(26 * 48 + 6 -3, 26 * 48 + 6, frame));
-        var distance1 = 10 + 5 * easeIn(0, 1, T(26 * 48 + 9 -3, 26 * 48 + 9, frame));
+        var distance3 = 10 + 5 * easeIn(0, 1, T(start * 48 - 3, start * 48, frame));
+        var distance2 = 10 + 5 * easeIn(0, 1, T(start * 48 + 6 -3, start * 48 + 6, frame));
+        var distance1 = 10 + 5 * easeIn(0, 1, T(start * 48 + 9 -3, start * 48 + 9, frame));
         this.level1_hex1.position.set(distance1 * r32, distance1 / 2, 0);
         this.level1_hex2.position.set(-distance2 * r32, distance2 / 2, 0);
         this.level1_hex3.position.set(0, -distance3, 0);
@@ -638,12 +639,12 @@
         this.three_point_star.children[0].geometry.vertices[5].y = (distance1 - 10) / 2;
 
         this.three_point_star.rotation.set(0, 0, - 3 * Math.PI / 3 *
-            easeOut(0, 1, T(26 * 48 + 24 - 8, 26 * 48 + 24 - 2, frame)));
+            easeOut(0, 1, T(start * 48 + 24 - 8, start * 48 + 24 - 2, frame)));
 
         // Scale of the level 1 hexes.
-        var scale3 = 1 + 0.5 * easeIn(0, 1, T(26 * 48 + 24 -3, 26 * 48 + 24, frame));
-        const scale2 = 1 + 0.5 * easeIn(0, 1, T(26 * 48 + 24 + 9 -3, 26 * 48 + 24 + 9, frame));
-        var scale1 = 1 + 0.5 * easeIn(0, 1, T(26 * 48 + 24 + 18 -3, 26 * 48 + 24 + 18, frame));
+        var scale3 = 1 + 0.5 * easeIn(0, 1, T(start * 48 + 24 -3, start * 48 + 24, frame));
+        const scale2 = 1 + 0.5 * easeIn(0, 1, T(26 * 48 + 24 + 9 -3, start * 48 + 24 + 9, frame));
+        var scale1 = 1 + 0.5 * easeIn(0, 1, T(start * 48 + 24 + 18 -3, start * 48 + 24 + 18, frame));
         this.level1_hex1.scale.set(scale1, scale1, scale1);
         this.level1_hex2.scale.set(scale2, scale2, scale2);
         this.level1_hex3.scale.set(scale3, scale3, scale3);

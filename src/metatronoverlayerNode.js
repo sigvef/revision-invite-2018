@@ -49,13 +49,14 @@
     update(frame) {
       this.frame = frame;
       this.uniforms.frame.value = frame;
-      let t = Math.pow(Math.max(0, T(24 * 48, 24 * 48 + 12, frame)), 1.5);
+      let t = Math.pow(Math.max(0, T(24.5 * 48, 24.5 * 48 + 12, frame)), 1.5);
 
       this.uniforms.translationOverX.value = easeIn(0.5, 0, t);
       this.uniforms.translationUnderX.value = easeIn(0, -0.15, t);
 
-      if (BEAN >= 24.5 * 48) {
-        t = 1 - T(24.5 * 48 + 12 - 2, 24.5 * 48 + 12 - 2 + 10, frame);
+      var end = 25.84
+      if (BEAN >= end * 48) {
+        t = 1 - T(end * 48 + 12 - 2, end * 48 + 12 - 2 + 10, frame);
         this.uniforms.translationOverX.value = easeIn(0.5, 0, t);
         this.uniforms.translationUnderX.value = easeIn(0, -0.15, t);
       }
