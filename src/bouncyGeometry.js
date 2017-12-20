@@ -888,45 +888,60 @@
           0, 1, (frame - angleAnimationStartFrame) / (angleAnimationEndFrame - angleAnimationStartFrame)
         );
 
+        const logoAnimationEndFrame = FRAME_FOR_BEAN(3264);  // tweak
+
         const hexagonAngleTopLeft = Math.PI / 2 + Math.PI * 2 / 3;
         const hexagonAngleTopRight = Math.PI / 2 + Math.PI * 4 / 3;
+
+        const calculatePhi = (overshoot, y) => Math.min(
+          1,
+          0.6 + 0.75 * angleAnimationProgress - 0.1 * y * (1 - 0.65 * angleAnimationProgress)
+        ) * overshoot - Math.PI / 2;
+
+        const calculateX = (x, hexagonRadius, hexagonTopAngle) => hexagonGridOffsetX +
+          x * gridXDistance + cylinderRadius * hexagonRadius * Math.cos(hexagonTopAngle) +
+          angleAnimationProgress * 16 * GU;
+        const getAnimationProgressSegmentStart = (x, hexagonRadius, hexagonTopAngle) => (
+          circleCenterX -
+          hexagonGridOffsetX -
+          x * gridXDistance -
+          cylinderRadius * hexagonRadius * Math.cos(hexagonTopAngle)
+        ) / (16 * GU);
 
         this.ctx.lineWidth = zoomFactor * cylinderRadius;
         for (let y = 0; y < this.numHexagonsY; y++) {
           let yMid = hexagonGridOffsetY + y * gridYDistance;
           const circleRadius = circleCenterY - yMid;
 
-          this.ctx.save();
           for (let x = 0; x < this.numHexagonsX; x++) {
-            let xStart = hexagonGridOffsetX +
-              x * gridXDistance + cylinderRadius * hexagonRadiuses[2] * Math.cos(hexagonAngleTopLeft) +
-              angleAnimationProgress * 9 * GU;
-            let xEnd = hexagonGridOffsetX +
-              x * gridXDistance + cylinderRadius * hexagonRadiuses[4] * Math.cos(hexagonAngleTopRight) +
-              angleAnimationProgress * 9 * GU;
+            this.ctx.save();
+            let xStart = calculateX(x, hexagonRadiuses[2], hexagonAngleTopLeft);
+            let xEnd = calculateX(x, hexagonRadiuses[4], hexagonAngleTopRight);
+            const segmentAnimationStartsAtAngleAnimationProgress = getAnimationProgressSegmentStart(x, hexagonRadiuses[2], hexagonAngleTopLeft);
             let yStart = yMid;
             let yEnd = yMid;
 
             if (xEnd > circleCenterX) {
               const overshoot = (xEnd - circleCenterX) / GU;
-              const phiEnd = Math.min(1, 0.6 + 0.75 * angleAnimationProgress - 0.1 * y * (1 - 0.65 * angleAnimationProgress)) * overshoot - Math.PI / 2;
+              const phiEnd = calculatePhi(overshoot, y);
               xEnd = circleCenterX + circleRadius * Math.cos(phiEnd);
               yEnd = circleCenterY + circleRadius * Math.sin(phiEnd);
 
-              if (xStart > circleCenterX) {
+              if (angleAnimationProgress >= segmentAnimationStartsAtAngleAnimationProgress) {
+                const segmentAnimationProgress = (angleAnimationProgress - segmentAnimationStartsAtAngleAnimationProgress) / (1 - segmentAnimationStartsAtAngleAnimationProgress);
+                const targetLineWidth = this.revisionCircleSegments[y][x][0] < 0 ? 0 : zoomFactor * cylinderRadius;
+                this.ctx.lineWidth = lerp(
+                  zoomFactor * cylinderRadius,
+                  targetLineWidth,
+                  segmentAnimationProgress
+                );
+
                 const overshoot = (xStart - circleCenterX) / GU;
                 // TODO: normalize to one exact fraction of the circle
-                const phiStart = Math.min(
-                  1,
-                  0.6 + 0.75 * angleAnimationProgress - 0.1 * y * (1 - 0.65 * angleAnimationProgress)
-                ) * overshoot - Math.PI / 2;
+                const phiStart = calculatePhi(overshoot, y);
 
                 xStart = circleCenterX + circleRadius * Math.cos(phiStart);
                 yStart = circleCenterY + circleRadius * Math.sin(phiStart);
-                if (this.revisionCircleSegments[y][x][0] < 0) {
-                  // WIP
-                  continue;
-                }
               }
             }
 
@@ -941,6 +956,7 @@
               this.hexagonRows[y][x].end.velocity.y = 0;
             }
 
+            /*
             const forceFactor = 0.5;
             const velocityFactor = 0.5;
 
@@ -961,19 +977,20 @@
             this.hexagonRows[y][x].end.velocity.y *= velocityFactor;
             this.hexagonRows[y][x].end.position.x += this.hexagonRows[y][x].end.velocity.x;
             this.hexagonRows[y][x].end.position.y += this.hexagonRows[y][x].end.velocity.y;
+            */
 
             this.ctx.beginPath();
             this.ctx.moveTo(
-              zoomedX(this.hexagonRows[y][x].start.position.x),
-              zoomedY(this.hexagonRows[y][x].start.position.y)
+              zoomedX(xStart),
+              zoomedY(yStart)
             );
             this.ctx.lineTo(
-              zoomedX(this.hexagonRows[y][x].end.position.x),
-              zoomedY(this.hexagonRows[y][x].end.position.y)
+              zoomedX(xEnd),
+              zoomedY(yEnd)
             );
             this.ctx.stroke();
+            this.ctx.restore();
           }
-          this.ctx.restore();
         }
       }
 
