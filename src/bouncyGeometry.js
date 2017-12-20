@@ -75,15 +75,15 @@
         [[-1, -1], [-1, -1], [-1, -1], [-1, -1], [-2, -2], [-2, -2], [-2, -2], [-2, -2], [-3, -3], [-3, -3], [-3, -3], [-3, -3], [-4, -4], [-4, -4], [-4, -4],],
       ];
       this.revisionCircleThicknesses = [
-        [444, 473],  // outermost
-        [386, 444],
-        [338, 386],
-        [271, 338],
-        [229, 271],
-        [190, 229],
-        [131, 190],
-        [89, 158],
-        [42, 89], // innermost
+        [444 / 473, 473 / 473],  // outermost
+        [386 / 473, 444 / 473],
+        [338 / 473, 386 / 473],
+        [271 / 473, 338 / 473],
+        [229 / 473, 271 / 473],
+        [190 / 473, 229 / 473],
+        [131 / 473, 190 / 473],
+        [89 / 473, 158 / 473],
+        [42 / 473, 89 / 473], // innermost
       ];
 
       // IMPACT
@@ -888,7 +888,7 @@
           0, 1, (frame - angleAnimationStartFrame) / (angleAnimationEndFrame - angleAnimationStartFrame)
         );
 
-        const logoAnimationEndFrame = FRAME_FOR_BEAN(3264);  // tweak
+        const logoAnimationEndFrame = FRAME_FOR_BEAN(3264);  // TODO
 
         const hexagonAngleTopLeft = Math.PI / 2 + Math.PI * 2 / 3;
         const hexagonAngleTopRight = Math.PI / 2 + Math.PI * 4 / 3;
@@ -907,11 +907,13 @@
           x * gridXDistance -
           cylinderRadius * hexagonRadius * Math.cos(hexagonTopAngle)
         ) / (16 * GU);
+        const outermostCircleRadius = circleCenterY - hexagonGridOffsetY + zoomFactor * cylinderRadius / 2;
 
         this.ctx.lineWidth = zoomFactor * cylinderRadius;
         for (let y = 0; y < this.numHexagonsY; y++) {
           let yMid = hexagonGridOffsetY + y * gridYDistance;
-          const circleRadius = circleCenterY - yMid;
+          let circleRadius = circleCenterY - yMid;
+          const originalCircleRadius = circleRadius;
 
           for (let x = 0; x < this.numHexagonsX; x++) {
             this.ctx.save();
@@ -921,30 +923,38 @@
             let yStart = yMid;
             let yEnd = yMid;
 
-            if (xEnd > circleCenterX) {
-              const overshoot = (xEnd - circleCenterX) / GU;
-              const phiEnd = calculatePhi(overshoot, y);
+            if (angleAnimationProgress >= segmentAnimationStartsAtAngleAnimationProgress) {
+              const segmentAnimationProgress = (angleAnimationProgress - segmentAnimationStartsAtAngleAnimationProgress) / (1 - segmentAnimationStartsAtAngleAnimationProgress);
+
+              const targetLineWidth = this.revisionCircleSegments[y][x][0] < 0 ?
+                0 :
+                zoomFactor * (this.revisionCircleThicknesses[y][1] - this.revisionCircleThicknesses[y][0]) * outermostCircleRadius;
+              this.ctx.lineWidth = lerp(
+                zoomFactor * cylinderRadius,
+                targetLineWidth,
+                segmentAnimationProgress
+              );
+              const targetCircleRadius = 0.5 * (this.revisionCircleThicknesses[y][1] + this.revisionCircleThicknesses[y][0]) * outermostCircleRadius;
+              circleRadius = lerp(
+                originalCircleRadius,
+                targetCircleRadius,
+                segmentAnimationProgress
+              );
+
+              const startOvershoot = (xStart - circleCenterX) / GU;
+              // TODO: normalize to one exact fraction of the circle
+              const phiStart = calculatePhi(startOvershoot, y);
+
+              xStart = circleCenterX + circleRadius * Math.cos(phiStart);
+              yStart = circleCenterY + circleRadius * Math.sin(phiStart);
+
+              const endOvershoot = (xEnd - circleCenterX) / GU;
+              const phiEnd = calculatePhi(endOvershoot, y);
               xEnd = circleCenterX + circleRadius * Math.cos(phiEnd);
               yEnd = circleCenterY + circleRadius * Math.sin(phiEnd);
-
-              if (angleAnimationProgress >= segmentAnimationStartsAtAngleAnimationProgress) {
-                const segmentAnimationProgress = (angleAnimationProgress - segmentAnimationStartsAtAngleAnimationProgress) / (1 - segmentAnimationStartsAtAngleAnimationProgress);
-                const targetLineWidth = this.revisionCircleSegments[y][x][0] < 0 ? 0 : zoomFactor * cylinderRadius;
-                this.ctx.lineWidth = lerp(
-                  zoomFactor * cylinderRadius,
-                  targetLineWidth,
-                  segmentAnimationProgress
-                );
-
-                const overshoot = (xStart - circleCenterX) / GU;
-                // TODO: normalize to one exact fraction of the circle
-                const phiStart = calculatePhi(overshoot, y);
-
-                xStart = circleCenterX + circleRadius * Math.cos(phiStart);
-                yStart = circleCenterY + circleRadius * Math.sin(phiStart);
-              }
             }
 
+            /*
             if (frame === FRAME_FOR_BEAN(3216)) {
               this.hexagonRows[y][x].start.position.x = xStart;
               this.hexagonRows[y][x].start.position.y = yStart;
@@ -955,6 +965,7 @@
               this.hexagonRows[y][x].end.velocity.x = 0;
               this.hexagonRows[y][x].end.velocity.y = 0;
             }
+            */
 
             /*
             const forceFactor = 0.5;
