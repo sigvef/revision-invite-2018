@@ -55,7 +55,7 @@
       this.ctx.globalAlpha = 0.4 + Math.random() * 0.2;
       const t = timer(2208 + 12, 2208 + 24, frame);
       const t2 = timer(2208 + 48 + 12, 2208 + 48 + 24, frame);
-      this.ctx.fillText('FOR ONCE', 15.4 + easeIn(2, 0, t) - easeIn(0, -3, t2), 6.5);
+      this.ctx.fillText('THIS YEAR', 15.4 + easeIn(2, 0, t) - easeIn(0, -3, t2), 6.5);
 
       this.ctx.globalAlpha = 1;
       this.ctx.clearRect(10.5, 0, easeIn(5.5, 0, t) + easeIn(0, 5.5, t2), 9);

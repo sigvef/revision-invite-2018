@@ -44,7 +44,7 @@
         this.textCtx.textBaseline = 'middle';
         this.textCtx.font = 'bold 1pt schmalibre';
         this.textCtx.fillStyle = 'white';
-        this.textCtx.fillText('NO PRIOR ART', 0, 0);
+        this.textCtx.fillText('NO GIMMICKS', 0, 0);
         this.textCtx.restore();
       }
       this.frame = frame;

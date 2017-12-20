@@ -135,7 +135,7 @@
       } else if(BEAN >= 3168 && BEAN < 3216) {
         this.uniforms.translationOverX.value = 0;
         this.ctx.fillStyle = 'black';
-        this.ctx.fillText('NO LATE NIGHTS', 0, 4.5);
+        this.ctx.fillText('NO LIVE CODING', 0, 4.5);
       }
       this.ctx.restore();
 

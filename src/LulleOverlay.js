@@ -68,7 +68,7 @@
       this.ctx.textAlign = 'center';
       this.ctx.textBaseline = 'middle';
       this.ctx.fillStyle = '#373c3f';
-      this.ctx.fillText('NO SEMINARS', 0., rightOffset);
+      this.ctx.fillText('NO TRADITIONS', 0., rightOffset);
       this.ctx.restore();
 
       this.ctx.restore();
