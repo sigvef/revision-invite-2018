@@ -41,59 +41,21 @@
           lerp(1, 0, (frame - 7532) / 20),
           (frame - 7397) / 20
         );
-
-        this.ctx.fillStyle = 'rgba(119, 225, 93, .95)';
-        this.ctx.beginPath();
-        this.ctx.moveTo(16, 0);
-        this.ctx.lineTo(easeIn(16, 10.5, t), 0);
-        this.ctx.lineTo(16, easeIn(0, 5.5, t));
-        this.ctx.lineTo(16, 0);
-        this.ctx.fill();
-
-        this.ctx.save();
-        this.ctx.translate(16, 0);
-        this.ctx.rotate(Math.PI / 4);
-        this.ctx.textAlign = 'left';
-        this.ctx.textBaseline = 'middle';
-        this.ctx.font = 'bold 0.7pt schmalibre';
-        this.ctx.fillStyle = '#556063';
-
-        this.ctx.fillText('JUST REVISION', -3.0, easeIn(-1.2, 3.1, t));
-        this.ctx.restore();
       } else {
-        const t = lerp(
+        const t = easeOut(
           0,
-          lerp(1, 0, (frame - 7181) / 20),
-          (frame - 7030) / 20
+          easeOut(1, 0, (frame - 7181) / 50),
+          (frame - 7030) / 100
         );
-
-        this.ctx.fillStyle = 'rgba(119, 225, 93, .95)';
-        this.ctx.beginPath();
-        this.ctx.moveTo(16, 0);
-        this.ctx.lineTo(easeIn(16, 10.5, t), 0);
-        this.ctx.lineTo(16, easeIn(0, 5.5, t));
-        this.ctx.lineTo(16, 0);
-        this.ctx.fill();
-
-        this.ctx.save();
-        this.ctx.translate(16, 0);
-        this.ctx.rotate(Math.PI / 4);
-        this.ctx.textAlign = 'left';
-        this.ctx.textBaseline = 'middle';
-        this.ctx.font = 'bold 0.7pt schmalibre';
-        this.ctx.fillStyle = '#556063';
-
-        this.ctx.fillText('JUST REVISION', -3.0, easeIn(-1.2, 3.1, t));
-        this.ctx.restore();
       }
       if(frame > 7300) {
-        const t = lerp(
+        const t = easeOut(
           0,
-          lerp(1, 0, (frame - 7512) / 20),
-          (frame - 7377) / 20
+          easeOut(1, 0, (frame - 7512) / 100),
+          (frame - 7377) / 50
         );
         // NO GRAS || NO STARS
-        this.ctx.fillStyle = 'rgba(119, 225, 93, .95)';
+        this.ctx.fillStyle = 'rgba(152, 90, 152, 0.9)';
         this.ctx.beginPath();
         this.ctx.moveTo(0, 9);
         this.ctx.lineTo(easeIn(0, 5.5, t), 9);
@@ -104,12 +66,14 @@
         this.ctx.save();
         this.ctx.translate(0, 9);
         this.ctx.rotate(Math.PI / 4);
-        this.ctx.textAlign = 'left';
+        this.ctx.textAlign = 'center';
         this.ctx.textBaseline = 'middle';
         this.ctx.font = 'bold 0.7pt schmalibre';
-        this.ctx.fillStyle = '#556063';
+        this.ctx.fillStyle = 'white';
+        this.ctx.globalCompositeOperation = 'xor';
 
-        this.ctx.fillText('NO PARTICLES', -2.8, easeIn(0.8, -3.5, t));
+        this.ctx.fillText('A NEW STYLE', 0, easeIn(0.8, -3.5, t));
+        this.ctx.fillText('', 0, easeIn(2.0, -2.8, t));
         this.ctx.restore();
       } else {
         const t = lerp(
@@ -118,7 +82,7 @@
           (frame - 7010) / 20
         );
         // NO GRAS || NO STARS
-        this.ctx.fillStyle = 'rgba(119, 225, 93, .95)';
+        this.ctx.fillStyle = 'rgba(152, 90, 152, 0.9)';
         this.ctx.beginPath();
         this.ctx.moveTo(0, 9);
         this.ctx.lineTo(easeIn(0, 5.5, t), 9);
@@ -129,12 +93,13 @@
         this.ctx.save();
         this.ctx.translate(0, 9);
         this.ctx.rotate(Math.PI / 4);
-        this.ctx.textAlign = 'left';
+        this.ctx.textAlign = 'center';
         this.ctx.textBaseline = 'middle';
         this.ctx.font = 'bold 0.7pt schmalibre';
-        this.ctx.fillStyle = '#556063';
+        this.ctx.fillStyle = 'white';
+        this.ctx.globalCompositeOperation = 'xor';
 
-        this.ctx.fillText('NO RIBBONS', -2.3, easeIn(0.8, -3.5, t));
+        this.ctx.fillText('THIS YEAR', 0, easeIn(0.8, -3.5, t));
         this.ctx.restore();
       }
 

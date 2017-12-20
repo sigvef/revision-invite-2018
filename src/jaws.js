@@ -15,7 +15,7 @@
       this.output.minFilter = THREE.LinearFilter;
       this.output.magFilter = THREE.LinearFilter;
 
-      const scrollolo = 'NO SCROLLERS                JUST';
+      const scrollolo = 'NO TICKETS                JUST';
       this.textCanvas = document.createElement('canvas');
       const textCtx = this.textCanvas.getContext('2d');
 
