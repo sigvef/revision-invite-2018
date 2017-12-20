@@ -30,12 +30,14 @@
       this.resize();
 
       this.canvasCube = new THREE.Mesh(
-          new THREE.BoxGeometry(175, 105, 1),
+          new THREE.BoxGeometry(160, 90, 1),
           new THREE.MeshBasicMaterial({
             map: this.canvasTexture,
             transparent: true,
           }));
       this.canvasCube.skipOverlayDrawing = true;
+      const cubeScale = 1.161;
+      this.canvasCube.scale.set(cubeScale, cubeScale, cubeScale);
       this.scene.add(this.canvasCube);
 
       //Camera
@@ -465,6 +467,7 @@
     update(frame) {
       super.update(frame);
       demo.nm.nodes.bloom.opacity = 0;
+      this.frame = frame;
 
       var asmoothstep = function (start_frame, duration, frame) {
         return smoothstep(0, 1, (frame - start_frame) / duration);
@@ -845,6 +848,8 @@
         this.ctx.lineTo(a.x, -a.y);
         this.ctx.lineTo(b.x, -b.y);
         this.ctx.fill();
+        this.ctx.strokeStyle = 'rgb(255, 73, 130)';
+        this.ctx.lineWidth = 0.5;
         this.ctx.stroke();
       }
     }
@@ -897,8 +902,30 @@
       this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
       this.ctx.save();
       this.ctx.scale(GU, GU);
-      this.ctx.translate(4.5, 4.5);
-      this.ctx.scale(1 / 20, 1 / 12);
+      this.ctx.fillStyle = 'rgb(55, 60, 63)';
+      const t = T(1248 - 6, 1248, this.frame);
+      this.ctx.fillRect(0, easeIn(9, 4.5, t), 16, 9);
+      this.ctx.font = 'bold 0.6pt schmalibre';
+      this.ctx.textAlign = 'left';
+      this.ctx.textBaseline = 'middle';
+      this.ctx.fillStyle = 'rgb(55, 60, 63)';
+      const t3 = T(1320 - 6, 1320, this.frame);
+      if(BEAN >= 1272) {
+        this.ctx.fillText('NO', easeOut(0, 6, t3) + 2 * 16 / 3, 3.75);
+      }
+      if(BEAN >= 1272 + 18) {
+        this.ctx.fillStyle = 'white';
+        this.ctx.fillText('SPONSORS', easeOut(0, 6, t3) + 2 * 16 / 3, 4.75);
+      } else if(BEAN >= 1272 + 9) {
+        this.ctx.fillStyle = 'white';
+        this.ctx.fillText('SPON', easeOut(0, 6, t3) + 2 * 16 / 3, 4.75);
+      }
+
+      const t2 = T(1248 + 9 - 6, 1248 + 9, this.frame);
+      let x = easeIn(8, 16 / 3, t2);
+      x = easeOut(x, 8, t3);
+      this.ctx.translate(x, 4.5);
+      this.ctx.scale(1 / 12, 1 / 12);
       this.draw(this.scene, 'fill');
       this.draw(this.scene, 'stroke');
       /*if(BEAN >= 1200 && BEAN < 1248 + 9) {
@@ -918,7 +945,7 @@
 
     resize() {
       super.resize();
-      this.canvas.width = 9 * GU;
+      this.canvas.width = 16 * GU;
       this.canvas.height = 9 * GU;
     }
   }

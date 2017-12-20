@@ -977,7 +977,7 @@
         fontScaler = 1.5;
 
       } else if (BEAN >= 3322 && BEAN < 3336) {
-        foregroundColor = black;
+        foregroundColor = white;
         text = 'AT EASTER 2018';
         const startFrame = FRAME_FOR_BEAN(3322);
         const endFrame = FRAME_FOR_BEAN(3332);
@@ -993,9 +993,9 @@
         text = 'THINGS WILL BE';
         fontScaler = 1.4;
       } else if (BEAN >= 3346) {
-        foregroundColor = black;
+        foregroundColor = white;
         text = 'DIFFERENT';
-        fontScaler = 1.8;
+        fontScaler = 2.2;
         const startFrame = FRAME_FOR_BEAN(3346);
         const endFrame = FRAME_FOR_BEAN(3357);
         const progress = (frame - startFrame) / (endFrame - startFrame);
@@ -1016,7 +1016,7 @@
       this.ctx.fillText(
         text,
         GU * 8 + (0.5 - this.random()) * shakeAmount,
-        GU * 4.665 + (0.5 - this.random()) * shakeAmount
+        GU * 4.765 + (0.5 - this.random()) * shakeAmount
       );
 
       this.textTexture.needsUpdate = true;

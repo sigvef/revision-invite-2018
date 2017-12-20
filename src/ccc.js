@@ -19,10 +19,6 @@
       this.greenColor = 0x77e15d;
       this.pinkColor = 0xff4982;
 
-      var light = new THREE.PointLight(0xffffff, 1, 100);
-      light.position.set(50, 50, 50);
-      this.scene.add(light);
-
       this.camera.position.z = 200;
 
       this.NUM_TENTACLES = 30;
@@ -30,9 +26,20 @@
 
       this.circle = new THREE.Mesh(
         new THREE.SphereGeometry(7, 32, 32),
-        new THREE.MeshBasicMaterial({color: 0xffffff})
+        new THREE.MeshPhysicalMaterial({
+          roughness: 1,
+          metalness: 0,
+        })
       );
+      const directionalLight = new THREE.DirectionalLight();
+      directionalLight.position.set(-1, 100, -1);
+      directionalLight.intensity = 0.5;
+      directionalLight.decay = 2;
+      this.scene.add(directionalLight);
       this.scene.add(this.circle);
+      const ambientLight = new THREE.AmbientLight();
+      ambientLight.intensity = 0.75;
+      this.scene.add(ambientLight);
 
       this.particleStartPos = [];
       this.particleGeometry = new THREE.Geometry();

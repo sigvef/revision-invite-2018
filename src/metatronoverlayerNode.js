@@ -31,6 +31,9 @@
         this.canvas.width = 16 * GU;
         this.canvas.height = 9 * GU;
       }
+    }
+
+    update(frame) {
       if(this.textCanvas) {
         this.textCanvas.width = 9 * GU;
         this.textCanvas.height = 2 * GU;
@@ -41,22 +44,18 @@
         this.textCtx.textBaseline = 'middle';
         this.textCtx.font = 'bold 1pt schmalibre';
         this.textCtx.fillStyle = 'white';
-        this.textCtx.fillText('NO GEOMETRY', 0, 0);
+        this.textCtx.fillText('NO PRIOR ART', 0, 0);
         this.textCtx.restore();
       }
-    }
-
-    update(frame) {
       this.frame = frame;
       this.uniforms.frame.value = frame;
-      let t = Math.pow(Math.max(0, T(24.5 * 48, 24.5 * 48 + 12, frame)), 1.5);
+      let t = Math.pow(Math.max(0, T(22 * 48, 22 * 48 + 12, frame)), 2.5);
 
       this.uniforms.translationOverX.value = easeIn(0.5, 0, t);
       this.uniforms.translationUnderX.value = easeIn(0, -0.15, t);
 
-      var end = 25.84
-      if (BEAN >= end * 48) {
-        t = 1 - T(end * 48 + 12 - 2, end * 48 + 12 - 2 + 10, frame);
+      if (BEAN >= 23 * 48) {
+        t = 1 - T(23 * 48, 23 * 48 + 12, frame);
         this.uniforms.translationOverX.value = easeIn(0.5, 0, t);
         this.uniforms.translationUnderX.value = easeIn(0, -0.15, t);
       }
@@ -88,7 +87,7 @@
       this.ctx.fillStyle = 'white';
       this.ctx.translate(-4.5, -.5);
       this.ctx.translate(0, 1.5);
-      const bouncyScale = 1 + 0.1 * Math.cos(this.frame / 60 / 60 * 115 * Math.PI * 2);
+      const bouncyScale = 1;
       this.ctx.scale(1 / GU, 1 / GU * bouncyScale);
       this.ctx.translate(0, -1.5 * GU);
       const step = 4;
@@ -99,7 +98,7 @@
           i,
           this.textCanvas.width,
           step + 1,
-          (1 - i / this.textCanvas.height) * 12 * Math.cos(this.frame / 60 / 60 * 115 * Math.PI),
+          0,
           i,
           this.textCanvas.width,
           step + 1);

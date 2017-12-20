@@ -373,7 +373,7 @@
           }
           this.textCtx.fillStyle = '#77e15d';
           if (swipeOffset > 0) {
-            this.textCtx.fillText('BACK TO BASICS                 '[i], 0, 0);
+            this.textCtx.fillText('SOMETHING NEW                     '[i], 0, 0);
             this.textCtx.rotate(Math.PI);
             this.textCtx.rotate(Math.PI);
           }
