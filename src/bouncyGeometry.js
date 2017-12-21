@@ -788,7 +788,7 @@
       const wholeEndFrame = FRAME_FOR_BEAN(3290);
       const wholeProgress = (frame - wholeStartFrame) / (wholeEndFrame - wholeStartFrame);
 
-      const R = (r, g, b) => `rgba(${0 | Math.min(r, 255)},${0 | Math.min(g, 255)},${0 | Math.min(b, 255)},1)`;
+      const R = (r, g, b, a) => `rgba(${0 | Math.min(r, 255)},${0 | Math.min(g, 255)},${0 | Math.min(b, 255)},${a})`;
       let zoomFactor = 1;
       let zoomPosition = {
         x: 8 * GU,
@@ -807,7 +807,7 @@
           zoomFactor = lerp(1 / 0.12, 1 / 0.8, thirdHitProgress);
         } else {
           const restStartFrame = FRAME_FOR_BEAN(3206);
-          const restEndFrame = FRAME_FOR_BEAN(3290);
+          const restEndFrame = FRAME_FOR_BEAN(3216 + 36);
           const restProgress = (frame - restStartFrame) / (restEndFrame - restStartFrame);
           zoomFactor = lerp(1 / 0.8, 1, restProgress)
         }
@@ -852,9 +852,9 @@
                 1 - Math.min(1, timeSinceImpact)
               );
               intensity = lerp(0.5, intensity, intensity);
-              this.ctx.fillStyle = R(255 * intensity, 73 * intensity, 130 * intensity);
+              this.ctx.fillStyle = R(255 * intensity, 73 * intensity, 130 * intensity, 1);
             } else {
-              this.ctx.fillStyle = R(255, 119, 162);
+              this.ctx.fillStyle = R(255, 119, 162, 1);
             }
             this.ctx.beginPath();
             this.ctx.moveTo(
@@ -883,12 +883,10 @@
         const hexagonGridOffsetY = 1.2 * GU;
 
         const angleAnimationStartFrame = FRAME_FOR_BEAN(3216);
-        const angleAnimationEndFrame = FRAME_FOR_BEAN(3296);
-        const angleAnimationProgress = lerp(
+        const angleAnimationEndFrame = FRAME_FOR_BEAN(3216 + 36);
+        const angleAnimationProgress = smoothstep(
           0, 1, (frame - angleAnimationStartFrame) / (angleAnimationEndFrame - angleAnimationStartFrame)
         );
-
-        const logoAnimationEndFrame = FRAME_FOR_BEAN(3264);  // TODO
 
         const hexagonAngleTopLeft = Math.PI / 2 + Math.PI * 2 / 3;
         const hexagonAngleTopRight = Math.PI / 2 + Math.PI * 4 / 3;
@@ -939,18 +937,22 @@
             }
 
             if (angleAnimationProgress >= segmentAnimationStartsAtAngleAnimationProgressEnd) {
-
-
               const segmentAnimationProgress = (angleAnimationProgress - segmentAnimationStartsAtAngleAnimationProgressStart) / (1 - segmentAnimationStartsAtAngleAnimationProgressStart);
 
               const targetLineWidth = this.revisionCircleSegments[y][x][0] < 0 ?
                 0 :
                 zoomFactor * (this.revisionCircleThicknesses[y][1] - this.revisionCircleThicknesses[y][0]) * outermostCircleRadius;
-              this.ctx.lineWidth = lerp(
+              let thatLineWidth = lerp(
                 zoomFactor * cylinderRadius,
                 targetLineWidth,
                 segmentAnimationProgress
               );
+              if (thatLineWidth < 0.02 * GU) {
+                thatLineWidth = 0;
+              } else {
+                thatLineWidth *= 1.03;
+              }
+
               const targetCircleRadius = 0.5 * (this.revisionCircleThicknesses[y][1] + this.revisionCircleThicknesses[y][0]) * outermostCircleRadius;
               circleRadius = lerp(
                 originalCircleRadius,
@@ -967,9 +969,35 @@
               }
 
               const endOvershoot = (xEnd - circleCenterX) / GU;
-              const phiEnd = calculatePhi(endOvershoot, y);
+              let phiEnd = calculatePhi(endOvershoot, y);
 
-              if (phiEnd > phiStart) {
+              let targetPhiStart = phiStart;
+              if (this.revisionCircleSegments[y][x][0] >= 0) {
+                targetPhiStart = 4 * Math.PI + 2 * Math.PI * this.revisionCircleSegments[y][x][0] / 360 - 0.02;
+              } else {
+                targetPhiStart = (phiStart + phiEnd) / 2;
+              }
+
+              let targetPhiEnd = phiEnd;
+              if (this.revisionCircleSegments[y][x][1] >= 0) {
+                targetPhiEnd = 4 * Math.PI + 2 * Math.PI * this.revisionCircleSegments[y][x][1] / 360 + 0.02;
+              } else {
+                targetPhiEnd = (phiStart + phiEnd) / 2;
+              }
+
+              const alpha = lerp(1, Math.min(1, targetLineWidth), Math.max(0, angleAnimationProgress - 0.6) / 0.4);
+
+              phiStart = lerp(
+                phiStart, targetPhiStart, Math.max(0, angleAnimationProgress - 0.7) / 0.3
+              );
+              phiEnd = lerp(
+                phiEnd, targetPhiEnd, Math.max(0, angleAnimationProgress - 0.7) / 0.3
+              );
+              let intensity = lerp(1, 2, Math.max(0, angleAnimationProgress - 0.3) / 0.7);
+              this.ctx.strokeStyle = R(255 * intensity, 119 * intensity, 162 * intensity, alpha);
+
+              if (phiEnd > phiStart && thatLineWidth > 1) {
+                this.ctx.lineWidth = thatLineWidth;
                 this.ctx.beginPath();
                 this.ctx.arc(zoomedX(circleCenterX), zoomedY(circleCenterY), circleRadius * zoomFactor, phiStart, phiEnd);
                 this.ctx.stroke();
