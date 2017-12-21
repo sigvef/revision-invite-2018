@@ -1030,9 +1030,10 @@
       const current = this.drawGridTranslations[
         this.drawGridTranslations.length - 1];
       this.drawGridTranslations.push({
-        x: current.x + x,
+        x: current.x + x - (x % 2), //Keep x even, or you'll have alternating coordinate system
         y: current.y + y,
       });
+      console.log(this.drawGridTranslations[this.drawGridTranslations.length - 1]);
     }
 
     drawGridPopTranslation() {
