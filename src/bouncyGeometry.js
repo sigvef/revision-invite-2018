@@ -236,7 +236,7 @@
         demo.nm.nodes.bloom.opacity = 0;
       } else if (BEAN >= 3264 && BEAN < 3312) {
         const idx = this.chordStabBeans.indexOf(BEAN - 2976);
-        if (idx !== -1 && BEAN <= 3304) {
+        if (idx !== -1 && BEAN < 3304) {
           demo.nm.nodes.bloom.opacity = 1.6;
         }
         demo.nm.nodes.bloom.opacity = demo.nm.nodes.bloom.opacity * 0.95;
