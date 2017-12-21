@@ -768,8 +768,8 @@
 
       this.ctx.clearRect(0, 0, this.textCanvas.width, this.textCanvas.height);
 
-      this.ctx.fillStyle = '#ff4982';
-      this.ctx.strokeStyle = '#ff4982';
+      this.ctx.fillStyle = '#FF77A2';
+      this.ctx.strokeStyle = '#FF77A2';
 
       const hexToRectStartFrame = FRAME_FOR_BEAN(3180);
       const hexToRectEndFrame = FRAME_FOR_BEAN(3184);
@@ -854,7 +854,7 @@
               intensity = lerp(0.5, intensity, intensity);
               this.ctx.fillStyle = R(255 * intensity, 73 * intensity, 130 * intensity);
             } else {
-              this.ctx.fillStyle = R(255, 73, 130);
+              this.ctx.fillStyle = R(255, 119, 162);
             }
             this.ctx.beginPath();
             this.ctx.moveTo(
@@ -919,12 +919,29 @@
             this.ctx.save();
             let xStart = calculateX(x, hexagonRadiuses[2], hexagonAngleTopLeft);
             let xEnd = calculateX(x, hexagonRadiuses[4], hexagonAngleTopRight);
-            const segmentAnimationStartsAtAngleAnimationProgress = getAnimationProgressSegmentStart(x, hexagonRadiuses[2], hexagonAngleTopLeft);
+            const segmentAnimationStartsAtAngleAnimationProgressStart = getAnimationProgressSegmentStart(x, hexagonRadiuses[2], hexagonAngleTopLeft);
+            const segmentAnimationStartsAtAngleAnimationProgressEnd = getAnimationProgressSegmentStart(x, hexagonRadiuses[4], hexagonAngleTopRight);
             let yStart = yMid;
             let yEnd = yMid;
 
-            if (angleAnimationProgress >= segmentAnimationStartsAtAngleAnimationProgress) {
-              const segmentAnimationProgress = (angleAnimationProgress - segmentAnimationStartsAtAngleAnimationProgress) / (1 - segmentAnimationStartsAtAngleAnimationProgress);
+            if (angleAnimationProgress < segmentAnimationStartsAtAngleAnimationProgressStart) {
+
+              this.ctx.beginPath();
+              this.ctx.moveTo(
+                zoomedX(xStart),
+                zoomedY(yStart)
+              );
+              this.ctx.lineTo(
+                zoomedX(angleAnimationProgress >= segmentAnimationStartsAtAngleAnimationProgressEnd ? circleCenterX : xEnd),
+                zoomedY(yEnd)
+              );
+              this.ctx.stroke();
+            }
+
+            if (angleAnimationProgress >= segmentAnimationStartsAtAngleAnimationProgressEnd) {
+
+
+              const segmentAnimationProgress = (angleAnimationProgress - segmentAnimationStartsAtAngleAnimationProgressStart) / (1 - segmentAnimationStartsAtAngleAnimationProgressStart);
 
               const targetLineWidth = this.revisionCircleSegments[y][x][0] < 0 ?
                 0 :
@@ -941,65 +958,24 @@
                 segmentAnimationProgress
               );
 
-              const startOvershoot = (xStart - circleCenterX) / GU;
-              // TODO: normalize to one exact fraction of the circle
-              const phiStart = calculatePhi(startOvershoot, y);
-
-              xStart = circleCenterX + circleRadius * Math.cos(phiStart);
-              yStart = circleCenterY + circleRadius * Math.sin(phiStart);
+              let phiStart = null;
+              if (angleAnimationProgress < segmentAnimationStartsAtAngleAnimationProgressStart) {
+                phiStart = -Math.PI / 2;
+              } else {
+                const startOvershoot = (xStart - circleCenterX) / GU;
+                phiStart = calculatePhi(startOvershoot, y);
+              }
 
               const endOvershoot = (xEnd - circleCenterX) / GU;
               const phiEnd = calculatePhi(endOvershoot, y);
-              xEnd = circleCenterX + circleRadius * Math.cos(phiEnd);
-              yEnd = circleCenterY + circleRadius * Math.sin(phiEnd);
+
+              if (phiEnd > phiStart) {
+                this.ctx.beginPath();
+                this.ctx.arc(zoomedX(circleCenterX), zoomedY(circleCenterY), circleRadius * zoomFactor, phiStart, phiEnd);
+                this.ctx.stroke();
+              }
             }
 
-            /*
-            if (frame === FRAME_FOR_BEAN(3216)) {
-              this.hexagonRows[y][x].start.position.x = xStart;
-              this.hexagonRows[y][x].start.position.y = yStart;
-              this.hexagonRows[y][x].end.position.x = xEnd;
-              this.hexagonRows[y][x].end.position.y = yEnd;
-              this.hexagonRows[y][x].start.velocity.x = 0;
-              this.hexagonRows[y][x].start.velocity.y = 0;
-              this.hexagonRows[y][x].end.velocity.x = 0;
-              this.hexagonRows[y][x].end.velocity.y = 0;
-            }
-            */
-
-            /*
-            const forceFactor = 0.5;
-            const velocityFactor = 0.5;
-
-            const startXDiff = xStart - this.hexagonRows[y][x].start.position.x;
-            const startYDiff = yStart - this.hexagonRows[y][x].start.position.y;
-            this.hexagonRows[y][x].start.velocity.x += startXDiff * forceFactor;
-            this.hexagonRows[y][x].start.velocity.y += startYDiff * forceFactor;
-            this.hexagonRows[y][x].start.velocity.x *= velocityFactor;
-            this.hexagonRows[y][x].start.velocity.y *= velocityFactor;
-            this.hexagonRows[y][x].start.position.x += this.hexagonRows[y][x].start.velocity.x;
-            this.hexagonRows[y][x].start.position.y += this.hexagonRows[y][x].start.velocity.y;
-
-            const endXDiff = xEnd - this.hexagonRows[y][x].end.position.x;
-            const endYDiff = yEnd - this.hexagonRows[y][x].end.position.y;
-            this.hexagonRows[y][x].end.velocity.x += endXDiff * forceFactor;
-            this.hexagonRows[y][x].end.velocity.y += endYDiff * forceFactor;
-            this.hexagonRows[y][x].end.velocity.x *= velocityFactor;
-            this.hexagonRows[y][x].end.velocity.y *= velocityFactor;
-            this.hexagonRows[y][x].end.position.x += this.hexagonRows[y][x].end.velocity.x;
-            this.hexagonRows[y][x].end.position.y += this.hexagonRows[y][x].end.velocity.y;
-            */
-
-            this.ctx.beginPath();
-            this.ctx.moveTo(
-              zoomedX(xStart),
-              zoomedY(yStart)
-            );
-            this.ctx.lineTo(
-              zoomedX(xEnd),
-              zoomedY(yEnd)
-            );
-            this.ctx.stroke();
             this.ctx.restore();
           }
         }
