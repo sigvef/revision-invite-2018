@@ -314,7 +314,7 @@
       }
 
       var vertex_distance = [inner_size, middle_size, outer_size];
-      var sphere_geometry = new THREE.SphereGeometry( 3.5, 16, 16 );
+      var sphere_geometry = new THREE.SphereGeometry( 2.5, 16, 16 );
       this.vertex_balls = [];
       for (var cube_num = 0; cube_num < 4; cube_num++)
       {
@@ -639,20 +639,20 @@
 
       }
 
-      var grow = 25.72;
+      var grow = 25.70;
       if (frame >= FRAME_FOR_BEAN(grow * 48))
       {
-        var ball_scale = 1 + 0.5 * elasticOut(0, 1, 1.1, T(grow * 48, grow * 48 + 36, frame));
+        var ball_scale = 1 + 0.8 * elasticOut(0, 1, 1.1, T(grow * 48, grow * 48 + 36, frame));
         for (var i = 0; i < 24; i++)
         {
           this.vertex_balls[i].scale.set ( ball_scale, ball_scale, ball_scale );
         }
       }
 
-      var disapear = 25.80;
+      var disapear = 25.81;
       if (frame >= FRAME_FOR_BEAN(disapear * 48))
       {
-        var ball_scale = 1.5 * (1 - elasticOut(0, 1, 1.1, T(disapear * 48, disapear * 48 + 36, frame)));
+        var ball_scale = 1.8 * (1 - elasticOut(0, 1, 1.1, T(disapear * 48, disapear * 48 + 24, frame)));
         for (var i = 0; i < 24; i++)
         {
           this.vertex_balls[i].scale.set ( ball_scale, ball_scale, ball_scale );
