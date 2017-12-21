@@ -962,14 +962,14 @@
 
               let targetPhiStart = phiStart;
               if (this.revisionCircleSegments[y][x][0] >= 0) {
-                targetPhiStart = 4 * Math.PI - 2 * Math.PI * this.revisionCircleSegments[y][x][1] / 360 - 0.01;
+                targetPhiStart = 4 * Math.PI + 2 * Math.PI * this.revisionCircleSegments[y][x][0] / 360 - 0.01;
               } else {
                 targetPhiStart = (phiStart + phiEnd) / 2;
               }
 
               let targetPhiEnd = phiEnd;
               if (this.revisionCircleSegments[y][x][0] >= 0) {
-                targetPhiEnd = 4 * Math.PI - 2 * Math.PI * this.revisionCircleSegments[y][x][0] / 360 + 0.01;
+                targetPhiEnd = 4 * Math.PI + 2 * Math.PI * this.revisionCircleSegments[y][x][1] / 360 + 0.01;
               } else {
                 targetPhiEnd = (phiStart + phiEnd) / 2;
               }
