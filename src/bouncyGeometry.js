@@ -52,22 +52,11 @@
       this.scene.add(this.textPlane);
 
       // REVISION LOGO
-      this.revisionLogoSegments = [
-        [[2, 61], [225, 233]],  // outermost
-        [[0, 360]],
-        [[62, 73], [91, 115], [173, 234], [261, 288], [314, 326], [343, 360]],
-        [[0, 360]],
-        [[0, 18], [31, 122], [137, 166], [265, 360]],
-        [[48, 87], [161, 177], [289, 333]],
-        [[202, 259]],
-        [[0, 360]],
-        [], // innermost
-      ];
       this.revisionCircleSegments = [
         [[2, 24], [24, 48], [48, 61], [-1, -1], [-2, -2], [-2, -2], [-2, -2], [-2, -2], [-3, -3], [225, 233], [-3, -3], [-3, -3], [-4, -4], [-4, -4], [-4, -4],],
         [[0, 24], [24, 48], [48, 72], [72, 96], [96, 120], [120, 144], [144, 168], [168, 192], [192, 216], [216, 240], [240, 264], [264, 288], [288, 312], [312, 336], [336, 360],],
         [[-1, -1], [-1, -1], [62, 73], [-1, -1], [91, 115], [-2, -2], [-2, -2], [173, 192], [192, 216], [216, 234], [-3, -3], [261, 288], [-4, -4], [314, 326], [343, 360],],
-        [[0, 24], [24, 48], [48, 72], [72, 96], [96, 120], [120, 144], [144, 168], [168, 192], [192, 216], [216, 240], [240, 264], [264, 288], [288, 312], [312, 336], [336, 360],],
+        [[-1, -1], [-1, -1], [-1, -1], [-1, -1], [-2, -2], [-2, -2], [-2, -2], [-2, -2], [-3, -3], [-3, -3], [-3, -3], [-3, -3], [-4, -4], [-4, -4], [-4, -4],],
         [[0, 18], [31, 48], [48, 72], [72, 96], [96, 122], [-2, -2], [137, 166], [-2, -2], [-3, -3], [-3, -3], [-3, -3], [265, 288], [288, 312], [312, 336], [336, 360],],
         [[-1, -1], [-1, -1], [48, 72], [72, 87], [-2, -2], [-2, -2], [-2, -2], [161, 177], [-3, -3], [-3, -3], [-3, -3], [-3, -3], [289, 312], [312, 333], [-4, -4],],
         [[-1, -1], [-1, -1], [-1, -1], [-1, -1], [-2, -2], [-2, -2], [-2, -2], [-2, -2], [202, 216], [216, 240], [240, 259], [-3, -3], [-4, -4], [-4, -4], [-4, -4],],
@@ -102,7 +91,7 @@
         3: new THREE.MeshBasicMaterial({ color: pinkColor }),
       };
       this.numHexagonsX = 15;
-      this.numHexagonsY = this.revisionLogoSegments.length;
+      this.numHexagonsY = this.revisionCircleSegments.length;
       this.hexagonRows = [];
       for (let y = 0; y < this.numHexagonsY; y++) {
         let row = [];
@@ -953,7 +942,7 @@
                 thatLineWidth *= 1.03;
               }
 
-              const targetCircleRadius = 0.5 * (this.revisionCircleThicknesses[y][1] + this.revisionCircleThicknesses[y][0]) * outermostCircleRadius;
+              const targetCircleRadius = 0.5 * (this.revisionCircleThicknesses[y][1] + this.revisionCircleThicknesses[y][0]) * outermostCircleRadius - 0.07 * outermostCircleRadius;
               circleRadius = lerp(
                 originalCircleRadius,
                 targetCircleRadius,
@@ -973,14 +962,14 @@
 
               let targetPhiStart = phiStart;
               if (this.revisionCircleSegments[y][x][0] >= 0) {
-                targetPhiStart = 4 * Math.PI + 2 * Math.PI * this.revisionCircleSegments[y][x][0] / 360 - 0.02;
+                targetPhiStart = 4 * Math.PI + 2 * Math.PI * this.revisionCircleSegments[y][x][0] / 360 - 0.01;
               } else {
                 targetPhiStart = (phiStart + phiEnd) / 2;
               }
 
               let targetPhiEnd = phiEnd;
               if (this.revisionCircleSegments[y][x][1] >= 0) {
-                targetPhiEnd = 4 * Math.PI + 2 * Math.PI * this.revisionCircleSegments[y][x][1] / 360 + 0.02;
+                targetPhiEnd = 4 * Math.PI + 2 * Math.PI * this.revisionCircleSegments[y][x][1] / 360 + 0.01;
               } else {
                 targetPhiEnd = (phiStart + phiEnd) / 2;
               }
