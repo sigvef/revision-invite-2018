@@ -49,13 +49,15 @@
       }
       this.frame = frame;
       this.uniforms.frame.value = frame;
-      let t = Math.pow(Math.max(0, T(22 * 48, 22 * 48 + 12, frame)), 2.5);
+      var start = 23.11;
+      let t = Math.pow(Math.max(0, T(start * 48, start * 48 + 12, frame)), 2.5);
 
       this.uniforms.translationOverX.value = easeIn(0.5, 0, t);
       this.uniforms.translationUnderX.value = easeIn(0, -0.15, t);
 
-      if (BEAN >= 23 * 48) {
-        t = 1 - T(23 * 48, 23 * 48 + 12, frame);
+      var end = 24.75 - 3 / 48;
+      if (BEAN >= end * 48) {
+        t = 1 - T(end * 48, end * 48 + 12, frame);
         this.uniforms.translationOverX.value = easeIn(0.5, 0, t);
         this.uniforms.translationUnderX.value = easeIn(0, -0.15, t);
       }
