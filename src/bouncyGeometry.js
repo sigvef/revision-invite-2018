@@ -786,6 +786,8 @@
     drawHexagons(frame) {
       this.ctx.clearRect(0, 0, this.textCanvas.width, this.textCanvas.height);
 
+      this.ctx.textBaseline = 'middle';
+      this.ctx.textAlign = 'center';
       this.ctx.fillStyle = '#FF77A2';
       this.ctx.strokeStyle = '#FF77A2';
 
@@ -817,12 +819,12 @@
           const firstHitsStartFrame = FRAME_FOR_BEAN(3168);
           const firstHitsEndFrame = FRAME_FOR_BEAN(3202);
           const firstHitsProgress = (frame - firstHitsStartFrame) / (firstHitsEndFrame - firstHitsStartFrame);
-          zoomFactor = lerp(1 / 0.08, 1 / 0.12, firstHitsProgress);
+          zoomFactor = lerp(1 / 0.08, 1 / 0.10, firstHitsProgress);
         } else if (BEAN >= 3203 && BEAN < 3206) {
           const thirdHitStartFrame = FRAME_FOR_BEAN(3203);
           const thirdHitEndFrame = FRAME_FOR_BEAN(3206);
           const thirdHitProgress = (frame - thirdHitStartFrame) / (thirdHitEndFrame -  thirdHitStartFrame);
-          zoomFactor = lerp(1 / 0.12, 1 / 0.8, thirdHitProgress);
+          zoomFactor = lerp(1 / 0.10, 1 / 0.8, thirdHitProgress);
         } else {
           const restStartFrame = FRAME_FOR_BEAN(3206);
           const restEndFrame = FRAME_FOR_BEAN(3216 + 36);
@@ -888,6 +890,19 @@
             }
             this.ctx.closePath();
             this.ctx.fill();
+            if (BEAN >= 3168 && BEAN < 3204 && y === 3 && x >= 5 && x <= 7) {
+              this.ctx.fillStyle = 'white';
+              if (x === 5 && BEAN >= 3168 && BEAN < 3168 + 12) {
+                this.ctx.font = `bold ${0.13 * GU * zoomFactor}px schmalibre`;
+                this.ctx.fillText('NO', zoomedX(actualX), zoomedY(actualY + 0.07 * cylinderRadius));
+              } else if (x === 6 && BEAN >= 3168 + 12 && BEAN < 3168 + 24) {
+                this.ctx.font = `bold ${0.115 * GU * zoomFactor}px schmalibre`;
+                this.ctx.fillText('LIVE', zoomedX(actualX), zoomedY(actualY + 0.07 * cylinderRadius));
+              } else if (x === 7 && BEAN >= 3168 + 24 && BEAN < 3168 + 36) {
+                this.ctx.font = `bold ${0.095 * GU * zoomFactor}px schmalibre`;
+                this.ctx.fillText('CODING', zoomedX(actualX), zoomedY(actualY + 0.07 * cylinderRadius));
+              }
+            }
           }
         }
         this.ctx.restore();
