@@ -136,7 +136,7 @@
       } else if(BEAN >= 3168 && BEAN < 3216 - 24) {
         this.uniforms.translationOverX.value = 0;
         this.ctx.fillStyle = 'white';
-        this.ctx.fillText('NO LIVE CODING', 0, 4.5);
+        //this.ctx.fillText('NO LIVE CODING', 0, 4.5);
       }
       this.ctx.restore();
 
