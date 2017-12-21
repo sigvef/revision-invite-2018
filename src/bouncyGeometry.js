@@ -11,7 +11,6 @@
       Author: Iver
       */
 
-      this.bgThrob = 0;
       this.stabThrob = 0;
       this.throb = 0;
 
@@ -289,9 +288,6 @@
         }
       }
 
-      if (BEAN >= 3024 && BEAN < 3312) {
-        this.drawHexagons(this.frame);
-      }
       this.updateChordStabBeans(frame);
       this.updateBall(frame);
       this.updateBeams(frame);
@@ -781,7 +777,6 @@
     }
 
     drawHexagons(frame) {
-
       this.ctx.clearRect(0, 0, this.textCanvas.width, this.textCanvas.height);
 
       this.ctx.fillStyle = '#FF77A2';
@@ -1105,6 +1100,9 @@
             lerp(60 / 255, 1, this.throb * 0.4),
             lerp(63 / 255, 1, this.throb * 0.4)
             ));
+      if (BEAN >= 3024 && BEAN < 3312) {
+        this.drawHexagons(this.frame);
+      }
       this.ps.render();
       renderer.render(this.scene, this.camera, this.renderTarget, true);
       this.outputs.render.setValue(this.renderTarget.texture);
