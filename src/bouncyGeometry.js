@@ -737,7 +737,34 @@
 
       this.scene.add(this.textPlane);
       this.textPlane.position.z = -80;
-      this.ps.particles.visible = false;
+      this.ps.particles.visible = true;
+      this.ps.decayFactor = 0.98;
+
+      const particlesStartFrame = FRAME_FOR_BEAN(3231);
+      const particlesEndFrame = FRAME_FOR_BEAN(3246);
+      const progress = (frame - particlesStartFrame) / (particlesEndFrame - particlesStartFrame);
+      if (progress >= 0 && progress < 1) {
+        const particleIntensity = Math.sin(lerp(0.2, 1, progress) * Math.PI);
+        for (let i = 0; i < 8; i++) {
+          if (this.random() < particleIntensity) {
+            const angle = this.random() * Math.PI * 2;
+            const radius = Math.max(3, 1 + 3 * this.random());
+            this.ps.spawn(
+              {
+                x: Math.cos(angle) * radius,
+                y: Math.sin(angle) * radius,
+                z: -79.5,
+              },
+              {
+                x: particleIntensity * 0.18 * Math.cos(angle - Math.PI / 2),
+                y: particleIntensity * 0.18 * Math.sin(angle - Math.PI / 2),
+                z: 0,
+              },
+              lerp(0.007, 0.016, this.random())
+            );
+          }
+        }
+      }
 
       const cameraFovStartFrame = FRAME_FOR_BEAN(3296);
       const cameraFovEndFrame = FRAME_FOR_BEAN(3304);
@@ -876,6 +903,9 @@
         const angleAnimationProgress = smoothstep(
           0, 1, (frame - angleAnimationStartFrame) / (angleAnimationEndFrame - angleAnimationStartFrame)
         );
+        const logoSlowSpinStartFrame = FRAME_FOR_BEAN(3236);
+        const logoSlowSpinEndFrame = FRAME_FOR_BEAN(3296);
+        const logoSpinProgress = (frame - logoSlowSpinStartFrame) / (logoSlowSpinEndFrame - logoSlowSpinStartFrame);
 
         const hexagonAngleTopLeft = Math.PI / 2 + Math.PI * 2 / 3;
         const hexagonAngleTopRight = Math.PI / 2 + Math.PI * 4 / 3;
@@ -895,7 +925,6 @@
           cylinderRadius * hexagonRadius * Math.cos(hexagonTopAngle)
         ) / (16 * GU);
         const outermostCircleRadius = circleCenterY - hexagonGridOffsetY + zoomFactor * cylinderRadius / 2;
-
         this.ctx.lineWidth = zoomFactor * cylinderRadius;
         for (let y = 0; y < this.numHexagonsY; y++) {
           let yMid = hexagonGridOffsetY + y * gridYDistance;
@@ -962,14 +991,14 @@
 
               let targetPhiStart = phiStart;
               if (this.revisionCircleSegments[y][x][0] >= 0) {
-                targetPhiStart = 4 * Math.PI + 2 * Math.PI * this.revisionCircleSegments[y][x][0] / 360 - 0.01;
+                targetPhiStart = 4 * Math.PI + 2 * Math.PI * this.revisionCircleSegments[y][x][0] / 360 - 0.01 + (y >= 3 ? -logoSpinProgress : logoSpinProgress);
               } else {
                 targetPhiStart = (phiStart + phiEnd) / 2;
               }
 
               let targetPhiEnd = phiEnd;
               if (this.revisionCircleSegments[y][x][0] >= 0) {
-                targetPhiEnd = 4 * Math.PI + 2 * Math.PI * this.revisionCircleSegments[y][x][1] / 360 + 0.01;
+                targetPhiEnd = 4 * Math.PI + 2 * Math.PI * this.revisionCircleSegments[y][x][1] / 360 + 0.01 + (y >= 3 ? -logoSpinProgress : logoSpinProgress);
               } else {
                 targetPhiEnd = (phiStart + phiEnd) / 2;
               }
@@ -1030,11 +1059,6 @@
       } else if (BEAN >= 3322 && BEAN < 3336) {
         foregroundColor = white;
         text = 'AT EASTER 2018';
-        const startFrame = FRAME_FOR_BEAN(3322);
-        const endFrame = FRAME_FOR_BEAN(3332);
-        const progress = (frame - startFrame) / (endFrame - startFrame);
-        throbFactor = lerp(2, 0, progress);
-        //shakeAmount = 5 * throbFactor;
         fontScaler = 1.4;
       } else if (BEAN >= 3336 && BEAN < 3340) {
         text = 'THINGS';
@@ -1047,11 +1071,6 @@
         foregroundColor = white;
         text = 'DIFFERENT';
         fontScaler = 2.2;
-        const startFrame = FRAME_FOR_BEAN(3346);
-        const endFrame = FRAME_FOR_BEAN(3357);
-        const progress = (frame - startFrame) / (endFrame - startFrame);
-        throbFactor = lerp(2, 0, progress);
-        //shakeAmount = 8 * throbFactor;
       }
       const pink = 'rgb(255, 73, 130)';
       const backgroundColor = foregroundColor === white ? pink : white;
