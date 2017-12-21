@@ -125,16 +125,17 @@
         this.ctx.fillText('NO SIZE LIMITS', lerp(16, -16, t2) - lerp(-3, 3, t), 4 / 5 * 9);
       }
 
-      if(BEAN >= 3264 && BEAN < 3264 + 24 + 12) {
+      if(BEAN >= 3264 && BEAN < 3264 + 24 + 8) {
         this.ctx.fillStyle = 'black';
-        this.ctx.fillText('NO OBSOLETE HARDWARE', 0, 4.5);
+        this.ctx.font = 'bold 1.66pt schmalibre';
+        this.ctx.fillText('WAIT, WHAT?', 0, 5.1);
       } else if(BEAN >= 3216 && BEAN < 3264 - 24) {
         this.uniforms.translationOverX.value = 0;
-        this.ctx.fillStyle = 'black';
+        this.ctx.fillStyle = 'white';
         this.ctx.fillText('NO SUBMISSIONS', 0, 4.5);
       } else if(BEAN >= 3168 && BEAN < 3216 - 24) {
         this.uniforms.translationOverX.value = 0;
-        this.ctx.fillStyle = 'black';
+        this.ctx.fillStyle = 'white';
         this.ctx.fillText('NO LIVE CODING', 0, 4.5);
       }
       this.ctx.restore();

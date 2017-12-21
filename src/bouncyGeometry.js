@@ -161,7 +161,7 @@
         192, 4 + 192, 10 + 192, 22 + 192, 24 + 192, 28 + 192, 34 + 192, 40 + 192, 42 + 192, 44 + 192, 46 + 192,
         48 + 192, 52 + 192, 58 + 192, 72 + 192, 76 + 192, 82 + 192, 96 + 192, 100 + 192, 106 + 192, 118 + 192,
         120 + 192, 124 + 192, 130 + 192, 136 + 192, 138 + 192, 130 + 192, 142 + 192,
-        148 + 192, 154 + 192, 168 + 192, 172 + 192, 178 + 192,
+        148 + 192, 154 + 192
       ];  // + 2976
       this.updateChordStabBeans = function() {
         for (let i = 0; i < this.beamThicknessScalers.length; i++) {
@@ -234,12 +234,19 @@
       this.frame = frame;
       if (BEAN < 3168 || BEAN >= 3312) {
         demo.nm.nodes.bloom.opacity = 0;
+      } else if (BEAN >= 3264 && BEAN < 3312) {
+        const idx = this.chordStabBeans.indexOf(BEAN - 2976);
+        if (idx !== -1 && BEAN <= 3304) {
+          demo.nm.nodes.bloom.opacity = 1.6;
+        }
+        demo.nm.nodes.bloom.opacity = demo.nm.nodes.bloom.opacity * 0.95;
       } else {
         if (BEAN % 12 === 0) {
           demo.nm.nodes.bloom.opacity = 0.5;
         } else {
           demo.nm.nodes.bloom.opacity *= 0.9;
         }
+
       }
 
       this.stabThrob *= 0.95;
