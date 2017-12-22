@@ -9,6 +9,7 @@
       });
 
       this.camera.near = 0.001;
+      this.camera.far = 400.;
       this.camera.updateProjectionMatrix();
       this.throb = 0;
 
@@ -23,6 +24,8 @@
       this.camera.position.z = 200;
 
       this.NUM_TENTACLES = 30;
+      this.VERTICES_PER_TENTACLE = 300;
+      this.FIX_RATIO = this.VERTICES_PER_TENTACLE / this.NUM_TENTACLES;
       this.NUM_PARTICLES = 200;
 
       this.circle = new THREE.Mesh(
@@ -82,8 +85,8 @@
           radius: 80
         };
 
-        for(let j = 0; j < this.NUM_TENTACLES; j++) {
-          const point = ((j / this.NUM_TENTACLES) * tentacleInfo.radius * 2) - tentacleInfo.radius;
+        for(let j = 0; j < this.VERTICES_PER_TENTACLE; j++) {
+          const point = ((j / this.VERTICES_PER_TENTACLE) * tentacleInfo.radius * 2) - tentacleInfo.radius;
           const vec = new THREE.Vector3(point, 0, 0);
           geo.vertices.push(vec);
         }
@@ -375,9 +378,9 @@
           let ratio = 1 - ((tentacle.radius - Math.abs(positions[j])) / tentacle.radius);
           let y = 1;
           if(BEAN >= 2784) {
-            y = Math.sin(frame * 100 / tentacle.speed + j*0.15) * 2 * ratio;
+            y = Math.sin(frame * 100 / tentacle.speed + j*0.15/this.FIX_RATIO) * 2 * ratio;
           } else {
-            y = Math.sin(frame * 10 / tentacle.speed + j*0.15) * 2 * ratio;
+            y = Math.sin(frame * 10 / tentacle.speed + j*0.15/this.FIX_RATIO) * 2 * ratio;
           }
           positions[j+1] = y;
         }
