@@ -1,7 +1,0 @@
-{
-    "tDiffuse": { "type": "t", "value": null },
-    "palette": { "type": "fv", "value": null },
-    "indexMatrix4x4": { "type": "fv1", "value": null },
-    "frame": { "type": "f", "value": 0.0 },
-    "pixelWidth": { "type": "f", "value": 0.0 }
-}
