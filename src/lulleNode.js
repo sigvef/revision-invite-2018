@@ -9,6 +9,11 @@
       this.myCamera = new THREE.PerspectiveCamera(45, 16 / 9, 1, 1000);
     }
 
+    warmup(renderer) {
+      this.update(4766);
+      this.render(renderer);
+    }
+
     update(frame) {
       const startBEAN = 1848;
       if (BEAN < startBEAN + 6) this.balls = 0;

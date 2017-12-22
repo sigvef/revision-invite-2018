@@ -361,6 +361,11 @@
       }]);
     }
 
+    warmup(renderer) {
+      this.update(6778);
+      this.render(renderer);
+    }
+
     update(frame) {
       super.update(frame);
 

@@ -16,6 +16,11 @@
       this.renderTarget.setSize(640 / 2, 360 / 2);
     }
 
+    warmup(renderer) {
+      this.update(5773);
+      this.render(renderer);
+    }
+
     update(frame) {
       this.uniforms.frame.value = frame;
     }

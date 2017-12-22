@@ -24,6 +24,12 @@
       this.canvas.height = 9 * GU;
     }
 
+
+    warmup(renderer) {
+      this.update(9327);
+      this.render(renderer);
+    }
+
     render() {
 
       this.ctx.fillStyle = 'rgb(255, 73, 130)';

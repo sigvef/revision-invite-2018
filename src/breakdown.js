@@ -29,6 +29,11 @@
       this.cameraDDR = 0;
     }
 
+    warmup(renderer) {
+      this.update(8779);
+      this.render(renderer);
+    }
+
     update(frame) {
       this.frame = frame;
 

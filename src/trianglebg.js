@@ -37,6 +37,11 @@
       this.lines.totalLength = totalLength;
     }
 
+    warmup(renderer) {
+      this.update(4766);
+      this.render(renderer);
+    }
+
     update(frame) {
       this.frame = frame;
     }

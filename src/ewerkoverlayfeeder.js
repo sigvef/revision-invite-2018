@@ -21,6 +21,13 @@
       Loader.load('res/outro-overlay.png', this.afterImage, () => {});
     }
 
+    warmup(renderer) {
+      this.update(11509);
+      this.render(renderer);
+      this.update(166);
+      this.render(renderer);
+    }
+
     update(frame) {
       this.frame = frame;
     }

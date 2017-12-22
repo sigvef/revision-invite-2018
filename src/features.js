@@ -167,6 +167,11 @@
       this.renderTarget2.setSize(16 * GU, 9 * GU);
     }
 
+    warmup(renderer) {
+      this.update(9896);
+      this.render(renderer);
+    }
+
     update(frame) {
 
       this.ball.material.uniforms.ambientLightIntensity.value = 0.2;

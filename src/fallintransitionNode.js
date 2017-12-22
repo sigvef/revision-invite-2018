@@ -8,6 +8,11 @@
       super(id, options);
     }
 
+    warmup(renderer) {
+      this.update(6779);
+      this.render(renderer);
+    }
+
     update(frame) {
       this.uniforms.t.value = easeIn(
         -1,

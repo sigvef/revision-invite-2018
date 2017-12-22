@@ -5,6 +5,11 @@
             this.kickThrob = 0;
         }
 
+        warmup(renderer) {
+          this.update(673);
+          this.render(renderer);
+        }
+
         update(frame) {
             demo.nm.nodes.bloom.opacity = 0;
             this.kickThrob *= 0.8;

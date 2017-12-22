@@ -23,6 +23,11 @@
       }
     }
 
+    warmup(renderer) {
+      this.update(2221);
+      this.render(renderer);
+    }
+
     beforeUpdate(frame) {
       const atariSceneStart = FRAME_FOR_BEAN(48 * 18);
       const animationFinished = FRAME_FOR_BEAN(48 * 18.25);

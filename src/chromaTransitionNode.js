@@ -9,6 +9,11 @@
       super(id, options);
     }
 
+    warmup(renderer) {
+      this.update(0);
+      this.render(renderer);
+    }
+
     update(frame) {
       this.uniforms.t.value = frame;
       this.uniforms.A.value = this.inputs.A.getValue();

@@ -6,6 +6,11 @@
       super(id, options);
     }
 
+    warmup(renderer) {
+      this.update(5775);
+      this.render(renderer);
+    }
+
     update(frame) {
       this.uniforms.frame.value = frame;
       const startBean = 2400 - 1;
