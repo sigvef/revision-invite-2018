@@ -66,7 +66,7 @@
         this.ctx.restore();
       }
 
-      if (BEAN >= 3816) {
+      if (BEAN >= 3816 + 1) {
         this.ctx.save();
         this.ctx.font = '1.1pt schmalibre';
         this.ctx.rotate(rotation - 0.0865);
@@ -74,7 +74,7 @@
         this.ctx.fillText('BONFIRE', 0, 4);
         this.ctx.restore();
       }
-      if (BEAN >= 3816 + 6) {
+      if (BEAN >= 3816 + 2) {
         this.ctx.save();
         this.ctx.font = '1.1pt schmalibre';
         this.ctx.rotate(rotation - 0.083);
@@ -82,7 +82,7 @@
         this.ctx.fillText('DRINKS', 0, 4);
         this.ctx.restore();
       }
-      if (BEAN >= 3816 + 6) {
+      if (BEAN >= 3816 + 3) {
         this.ctx.save();
         this.ctx.font = '1.1pt schmalibre';
         this.ctx.translate(-3.2, 6.0);
@@ -91,7 +91,7 @@
         this.ctx.restore();
       }
 
-      if (BEAN >= 3816 + 9) {
+      if (BEAN >= 3816 + 4) {
         this.ctx.save();
         this.ctx.font = '1.1pt schmalibre';
         this.ctx.rotate(rotation - 0.02);
@@ -99,7 +99,7 @@
         this.ctx.fillText('AMIGA', 0, 4);
         this.ctx.restore();
       }
-      if (BEAN >= 3816 + 9) {
+      if (BEAN >= 3816 + 5) {
         this.ctx.save();
         this.ctx.font = '1.1pt schmalibre';
         this.ctx.rotate(rotation - 0.02);
@@ -107,7 +107,7 @@
         this.ctx.fillText('CONCERTS', 0, 0.4);
         this.ctx.restore();
       }
-      if (BEAN >= 3816 + 12) {
+      if (BEAN >= 3816 + 6) {
         this.ctx.save();
         this.ctx.font = '1.1pt schmalibre';
         this.ctx.rotate(rotation);
@@ -115,7 +115,7 @@
         this.ctx.fillText('MUSIC', 5, 7.0);
         this.ctx.restore();
       }
-      if (BEAN >= 3816 + 12) {
+      if (BEAN >= 3816 + 7) {
         this.ctx.save();
         this.ctx.font = '1.1pt schmalibre';
         this.ctx.rotate(rotation);
@@ -123,7 +123,7 @@
         this.ctx.fillText('FOOD', 0, 0);
         this.ctx.restore();
       }
-      if (BEAN >= 3816 + 12) {
+      if (BEAN >= 3816 + 8) {
         this.ctx.save();
         this.ctx.font = '1.1pt schmalibre';
         this.ctx.rotate(rotation);
@@ -131,7 +131,7 @@
         this.ctx.fillText('GRAPHICS', 0, 10.5);
         this.ctx.restore();
       }
-      if (BEAN >= 3816 + 15) {
+      if (BEAN >= 3816 + 9) {
         this.ctx.save();
         this.ctx.font = '1.1pt schmalibre';
         this.ctx.rotate(rotation);
@@ -139,7 +139,7 @@
         this.ctx.fillText('C64', 0, 4);
         this.ctx.restore();
       }
-      if (BEAN >= 3816 + 16) {
+      if (BEAN >= 3816 + 10) {
         this.ctx.save();
         this.ctx.font = '1.1pt schmalibre';
         this.ctx.translate(11.8, -4.4);
@@ -147,7 +147,7 @@
         this.ctx.fillText('SEMINARS', 0, 0.4);
         this.ctx.restore();
       }
-      if (BEAN >= 3816 + 17) {
+      if (BEAN >= 3816 + 11) {
         this.ctx.save();
         this.ctx.font = '1.1pt schmalibre';
         this.ctx.translate(19, 1.5);
@@ -155,7 +155,7 @@
         this.ctx.fillText('FRIENDSHIP', 0, 0);
         this.ctx.restore();
       }
-      if (BEAN >= 3816 + 18) {
+      if (BEAN >= 3816 + 12) {
         this.ctx.save();
         this.ctx.font = '1.1pt schmalibre';
         this.ctx.rotate(rotation + 0.18);
@@ -163,7 +163,7 @@
         this.ctx.fillText('LIVESTREAM', 0, 0);
         this.ctx.restore();
       }
-      if (BEAN >= 3816 + 18) {
+      if (BEAN >= 3816 + 13) {
         this.ctx.save();
         this.ctx.font = '1.1pt schmalibre';
         this.ctx.translate(24.8, -9);
@@ -171,7 +171,7 @@
         this.ctx.fillText('PHOTOWALL', 0, 0.4);
         this.ctx.restore();
       }
-      if (BEAN >= 3816 + 18) {
+      if (BEAN >= 3816 + 14) {
         this.ctx.save();
         this.ctx.font = '1.1pt schmalibre';
         this.ctx.translate(21.8, -11.5);
@@ -179,7 +179,7 @@
         this.ctx.fillText('PC', 0, 0.4);
         this.ctx.restore();
       }
-      if (BEAN >= 3816 + 18  ) {
+      if (BEAN >= 3816 + 15) {
         this.ctx.save();
         this.ctx.font = '1.1pt schmalibre';
         this.ctx.translate(30, 11.4);
