@@ -43,7 +43,7 @@
         this.textCtx.textBaseline = 'middle';
         this.textCtx.font = 'bold 0.9pt schmalibre';
         this.textCtx.fillStyle = 'white';
-        this.textCtx.fillText('NO DEADLINES', 0, 0);
+        this.textCtx.fillText('NO STARFIELDS', 0, 0);
         this.textCtx.restore();
       }
     }
@@ -122,7 +122,7 @@
         const t2 = 0.5 + (t > 0.5 ? 1 : -1) * Math.pow(Math.abs(2 * t - 1), 10.6) / 2;
         this.uniforms.translationOverX.value = 0;
         this.ctx.fillStyle = 'black';
-        this.ctx.fillText('NO SIZE LIMITS', lerp(16, -16, t2) - lerp(-3, 3, t), 4 / 5 * 9);
+        this.ctx.fillText('NO DEADLINES', lerp(16, -16, t2) - lerp(-3, 3, t), 4 / 5 * 9);
       }
 
       if(BEAN >= 3264 && BEAN < 3264 + 24 + 8) {

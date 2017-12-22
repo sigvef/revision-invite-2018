@@ -72,7 +72,7 @@
         this.ctx.fillStyle = 'white';
         this.ctx.globalCompositeOperation = 'xor';
 
-        this.ctx.fillText('A NEW STYLE', 0, easeIn(0.8, -3.5, t));
+        this.ctx.fillText('NO RIBBONS', 0, easeIn(0.8, -3.5, t));
         this.ctx.fillText('', 0, easeIn(2.0, -2.8, t));
         this.ctx.restore();
       } else {
@@ -99,7 +99,7 @@
         this.ctx.fillStyle = 'white';
         this.ctx.globalCompositeOperation = 'xor';
 
-        this.ctx.fillText('THIS YEAR', 0, easeIn(0.8, -3.5, t));
+        this.ctx.fillText('THIS TIME', 0, easeIn(0.8, -3.5, t));
         this.ctx.restore();
       }
 

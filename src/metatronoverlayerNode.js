@@ -36,15 +36,26 @@
     update(frame) {
       if(this.textCanvas) {
         this.textCanvas.width = 9 * GU;
-        this.textCanvas.height = 2 * GU;
+        this.textCanvas.height = 4 * GU;
+
         this.textCtx.save();
-        this.textCtx.scale(GU, GU);
-        this.textCtx.translate(4.5, 1);
+        this.textCtx.scale(0.9*GU, 0.9*GU);
+        this.textCtx.translate(5, 1);
         this.textCtx.textAlign = 'center';
         this.textCtx.textBaseline = 'middle';
         this.textCtx.font = 'bold 1pt schmalibre';
         this.textCtx.fillStyle = 'white';
-        this.textCtx.fillText('NO PRIOR ART', 0, 0);
+        this.textCtx.fillText('NO EUCLIDEAN', 0, 0);
+        this.textCtx.restore();
+
+        this.textCtx.save();
+        this.textCtx.scale(0.9*GU, 0.9*GU);
+        this.textCtx.translate(5, 2.5);
+        this.textCtx.textAlign = 'center';
+        this.textCtx.textBaseline = 'middle';
+        this.textCtx.font = 'bold 1pt schmalibre';
+        this.textCtx.fillStyle = 'white';
+        this.textCtx.fillText('GEOMETRIES', 0, 0);
         this.textCtx.restore();
       }
       this.frame = frame;
@@ -70,7 +81,6 @@
       this.ctx.scale(GU, GU);
 
       const nudger = 0.5;
-
       this.ctx.beginPath();
       this.ctx.moveTo(0, 0);
       this.ctx.lineTo(16 / 3 - nudger, 0);
