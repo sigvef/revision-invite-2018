@@ -498,7 +498,7 @@
           text = 'IT\'S';
         } else if (BEAN >= 648 + 6) {
           textX = 50;
-          text = 'THIS YEAR';
+          text = 'THIS TIME';
         } else {
           textX = 50;
           text = 'THIS';

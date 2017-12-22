@@ -364,10 +364,10 @@
                 this.textCtx.fillText('                      '[i], 0, -1);
               }
               if(BEAN >= 816 + 12) {
-                this.textCtx.fillText('          YE               '[i], 0, -1);
+                this.textCtx.fillText('          TI               '[i], 0, -1);
               }
               if(BEAN >= 816 + 12 + 4) {
-                this.textCtx.fillText('            AR                '[i], 0, -1);
+                this.textCtx.fillText('            ME                '[i], 0, -1);
               }
             }
           }
