@@ -327,6 +327,7 @@
 
               var vertex_ball = new THREE.Mesh(sphere_geometry, line_material);
               vertex_ball.position.set(x * vertex_distance[cube_num], y * vertex_distance[cube_num], z * vertex_distance[cube_num]);
+              vertex_ball.userData = {isVertexBall: true};
               this.spin_cube.add(vertex_ball);
               this.vertex_balls.push(vertex_ball);
             }
@@ -702,10 +703,10 @@
         this.three_point_star.scale.set(scale, scale, scale);
 
 
-        var claw_progress1 = asmoothstep(FRAME_FOR_BEAN(1322), FRAME_FOR_BEAN(9), frame);
-        var claw_progress2 = asmoothstep(FRAME_FOR_BEAN(1322), FRAME_FOR_BEAN(9), frame);
-        var claw_progress3 = asmoothstep(FRAME_FOR_BEAN(1330), FRAME_FOR_BEAN(7), frame);
-        var claw_progress4 = asmoothstep(FRAME_FOR_BEAN(1330), FRAME_FOR_BEAN(7), frame);
+        var claw_progress1 = asmoothstep(FRAME_FOR_BEAN(1320), FRAME_FOR_BEAN(9), frame);
+        var claw_progress2 = asmoothstep(FRAME_FOR_BEAN(1320), FRAME_FOR_BEAN(9), frame);
+        var claw_progress3 = asmoothstep(FRAME_FOR_BEAN(1329), FRAME_FOR_BEAN(7), frame);
+        var claw_progress4 = asmoothstep(FRAME_FOR_BEAN(1329), FRAME_FOR_BEAN(7), frame);
         /*var claw_progress1 = asmoothstep(FRAME_FOR_BEAN(26.75 * 48), FRAME_FOR_BEAN(12), frame);
         var claw_progress2 = asmoothstep(FRAME_FOR_BEAN(26.875 * 48), FRAME_FOR_BEAN(12), frame);
         var claw_progress3 = asmoothstep(FRAME_FOR_BEAN(27 * 48), FRAME_FOR_BEAN(12), frame);
@@ -900,10 +901,11 @@
     }
 
     draw(object, method) {
-      this.ctx.strokeStyle = 'white';
-      this.ctx.fillStyle = 'rgb(55, 60, 63)';
-      this.ctx.lineWidth = 1.5;
       object.traverseVisible(child => {
+        this.ctx.lineCap = 'round';
+        this.ctx.strokeStyle = 'white';
+        this.ctx.fillStyle = 'rgb(55, 60, 63)';
+        this.ctx.lineWidth = 1.5;
         if(child.lineWidth) {
           this.ctx.lineWidth = child.lineWidth;
         }
@@ -919,25 +921,44 @@
         if(!(child.geometry && child.geometry.vertices.length)) {
           return;
         }
-        this.ctx.beginPath();
         child.updateMatrix();
-        for(let j = 0; j < child.geometry.vertices.length + 2; j++) {
-          const vertex = child.geometry.vertices[
-            j % child.geometry.vertices.length].clone();
-          vertex.applyMatrix4(child.matrixWorld);
-          const x = vertex.x;
-          const y = -(vertex.y);
-          if(j == 0) {
-            this.ctx.moveTo(x, y);
+        if (child.geometry.vertices.length >= 2) {
+          if (child.userData && child.userData.isVertexBall) {
+            if (!isNaN(child.position.x) && BEAN < 1242 && BEAN >= 1200) {
+              const position = child.position.clone();
+              position.applyMatrix4(child.matrixWorld);
+              this.ctx.fillStyle = 'white';
+              this.ctx.beginPath();
+              this.ctx.arc(0.5 * position.x, -0.5 * position.y, 3.2 * Math.abs(child.scale.x), 0, 2 * Math.PI);
+              this.ctx.fill();
+            }
           } else {
-            this.ctx.lineTo(x, y);
+            let previousX = null;
+            let previousY = null;
+            this.ctx.beginPath();
+            for(let j = 0; j < child.geometry.vertices.length; j++) {
+              const vertex = child.geometry.vertices[j % child.geometry.vertices.length].clone();
+              vertex.applyMatrix4(child.matrixWorld);
+              const x = vertex.x;
+              const y = -(vertex.y);
+              if(j === 0) {
+                this.ctx.moveTo(x, y);
+              } else {
+                let distance = Math.sqrt(Math.pow(previousX - x, 2) + Math.pow(previousY - y, 2));
+                if (distance >= 0.5) {
+                  this.ctx.lineTo(x, y);
+                }
+              }
+              previousX = x;
+              previousY = y;
+            }
+            if(method == 'stroke') {
+              this.ctx.stroke();
+              this.ctx.strokeStyle = 'white'; //reset colour
+            } else {
+              this.ctx.fill();
+            }
           }
-        }
-        if(method == 'stroke') {
-          this.ctx.stroke();
-          this.ctx.strokeStyle = 'white'; //reset colour
-        } else {
-          this.ctx.fill();
         }
       });
     }
