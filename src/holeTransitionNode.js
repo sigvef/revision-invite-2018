@@ -13,6 +13,11 @@
       this.inputs.B.enabled = BEAN >= 2948;
     }
 
+    warmup(renderer) {
+      this.update(4273);
+      this.render(renderer);
+    }
+
     update(frame) {
       this.uniforms.t.value = frame;
       this.uniforms.A.value = this.inputs.A.getValue();

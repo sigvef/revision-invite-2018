@@ -14,6 +14,11 @@
       this.uniforms.resolution.value.y = 9 * GU;
     }
 
+    warmup(renderer) {
+      this.update(9896);
+      this.render(renderer);
+    }
+
     update(frame) {
       this.uniforms.tDiffuse.value = this.inputs.tDiffuse.getValue();
     }

@@ -7,7 +7,6 @@
           render: new NIN.TextureOutput()
         },
         inputs: {
-          butterflyContent: new NIN.Input(),
           griddymid: new NIN.Input(),
           globeTextures: new NIN.Input(),
         }
@@ -506,6 +505,11 @@
         object3d.rotation.y = angle;
         this.lasers.push(laserBeam);
       }
+    }
+
+    warmup(renderer) {
+      this.update(5775);
+      this.render(renderer);
     }
 
     update(frame) {

@@ -195,6 +195,11 @@
         (frame - from.frame) / (to.frame - from.frame));
     }
 
+    warmup(renderer) {
+      this.update(3776);
+      this.render(renderer);
+    }
+
     update(frame) {
       super.update(frame);
       this.frame = frame;

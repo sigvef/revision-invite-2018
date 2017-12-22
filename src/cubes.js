@@ -96,6 +96,11 @@
       this.textCanvas.height = 9 * GU * 2;
     }
 
+    warmup(renderer) {
+      this.update(2014);
+      this.render(renderer);
+    }
+
     update(frame) {
       const baseBean = 768;
       this.frame = frame;

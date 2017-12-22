@@ -4,6 +4,11 @@
       super(id, options);
     }
 
+    warmup(renderer) {
+      this.update(1700);
+      this.render(renderer);
+    }
+
     update(frame) {
       this.uniforms.t.value = (frame - FRAME_FOR_BEAN(76 * 12 * 4)) / 60;
       this.uniforms.smallCircleRadius.value = frame / 500 % 0.2 + 0.1;

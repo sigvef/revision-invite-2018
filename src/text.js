@@ -391,6 +391,11 @@
       }
     }
 
+    warmup(renderer) {
+      this.update(2041);
+      this.render(renderer);
+    }
+
     update(frame) {
       this.frame = frame;
       if(frame == 1752) {

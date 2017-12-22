@@ -6,6 +6,11 @@
       super(id, options);
     }
 
+    warmup(renderer) {
+      this.update(2297);
+      this.render(renderer);
+    }
+
     update(frame) {
       this.uniforms.frame.value = frame;
       this.uniforms.tDiffuse.value = this.inputs.tDiffuse.getValue();

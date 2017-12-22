@@ -258,6 +258,11 @@
       }
     }
 
+    warmup(renderer) {
+      this.update(10624);
+      this.render(renderer);
+    }
+
     update(frame) {
       demo.nm.nodes.bloom.opacity = 0;
 

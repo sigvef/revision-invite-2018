@@ -25,6 +25,11 @@
       this.resize();
     }
 
+    warmup(renderer) {
+      this.update(2764);
+      this.render(renderer);
+    }
+
     resize() {
       super.resize();
       if(this.canvas) {

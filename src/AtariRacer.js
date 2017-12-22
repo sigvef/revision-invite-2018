@@ -378,6 +378,12 @@
       return easeIn(coordinate | 0, (coordinate | 0) + Math.sign(coordinate), Math.pow(Math.sign(coordinate) * (coordinate % 1.0), 4.0));
     }
 
+    warmup(renderer) {
+      this.update(2297);
+      this.render(renderer);
+    }
+
+
     update(frame) {
       super.update(frame);
 

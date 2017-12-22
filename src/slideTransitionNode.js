@@ -8,6 +8,11 @@
       super(id, options);
     }
 
+    warmup(renderer) {
+      this.update(2729);
+      this.render(renderer);
+    }
+
     update(frame) {
       this.uniforms.t.value = lerp(0, 1, (frame - FRAME_FOR_BEAN(21 * 48 + 42)) / 11);
       this.uniforms.A.value = this.inputs.A.getValue();

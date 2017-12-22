@@ -226,6 +226,11 @@
       this.cumulativeStabThrob = 0;
     }
 
+    warmup(renderer) {
+      this.update(1290);
+      this.render(renderer);
+    }
+
     update(frame) {
       this.frame = frame;
 

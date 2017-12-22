@@ -21,6 +21,11 @@
       Loader.load('res/pink_revision_logo_middle.png', this.revisionLogoMiddle, () => { });
     }
 
+    warmup(renderer) {
+      this.update(3776);
+      this.render(renderer);
+    }
+
     update(frame) {
       super.update(frame);
 

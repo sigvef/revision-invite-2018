@@ -230,6 +230,13 @@
       }
     }
 
+    warmup(renderer) {
+      this.update(8230);
+      this.render(renderer);
+      this.update(8470);
+      this.render(renderer);
+    }
+
     update(frame) {
       this.frame = frame;
       if (BEAN < 3168 || BEAN >= 3312) {

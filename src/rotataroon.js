@@ -71,6 +71,11 @@
       this.inputs.background.enabled = BEAN < 3864;
     }
 
+    warmup(renderer) {
+      this.update(10360);
+      this.render(renderer);
+    }
+
     update(frame) {
       this.cube.material.uniforms.lineAmount.value = 1;
       this.cube2.material.uniforms.lineAmount.value = 1;

@@ -32,6 +32,11 @@
       this.renderTarget.setSize(16 * GU / scale, 9 * GU / scale);
     }
 
+    warmup(renderer) {
+      this.update(0);
+      this.render(renderer);
+    }
+
     update() {
       this.uniforms.tDiffuse.value = this.inputs.tDiffuse.getValue();
     }

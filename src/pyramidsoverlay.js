@@ -22,6 +22,11 @@
       this.output.magFilter = THREE.LinearFilter;
     }
 
+    warmup(renderer) {
+      this.update(5775);
+      this.render(renderer);
+    }
+
     update(frame) {
       this.snareThrob *= 0.95;
       this.frame = frame;

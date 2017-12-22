@@ -11,6 +11,11 @@
       super(id, options);
     }
 
+    warmup(renderer) {
+      this.update(3771);
+      this.render(renderer);
+    }
+
     update(frame) {
       const t = (frame - FRAME_FOR_BEAN(4 * 12 * 30)) / 60;
       this.uniforms.frame.value = frame;

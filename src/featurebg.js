@@ -28,6 +28,11 @@
       }
     }
 
+    warmup(renderer) {
+      this.update(9896);
+      this.render(renderer);
+    }
+
     update(frame) {
       this.frame = frame;
     }

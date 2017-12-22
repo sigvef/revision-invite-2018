@@ -9,6 +9,11 @@
       this.opacity = options.opacity;
     }
 
+    warmup(renderer) {
+      this.update(0);
+      this.render(renderer);
+    }
+
     update(frame) {
       this.uniforms.opacity.value = this.opacity;
       this.uniforms.A.value = this.inputs.A.getValue();

@@ -198,6 +198,17 @@
       this.inputs.beamer2.enabled = BEAN > 3672 && BEAN < 4280;
     }
 
+    warmup(renderer) {
+      this.update(179);
+      this.render(renderer);
+      this.update(263);
+      this.render(renderer);
+      this.update(326);
+      this.render(renderer);
+      this.update(479);
+      this.render(renderer);
+    }
+
     update(frame) {
       super.update(frame);
 

@@ -49,39 +49,8 @@
     "type": "metatron"
   },
   {
-    "id": "iceberg",
-    "type": "iceberg"
-  },
-  {
-    "id": "toon",
-    "type": "toonNode",
-    "options": {
-      "shader": "toon"
-    },
-    "connected": {
-      "image": "iceberg.render",
-      "coloring": "iceberg.renderColoring"
-    }
-  },
-  {
     "id": "logotransition",
     "type": "logotransition"
-  },
-  {
-    "id": "butterflies",
-    "type": "butterflies"
-  },
-  {
-    "id": "metaballs",
-    "type": "metaballs",
-    "options": {
-      "shader": "triangle"
-    },
-    "connected": {
-      "image": "pyramids.render",
-      "ballpositions": "butterflies.ballpositions",
-      "nextScene": "GodsOrKings.render"
-    }
   },
   {
     "id": "carousel",
@@ -104,32 +73,6 @@
   {
     "id": "jaws",
     "type": "jaws"
-  },
-  {
-    "id": "chilla",
-    "type": "chilla"
-  },
-  {
-    "id": "letterbox",
-    "type": "letterboxNode",
-    "options": {
-      "shader": "letterbox"
-    },
-    "connected": {
-      "image": "chilla.render"
-    }
-  },
-  {
-    "id": "trainmodel",
-    "type": "trainmodelNode",
-    "options": {
-      "shader": "trainmodel"
-    },
-    "connected": {
-      "twistertex": "letterbox.render",
-      "camera": "traincam.camera",
-      "overlay": "trainoverlay.render"
-    }
   },
   {
     "id": "AtariRacer",
@@ -156,51 +99,8 @@
     }
   },
   {
-    "id": "star",
-    "type": "starNode",
-    "options": {
-      "shader": "star"
-    }
-  },
-  {
-    "id": "GodsOrKings",
-    "type": "GodsOrKingsNode",
-    "connected": {
-      "A": "CrownBG.render"
-    },
-    "options": {
-      "shader": "GodsOrKings"
-    }
-  },
-  {
     "id": "text",
     "type": "text"
-  },
-  {
-    "id": "barndoors",
-    "type": "barndoorsNode",
-    "options": {
-      "shader": "barndoors"
-    },
-    "connected": {
-      "A": "star.render"
-    }
-  },
-  {
-    "id": "chromaTransition",
-    "type": "chromaTransitionNode",
-    "options": {
-      "shader": "chromaTransition"
-    },
-    "connected": {
-      "A": "carousel.render",
-      "B": "hexafont.render",
-      "chroma": "starChroma.render"
-    }
-  },
-  {
-    "id": "starChroma",
-    "type": "starChroma"
   },
   {
     "id": "pyramids",
@@ -209,7 +109,6 @@
       "shader": "chess"
     },
     "connected": {
-      "butterflyContent": "butterflies.threedeecontent",
       "griddymid": "griddymid.render",
       "globeTextures": "globetextures.globeTextures"
     }
@@ -251,40 +150,6 @@
     "type": "bouncyGeometry"
   },
   {
-    "id": "dithering",
-    "type": "ditheringNode",
-    "options": {
-      "shader": "dithering"
-    },
-    "connected": {
-      "tDiffuse": "pyramids.render"
-    }
-  },
-  {
-    "id": "predith",
-    "type": "predith"
-  },
-  {
-    "id": "patterns",
-    "type": "patterns"
-  },
-  {
-    "id": "triangalons",
-    "type": "triangalons"
-  },
-  {
-    "id": "diamondillium",
-    "type": "diamondillium"
-  },
-  {
-    "id": "traincam",
-    "type": "traincam"
-  },
-  {
-    "id": "trainoverlay",
-    "type": "trainoverlay"
-  },
-  {
     "id": "ewerk",
     "type": "ewerk",
     "connected": {
@@ -292,10 +157,6 @@
       "beamer": "OrthoCube.render",
       "beamer2": "tree.render"
     }
-  },
-  {
-    "id": "bowties",
-    "type": "bowties"
   },
   {
     "id": "schmapple",
@@ -337,10 +198,6 @@
   {
     "id": "breakdown",
     "type": "breakdown"
-  },
-  {
-    "id": "CrownBG",
-    "type": "crownBG"
   },
   {
     "id": "griddymid",
@@ -636,26 +493,6 @@
     "type": "tartarstuffNode",
     "options": {
       "shader": "tartan"
-    }
-  },
-  {
-    "id": "tarblurx",
-    "type": "BlurPassNode",
-    "options": {
-      "direction": "x"
-    },
-    "connected": {
-      "tDiffuse": "tarblury.render"
-    }
-  },
-  {
-    "id": "tarblury",
-    "type": "BlurPassNode",
-    "options": {
-      "direction": "y"
-    },
-    "connected": {
-      "tDiffuse": "tartarstuff.render"
     }
   }
 ]

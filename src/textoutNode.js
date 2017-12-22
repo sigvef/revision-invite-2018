@@ -10,6 +10,11 @@
       this.throb = 0;
     }
 
+    warmup(renderer) {
+      this.update(2229);
+      this.render(renderer);
+    }
+
     update(frame) {
 
       this.inputs.A.enabled = BEAN < 24 * 12 * 4;

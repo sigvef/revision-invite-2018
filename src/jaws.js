@@ -43,6 +43,11 @@
       this.canvas.height = 9 * GU;
     }
 
+    warmup(renderer) {
+      this.update(1586);
+      this.render(renderer);
+    }
+
     update(frame) {
       super.update(frame);
       this.frame = frame;
