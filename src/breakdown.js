@@ -465,6 +465,8 @@
         this.renderSpikes();
       } else if (BEAN >= offset) {
         this.renderCirclePanner();
+      } else if (BEAN >= offset - 12) {
+        this.renderBowties();
       } else {
         this.renderZoomer();
       }
