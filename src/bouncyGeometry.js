@@ -897,10 +897,10 @@
                 this.ctx.fillText('NO', zoomedX(actualX), zoomedY(actualY + 0.07 * cylinderRadius));
               } else if (x === 6 && BEAN >= 3168 + 12 && BEAN < 3168 + 24) {
                 this.ctx.font = `bold ${0.115 * GU * zoomFactor}px schmalibre`;
-                this.ctx.fillText('LIVE', zoomedX(actualX), zoomedY(actualY + 0.07 * cylinderRadius));
+                this.ctx.fillText('SIZE', zoomedX(actualX), zoomedY(actualY + 0.07 * cylinderRadius));
               } else if (x === 7 && BEAN >= 3168 + 24 && BEAN < 3168 + 36) {
                 this.ctx.font = `bold ${0.095 * GU * zoomFactor}px schmalibre`;
-                this.ctx.fillText('CODING', zoomedX(actualX), zoomedY(actualY + 0.07 * cylinderRadius));
+                this.ctx.fillText('LIMITS', zoomedX(actualX), zoomedY(actualY + 0.07 * cylinderRadius));
               }
             }
           }

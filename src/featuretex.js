@@ -15,8 +15,8 @@
       this.output.magFilter = THREE.LinearFilter;
       this.texts = [
         'PARTY',
-        'MUSIC',
         'VISITORS',
+        'MUSIC',
         'DEMOS',
         'AND',
         'MORE',

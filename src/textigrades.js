@@ -124,14 +124,14 @@
         this.ctx.fillText('EAST', x, y);
       } else if (BEAN >= 3960 + 9) {
         this.ctx.fillStyle = 'rgb(55, 60, 63)';
-        this.ctx.fillText('E-WERK', x + 0.1, y + 0.1);
+        this.ctx.fillText('E WERK', x + 0.1, y + 0.1);
         this.ctx.fillStyle = 'rgb(255, 73, 130)';
-        this.ctx.fillText('E-WERK', x, y);
+        this.ctx.fillText('E WERK', x, y);
       } else if (BEAN >= 3960) {
         this.ctx.fillStyle = 'rgb(55, 60, 63)';
-        this.ctx.fillText('E-', x + 0.1, y + 0.1);
+        this.ctx.fillText('E', x + 0.1, y + 0.1);
         this.ctx.fillStyle = 'rgb(255, 73, 130)';
-        this.ctx.fillText('E-', x, y);
+        this.ctx.fillText('E', x, y);
       } else if (BEAN >= 3936) {
         this.ctx.textAlign = 'center';
         this.ctx.font = 'bold 0.6pt schmalibre';
