@@ -10,11 +10,12 @@
       this.throb = 0;
     }
 
-    update(frame) {
-
+    beforeUpdate(frame) {
       this.inputs.A.enabled = BEAN < 24 * 12 * 4;
       this.inputs.B.enabled = BEAN >= 23 * 12 * 4;
+    }
 
+    update(frame) {
       const t = lerp(
         0,
         2,
