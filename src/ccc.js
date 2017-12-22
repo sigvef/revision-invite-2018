@@ -10,6 +10,7 @@
 
       this.camera.near = 0.001;
       this.camera.updateProjectionMatrix();
+      this.throb = 0;
 
       this.random = new Random(0x80deed); // eslint-disable-line
       this.colorRandom = new Random(0xcafebabe); // eslint-disable-line
