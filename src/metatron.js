@@ -960,10 +960,10 @@
       }
       if(BEAN >= 1272 + 18) {
         this.ctx.fillStyle = 'white';
-        this.ctx.fillText('SPONSORS', easeOut(0, 7, t3) + 2 * 16 / 3 -0.75, 4.75);
+        this.ctx.fillText('TOILETS', easeOut(0, 7, t3) + 2 * 16 / 3 -0.75, 4.75);
       } else if(BEAN >= 1272 + 9) {
         this.ctx.fillStyle = 'white';
-        this.ctx.fillText('SPON', easeOut(0, 7, t3) + 2 * 16 / 3 - 0.75, 4.75);
+        this.ctx.fillText('TOI', easeOut(0, 7, t3) + 2 * 16 / 3 - 0.75, 4.75);
       }
 
       const t2 = T(1248 + 9 - 6, 1248 + 9, this.frame);
