@@ -106,7 +106,7 @@
         tentacle.speed = tentacleInfo.speed;
         tentacle.radius = tentacleInfo.radius;
 
-        tentacle.rotation.x = this.random() * Math.PI;
+        //tentacle.rotation.x = this.random() * Math.PI;
         tentacle.rotation.y = this.random() * Math.PI;
         tentacle.rotation.z = this.random() * Math.PI;
         this.group.add(tentacle);
