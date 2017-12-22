@@ -12,8 +12,8 @@
       this.backThrob = 0;
 
       this.wallCanvas = document.createElement('canvas');
-      this.wallCanvas.width = 48 / 3 * 2;
-      this.wallCanvas.height = 27 / 3 * 2;
+      this.wallCanvas.width = 2 * 48 / 3 * 2;
+      this.wallCanvas.height = 2 * 27 / 3 * 2;
       this.wallCtx = this.wallCanvas.getContext('2d');
       this.wallTexture = new THREE.CanvasTexture(this.wallCanvas);
       this.wallTexture.minFilter = THREE.NearestFilter;
@@ -34,7 +34,7 @@
       this.scene.add(this.directionalLight);
 
       this.bg = new THREE.Mesh(
-        new THREE.BoxGeometry(16, 9, 1),
+        new THREE.BoxGeometry(2*16, 2*9, 1),
         new THREE.ShaderMaterial(SHADERS.discowall));
       this.scene.add(this.bg);
       this.bg.position.z = -100;
@@ -287,9 +287,9 @@
         cameraPosition.z = 20;
 
         const t = (frame - 2186 + 10) / 10;
-        cameraPosition.x = easeIn(70, 0, t);
+        cameraPosition.x = easeIn(70, 10, t);
         cameraPosition.y = easeIn(13, 13, t);
-        cameraPosition.z = easeIn(20, 100, t);
+        cameraPosition.z = easeIn(20, 110, t);
 
         for (let i = 0; i < this.cubes.length; i++) {
           this.cubes[i].scale.x = easeIn(this.cubes[i].scale.x, 1, t);
@@ -297,9 +297,9 @@
         }
       }
       if (frame >= 2186) {
-        cameraPosition.x = 0;
+        cameraPosition.x = 10;
         cameraPosition.y = 0;
-        cameraPosition.z = 100;
+        cameraPosition.z = 110;
       }
 
       this.cameraShakeAcceleration.x = -this.cameraShakePosition.x * 0.05;
@@ -332,7 +332,7 @@
     render(renderer) {
       const baseBean = 768;
       this.textCtx.save();
-      this.textCtx.scale(GU * 2, GU * 2);
+      this.textCtx.scale(GU, GU);
       this.textCtx.fillStyle = 'black';
       this.textCtx.fillRect(0, 0, 16, 9);
       this.textCtx.globalAlpha = 1;
@@ -344,7 +344,7 @@
         for (let i = 0; i < 16; i++) {
           const swipeOffset = 2 * (BEAN - start) - i;
           this.textCtx.save();
-          this.textCtx.translate(1 + i + 0.5, 4.4);
+          this.textCtx.translate(i + 1 + 0.5, 4.4);
           this.textCtx.fillStyle = 'rgb(255, 73, 130)';
           if(BEAN <= 8400) {
             if(-swipeOffset * 2 > 0) {

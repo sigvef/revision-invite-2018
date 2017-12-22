@@ -10,7 +10,7 @@ void main() {
 
     vec2 uv = vUv;
     uv -= 0.5;
-    uv *= vec2(16., 9.) / 16.;
+    uv *= vec2(16., 9.) / 8.;
 
     float light = 1.;
     vec2 grid = uv * 8.;
@@ -18,8 +18,14 @@ void main() {
     light *= abs(cos(PI + grid.y * PI * 2.));
     light = pow(light, .1);
 
-    vec3 color = texture2D(walltexture, vUv).xyz * 2.;
-    color += texture2D(texttexture, vUv).xyz;
+    vec2 wallUV = vUv;
+    wallUV += vec2(-0.25, 0.25);
+    vec3 color = texture2D(walltexture, wallUV).xyz * 2.;
+
+    vec2 textUV = vUv;
+    textUV += vec2(-0.25, 0.25);
+
+    color += texture2D(texttexture, textUV).xyz;
     color *= light;
 
     color *= 0.9;
