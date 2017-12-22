@@ -703,10 +703,10 @@
         this.three_point_star.scale.set(scale, scale, scale);
 
 
-        var claw_progress1 = asmoothstep(FRAME_FOR_BEAN(1322), FRAME_FOR_BEAN(9), frame);
-        var claw_progress2 = asmoothstep(FRAME_FOR_BEAN(1322), FRAME_FOR_BEAN(9), frame);
-        var claw_progress3 = asmoothstep(FRAME_FOR_BEAN(1330), FRAME_FOR_BEAN(7), frame);
-        var claw_progress4 = asmoothstep(FRAME_FOR_BEAN(1330), FRAME_FOR_BEAN(7), frame);
+        var claw_progress1 = asmoothstep(FRAME_FOR_BEAN(1320), FRAME_FOR_BEAN(9), frame);
+        var claw_progress2 = asmoothstep(FRAME_FOR_BEAN(1320), FRAME_FOR_BEAN(9), frame);
+        var claw_progress3 = asmoothstep(FRAME_FOR_BEAN(1329), FRAME_FOR_BEAN(7), frame);
+        var claw_progress4 = asmoothstep(FRAME_FOR_BEAN(1329), FRAME_FOR_BEAN(7), frame);
         /*var claw_progress1 = asmoothstep(FRAME_FOR_BEAN(26.75 * 48), FRAME_FOR_BEAN(12), frame);
         var claw_progress2 = asmoothstep(FRAME_FOR_BEAN(26.875 * 48), FRAME_FOR_BEAN(12), frame);
         var claw_progress3 = asmoothstep(FRAME_FOR_BEAN(27 * 48), FRAME_FOR_BEAN(12), frame);
