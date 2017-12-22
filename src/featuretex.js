@@ -66,7 +66,7 @@
         this.ctx.restore();
       }
 
-      if (BEAN >= 3816 + 4) {
+      if (BEAN >= 3816) {
         this.ctx.save();
         this.ctx.font = '1.1pt schmalibre';
         this.ctx.rotate(rotation - 0.0865);
@@ -74,7 +74,7 @@
         this.ctx.fillText('BONFIRE', 0, 4);
         this.ctx.restore();
       }
-      if (BEAN >= 3816 + 4) {
+      if (BEAN >= 3816 + 6) {
         this.ctx.save();
         this.ctx.font = '1.1pt schmalibre';
         this.ctx.rotate(rotation - 0.083);
@@ -82,7 +82,7 @@
         this.ctx.fillText('DRINKS', 0, 4);
         this.ctx.restore();
       }
-      if (BEAN >= 3816 + 4) {
+      if (BEAN >= 3816 + 6) {
         this.ctx.save();
         this.ctx.font = '1.1pt schmalibre';
         this.ctx.translate(-3.2, 6.0);
@@ -91,7 +91,7 @@
         this.ctx.restore();
       }
 
-      if (BEAN >= 3816 + 6) {
+      if (BEAN >= 3816 + 9) {
         this.ctx.save();
         this.ctx.font = '1.1pt schmalibre';
         this.ctx.rotate(rotation - 0.02);
@@ -99,7 +99,7 @@
         this.ctx.fillText('AMIGA', 0, 4);
         this.ctx.restore();
       }
-      if (BEAN >= 3816 + 6) {
+      if (BEAN >= 3816 + 9) {
         this.ctx.save();
         this.ctx.font = '1.1pt schmalibre';
         this.ctx.rotate(rotation - 0.02);
@@ -139,7 +139,15 @@
         this.ctx.fillText('C64', 0, 4);
         this.ctx.restore();
       }
-      if (BEAN >= 3816 + 18) {
+      if (BEAN >= 3816 + 16) {
+        this.ctx.save();
+        this.ctx.font = '1.1pt schmalibre';
+        this.ctx.translate(11.8, -4.4);
+        this.ctx.rotate(rotation + 0.02);
+        this.ctx.fillText('SEMINARS', 0, 0.4);
+        this.ctx.restore();
+      }
+      if (BEAN >= 3816 + 17) {
         this.ctx.save();
         this.ctx.font = '1.1pt schmalibre';
         this.ctx.translate(19, 1.5);
@@ -153,14 +161,6 @@
         this.ctx.rotate(rotation + 0.18);
         this.ctx.translate(19, 9.8);
         this.ctx.fillText('LIVESTREAM', 0, 0);
-        this.ctx.restore();
-      }
-      if (BEAN >= 3816 + 15) {
-        this.ctx.save();
-        this.ctx.font = '1.1pt schmalibre';
-        this.ctx.translate(11.8, -4.4);
-        this.ctx.rotate(rotation + 0.02);
-        this.ctx.fillText('SEMINARS', 0, 0.4);
         this.ctx.restore();
       }
       if (BEAN >= 3816 + 18) {
