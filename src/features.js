@@ -276,14 +276,14 @@
       if (this.textball.material.map) {
         this.textball.material.map.wrapT = THREE.ClampToEdgeWrapping;
         this.textball.material.map.wrapS = THREE.ClampToEdgeWrapping;
-        this.textball.material.map.repeat.set(2, 3);
+        this.textball.material.map.repeat.set(1, 1.5);
         let offset = ((frame / 200 - 1) % 2) - 1;
         const t = frame / 60 / 60 * 115 / 2;
         offset = easeOut(0, 1, ((t % 1) - 0.25) * 2) - easeIn(1, 0, ((t % 1)) * 2 - 1);
         offset = Math.pow(offset, 5);
         this.textball.material.map.offset.set(
-          offset,
-          -1);
+          offset+0.25,
+          -0.25);
       }
       this.textball.material.needsUpdate = true;
 
@@ -319,8 +319,8 @@
         this.ball.position.set(0, 0, 0);
 
         if (this.textball.material.map) {
-          this.textball.material.map.offset.set(-0.5, -2.5);
-          this.textball.material.map.repeat.set(4, 6);
+          this.textball.material.map.offset.set(0, -1.0);
+          this.textball.material.map.repeat.set(2, 3.0);
         }
 
         let t = (frame - FRAME_FOR_BEAN(3816 + 12 + 6)) / (

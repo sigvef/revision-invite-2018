@@ -49,23 +49,7 @@
         this.ctx.font = '1.1pt schmalibre';
         this.ctx.rotate(rotation);
         this.ctx.translate(-12, -6);
-        this.ctx.fillText('PC', 0, 4);
-        this.ctx.restore();
-      }
-      if (BEAN >= 3816 + 6) {
-        this.ctx.save();
-        this.ctx.font = '1.1pt schmalibre';
-        this.ctx.rotate(rotation);
-        this.ctx.translate(0, -6);
-        this.ctx.fillText('AMIGA', 0, 4);
-        this.ctx.restore();
-      }
-      if (BEAN >= 3816 + 18) {
-        this.ctx.save();
-        this.ctx.font = '1.1pt schmalibre';
-        this.ctx.rotate(rotation);
-        this.ctx.translate(12, -6);
-        this.ctx.fillText('C64', 0, 4);
+        this.ctx.fillText('ATARI', 0, 4);
         this.ctx.restore();
       }
       if (BEAN >= 3816) {
@@ -73,23 +57,129 @@
         this.ctx.font = '1.1pt schmalibre';
         this.ctx.rotate(rotation);
         this.ctx.translate(-12, 1);
-        this.ctx.fillText('ATARI', 0, 0.4);
+        this.ctx.fillText('LIVE-CODING', 0, 0.4);
         this.ctx.restore();
       }
-      if (BEAN >= 3816 + 9) {
+
+      if (BEAN >= 3816 + 4) {
+        this.ctx.save();
+        this.ctx.font = '1.1pt schmalibre';
+        this.ctx.rotate(rotation - 0.0865);
+        this.ctx.translate(-5.1, -13);
+        this.ctx.fillText('BONFIRE', 0, 4);
+        this.ctx.restore();
+      }
+      if (BEAN >= 3816 + 4) {
+        this.ctx.save();
+        this.ctx.font = '1.1pt schmalibre';
+        this.ctx.rotate(rotation - 0.083);
+        this.ctx.translate(-5.0, -17.0);
+        this.ctx.fillText('DRINKS', 0, 4);
+        this.ctx.restore();
+      }
+      if (BEAN >= 3816 + 4) {
+        this.ctx.save();
+        this.ctx.font = '1.1pt schmalibre';
+        this.ctx.translate(-3.2, 6.0);
+        this.ctx.rotate(rotation-0.09);
+        this.ctx.fillText('OLDSKOOL', -0.5, 4);
+        this.ctx.restore();
+      }
+
+      if (BEAN >= 3816 + 6) {
+        this.ctx.save();
+        this.ctx.font = '1.1pt schmalibre';
+        this.ctx.rotate(rotation - 0.02);
+        this.ctx.translate(0, -6);
+        this.ctx.fillText('AMIGA', 0, 4);
+        this.ctx.restore();
+      }
+      if (BEAN >= 3816 + 6) {
+        this.ctx.save();
+        this.ctx.font = '1.1pt schmalibre';
+        this.ctx.rotate(rotation - 0.02);
+        this.ctx.translate(0, 1);
+        this.ctx.fillText('CONCERTS', 0, 0.4);
+        this.ctx.restore();
+      }
+      if (BEAN >= 3816 + 12) {
         this.ctx.save();
         this.ctx.font = '1.1pt schmalibre';
         this.ctx.rotate(rotation);
         this.ctx.translate(0, 1);
-        this.ctx.fillText('CONCERTS', 0, 0.4);
+        this.ctx.fillText('MUSIC', 5, 7.0);
+        this.ctx.restore();
+      }
+      if (BEAN >= 3816 + 12) {
+        this.ctx.save();
+        this.ctx.font = '1.1pt schmalibre';
+        this.ctx.rotate(rotation);
+        this.ctx.translate(5.9, -8.5);
+        this.ctx.fillText('FOOD', 0, 0);
+        this.ctx.restore();
+      }
+      if (BEAN >= 3816 + 12) {
+        this.ctx.save();
+        this.ctx.font = '1.1pt schmalibre';
+        this.ctx.rotate(rotation);
+        this.ctx.translate(5.2, 1);
+        this.ctx.fillText('GRAPHICS', 0, 10.5);
+        this.ctx.restore();
+      }
+      if (BEAN >= 3816 + 15) {
+        this.ctx.save();
+        this.ctx.font = '1.1pt schmalibre';
+        this.ctx.rotate(rotation);
+        this.ctx.translate(12, -6);
+        this.ctx.fillText('C64', 0, 4);
         this.ctx.restore();
       }
       if (BEAN >= 3816 + 18) {
         this.ctx.save();
         this.ctx.font = '1.1pt schmalibre';
-        this.ctx.rotate(rotation);
-        this.ctx.translate(12, 1);
+        this.ctx.translate(19, 1.5);
+        this.ctx.rotate(rotation+0.16);
+        this.ctx.fillText('FRIENDSHIP', 0, 0);
+        this.ctx.restore();
+      }
+      if (BEAN >= 3816 + 18) {
+        this.ctx.save();
+        this.ctx.font = '1.1pt schmalibre';
+        this.ctx.rotate(rotation + 0.18);
+        this.ctx.translate(19, 9.8);
+        this.ctx.fillText('LIVESTREAM', 0, 0);
+        this.ctx.restore();
+      }
+      if (BEAN >= 3816 + 15) {
+        this.ctx.save();
+        this.ctx.font = '1.1pt schmalibre';
+        this.ctx.translate(11.8, -4.4);
+        this.ctx.rotate(rotation + 0.02);
         this.ctx.fillText('SEMINARS', 0, 0.4);
+        this.ctx.restore();
+      }
+      if (BEAN >= 3816 + 18) {
+        this.ctx.save();
+        this.ctx.font = '1.1pt schmalibre';
+        this.ctx.translate(24.8, -9);
+        this.ctx.rotate(rotation + 0.14);
+        this.ctx.fillText('PHOTOWALL', 0, 0.4);
+        this.ctx.restore();
+      }
+      if (BEAN >= 3816 + 18) {
+        this.ctx.save();
+        this.ctx.font = '1.1pt schmalibre';
+        this.ctx.translate(21.8, -11.5);
+        this.ctx.rotate(rotation+0.12);
+        this.ctx.fillText('PC', 0, 0.4);
+        this.ctx.restore();
+      }
+      if (BEAN >= 3816 + 18  ) {
+        this.ctx.save();
+        this.ctx.font = '1.1pt schmalibre';
+        this.ctx.translate(30, 11.4);
+        this.ctx.rotate(rotation + 0.32);
+        this.ctx.fillText('WORKSHOP', 0, 0);
         this.ctx.restore();
       }
 
@@ -100,8 +190,8 @@
     }
 
     resize() {
-      this.canvas.width = 16 * GU;
-      this.canvas.height = 9 * GU;
+      this.canvas.width = 2 * 16 * GU;
+      this.canvas.height = 2 * 9 * GU;
     }
   }
 
