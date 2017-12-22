@@ -77,7 +77,6 @@
       this.ctx.lineTo(16 / 3 + nudger, 9);
       this.ctx.lineTo(0, 9);
       this.ctx.lineTo(0, 0);
-      this.ctx.fillStyle = 'rgb(55, 60, 63)';
       this.ctx.fillStyle = '#282b2d';
       this.ctx.fill();
 
