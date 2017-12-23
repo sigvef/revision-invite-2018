@@ -200,6 +200,38 @@
       this.ctx.restore();
     }
 
+    renderSomething() {
+      const ctx = this.ctx;
+      ctx.save();
+      ctx.translate(-8, -4.5);
+      ctx.fillStyle = '#3c0850';
+      ctx.fillRect(0, 0, GU, GU);
+      ctx.beginPath();
+      ctx.moveTo(0, 0);
+      ctx.fillStyle = '#570079';
+      const amount = this.spikeDirection > 0
+        ? (this.spikeAmount - 0.5) * 2
+        : (0.5 - this.spikeAmount) * 2;
+      const yOffset = (this.frame / 4) % 2;
+      ctx.translate(0, -yOffset);
+      for (let j = 0; j < 20; j++) {
+        for (let i = 0; i < 17; i++) {
+          ctx.lineTo(j % 2 ? i : 16 - i,
+            -2 +
+            j + (i % 2)
+            + amount / 2 * (j % 2 ? 1 : -1)
+          );
+        }
+      }
+      ctx.lineTo(0, 20);
+      ctx.fill();
+      ctx.lineWidth = 0.1;
+      ctx.strokeStyle = '#221e1f';
+      ctx.stroke();
+      ctx.translate(0, yOffset);
+      ctx.restore();
+    }
+
     renderSpikes() {
       const ctx = this.ctx;
       ctx.save();
@@ -466,7 +498,7 @@
       } else if (BEAN >= offset) {
         this.renderCirclePanner();
       } else if (BEAN >= offset - 12) {
-        this.renderBowties();
+        this.renderSomething();
       } else {
         this.renderZoomer();
       }
