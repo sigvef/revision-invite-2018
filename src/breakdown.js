@@ -201,35 +201,42 @@
     }
 
     renderSomething() {
-      const ctx = this.ctx;
-      ctx.save();
-      ctx.translate(-8, -4.5);
-      ctx.fillStyle = '#3c0850';
-      ctx.fillRect(0, 0, GU, GU);
-      ctx.beginPath();
-      ctx.moveTo(0, 0);
-      ctx.fillStyle = '#570079';
-      const amount = this.spikeDirection > 0
-        ? (this.spikeAmount - 0.5) * 2
-        : (0.5 - this.spikeAmount) * 2;
-      const yOffset = (this.frame / 4) % 2;
-      ctx.translate(0, -yOffset);
-      for (let j = 0; j < 20; j++) {
-        for (let i = 0; i < 17; i++) {
-          ctx.lineTo(j % 2 ? i : 16 - i,
-            -2 +
-            j + (i % 2)
-            + amount / 2 * (j % 2 ? 1 : -1)
-          );
+      this.ctx.save();
+      this.ctx.translate(-8, -4.5);
+      this.ctx.fillStyle = '#28654b';
+      this.ctx.fillRect(0, 0, GU, GU);
+      this.ctx.fillStyle = '#212121';
+      this.ctx.lineWidth = 0.05;
+      this.ctx.beginPath();
+      for (let i = 0; i < 20; i++) {
+        for (let j = 0; j < 10; j++) {
+          const x = i + (j % 2) * 0.5;
+          const y = j;
+          const r = 0.25 + Math.max(0, (i % 2) * 0.25 - (j % 2 == 0) * 0.25);
+          this.ctx.save();
+          this.ctx.translate(x, y);
+          let angle = (this.frame / 10) % (Math.PI * 2);
+          angle = (angle + (i ^ j) / 2) % (Math.PI * 2);
+          if (angle > Math.PI) {
+            angle = Math.PI * 2 - angle;
+            this.ctx.rotate(Math.PI / 2);
+          }
+          this.ctx.moveTo(0, 0);
+          this.ctx.lineTo(r * Math.cos(-angle / 2),
+            r * Math.sin(-angle / 2));
+          this.ctx.arc(0, 0, r,
+            - angle / 2,
+            + angle / 2);
+          this.ctx.lineTo(0, 0);
+          this.ctx.lineTo(r * Math.cos(Math.PI - angle / 2),
+            r * Math.sin(Math.PI - angle / 2));
+          this.ctx.arc(0, 0, r, Math.PI - angle / 2, Math.PI + angle / 2);
+          this.ctx.lineTo(0, 0);
+          this.ctx.restore();
         }
       }
-      ctx.lineTo(0, 20);
-      ctx.fill();
-      ctx.lineWidth = 0.1;
-      ctx.strokeStyle = '#221e1f';
-      ctx.stroke();
-      ctx.translate(0, yOffset);
-      ctx.restore();
+      this.ctx.fill();
+      this.ctx.restore();
     }
 
     renderSpikes() {
