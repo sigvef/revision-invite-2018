@@ -118,24 +118,6 @@
           metalness: 0,
         }));
 
-      this.cloudGlobe = new THREE.Mesh(
-        new THREE.SphereGeometry(201, 40, 40),
-        new THREE.MeshStandardMaterial({
-          color: 0xffffff,
-          roughness: 1,
-          metalness: 0,
-          transparent: true,
-        }));
-
-      this.cloudGlobeDetail = new THREE.Mesh(
-        new THREE.SphereGeometry(201.1, 40, 40),
-        new THREE.MeshStandardMaterial({
-          color: 0xffffff,
-          roughness: 1,
-          metalness: 0,
-          transparent: true,
-        }));
-
       this.globeContainer.add(this.globe);
       this.globeContainer.add(this.globeDetail);
 
@@ -230,32 +212,22 @@
       demo.nm.nodes.bloom.opacity = 0;
       this.globeContainer.rotation.y = 5 - frame / 1000;
       this.globeDetail.visible = frame >= 248 && frame <= 11317;
-      this.cloudGlobeDetail.visible = frame >= 248 && frame <= 11317;
       this.globe.visible = frame < 248 || frame > 11317;
-      this.cloudGlobe.visible = frame < 248 || frame > 11317;
       this.revisionLogo.visible = frame > 11317;
       this.ewerkModel.visible = frame >= 248 && frame <= 11317;
 
       this.globe.material.opacity = 1;
-      this.cloudGlobe.material.opacity = 1;
       this.revisionLogo.material.opacity = 0;
 
       const globeTextures = this.inputs.globeTextures.getValue();
       if (globeTextures) {
         this.globe.material.map = globeTextures.map;
-        this.cloudGlobe.material.alphaMap = globeTextures.cloudMap;
-        this.cloudGlobe.material.roughnessMap = globeTextures.cloudMap;
         this.globeDetail.material.map = globeTextures.mapDetail;
-        this.cloudGlobeDetail.material.alphaMap = globeTextures.cloudMapDetail;
-        this.cloudGlobeDetail.material.roughnessMap = globeTextures.cloudMapDetail;
 
         //Set anisotropy to avoid blurry globe
         let maxAnisotropy = demo.renderer.getMaxAnisotropy();
         this.globe.material.map.anisotropy = maxAnisotropy;
         this.globeDetail.material.map.anisotropy = maxAnisotropy;
-
-
-        //this.skybox.material = globeTextures.skyboxMaterial;
       }
       const frame1 = FRAME_FOR_BEAN(1 * 12 * 4);
       const frame2 = FRAME_FOR_BEAN(2 * 12 * 4);
@@ -271,8 +243,6 @@
       const frame12 = FRAME_FOR_BEAN(90 * 12 * 4 + 9);
       const frame13 = FRAME_FOR_BEAN(90 * 12 * 4 + 9 + 9);
 
-      this.cloudGlobe.rotation.y -= 0.0002;
-      this.cloudGlobeDetail.rotation.y -= 0.0002;
       this.ps.particles.rotation.y += 0.0005;
 
       if (frame > frame2 && frame < frame12) {
@@ -486,7 +456,6 @@
         this.revisionLogo.lookAt(this.camera.position);
 
         this.globe.material.opacity = easeIn(1, 0, (frame - 11315) / 10);
-        this.cloudGlobe.material.opacity = easeIn(1, 0, (frame - 11315) / 10);
         this.globeOutline.material.opacity = easeIn(1, 0, (frame - 11315) / 10);
         this.revisionLogo.material.opacity = lerp(0, 1, (frame - 11315) / 10);
       }

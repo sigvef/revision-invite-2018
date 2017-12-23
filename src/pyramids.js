@@ -8,20 +8,12 @@
         },
         inputs: {
           griddymid: new NIN.Input(),
-          globeTextures: new NIN.Input(),
         }
       });
 
-      this.ps = new ParticleSystem({color: new THREE.Color(1, 1, 1)});
+      this.ps = new global.ParticleSystem({color: new THREE.Color(1, 1, 1)});
       this.scene.add(this.ps.particles);
 
-      this.skybox = new THREE.Mesh(
-          new THREE.BoxGeometry(500, 500, 500),
-          new THREE.MeshBasicMaterial({
-            color: 0xffffff,
-            side: THREE.DoubleSide,
-          }));
-      //this.scene.add(this.skybox);
 
       this.cameraPreviousPosition = new THREE.Vector3(0, 0, 0);
       this.cameraShakePosition = new THREE.Vector3(0, 0, 0);
@@ -516,11 +508,6 @@
       super.update(frame);
 
       this.ps.update(frame);
-
-      const globeTextures = this.inputs.globeTextures.getValue();
-      if(globeTextures) {
-        this.skybox.material = globeTextures.skyboxMaterial;
-      }
 
       if(BEAT) {
         switch(BEAN) {
