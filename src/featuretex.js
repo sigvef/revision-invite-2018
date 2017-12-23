@@ -49,7 +49,7 @@
       }
 
       const rotation = -0.43;
-      if (BEAN >= 3816) {
+      if (BEAN >= 3816+16) {
         this.ctx.save();
         this.ctx.font = '1.1pt schmalibre';
         this.ctx.rotate(rotation);
@@ -107,7 +107,7 @@
         this.ctx.fillText('CONCERTS', 0, 0.4);
         this.ctx.restore();
       }
-      if (BEAN >= 3816 + 11) {
+      if (BEAN >= 3816 + 2) {
         this.ctx.save();
         this.ctx.font = '1.1pt schmalibre';
         this.ctx.rotate(rotation);
@@ -155,7 +155,7 @@
         this.ctx.fillText('FRIENDSHIP', 0, 0);
         this.ctx.restore();
       }
-      if (BEAN >= 3816 + 2) {
+      if (BEAN >= 3816 + 11) {
         this.ctx.save();
         this.ctx.font = '1.1pt schmalibre';
         this.ctx.rotate(rotation + 0.18);
