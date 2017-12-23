@@ -1,4 +1,4 @@
-(function(global) {
+(function (global) {
 
   function T(startBean, endBean, frame) {
     const startFrame = FRAME_FOR_BEAN(startBean);
@@ -34,18 +34,18 @@
 
     resize() {
       super.resize();
-      if(this.canvas) {
+      if (this.canvas) {
         this.canvas.width = 16 * GU;
         this.canvas.height = 9 * GU;
       }
-      if(this.textCanvas) {
+      if (this.textCanvas) {
         this.textCanvas.width = 9 * GU;
         this.textCanvas.height = 2 * GU;
         this.textCtx.save();
         this.textCtx.scale(GU, GU);
         this.textCtx.translate(4.5, 1);
         this.textCtx.textAlign = 'center';
-        this.textCtx.textBaseline = 'middle';
+        this.textCtx.textBaseline = 'alphabetic';
         this.textCtx.font = 'bold 0.9pt schmalibre';
         this.textCtx.fillStyle = 'white';
         this.textCtx.fillText('NO STARFIELDS', 0, 0);
@@ -75,7 +75,7 @@
 
       const nudger = 0.5;
 
-      if(BEAN < 3072) {
+      if (BEAN < 3072) {
         this.ctx.save();
         this.ctx.scale(GU, GU);
         this.ctx.beginPath();
@@ -100,7 +100,7 @@
         this.ctx.scale(1 / GU, 1 / GU * bouncyScale);
         this.ctx.translate(0, -1.5 * GU);
         const step = 4;
-        for(let i  = 0; i < this.textCanvas.height; i+=step) {
+        for (let i = 0; i < this.textCanvas.height; i += step) {
           this.ctx.drawImage(
             this.textCanvas,
             0,
@@ -120,25 +120,26 @@
       this.ctx.scale(GU, GU);
       this.ctx.translate(8, 0);
       this.ctx.font = 'bold 1pt schmalibre';
-      this.ctx.textAlign = 'center';
       this.ctx.textBaseline = 'middle';
-      if(BEAN >= 3072) {
+      this.ctx.textAlign = 'center';
+      if (BEAN >= 3072) {
         const t = T(3072, 3072 + 48, this.frame);
         const t2 = 0.5 + (t > 0.5 ? 1 : -1) * Math.pow(Math.abs(2 * t - 1), 10.6) / 2;
+        this.ctx.textBaseline = 'alphabetic';
         this.uniforms.translationOverX.value = 0;
         this.ctx.fillStyle = 'black';
-        this.ctx.fillText('NO DEADLINES', lerp(16, -16, t2) - lerp(-3, 3, t), 4 / 5 * 9);
+        this.ctx.fillText('NO DEADLINES', lerp(16, -16, t2) - lerp(-3, 3, t), 4 / 5 * 9 + 0.51);
       }
 
-      if(BEAN >= 3264 && BEAN < 3264 + 24 + 8) {
+      if (BEAN >= 3264 && BEAN < 3264 + 24 + 8) {
         this.ctx.fillStyle = 'black';
         this.ctx.font = 'bold 1.66pt schmalibre';
         this.ctx.fillText('WAIT, WHAT?', 0, 5.1);
-      } else if(BEAN >= 3216 && BEAN < 3264 - 24) {
+      } else if (BEAN >= 3216 && BEAN < 3264 - 24) {
         this.uniforms.translationOverX.value = 0;
         this.ctx.fillStyle = 'white';
         this.ctx.fillText('NO SUBMISSIONS', 0, 4.5);
-      } else if(BEAN >= 3168 && BEAN < 3216 - 24) {
+      } else if (BEAN >= 3168 && BEAN < 3216 - 24) {
         this.uniforms.translationOverX.value = 0;
         this.ctx.fillStyle = 'white';
         //this.ctx.fillText('NO LIVE CODING', 0, 4.5);
