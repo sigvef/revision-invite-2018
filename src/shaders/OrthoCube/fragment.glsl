@@ -1,4 +1,4 @@
-precision mediump float; // or lowp
+precision highp float;
 #define M_PI 3.1415926535897932384626433832795
 
 uniform float frame;
@@ -11,7 +11,7 @@ uniform float cubeSize;
 uniform sampler2D tDiffuse; 
 varying vec2 vUv;
 
-const int MAX_MARCHING_STEPS = 128;
+const int MAX_MARCHING_STEPS = 180;
 const float EPSILON = 0.001;
 const float END = 100.0;
 const float START = 0.0;
@@ -109,8 +109,9 @@ vec2 sdf(vec3 p) {
 vec3 march(vec3 eye, vec3 dir, float start, float end) {
     float depth = start;
     float closestDist = END;
+    vec2 distoid = vec2(0.0, 0.0);
     for (int i = 0; i < MAX_MARCHING_STEPS; i++) {
-        vec2 distoid = sdf(eye + depth * dir);
+        distoid = sdf(eye + depth * dir);
         float dist = distoid.x;
         if(dist < closestDist){
             closestDist = dist;
@@ -123,7 +124,7 @@ vec3 march(vec3 eye, vec3 dir, float start, float end) {
             return vec3(end, 0.0, i);;
         }
     }
-    return vec3(end, 0.0, MAX_MARCHING_STEPS);
+    return vec3(END, 0.0, MAX_MARCHING_STEPS);
 }
 
 vec3 estimateNormal(vec3 p) {
@@ -145,7 +146,7 @@ void main() {
     vec3 dir = normalize(-pos);
 
     vec2 propUV = vUv - vec2(0.5, 0.5);
-    propUV = propUV * vec2(16, 9) * 1.4;
+    propUV = propUV * vec2(16.0, 9.0) * 1.4;
 
     //NOTE: Math assumes camera is always pointing in Z+
     //do not rotate the camera without fixing math
@@ -154,7 +155,7 @@ void main() {
     vec3  distOid = march(eye, dir, START, END);
     float dist = distOid.x;
 
-    vec3 color;
+    vec3 color = vec3(0.0, 0.0, 0.0);
 
     if (dist >= END-EPSILON) {
         color = dark;
