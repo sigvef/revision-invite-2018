@@ -2,7 +2,7 @@
     class OrthoCubeNode extends NIN.ShaderNode {
         constructor(id, options) {
             super(id, options);
-            this.kickThrob = 0;
+            this.kickThrob = 0.0;
         }
 
         warmup(renderer) {
