@@ -34,7 +34,7 @@
       this.scene.add(this.directionalLight);
 
       this.bg = new THREE.Mesh(
-        new THREE.BoxGeometry(2*16, 2*9, 1),
+        new THREE.BoxGeometry(2 * 16, 2 * 9, 1),
         new THREE.ShaderMaterial(SHADERS.discowall));
       this.scene.add(this.bg);
       this.bg.position.z = -100;
@@ -343,42 +343,43 @@
       this.textCtx.globalAlpha = 1;
       this.textCtx.font = '1pt schmalibre';
       this.textCtx.textAlign = 'center';
-      this.textCtx.textBaseline = 'middle';
+      this.textCtx.textBaseline = 'alphabetic';
       if (BEAN >= baseBean) {
+        const verticalOffset = 0.51;
         const start = baseBean + 48 + 24;
         for (let i = 0; i < 16; i++) {
           const swipeOffset = 2 * (BEAN - start) - i;
           this.textCtx.save();
           this.textCtx.translate(i + 1 + 0.5, 4.4);
           this.textCtx.fillStyle = 'rgb(255, 73, 130)';
-          if(BEAN <= 8400) {
-            if(-swipeOffset * 2 > 0) {
-              if(BEAN >= 816 - 12) {
-                this.textCtx.fillText('     T               '[i], 0, -1);
+          if (BEAN <= 8400) {
+            if (-swipeOffset * 2 > 0) {
+              if (BEAN >= 816 - 12) {
+                this.textCtx.fillText('     T               '[i], 0, verticalOffset);
               }
-              if(BEAN >= 816 - 6) {
-                this.textCtx.fillText('      H             '[i], 0, -1);
+              if (BEAN >= 816 - 6) {
+                this.textCtx.fillText('      H             '[i], 0, verticalOffset);
               }
-              if(BEAN >= 816) {
-                this.textCtx.fillText('       I             '[i], 0, -1);
+              if (BEAN >= 816) {
+                this.textCtx.fillText('       I             '[i], 0, verticalOffset);
               }
-              if(BEAN >= 816 + 6) {
-                this.textCtx.fillText('        S             '[i], 0, -1);
+              if (BEAN >= 816 + 6) {
+                this.textCtx.fillText('        S             '[i], 0, verticalOffset);
               }
-              if(BEAN >= 816 + 12) {
-                this.textCtx.fillText('                      '[i], 0, -1);
+              if (BEAN >= 816 + 12) {
+                this.textCtx.fillText('                      '[i], 0, verticalOffset);
               }
-              if(BEAN >= 816 + 12) {
-                this.textCtx.fillText('          TI               '[i], 0, -1);
+              if (BEAN >= 816 + 12) {
+                this.textCtx.fillText('          TI               '[i], 0, verticalOffset);
               }
-              if(BEAN >= 816 + 12 + 4) {
-                this.textCtx.fillText('            ME                '[i], 0, -1);
+              if (BEAN >= 816 + 12 + 4) {
+                this.textCtx.fillText('            ME                '[i], 0, verticalOffset);
               }
             }
           }
           this.textCtx.fillStyle = '#77e15d';
           if (swipeOffset > 0) {
-            this.textCtx.fillText('JUST THE BASICS                    '[i], 0, 0);
+            this.textCtx.fillText('JUST THE BASICS                    '[i], 0, verticalOffset);
             this.textCtx.rotate(Math.PI);
             this.textCtx.rotate(Math.PI);
           }

@@ -1,4 +1,4 @@
-(function(global) {
+(function (global) {
 
   function T(startBean, endBean, frame) {
     const startFrame = FRAME_FOR_BEAN(startBean);
@@ -30,11 +30,11 @@
       this.resize();
 
       this.canvasCube = new THREE.Mesh(
-          new THREE.BoxGeometry(160, 90, 1),
-          new THREE.MeshBasicMaterial({
-            map: this.canvasTexture,
-            transparent: true,
-          }));
+        new THREE.BoxGeometry(160, 90, 1),
+        new THREE.MeshBasicMaterial({
+          map: this.canvasTexture,
+          transparent: true,
+        }));
       this.canvasCube.skipOverlayDrawing = true;
       const cubeScale = 1.161;
       this.canvasCube.scale.set(cubeScale, cubeScale, cubeScale);
@@ -42,22 +42,22 @@
 
       //Camera
       var zoom = 5.8;
-      this.camera = new THREE.OrthographicCamera( -zoom * 16, zoom * 16 , zoom * 9, -zoom * 9, 1, 100000 );
+      this.camera = new THREE.OrthographicCamera(-zoom * 16, zoom * 16, zoom * 9, -zoom * 9, 1, 100000);
       this.camera.position.z = 10000;
 
       // Scene background
       this.cube = new THREE.Mesh(new THREE.BoxGeometry(196, 109, 0.1),
-                                 new THREE.MeshBasicMaterial({ color: 0x77e15d }));
+        new THREE.MeshBasicMaterial({ color: 0x77e15d }));
       this.cube.skipOverlayDrawing = true;
-      this.cube.position.set(0,0,-100);
+      this.cube.position.set(0, 0, -100);
       this.scene.add(this.cube);
 
       this.line_width = .20;
 
       var line_material = this.transparentMaterial;
-      var small_radius  = 10;
+      var small_radius = 10;
       var hex_segments = 6;
-      var small_geometry = new THREE.CircleGeometry( small_radius, hex_segments );
+      var small_geometry = new THREE.CircleGeometry(small_radius, hex_segments);
 
       small_geometry.vertices.shift();
       small_geometry.computeLineDistances();
@@ -65,23 +65,23 @@
       this.center_rotation_container = new THREE.Object3D();
 
       this.small_center_hex = new THREE.Object3D();
-      this.small_center_hex.add(new THREE.Line( small_geometry, line_material ));
+      this.small_center_hex.add(new THREE.Line(small_geometry, line_material));
       this.center_rotation_container.add(this.small_center_hex);
       this.small_center_hex.rotation.set(0, 0, Math.PI / 6);
 
       this.level1_hex1 = new THREE.Object3D();
-      this.level1_hex1.add(new THREE.Line( small_geometry, line_material ));
-      this.level1_hex2= new THREE.Object3D();
-      this.level1_hex2.add(new THREE.Line( small_geometry, line_material ));
+      this.level1_hex1.add(new THREE.Line(small_geometry, line_material));
+      this.level1_hex2 = new THREE.Object3D();
+      this.level1_hex2.add(new THREE.Line(small_geometry, line_material));
       this.level1_hex3 = new THREE.Object3D();
-      this.level1_hex3.add(new THREE.Line( small_geometry, line_material ));
+      this.level1_hex3.add(new THREE.Line(small_geometry, line_material));
       this.center_rotation_container.add(this.level1_hex1);
       this.center_rotation_container.add(this.level1_hex2);
       this.center_rotation_container.add(this.level1_hex3);
 
-      this.level1_hex1.rotation.set(0, 0, Math.PI/6);
-      this.level1_hex2.rotation.set(0, 0, -Math.PI/6);
-      this.level1_hex3.rotation.set(0, 0, Math.PI/6);
+      this.level1_hex1.rotation.set(0, 0, Math.PI / 6);
+      this.level1_hex2.rotation.set(0, 0, -Math.PI / 6);
+      this.level1_hex3.rotation.set(0, 0, Math.PI / 6);
 
       this.scene.add(this.center_rotation_container);
 
@@ -90,31 +90,31 @@
       line_geometry.vertices.push(new THREE.Vector3(0, 15, 0));
 
       this.center_line1 = new THREE.Object3D();
-      this.center_line1.add( new THREE.Line( line_geometry, line_material ));
+      this.center_line1.add(new THREE.Line(line_geometry, line_material));
       this.center_line2 = new THREE.Object3D();
-      this.center_line2.add( new THREE.Line( line_geometry, line_material ));
+      this.center_line2.add(new THREE.Line(line_geometry, line_material));
       this.center_line3 = new THREE.Object3D();
-      this.center_line3.add( new THREE.Line( line_geometry, line_material ));
+      this.center_line3.add(new THREE.Line(line_geometry, line_material));
 
       this.scene.add(this.center_line1);
       this.scene.add(this.center_line2);
       this.scene.add(this.center_line3);
-            
-      var circle_geometry = new THREE.TorusGeometry( 10, this.line_width / 2, 10, 128 );
+
+      var circle_geometry = new THREE.TorusGeometry(10, this.line_width / 2, 10, 128);
       circle_geometry.computeLineDistances();
-      this.center_circle = new THREE.Mesh( circle_geometry, this.transparentMaterial);
+      this.center_circle = new THREE.Mesh(circle_geometry, this.transparentMaterial);
       this.scene.add(this.center_circle);
 
       this.middle_center_hex = new THREE.Object3D();
-      this.middle_center_hex.add(new THREE.Line( small_geometry, line_material ));
+      this.middle_center_hex.add(new THREE.Line(small_geometry, line_material));
       this.outer_center_hex = new THREE.Object3D();
-      this.outer_center_hex.add(new THREE.Line( small_geometry, line_material ));
+      this.outer_center_hex.add(new THREE.Line(small_geometry, line_material));
       this.middle_center_hex.rotation.set(0, 0, Math.PI / 6);
       this.outer_center_hex.rotation.set(0, 0, Math.PI / 6);
       this.outer_center_hex.lineWidth = 2;
       this.scene.add(this.middle_center_hex);
       this.scene.add(this.outer_center_hex);
-      
+
       // Square root of three divided by two. For a hex of diameter 1 this is the distance from the center to the edge.
       var r32 = 0.86602540378;
       r32 = Math.sqrt(3) / 2;
@@ -132,7 +132,7 @@
 
       this.three_point_star = new THREE.Object3D();
       this.three_point_star.lineWidth = 1.5;
-      this.three_point_star.add(new THREE.Line( star_geometry, line_material ));
+      this.three_point_star.add(new THREE.Line(star_geometry, line_material));
       this.scene.add(this.three_point_star);
 
       var darker_line_material = line_material;
@@ -145,7 +145,7 @@
       var horizontal_distance3 = 15;
 
       var small_claw_geometry = new THREE.Geometry();
-      
+
       small_claw_geometry.vertices.push(new THREE.Vector3(horizontal_distance1 * r32 + horizontal_distance3, horizontal_distance1 / 2, 0));
       small_claw_geometry.vertices.push(new THREE.Vector3(horizontal_distance2 * r32, horizontal_distance1 + horizontal_distance2 / 2, 0));
       small_claw_geometry.vertices.push(new THREE.Vector3(-horizontal_distance1 * r32, horizontal_distance1 / 2, 0));
@@ -160,9 +160,9 @@
 
 
       this.small_claw_r = new THREE.Object3D();
-      this.small_claw_r.add(new THREE.Line( small_claw_geometry, darker_line_material ));
+      this.small_claw_r.add(new THREE.Line(small_claw_geometry, darker_line_material));
       this.small_claw_l = new THREE.Object3D();
-      this.small_claw_l.add(new THREE.Line( small_claw_geometry, darker_line_material2 ));
+      this.small_claw_l.add(new THREE.Line(small_claw_geometry, darker_line_material2));
       this.small_claw_r.position.set(30 * r32, 0, -1);
       this.small_claw_l.position.set(-30 * r32, 0, -1);
       this.small_claw_l.scale.set(-1, 1, 1);
@@ -185,9 +185,9 @@
       large_claw_geometry.vertices.push(new THREE.Vector3(0, claw_outer_distance, 0));
 
       this.large_claw_r = new THREE.Object3D();
-      this.large_claw_r.add(new THREE.Line( large_claw_geometry, darker_line_material3 ));
+      this.large_claw_r.add(new THREE.Line(large_claw_geometry, darker_line_material3));
       this.large_claw_l = new THREE.Object3D();
-      this.large_claw_l.add(new THREE.Line( large_claw_geometry, darker_line_material4 ));
+      this.large_claw_l.add(new THREE.Line(large_claw_geometry, darker_line_material4));
       this.large_claw_r.position.set(claw_outer_distance * r32, 0, -1);
       this.large_claw_l.position.set(-claw_outer_distance * r32, 0, -1);
       this.large_claw_l.scale.set(-1, 1, 1);
@@ -212,7 +212,7 @@
       cube_geometry.vertices.push(new THREE.Vector3(-1, 1, -1));
       cube_geometry.vertices.push(new THREE.Vector3(-1, 1, 1));
       cube_geometry.vertices.push(new THREE.Vector3(-1, -1, 1));
-      
+
       this.spin_cube = new THREE.Object3D();
 
       var cube_line_material = line_material;
@@ -222,13 +222,13 @@
       this.outer_cube = new THREE.Line(cube_geometry, cube_line_material);
 
       this.middle_cube_3d = new THREE.Mesh(
-          new THREE.BoxGeometry(2, 2, 2),
-          new THREE.MeshBasicMaterial({
-            transparent: true,
-            opacity: 0,
-            depthWrite: false,
-            depthTest: false,
-          }));
+        new THREE.BoxGeometry(2, 2, 2),
+        new THREE.MeshBasicMaterial({
+          transparent: true,
+          opacity: 0,
+          depthWrite: false,
+          depthTest: false,
+        }));
       //this.scene.add(this.middle_cube_3d);
       //this.middle_cube_3d.render_3d = true;
 
@@ -240,10 +240,10 @@
       var scalers = [1.2, 1.8, 2.2];
 
       var spin_cube_material = this.transparentMaterial;
-      
-      for (var i = 0; i < 3; i++) {  
+
+      for (var i = 0; i < 3; i++) {
         var scaler = scalers[i];
-        var spin_cube_geometry = new THREE.CylinderGeometry( this.line_width * scaler, this.line_width * scaler, 2 * sizes[i], 12);
+        var spin_cube_geometry = new THREE.CylinderGeometry(this.line_width * scaler, this.line_width * scaler, 2 * sizes[i], 12);
         var edge1 = new THREE.Mesh(spin_cube_geometry, spin_cube_material);
         var edge2 = new THREE.Mesh(spin_cube_geometry, spin_cube_material);
         var edge3 = new THREE.Mesh(spin_cube_geometry, spin_cube_material);
@@ -281,7 +281,7 @@
         edge12.position.set(0, -sizes[i], -sizes[i]);
         edge12.rotation.set(0, 0, Math.PI / 2);
 
-        if(i == 2) {
+        if (i == 2) {
           const hack = new THREE.Object3D();
           hack.add(edge1);
           hack.add(edge2);
@@ -314,20 +314,16 @@
       }
 
       var vertex_distance = [inner_size, middle_size, outer_size];
-      var sphere_geometry = new THREE.SphereGeometry( 2.5, 16, 16 );
+      var sphere_geometry = new THREE.SphereGeometry(2.5, 16, 16);
       this.vertex_balls = [];
-      for (var cube_num = 0; cube_num < 4; cube_num++)
-      {
-        for(var x = -1; x <= 1; x += 2)
-        {
-          for(var y = -1; y <= 1; y += 2)
-          {
-            for(var z = -1; z <= 1; z += 2)
-            {
+      for (var cube_num = 0; cube_num < 4; cube_num++) {
+        for (var x = -1; x <= 1; x += 2) {
+          for (var y = -1; y <= 1; y += 2) {
+            for (var z = -1; z <= 1; z += 2) {
 
               var vertex_ball = new THREE.Mesh(sphere_geometry, line_material);
               vertex_ball.position.set(x * vertex_distance[cube_num], y * vertex_distance[cube_num], z * vertex_distance[cube_num]);
-              vertex_ball.userData = {isVertexBall: true};
+              vertex_ball.userData = { isVertexBall: true };
               this.spin_cube.add(vertex_ball);
               this.vertex_balls.push(vertex_ball);
             }
@@ -342,17 +338,17 @@
       this.spin_cube.add(this.inner_cube);
       this.spin_cube.add(this.middle_cube);
       this.spin_cube.add(this.outer_cube);
-      this.spin_cube.position.set(0,0,0);
+      this.spin_cube.position.set(0, 0, 0);
       this.scene.add(this.spin_cube);
 
       var spin = Math.PI / 4;
 
-      this.spin_cube.rotation.set(spin * 0.7837 , spin , 0);
+      this.spin_cube.rotation.set(spin * 0.7837, spin, 0);
 
       //var ico_material = new THREE.MeshBasicMaterial({color: 0x999999});
       var ico_material = this.transparentMaterial;
       var central_ico_geometry = new THREE.IcosahedronGeometry(1, 0);
-      central_ico_geometry.faces.splice(0,20);
+      central_ico_geometry.faces.splice(0, 20);
       this.ico = new THREE.Mesh(central_ico_geometry, ico_material);
       this.ico.render_3d = true;
       this.ico.rotation.set(1.015, 0, 0);
@@ -366,10 +362,9 @@
       this.slam_icos = [];
       this.slam_ico_containers = [];
       var ico_geometry = new THREE.IcosahedronGeometry(1, 0);
-      for (var i = 0; i < 20; i++)
-      {
+      for (var i = 0; i < 20; i++) {
         var slam_ico_geometry = new THREE.IcosahedronGeometry(1, 0);
-        slam_ico_geometry.faces.splice(0,20);
+        slam_ico_geometry.faces.splice(0, 20);
         slam_ico_geometry.faces.push(ico_geometry.faces[i]);
 
         this.slam_icos.push(new THREE.Mesh(slam_ico_geometry, ico_material));
@@ -400,7 +395,7 @@
       this.add_lines_for_geometry(this.small_claw_l.children[0].geometry, this.small_claw_l, 1);
       this.add_lines_for_geometry(this.large_claw_r.children[0].geometry, this.large_claw_r, 1);
       this.add_lines_for_geometry(this.large_claw_l.children[0].geometry, this.large_claw_l, 1);*/
-      
+
 
       /*
       this.three_point_star.children[0].visible = false;
@@ -419,38 +414,38 @@
       this.large_claw_r.children[0].visible = false;
       this.large_claw_l.children[0].visible = false;
       */
-      this.small_claw_r.children[0].position.set(0,0,0);
-      this.small_claw_l.children[0].position.set(0,0,0);
-      this.large_claw_r.children[0].position.set(0,0,0);
-      this.large_claw_l.children[0].position.set(0,0,0);
+      this.small_claw_r.children[0].position.set(0, 0, 0);
+      this.small_claw_l.children[0].position.set(0, 0, 0);
+      this.large_claw_r.children[0].position.set(0, 0, 0);
+      this.large_claw_l.children[0].position.set(0, 0, 0);
 
     }
 
 
     add_lines_for_geometry(geometry, container, scaler) {
       var arr = [];
-      for(var i = 0; i < geometry.vertices.length;  i++) {
+      for (var i = 0; i < geometry.vertices.length; i++) {
         var cur_x = geometry.vertices[i].x;
         var cur_y = geometry.vertices[i].y;
-        var next_x = geometry.vertices[(i + 1)%geometry.vertices.length].x;
-        var next_y = geometry.vertices[(i + 1)%geometry.vertices.length].y;
+        var next_x = geometry.vertices[(i + 1) % geometry.vertices.length].x;
+        var next_y = geometry.vertices[(i + 1) % geometry.vertices.length].y;
 
         var angle = Math.atan2(next_x - cur_x, next_y - cur_y);
 
         arr.push(new THREE.Geometry());
-        arr[i].vertices.push(new THREE.Vector3(cur_x - this.line_width * scaler * Math.sin(angle + Math.PI/2), cur_y - this.line_width * Math.cos(angle + Math.PI/2),0));
-        arr[i].vertices.push(new THREE.Vector3(next_x - this.line_width * scaler * Math.sin(angle + Math.PI/2), next_y - this.line_width * Math.cos(angle + Math.PI/2),0));
-        arr[i].vertices.push(new THREE.Vector3(next_x + this.line_width * scaler * Math.sin(angle + Math.PI/2), next_y + this.line_width * Math.cos(angle + Math.PI/2),0));
-        arr[i].vertices.push(new THREE.Vector3(cur_x + this.line_width * scaler * Math.sin(angle + Math.PI/2), cur_y + this.line_width * Math.cos(angle + Math.PI/2),0));
+        arr[i].vertices.push(new THREE.Vector3(cur_x - this.line_width * scaler * Math.sin(angle + Math.PI / 2), cur_y - this.line_width * Math.cos(angle + Math.PI / 2), 0));
+        arr[i].vertices.push(new THREE.Vector3(next_x - this.line_width * scaler * Math.sin(angle + Math.PI / 2), next_y - this.line_width * Math.cos(angle + Math.PI / 2), 0));
+        arr[i].vertices.push(new THREE.Vector3(next_x + this.line_width * scaler * Math.sin(angle + Math.PI / 2), next_y + this.line_width * Math.cos(angle + Math.PI / 2), 0));
+        arr[i].vertices.push(new THREE.Vector3(cur_x + this.line_width * scaler * Math.sin(angle + Math.PI / 2), cur_y + this.line_width * Math.cos(angle + Math.PI / 2), 0));
 
-        arr[i].faces.push( new THREE.Face3( 0, 2, 1 ) );
-        arr[i].faces.push( new THREE.Face3( 0, 3, 2 ) );
+        arr[i].faces.push(new THREE.Face3(0, 2, 1));
+        arr[i].faces.push(new THREE.Face3(0, 3, 2));
 
         arr[i].faces[0].color = new THREE.Color(0x999999);
         arr[i].faces[1].color = new THREE.Color(0x999999);
 
         //container.add(new THREE.Mesh( arr[i], new THREE.MeshBasicMaterial({side: THREE.DoubleSide, vertexColors: THREE.FaceColors})));
-        container.add(new THREE.Mesh( arr[i], this.transparentMaterial));
+        container.add(new THREE.Mesh(arr[i], this.transparentMaterial));
       }
 
       return arr;
@@ -459,30 +454,30 @@
 
     update_geometry_lines(geometry, arr) {
 
-      for(var i = 0; i < geometry.vertices.length;  i++) {
+      for (var i = 0; i < geometry.vertices.length; i++) {
         var cur_x = geometry.vertices[i].x;
         var cur_y = geometry.vertices[i].y;
-        var next_x = geometry.vertices[(i + 1)%geometry.vertices.length].x;
-        var next_y = geometry.vertices[(i + 1)%geometry.vertices.length].y;
+        var next_x = geometry.vertices[(i + 1) % geometry.vertices.length].x;
+        var next_y = geometry.vertices[(i + 1) % geometry.vertices.length].y;
 
         var angle = Math.atan2(next_x - cur_x, next_y - cur_y);
 
         //arr[i].vertices.push(new THREE.Vector3(cur_x - this.line_width * Math.sin(angle + Math.PI/2), cur_y - this.line_width * Math.cos(angle + Math.PI/2),0));
-        arr[i].vertices[0].x = cur_x - this.line_width * Math.sin(angle + Math.PI/2);
-        arr[i].vertices[0].y = cur_y - this.line_width * Math.cos(angle + Math.PI/2);
+        arr[i].vertices[0].x = cur_x - this.line_width * Math.sin(angle + Math.PI / 2);
+        arr[i].vertices[0].y = cur_y - this.line_width * Math.cos(angle + Math.PI / 2);
         //arr[i].vertices.push(new THREE.Vector3(next_x - this.line_width * Math.sin(angle + Math.PI/2), next_y - this.line_width * Math.cos(angle + Math.PI/2),0));
-        arr[i].vertices[1].x = next_x - this.line_width * Math.sin(angle + Math.PI/2);
-        arr[i].vertices[1].y = next_y - this.line_width * Math.cos(angle + Math.PI/2);
+        arr[i].vertices[1].x = next_x - this.line_width * Math.sin(angle + Math.PI / 2);
+        arr[i].vertices[1].y = next_y - this.line_width * Math.cos(angle + Math.PI / 2);
         //arr[i].vertices.push(new THREE.Vector3(next_x + this.line_width * Math.sin(angle + Math.PI/2), next_y + this.line_width * Math.cos(angle + Math.PI/2),0));
-        arr[i].vertices[2].x = next_x + this.line_width * Math.sin(angle + Math.PI/2);
-        arr[i].vertices[2].y = next_y + this.line_width * Math.cos(angle + Math.PI/2);
+        arr[i].vertices[2].x = next_x + this.line_width * Math.sin(angle + Math.PI / 2);
+        arr[i].vertices[2].y = next_y + this.line_width * Math.cos(angle + Math.PI / 2);
         //arr[i].vertices.push(new THREE.Vector3(cur_x + this.line_width * Math.sin(angle + Math.PI/2), cur_y + this.line_width * Math.cos(angle + Math.PI/2),0));
-        arr[i].vertices[3].x = cur_x + this.line_width * Math.sin(angle + Math.PI/2);
-        arr[i].vertices[3].y = cur_y + this.line_width * Math.cos(angle + Math.PI/2);
+        arr[i].vertices[3].x = cur_x + this.line_width * Math.sin(angle + Math.PI / 2);
+        arr[i].vertices[3].y = cur_y + this.line_width * Math.cos(angle + Math.PI / 2);
 
         arr[i].verticesNeedUpdate = true;
       }
-    }    
+    }
 
     warmup(renderer) {
       this.update(2764);
@@ -508,10 +503,10 @@
       this.level1_hex1.scale.set(1, 1, 1);
       this.level1_hex2.scale.set(1, 1, 1);
       this.level1_hex3.scale.set(1, 1, 1);
-      this.level1_hex1.rotation.set(0, 0, Math.PI/6);
-      this.level1_hex2.rotation.set(0, 0, -Math.PI/6);
-      this.level1_hex3.rotation.set(0, 0, Math.PI/6);
-      this.center_rotation_container.rotation.set(0, 0, Math.PI/3);
+      this.level1_hex1.rotation.set(0, 0, Math.PI / 6);
+      this.level1_hex2.rotation.set(0, 0, -Math.PI / 6);
+      this.level1_hex3.rotation.set(0, 0, Math.PI / 6);
+      this.center_rotation_container.rotation.set(0, 0, Math.PI / 3);
       this.center_line1.scale.set(0, 0, 0);
       this.center_line2.scale.set(0, 0, 0);
       this.center_line3.scale.set(0, 0, 0);
@@ -533,21 +528,20 @@
       this.three_point_star.rotation.set(0, 0, 0);
       this.three_point_star.position.set(200, 0, 0);
       this.spin_cube.position.set(200, 0, 0);
-      this.spin_cube.rotation.set(Math.PI / 4 * 0.7837 , Math.PI / 4 , 0);
+      this.spin_cube.rotation.set(Math.PI / 4 * 0.7837, Math.PI / 4, 0);
       this.hack.rotation.copy(this.spin_cube.rotation);
       this.hack.scale.copy(this.spin_cube.scale);
       this.hack.position.copy(this.spin_cube.position);
       this.ico.position.set(200, 0, 0);
-      for(var i = 0; i < 20; i++)
-      {
+      for (var i = 0; i < 20; i++) {
         this.slam_icos[i].position.set(200, 0, 0);
       }
 
       const base = 22 * 48;
-      if ( frame >= FRAME_FOR_BEAN(22 * 48)) {
+      if (frame >= FRAME_FOR_BEAN(22 * 48)) {
         var scale = elasticOut(0.0000001, 1, 1.1, T(base, base + 12, frame));
         this.small_center_hex.scale.set(scale, scale, scale);
-      } 
+      }
       if (frame >= FRAME_FOR_BEAN(22 * 48 + 9)) {
         const progress = elasticOut(0, 1, 1.1, T(base + 9, base + 9 + 12, frame));
         this.level1_hex1.position.set(10 * r32 * progress, 10 / 2 * progress, 100);
@@ -587,18 +581,18 @@
       }
       if (frame >= FRAME_FOR_BEAN(23 * 48)) {
         this.center_rotation_container.rotation.set(
-            0,
-            0,
-            Math.PI / 3 - 3 * Math.PI / 3 *
-              (easeOut(0, 0.5, T(23 * 48, 23 * 48 + 9 + 9, frame)) +
-               easeIn(0, 0.5, T(23 * 48, 23 * 48 + 9, frame))));
+          0,
+          0,
+          Math.PI / 3 - 3 * Math.PI / 3 *
+          (easeOut(0, 0.5, T(23 * 48, 23 * 48 + 9 + 9, frame)) +
+            easeIn(0, 0.5, T(23 * 48, 23 * 48 + 9, frame))));
 
 
         const scale = 1 + 0.5 * easeOut(0, 1, T(24 * 48 - 6, 24 * 48, frame));
         this.small_center_hex.scale.set(scale, scale, scale);
 
 
-        var scale2 = 1.5 + 2.55  * elasticOut(0, 1, 1.1, T(24 * 48, 24 * 48 + 9, frame));
+        var scale2 = 1.5 + 2.55 * elasticOut(0, 1, 1.1, T(24 * 48, 24 * 48 + 9, frame));
         this.center_circle.scale.set(scale2, scale2, scale2);
 
 
@@ -619,9 +613,8 @@
         this.center_line3.scale.set(scale, scale, scale);
 
         var ball_scale = elasticOut(0, 1, 1.1, T(25 * 48, 25 * 48 + 9, frame));
-        for (var i = 0; i < 24; i++)
-        {
-          this.vertex_balls[i].scale.set ( ball_scale, ball_scale, ball_scale );
+        for (var i = 0; i < 24; i++) {
+          this.vertex_balls[i].scale.set(ball_scale, ball_scale, ball_scale);
         }
       }
       if (frame >= FRAME_FOR_BEAN(25 * 48)) {
@@ -634,37 +627,33 @@
         this.center_line3.position.set(200, 0, 0);
         const progress = easeIn(0, 1., T(25 * 48, 25 * 48 + 24, frame));
         var spin = Math.PI / 4 + 2 * Math.PI * progress;
-        this.spin_cube.rotation.set(spin -0.1698 , spin , 0);
+        this.spin_cube.rotation.set(spin - 0.1698, spin, 0);
 
-        this.level1_hex1.rotation.set(2 * Math.PI * progress, 2 * Math.PI * progress , Math.PI/6);
-        this.level1_hex2.rotation.set(2 * Math.PI * progress, 2 * Math.PI * progress , Math.PI/6);
-        this.level1_hex3.rotation.set(2 * Math.PI * progress, 2 * Math.PI * progress , Math.PI/6);
+        this.level1_hex1.rotation.set(2 * Math.PI * progress, 2 * Math.PI * progress, Math.PI / 6);
+        this.level1_hex2.rotation.set(2 * Math.PI * progress, 2 * Math.PI * progress, Math.PI / 6);
+        this.level1_hex3.rotation.set(2 * Math.PI * progress, 2 * Math.PI * progress, Math.PI / 6);
 
         this.center_rotation_container.rotation.z = easeOut(
-            0, Math.PI * 5, T(26 * 48 - 24, 26 * 48, frame));
+          0, Math.PI * 5, T(26 * 48 - 24, 26 * 48, frame));
 
       }
 
       var grow = 25.70;
-      if (frame >= FRAME_FOR_BEAN(grow * 48))
-      {
+      if (frame >= FRAME_FOR_BEAN(grow * 48)) {
         var ball_scale = 1 + 0.8 * elasticOut(0, 1, 1.1, T(grow * 48, grow * 48 + 36, frame));
-        for (var i = 0; i < 24; i++)
-        {
-          this.vertex_balls[i].scale.set ( ball_scale, ball_scale, ball_scale );
+        for (var i = 0; i < 24; i++) {
+          this.vertex_balls[i].scale.set(ball_scale, ball_scale, ball_scale);
         }
       }
 
       var disapear = 25.81;
-      if (frame >= FRAME_FOR_BEAN(disapear * 48))
-      {
+      if (frame >= FRAME_FOR_BEAN(disapear * 48)) {
         var ball_scale = 1.8 * (1 - elasticOut(0, 1, 1.1, T(disapear * 48, disapear * 48 + 24, frame)));
-        for (var i = 0; i < 24; i++)
-        {
-          this.vertex_balls[i].scale.set ( ball_scale, ball_scale, ball_scale );
+        for (var i = 0; i < 24; i++) {
+          this.vertex_balls[i].scale.set(ball_scale, ball_scale, ball_scale);
         }
       }
-      if (frame >= FRAME_FOR_BEAN(26 * 48 -3)) {
+      if (frame >= FRAME_FOR_BEAN(26 * 48 - 3)) {
         this.center_rotation_container.rotation.z = 0;
         this.spin_cube.position.set(200, 0, 0);
         this.small_center_hex.position.set(0, 0, 0);
@@ -678,8 +667,8 @@
         var start = 26.5;
         // Distance from main center to center of the level 1 hexes.
         var distance3 = 10 + 5 * easeIn(0, 1, T(start * 48 - 3, start * 48, frame));
-        var distance2 = 10 + 5 * easeIn(0, 1, T(start * 48 + 6 -3, start * 48 + 6, frame));
-        var distance1 = 10 + 5 * easeIn(0, 1, T(start * 48 + 9 -3, start * 48 + 9, frame));
+        var distance2 = 10 + 5 * easeIn(0, 1, T(start * 48 + 6 - 3, start * 48 + 6, frame));
+        var distance1 = 10 + 5 * easeIn(0, 1, T(start * 48 + 9 - 3, start * 48 + 9, frame));
         this.level1_hex1.position.set(distance1 * r32, distance1 / 2, 0);
         this.level1_hex2.position.set(-distance2 * r32, distance2 / 2, 0);
         this.level1_hex3.position.set(0, -distance3, 0);
@@ -693,18 +682,18 @@
         this.three_point_star.children[0].geometry.vertices[5].y = (distance1 - 10) / 2;
 
         this.three_point_star.rotation.set(0, 0, - 3 * Math.PI / 3 *
-            easeOut(0, 1, T(start * 48 + 24 - 8, start * 48 + 24 - 2, frame)));
+          easeOut(0, 1, T(start * 48 + 24 - 8, start * 48 + 24 - 2, frame)));
 
         // Scale of the level 1 hexes.
-        var scale3 = 1 + 0.5 * easeIn(0, 1, T(start * 48 + 24 -3, start * 48 + 24, frame));
-        const scale2 = 1 + 0.5 * easeIn(0, 1, T(26 * 48 + 24 + 9 -3, start * 48 + 24 + 9, frame));
-        var scale1 = 1 + 0.5 * easeIn(0, 1, T(start * 48 + 24 + 18 -3, start * 48 + 24 + 18, frame));
+        var scale3 = 1 + 0.5 * easeIn(0, 1, T(start * 48 + 24 - 3, start * 48 + 24, frame));
+        const scale2 = 1 + 0.5 * easeIn(0, 1, T(26 * 48 + 24 + 9 - 3, start * 48 + 24 + 9, frame));
+        var scale1 = 1 + 0.5 * easeIn(0, 1, T(start * 48 + 24 + 18 - 3, start * 48 + 24 + 18, frame));
         this.level1_hex1.scale.set(scale1, scale1, scale1);
         this.level1_hex2.scale.set(scale2, scale2, scale2);
         this.level1_hex3.scale.set(scale3, scale3, scale3);
       }
       if (frame >= FRAME_FOR_BEAN(27)) {
-        const scale = 1 + 0.67 * easeOut(0, 1, T(27 * 48 + 6 -3, 27 * 48 + 6, frame));
+        const scale = 1 + 0.67 * easeOut(0, 1, T(27 * 48 + 6 - 3, 27 * 48 + 6, frame));
         this.three_point_star.scale.set(scale, scale, scale);
 
 
@@ -717,7 +706,7 @@
         var claw_progress3 = asmoothstep(FRAME_FOR_BEAN(27 * 48), FRAME_FOR_BEAN(12), frame);
         var claw_progress4 = asmoothstep(FRAME_FOR_BEAN(27.125 * 48), FRAME_FOR_BEAN(12), frame);*/
 
-        
+
         /*this.small_claw_r.children[1].material.color.r = this.cube.material.color.r + 0.15 * claw_progress1;
         this.small_claw_r.children[1].material.color.g = this.cube.material.color.g + 0.15 * claw_progress1;
         this.small_claw_r.children[1].material.color.b = this.cube.material.color.b + 0.15 * claw_progress1;
@@ -775,10 +764,10 @@
                                                                         this.cube.material.color.b + 0.15 * claw_progress4);
           this.large_claw_l.children[i].geometry.colorsNeedUpdate = true;
         }*/
-        
 
 
-        
+
+
         /*this.small_claw_r.position.set(30 * r32 - 8 * (1 - claw_progress1), 0, -1);
         this.small_claw_l.position.set(-30 * r32 + 8 * (1 - claw_progress2), 0, -1);
         this.large_claw_r.position.set(50 * r32 - 8 * (1 - claw_progress3), 0, -1);
@@ -788,7 +777,7 @@
         claw_progress2 = elasticOut(0, 1, 1, claw_progress2);
         claw_progress3 = elasticOut(0, 1, 1, claw_progress3);
         claw_progress4 = elasticOut(0, 1, 1, claw_progress4);
-        this.small_claw_r.position.set(30 * r32 + 20  * (1 - claw_progress1), 0, -1);
+        this.small_claw_r.position.set(30 * r32 + 20 * (1 - claw_progress1), 0, -1);
         this.small_claw_r.scale.set(claw_progress1, claw_progress1, claw_progress1);
         this.small_claw_l.position.set(-30 * r32 - 20 * (1 - claw_progress2), 0, -1);
         this.small_claw_l.scale.set(-claw_progress2, claw_progress2, claw_progress2);
@@ -802,8 +791,7 @@
         this.ico.position.set(200, 0, 0);
         this.ico_container.rotation.set(0, frame / 50, 0);
 
-        for(var i = 0; i < 20; i++)
-        {
+        for (var i = 0; i < 20; i++) {
           this.slam_icos[i].scale.set(23.5, 23.5, 23.5);
           this.slam_icos[i].position.set(0, 0, 0);
           var slam_progress = asmoothstep(FRAME_FOR_BEAN(28 * 48 + i * 2), FRAME_FOR_BEAN(12), frame);
@@ -814,21 +802,20 @@
         }
       }
 
-      if (frame >= FRAME_FOR_BEAN(28 * 48 )){
-        this.middle_center_hex.overrideColor ='rgb(255,73,130)';// 0xff4982;
-      }else{
+      if (frame >= FRAME_FOR_BEAN(28 * 48)) {
+        this.middle_center_hex.overrideColor = 'rgb(255,73,130)';// 0xff4982;
+      } else {
         this.middle_center_hex.overrideColor = 'white'; //stateless, yo!
       }
 
       if (frame >= FRAME_FOR_BEAN(29 * 48)) {
 
-        for(var i = 0; i < 20; i++)
-        {
+        for (var i = 0; i < 20; i++) {
           this.slam_icos[i].position.set(0, 0, 0);
           var scale = 23.5;
           var slam_progress = asmoothstep(FRAME_FOR_BEAN(29 * 48), FRAME_FOR_BEAN(12), frame);
           slam_progress = elasticOut(0, 1, 1, slam_progress);
-          slam_progress = slam_progress * 10  + scale;
+          slam_progress = slam_progress * 10 + scale;
           this.slam_icos[i].scale.set(slam_progress, slam_progress, slam_progress);
           var direction = (i % 2) * 2 - 1
           //this.slam_ico_containers[i].position.set((120 - slam_progress * 120) * direction, 0, 0);
@@ -864,7 +851,7 @@
       lightVector.normalize();
       const viewVector = new THREE.Vector3(-1, 1, 1);
       viewVector.normalize();
-      for(let i = 0; i < child.geometry.faces.length; i++) {
+      for (let i = 0; i < child.geometry.faces.length; i++) {
         const face = child.geometry.faces[i];
         const a = child.geometry.vertices[face.a].clone();
         const b = child.geometry.vertices[face.b].clone();
@@ -877,12 +864,12 @@
         const v = c.clone();
         v.sub(a);
         const normal = new THREE.Vector3(
-          u.y * v.z - u.z * v.y, 
-          u.z * v.x - u.x * v.z, 
+          u.y * v.z - u.z * v.y,
+          u.z * v.x - u.x * v.z,
           u.x * v.y - u.y * v.x);
         normal.normalize();
 
-        if(normal.z <= 0) {
+        if (normal.z <= 0) {
           continue;
         }
 
@@ -911,19 +898,19 @@
         this.ctx.strokeStyle = 'white';
         this.ctx.fillStyle = 'rgb(55, 60, 63)';
         this.ctx.lineWidth = 1.5;
-        if(child.lineWidth) {
+        if (child.lineWidth) {
           this.ctx.lineWidth = child.lineWidth;
         }
-        if(child.overrideColor){
+        if (child.overrideColor) {
           this.ctx.strokeStyle = child.overrideColor;
         }
-        if(child.skipOverlayDrawing) {
+        if (child.skipOverlayDrawing) {
           return;
         }
-        if(child.render_3d) {
+        if (child.render_3d) {
           return;
         }
-        if(!(child.geometry && child.geometry.vertices.length)) {
+        if (!(child.geometry && child.geometry.vertices.length)) {
           return;
         }
         child.updateMatrix();
@@ -941,12 +928,12 @@
             let previousX = null;
             let previousY = null;
             this.ctx.beginPath();
-            for(let j = 0; j < child.geometry.vertices.length; j++) {
+            for (let j = 0; j < child.geometry.vertices.length; j++) {
               const vertex = child.geometry.vertices[j % child.geometry.vertices.length].clone();
               vertex.applyMatrix4(child.matrixWorld);
               const x = vertex.x;
               const y = -(vertex.y);
-              if(j === 0) {
+              if (j === 0) {
                 this.ctx.moveTo(x, y);
               } else {
                 let distance = Math.sqrt(Math.pow(previousX - x, 2) + Math.pow(previousY - y, 2));
@@ -957,7 +944,7 @@
               previousX = x;
               previousY = y;
             }
-            if(method == 'stroke') {
+            if (method == 'stroke') {
               this.ctx.stroke();
               this.ctx.strokeStyle = 'white'; //reset colour
             } else {
@@ -978,18 +965,18 @@
       this.ctx.fillRect(0, easeIn(9, 4.5, t), 16, 9);
       this.ctx.font = 'bold 0.6pt schmalibre';
       this.ctx.textAlign = 'left';
-      this.ctx.textBaseline = 'middle';
+      this.ctx.textBaseline = 'alphabetic';
       this.ctx.fillStyle = 'rgb(55, 60, 63)';
       const t3 = T(1320 - 6, 1320, this.frame);
-      if(BEAN >= 1272) {
-        this.ctx.fillText('JUST', easeOut(0, 7, t3) + 2 * 16 / 3 - 0.75, 3.75);
+      if (BEAN >= 1272) {
+        this.ctx.fillText('JUST', easeOut(0, 7, t3) + 2 * 16 / 3 - 0.75, 3.75 + 0.51);
       }
-      if(BEAN >= 1272 + 18) {
+      if (BEAN >= 1272 + 18) {
         this.ctx.fillStyle = 'white';
-        this.ctx.fillText('REVISION', easeOut(0, 7, t3) + 2 * 16 / 3 -0.75, 4.75);
-      } else if(BEAN >= 1272 + 9) {
+        this.ctx.fillText('REVISION', easeOut(0, 7, t3) + 2 * 16 / 3 - 0.75, 4.75 + 0.51);
+      } else if (BEAN >= 1272 + 9) {
         this.ctx.fillStyle = 'white';
-        this.ctx.fillText('REV', easeOut(0, 7, t3) + 2 * 16 / 3 - 0.75, 4.75);
+        this.ctx.fillText('REV', easeOut(0, 7, t3) + 2 * 16 / 3 - 0.75, 4.75 + 0.51);
       }
 
       const t2 = T(1248 + 9 - 6, 1248 + 9, this.frame);
@@ -1002,10 +989,9 @@
       /*if(BEAN >= 1200 && BEAN < 1248 + 9) {
         this.draw3d(this.middle_cube_3d);
       }*/
-      if(BEAN >= 1344) {
+      if (BEAN >= 1344) {
         this.draw3d(this.ico);
-        for(var i = 0; i < 20; i++)
-        {
+        for (var i = 0; i < 20; i++) {
           this.draw3d(this.slam_icos[i]);
         }
       }
