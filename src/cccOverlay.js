@@ -1,4 +1,4 @@
-(function(global) {
+(function (global) {
   class cccOverlay extends NIN.THREENode {
     constructor(id) {
       super(id, {
@@ -40,7 +40,7 @@
       this.ctx.save();
       this.ctx.scale(GU, GU);
 
-      if(frame > 7320) {
+      if (frame > 7320) {
         const t = lerp(
           0,
           lerp(1, 0, (frame - 7532) / 20),
@@ -53,11 +53,11 @@
           (frame - 7030) / 100
         );
       }
-      if(frame > 7300) {
+      if (frame > 7300) {
         const t = easeOut(
           0,
-          easeOut(1, 0, (frame - 7512) / 100),
-          (frame - 7377) / 50
+          easeOut(1, 0, (frame - 7622) / 30),
+          (frame - 7377) / 30
         );
         // NO GRAS || NO STARS
         this.ctx.fillStyle = 'rgba(152, 90, 152, 0.9)';
@@ -72,19 +72,19 @@
         this.ctx.translate(0, 9);
         this.ctx.rotate(Math.PI / 4);
         this.ctx.textAlign = 'center';
-        this.ctx.textBaseline = 'middle';
+        this.ctx.textBaseline = 'alphabetic';
         this.ctx.font = 'bold 0.7pt schmalibre';
         this.ctx.fillStyle = 'white';
         this.ctx.globalCompositeOperation = 'xor';
 
-        this.ctx.fillText('NO RIBBONS', 0, easeIn(0.8, -3.5, t));
+        this.ctx.fillText('NO RIBBONS', 0, easeIn(0.8, -3.5, t) + 0.51);
         this.ctx.fillText('', 0, easeIn(2.0, -2.8, t));
         this.ctx.restore();
       } else {
         const t = lerp(
           0,
-          lerp(1, 0, (frame - 7161) / 20),
-          (frame - 7010) / 20
+          lerp(1, 0, (frame - 7263 + 30) / 30),
+          (frame - 7010 + 20) / 30
         );
         // NO GRAS || NO STARS
         this.ctx.fillStyle = 'rgba(152, 90, 152, 0.9)';
@@ -99,12 +99,12 @@
         this.ctx.translate(0, 9);
         this.ctx.rotate(Math.PI / 4);
         this.ctx.textAlign = 'center';
-        this.ctx.textBaseline = 'middle';
+        this.ctx.textBaseline = 'alphabetic';
         this.ctx.font = 'bold 0.7pt schmalibre';
         this.ctx.fillStyle = 'white';
         this.ctx.globalCompositeOperation = 'xor';
 
-        this.ctx.fillText('THIS TIME', 0, easeIn(0.8, -3.5, t));
+        this.ctx.fillText('THIS TIME', 0, easeIn(0.8, -3.5, t) + 0.51);
         this.ctx.restore();
       }
 
