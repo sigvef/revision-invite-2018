@@ -35,10 +35,10 @@
       this.ctx.fillStyle = 'white';
       this.ctx.font = 'bold 0.8pt schmalibre';
       this.ctx.textAlign = 'left';
-      this.ctx.textBaseline = 'middle';
+      this.ctx.textBaseline = 'alphabetic';
 
       const x = 0;
-      const y = -0.18;
+      const y = -0.18 + 0.51;
       if (BEAN >= 84 * 48 + 4) {
         //Show nothing
       } else if (BEAN >= 3960 + 48 + 12 + 10) {
@@ -144,10 +144,10 @@
         this.ctx.scale(3, 3);
         this.ctx.translate((Math.random() - 0.5) * 0.2,
           (Math.random() - 0.5) * 0.2);
-        this.ctx.fillText('REVISION', 0, -0.25);
+        this.ctx.fillText('REVISION', 0, -0.25 + 0.51);
       } else if (BEAN >= 3912) {
         this.ctx.textAlign = 'center';
-        this.ctx.fillText('NO LIMIT', 0, -0.19);
+        this.ctx.fillText('NO LIMIT', 0, -0.19 + 0.51);
       } else if (BEAN >= 3888) {
         const inT = lerp(0, 1, (frame - FRAME_FOR_BEAN(3888)) / (
           FRAME_FOR_BEAN(3888 + 3) - FRAME_FOR_BEAN(3888)));
@@ -157,7 +157,7 @@
         this.ctx.fillText(
           word.slice(0, lerp(0, word.length, inT - outT)),
           -7,
-          -.19);
+          -.19 + 0.51);
       } else if (BEAN >= 3864) {
         const inT = lerp(0, 1, (frame - FRAME_FOR_BEAN(3864)) / (
           FRAME_FOR_BEAN(3864 + 3) - FRAME_FOR_BEAN(3864)));
@@ -167,7 +167,7 @@
         this.ctx.fillText(
           word.slice(0, lerp(0, word.length, inT - outT)),
           -7,
-          -0.19);
+          -0.19 + 0.51);
       }
 
       this.ctx.restore();

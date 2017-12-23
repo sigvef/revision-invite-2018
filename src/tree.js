@@ -1,4 +1,4 @@
-(function(global) {
+(function (global) {
   class tree extends NIN.THREENode {
     constructor(id, options) {
       super(id, {
@@ -20,7 +20,7 @@
       this.ps.particles.material.depthTest = true;
       this.ps.particles.material.depthWrite = false;
       this.ps.particles.material.needsUpdate = true;
-      for(let i = 0; i < 10000; i++) {
+      for (let i = 0; i < 10000; i++) {
         const angle = Math.random() * Math.PI * 2;
         const angle2 = Math.random() * Math.PI * 2;
         const angle3 = Math.random() * Math.PI * 2;
@@ -32,10 +32,10 @@
           y: Math.sin(angle) * radius,
           z: Math.cos(angle2) * radius,
         }, {
-          x: Math.cos(angle3) * radius2,
-          y: Math.sin(angle3) * radius2,
-          z: Math.cos(angle4) * radius2,
-        }, 0.01);
+            x: Math.cos(angle3) * radius2,
+            y: Math.sin(angle3) * radius2,
+            z: Math.cos(angle4) * radius2,
+          }, 0.01);
       }
 
       this.ps.particles.position.z = -50;
@@ -238,9 +238,9 @@
         );
         const m = new THREE.Matrix4();
         m.set(1, 0, 0, 0,
-              0, 0, 1, 0,
-              0, -1, 0, 0,
-              0, 0, 0, 1);
+          0, 0, 1, 0,
+          0, -1, 0, 0,
+          0, 0, 0, 1);
         orientation.multiply(m);
         const cylinder = new THREE.Mesh(
           new THREE.CylinderGeometry(.2, .2, direction.length(), 6),
@@ -269,7 +269,7 @@
       this.ps.update();
 
       this.background.material.map = this.inputs.bg.getValue();
-      if(this.background.material.map) {
+      if (this.background.material.map) {
         this.background.material.map.needsUpdate = true;
         this.background.material.needsUpdate = true;
         this.background.material.needsUpdate = true;
@@ -330,9 +330,9 @@
           );
           const m = new THREE.Matrix4();
           m.set(1, 0, 0, 0,
-                0, 0, 1, 0,
-                0, -1, 0, 0,
-                0, 0, 0, 1);
+            0, 0, 1, 0,
+            0, -1, 0, 0,
+            0, 0, 0, 1);
           orientation.multiply(m);
           this.cylinders[index].setRotationFromMatrix(orientation);
         } else if (BEAN < 84.5 * 48 + ball.finalBean - 4) {
@@ -357,9 +357,9 @@
           );
           const m = new THREE.Matrix4();
           m.set(1, 0, 0, 0,
-                0, 0, 1, 0,
-                0, -1, 0, 0,
-                0, 0, 0, 1);
+            0, 0, 1, 0,
+            0, -1, 0, 0,
+            0, 0, 0, 1);
           orientation.multiply(m);
           this.cylinders[index].setRotationFromMatrix(orientation);
 
@@ -407,9 +407,9 @@
           );
           const m = new THREE.Matrix4();
           m.set(1, 0, 0, 0,
-                0, 0, 1, 0,
-                0, -1, 0, 0,
-                0, 0, 0, 1);
+            0, 0, 1, 0,
+            0, -1, 0, 0,
+            0, 0, 0, 1);
           orientation.multiply(m);
           this.cylinders[index].setRotationFromMatrix(orientation);
 
@@ -497,35 +497,35 @@
       }
 
       const spinnerT = lerp(0, 1, (frame - FRAME_FOR_BEAN(4056 + 24 + 9 + 9)) / 100);
-      for(let i = 0; i < this.ballMeshes.length; i++) {
+      for (let i = 0; i < this.ballMeshes.length; i++) {
         const ball = this.ballMeshes[i];
         ball.rotation.y = easeOut(
-            Math.PI / 2 + Math.PI / 6,
-            Math.PI / 2 + Math.PI / 6 -3 * Math.PI * 2,
-            Math.sqrt(spinnerT)) -
-          Math.max((frame - FRAME_FOR_BEAN(4056 + 24 +9 +9)) / 60 / 60 * 115, 0);
+          Math.PI / 2 + Math.PI / 6,
+          Math.PI / 2 + Math.PI / 6 - 3 * Math.PI * 2,
+          Math.sqrt(spinnerT)) -
+          Math.max((frame - FRAME_FOR_BEAN(4056 + 24 + 9 + 9)) / 60 / 60 * 115, 0);
       }
 
       this.rotation = this.ballMeshes[0].rotation.y;
 
-      if(BEAT) {
-        switch(BEAN) {
-        case 4056:
-        case 4056 + 9:
-        case 4056 + 24:
-        case 4056 + 24 + 9:
-        case 4056 + 24 + 9 + 9:
-        case 4128 + 12 + 9:
-        case 4128 + 12 + 9 + 48:
-          this.cameraShakeVelocity.x = this.camera.position.x -
-            this.cameraPreviousPosition.x;
-          this.cameraShakeVelocity.y = this.camera.position.y -
-            this.cameraPreviousPosition.y;
-          this.cameraShakeVelocity.z = this.camera.position.z -
-            this.cameraPreviousPosition.z;
-          this.cameraShakeAngularVelocity.x = (Math.random() - 0.5) * 0.05;
-          this.cameraShakeAngularVelocity.y = (Math.random() - 0.5) * 0.05;
-          this.cameraShakeAngularVelocity.z = (Math.random() - 0.5) * 0.05;
+      if (BEAT) {
+        switch (BEAN) {
+          case 4056:
+          case 4056 + 9:
+          case 4056 + 24:
+          case 4056 + 24 + 9:
+          case 4056 + 24 + 9 + 9:
+          case 4128 + 12 + 9:
+          case 4128 + 12 + 9 + 48:
+            this.cameraShakeVelocity.x = this.camera.position.x -
+              this.cameraPreviousPosition.x;
+            this.cameraShakeVelocity.y = this.camera.position.y -
+              this.cameraPreviousPosition.y;
+            this.cameraShakeVelocity.z = this.camera.position.z -
+              this.cameraPreviousPosition.z;
+            this.cameraShakeAngularVelocity.x = (Math.random() - 0.5) * 0.05;
+            this.cameraShakeAngularVelocity.y = (Math.random() - 0.5) * 0.05;
+            this.cameraShakeAngularVelocity.z = (Math.random() - 0.5) * 0.05;
         }
       }
 
@@ -566,7 +566,7 @@
       this.ps.render();
       const offsetX = Math.sin(this.rotation) * 0.15;
       const offsetY = -Math.cos(this.rotation) * 0.15;
-      for(let i = 0; i < this.ballMeshes.length; i++) {
+      for (let i = 0; i < this.ballMeshes.length; i++) {
         const ballMesh = this.ballMeshes[i];
         const ball = this.balls[i];
         if (BEAN < 84.5 * 48 + ball.bean - 8) {
@@ -580,18 +580,18 @@
         ctx.translate(1, 1);
         ctx.rotate(Math.PI / 6);
         ctx.textAlign = 'center';
-        ctx.textBaseline = 'middle';
+        ctx.textBaseline = 'alphabetic';
         ctx.font = 'bold 1pt schmalibre';
         ctx.fillText(
           ball.letter,
           offsetX,
-          offsetY - 0.075
+          offsetY - 0.075 + 0.51
         );
         ctx.fillStyle = '#373c3f';
         ctx.fillText(
           ball.letter,
           0,
-          -0.075
+          -0.075 + 0.51
         );
         ctx.restore();
         ballMesh.output.needsUpdate = true;
