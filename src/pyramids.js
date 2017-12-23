@@ -497,11 +497,21 @@
         object3d.rotation.y = angle;
         this.lasers.push(laserBeam);
       }
+
+      this.resize();
     }
 
     warmup(renderer) {
       this.update(5775);
       this.render(renderer);
+    }
+
+    resize() {
+      super.resize();
+      if(this.groundMirror) {
+        this.groundMirror.renderTarget.setSize(1024, 1024);
+        this.groundMirror.renderTarget2.setSize(1024, 1024);
+      }
     }
 
     update(frame) {
