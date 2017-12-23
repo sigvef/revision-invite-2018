@@ -109,8 +109,7 @@
       "shader": "chess"
     },
     "connected": {
-      "griddymid": "griddymid.render",
-      "globeTextures": "globetextures.globeTextures"
+      "griddymid": "griddymid.render"
     }
   },
   {

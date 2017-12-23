@@ -153,7 +153,7 @@
           FRAME_FOR_BEAN(3888 + 3) - FRAME_FOR_BEAN(3888)));
         const outT = lerp(0, 1, (frame - FRAME_FOR_BEAN(3912 - 3)) / (FRAME_FOR_BEAN(3912) - FRAME_FOR_BEAN(3912 - 3)));
         this.ctx.textAlign = 'left';
-        const word = 'NO FUZZ';
+        const word = 'NO FUSS';
         this.ctx.fillText(
           word.slice(0, lerp(0, word.length, inT - outT)),
           -7,

@@ -8,20 +8,12 @@
         },
         inputs: {
           griddymid: new NIN.Input(),
-          globeTextures: new NIN.Input(),
         }
       });
 
-      this.ps = new ParticleSystem({color: new THREE.Color(1, 1, 1)});
+      this.ps = new global.ParticleSystem({color: new THREE.Color(1, 1, 1)});
       this.scene.add(this.ps.particles);
 
-      this.skybox = new THREE.Mesh(
-          new THREE.BoxGeometry(500, 500, 500),
-          new THREE.MeshBasicMaterial({
-            color: 0xffffff,
-            side: THREE.DoubleSide,
-          }));
-      //this.scene.add(this.skybox);
 
       this.cameraPreviousPosition = new THREE.Vector3(0, 0, 0);
       this.cameraShakePosition = new THREE.Vector3(0, 0, 0);
@@ -505,6 +497,8 @@
         object3d.rotation.y = angle;
         this.lasers.push(laserBeam);
       }
+
+      this.resize();
     }
 
     warmup(renderer) {
@@ -512,15 +506,18 @@
       this.render(renderer);
     }
 
+    resize() {
+      super.resize();
+      if(this.groundMirror) {
+        this.groundMirror.renderTarget.setSize(1024, 1024);
+        this.groundMirror.renderTarget2.setSize(1024, 1024);
+      }
+    }
+
     update(frame) {
       super.update(frame);
 
       this.ps.update(frame);
-
-      const globeTextures = this.inputs.globeTextures.getValue();
-      if(globeTextures) {
-        this.skybox.material = globeTextures.skyboxMaterial;
-      }
 
       if(BEAT) {
         switch(BEAN) {
