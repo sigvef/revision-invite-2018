@@ -18,45 +18,59 @@
     "subdivision": 12,
     "BEANOffset": 48
   },
-  "googleAnalyticsID": "Your GA ID",
-  "labels": [{
-    "name": "Pre-intro",
-    "BEAN": 48
-  }, {
-    "name": "Intro",
-    "BEAN": 240
-  }, {
-    "name": "A",
-    "BEAN": 672
-  }, {
-    "name": "B",
-    "BEAN": 1056
-  }, {
-    "name": "A",
-    "BEAN": 1440
-  }, {
-    "name": "C",
-    "BEAN": 1824
-  }, {
-    "name": "C",
-    "BEAN": 2208
-  }, {
-    "name": "B lowdown",
-    "BEAN": 2592
-  }, {
-    "name": "piano snippet",
-    "BEAN": 2736
-  }, {
-    "name": "B groovy",
-    "BEAN": 2976
-  }, {
-    "name": "A breakdown",
-    "BEAN": 3360
-  }, {
-    "name": "B + A merger",
-    "BEAN": 3672
-  }, {
-    "name": "A outro",
-    "BEAN": 4056
-  }]
+  "googleAnalyticsID": "UA-97441881-3",
+  "labels": [
+    {
+      "name": "Pre-intro",
+      "BEAN": 48
+    },
+    {
+      "name": "Intro",
+      "BEAN": 240
+    },
+    {
+      "name": "A",
+      "BEAN": 672
+    },
+    {
+      "name": "B",
+      "BEAN": 1056
+    },
+    {
+      "name": "A",
+      "BEAN": 1440
+    },
+    {
+      "name": "C",
+      "BEAN": 1824
+    },
+    {
+      "name": "C",
+      "BEAN": 2208
+    },
+    {
+      "name": "B lowdown",
+      "BEAN": 2592
+    },
+    {
+      "name": "piano snippet",
+      "BEAN": 2736
+    },
+    {
+      "name": "B groovy",
+      "BEAN": 2976
+    },
+    {
+      "name": "A breakdown",
+      "BEAN": 3360
+    },
+    {
+      "name": "B + A merger",
+      "BEAN": 3672
+    },
+    {
+      "name": "A outro",
+      "BEAN": 4056
+    }
+  ]
 }
