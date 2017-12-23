@@ -23,7 +23,7 @@
       margin: 0;
       border: 0;
       outline: 0;
-      background: #77e15d;
+      background: #373c3f;
     }
 
     h1, h2 {
@@ -43,15 +43,27 @@
 
     .loading-text {
       position: absolute;
-      right: -700px;
-      padding: 50px 200px 200px;
-      top: calc(50% - 50px);
+      right: -35vw;
+      top: calc(50% - 100px);
+      padding: 50px 100px;
       color: white;
-      font-size: 74px;
+      font-size: 54px;
       font-weight: bold;
       background: #373c3f;
-      width: 100vh;
+      width: 56.25vw;
+      height: 100px;
       transform: rotate(80deg);
+      text-align: center;
+    }
+    @media (max-width: 1024px) {
+      .loading-text {
+        font-size: 34px;
+      }
+    }
+    @media (max-width: 600px) {
+      .loading-text {
+        font-size: 20px;
+      }
     }
 
     .progress-bar-inner {
@@ -63,11 +75,12 @@
     }
 
     .progress-bar-container {
+      overflow: hidden;
+      background: #77e15d;
+      width: 100vw;
+      height: 56.25vw;
       position: absolute;
-      left: 0;
-      top: 0;
-      bottom: 0;
-      right: 0;
+      top: calc(50% - 28.125vw);
     }
 
     #start-button {
