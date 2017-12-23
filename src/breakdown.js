@@ -94,7 +94,7 @@
     }
 
     renderZoomer() {
-      const fontYOffset = 0.3223;
+      const fontYOffset = 0.3223 + 0.51;
 
       let t5 = (this.frame - FRAME_FOR_BEAN(3466)) / (
         FRAME_FOR_BEAN(3466 + 3) - FRAME_FOR_BEAN(3466));
@@ -108,7 +108,7 @@
       this.ctx.fillStyle = '#77e15d';
       this.ctx.fillRect(-8, -4.5, 16, 9);
       this.ctx.font = 'bold 2pt schmalibre';
-      this.ctx.textBaseline = 'middle';
+      this.ctx.textBaseline = 'alphabetic';
       this.ctx.textAlign = 'right';
       this.ctx.fillStyle = 'white';
       this.ctx.lineWidth = 0.2;
@@ -475,7 +475,7 @@
       }
 
       this.ctx.font = 'bold 1.25pt schmalibre';
-      this.ctx.textBaseline = 'middle';
+      this.ctx.textBaseline = 'alphabetic';
       this.ctx.textAlign = 'center';
       const shadowOffset = 0.08;
       const fontYOffset = 0.5123;
