@@ -1,8 +1,0 @@
-{
-    "r": { "type": "f", "value": 0 },
-    "g": { "type": "f", "value": 1 },
-    "b": { "type": "f", "value": 0 },
-    "a": { "type": "f", "value": 1 },
-    "percentage": { "type": "f", "value": 0 },
-    "frame": { "type": "f", "value": 0.0 }
-}

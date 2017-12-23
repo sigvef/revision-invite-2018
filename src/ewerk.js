@@ -27,19 +27,19 @@
 
       const maps = {
         'ewerk_Cylinder.002_Cylinder.003':
-          Loader.loadTexture('res/ewerk_map.png'),
+          Loader.loadTexture('res/ewerk_map.jpg'),
         'newground_Plane.001':
-          Loader.loadTexture('res/ground_lightmap.png'),
+          Loader.loadTexture('res/ground_lightmap.jpg'),
         'tree_Cylinder':
-          Loader.loadTexture('res/tree_lightmap.png'),
+          Loader.loadTexture('res/tree_lightmap.jpg'),
         'tree2_Cylinder.001':
-          Loader.loadTexture('res/tree2_lightmap.png'),
+          Loader.loadTexture('res/tree2_lightmap.jpg'),
         'tree3_Cylinder.002':
-          Loader.loadTexture('res/tree3_lightmap.png'),
+          Loader.loadTexture('res/tree3_lightmap.jpg'),
         'inside_Cube.002':
-          Loader.loadTexture('res/inside_map.png'),
+          Loader.loadTexture('res/inside_map.jpg'),
         'stage_Cube_Cube.000':
-          Loader.loadTexture('res/stage_map.png'),
+          Loader.loadTexture('res/stage_map.jpg'),
       };
       Loader.loadAjax('res/ewerk.obj', text => {
         const obj = objLoader.parse(text);
