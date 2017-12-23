@@ -1,4 +1,4 @@
-(function(global) {
+(function (global) {
   class revisionBars extends NIN.THREENode {
     constructor(id) {
       super(id, {
@@ -86,7 +86,7 @@
         },
       ];
 
-      for(let i = 0; i < this.textScript.length; i++) {
+      for (let i = 0; i < this.textScript.length; i++) {
         const el = this.textScript[i];
         el.x -= 8;
       }
@@ -100,73 +100,73 @@
       };
 
       this.cameraXPath = this.path([
-        {bean: 1440, easing: 'step', value: 6.5},
+        { bean: 1440, easing: 'step', value: 6.5 },
 
-        {bean: 1440 + 9 - 3, easing: 'step', value: 6.5},
-        {bean: 1440 + 9, easing: 'easeIn', value: 5.5},
+        { bean: 1440 + 9 - 3, easing: 'step', value: 6.5 },
+        { bean: 1440 + 9, easing: 'easeIn', value: 5.5 },
 
-        {bean: 1440 + 24 - 3, easing: 'step', value: 5.5},
-        {bean: 1440 + 24, easing: 'easeIn', value: 4.5},
+        { bean: 1440 + 24 - 3, easing: 'step', value: 5.5 },
+        { bean: 1440 + 24, easing: 'easeIn', value: 4.5 },
 
-        {bean: 1440 + 24 + 9 - 3, easing: 'step', value: 4.5},
-        {bean: 1440 + 24 + 9, easing: 'easeIn', value: 3.5},
+        { bean: 1440 + 24 + 9 - 3, easing: 'step', value: 4.5 },
+        { bean: 1440 + 24 + 9, easing: 'easeIn', value: 3.5 },
 
-        {bean: 1440 + 24 + 18 - 3, easing: 'step', value: 3.5},
-        {bean: 1440 + 24 + 18, easing: 'easeIn', value: 2.5},
+        { bean: 1440 + 24 + 18 - 3, easing: 'step', value: 3.5 },
+        { bean: 1440 + 24 + 18, easing: 'easeIn', value: 2.5 },
 
-        {bean: 1440 + 48 + 12 - 3, easing: 'step', value: 2.5},
-        {bean: 1440 + 48 + 12, easing: 'easeIn', value: 1.5},
+        { bean: 1440 + 48 + 12 - 3, easing: 'step', value: 2.5 },
+        { bean: 1440 + 48 + 12, easing: 'easeIn', value: 1.5 },
 
-        {bean: 1440 + 48 + 24 + 24, easing: 'easeOut', value: 0},
+        { bean: 1440 + 48 + 24 + 24, easing: 'easeOut', value: 0 },
       ]);
       this.cameraYPath = this.path([
-        {bean: 1440, easing: 'step', value: 3.5},
+        { bean: 1440, easing: 'step', value: 3.5 },
 
-        {bean: 1440 + 9 - 3, easing: 'step', value: 3.5},
-        {bean: 1440 + 9, easing: 'easeIn', value: 2.5},
+        { bean: 1440 + 9 - 3, easing: 'step', value: 3.5 },
+        { bean: 1440 + 9, easing: 'easeIn', value: 2.5 },
 
-        {bean: 1440 + 24 - 3, easing: 'step', value: 2.5},
-        {bean: 1440 + 24, easing: 'easeIn', value: 1.5},
+        { bean: 1440 + 24 - 3, easing: 'step', value: 2.5 },
+        { bean: 1440 + 24, easing: 'easeIn', value: 1.5 },
 
-        {bean: 1440 + 24 + 9 - 3, easing: 'step', value: 1.5},
-        {bean: 1440 + 24 + 9, easing: 'easeIn', value: 0.5},
+        { bean: 1440 + 24 + 9 - 3, easing: 'step', value: 1.5 },
+        { bean: 1440 + 24 + 9, easing: 'easeIn', value: 0.5 },
 
-        {bean: 1440 + 24 + 18 - 3, easing: 'step', value: 0.5},
-        {bean: 1440 + 24 + 18, easing: 'easeIn', value: -0.5},
+        { bean: 1440 + 24 + 18 - 3, easing: 'step', value: 0.5 },
+        { bean: 1440 + 24 + 18, easing: 'easeIn', value: -0.5 },
 
-        {bean: 1440 + 48 + 12 - 3, easing: 'step', value: -0.5},
-        {bean: 1440 + 48 + 12, easing: 'easeIn', value: -1.5},
+        { bean: 1440 + 48 + 12 - 3, easing: 'step', value: -0.5 },
+        { bean: 1440 + 48 + 12, easing: 'easeIn', value: -1.5 },
 
-        {bean: 1440 + 48 + 24 + 24, easing: 'easeOut', value: 0},
+        { bean: 1440 + 48 + 24 + 24, easing: 'easeOut', value: 0 },
       ]);
       this.cameraZoomPath = this.path([
-        {bean: 1440 + 48 + 12, easing: 'step', value: 3},
-        {bean: 1440 + 48 + 24 + 6, easing: 'easeOut', value: 1},
+        { bean: 1440 + 48 + 12, easing: 'step', value: 3 },
+        { bean: 1440 + 48 + 24 + 6, easing: 'easeOut', value: 1 },
       ]);
       this.cameraRotatePath = this.path([
-        {bean: 1440, easing: 'step', value: -0.1},
+        { bean: 1440, easing: 'step', value: -0.1 },
 
-        {bean: 1440 + 9 - 3, easing: 'step', value: -0.1},
-        {bean: 1440 + 9, easing: 'easeIn', value: 0.1},
+        { bean: 1440 + 9 - 3, easing: 'step', value: -0.1 },
+        { bean: 1440 + 9, easing: 'easeIn', value: 0.1 },
 
-        {bean: 1440 + 24 - 3, easing: 'step', value: 0.1},
-        {bean: 1440 + 24, easing: 'easeIn', value: -0.1},
+        { bean: 1440 + 24 - 3, easing: 'step', value: 0.1 },
+        { bean: 1440 + 24, easing: 'easeIn', value: -0.1 },
 
-        {bean: 1440 + 24 + 9 - 3, easing: 'step', value: -0.1},
-        {bean: 1440 + 24 + 9, easing: 'easeIn', value: 0.1},
+        { bean: 1440 + 24 + 9 - 3, easing: 'step', value: -0.1 },
+        { bean: 1440 + 24 + 9, easing: 'easeIn', value: 0.1 },
 
-        {bean: 1440 + 24 + 18 - 3, easing: 'step', value: 0.1},
-        {bean: 1440 + 24 + 18, easing: 'easeIn', value: -0.1},
+        { bean: 1440 + 24 + 18 - 3, easing: 'step', value: 0.1 },
+        { bean: 1440 + 24 + 18, easing: 'easeIn', value: -0.1 },
 
-        {bean: 1440 + 48 + 12 - 3, easing: 'step', value: -0.1},
-        {bean: 1440 + 48 + 12, easing: 'easeIn', value: 0.1},
+        { bean: 1440 + 48 + 12 - 3, easing: 'step', value: -0.1 },
+        { bean: 1440 + 48 + 12, easing: 'easeIn', value: 0.1 },
 
-        {bean: 1440 + 48 + 24, easing: 'easeOut', value: 0},
+        { bean: 1440 + 48 + 24, easing: 'easeOut', value: 0 },
       ]);
     }
 
     path(points) {
-      for(let i = 0; i < points.length; i++) {
+      for (let i = 0; i < points.length; i++) {
         const point = points[i];
         point.frame = FRAME_FOR_BEAN(point.bean);
       }
@@ -176,11 +176,11 @@
     getPoint(path, frame) {
       let from = path[0];
       let to = path[0];
-      for(let i = 0; i < path.length; i++) {
+      for (let i = 0; i < path.length; i++) {
         const current = path[i];
-        if(current.frame <= frame) {
-          from = current; 
-          if(path[i + 1]) {
+        if (current.frame <= frame) {
+          from = current;
+          if (path[i + 1]) {
             to = path[i + 1];
           } else {
             return to.value;
@@ -205,20 +205,20 @@
       this.frame = frame;
 
       this.throb *= .85;
-      if(BEAT && BEAN <= 1536) {
-        switch(BEAN % 96) {
-        case 0:
-        case 9:
-        case 24:
-        case 24 + 9:
-        case 24 + 18:
-        case 48 + 12:
-        case 48 + 24:
-          this.throb = 1;
-          this.cameraDX = (this.outputs.cameraValues.value.cameraX -
-            this.cameraPreviousX) * 0.5;
-          this.cameraDY = (this.outputs.cameraValues.value.cameraY -
-            this.cameraPreviousY) * 0.5;
+      if (BEAT && BEAN <= 1536) {
+        switch (BEAN % 96) {
+          case 0:
+          case 9:
+          case 24:
+          case 24 + 9:
+          case 24 + 18:
+          case 48 + 12:
+          case 48 + 24:
+            this.throb = 1;
+            this.cameraDX = (this.outputs.cameraValues.value.cameraX -
+              this.cameraPreviousX) * 0.5;
+            this.cameraDY = (this.outputs.cameraValues.value.cameraY -
+              this.cameraPreviousY) * 0.5;
         }
       }
 
@@ -298,13 +298,13 @@
 
         this.ctx.font = '0.6pt schmalibre';
         this.ctx.textAlign = 'center';
-        this.ctx.textBaseline = 'middle';
+        this.ctx.textBaseline = 'alphabetic';
         this.ctx.fillStyle = 'white';
         this.ctx.lineWidth = 0.2;
         this.ctx.translate(letter.x + 0.45, 0.35);
         this.ctx.fillStyle = 'rgba(119, 225, 93, 1)';
         this.ctx.fillStyle = 'white';
-        this.ctx.fillText(letter.letter, 0, 0);
+        this.ctx.fillText(letter.letter, 0, 0.51);
         this.ctx.restore();
       }
 

@@ -1,4 +1,4 @@
-(function(global) {
+(function (global) {
 
   function T(startBean, endBean, frame) {
     const startFrame = FRAME_FOR_BEAN(startBean);
@@ -21,7 +21,7 @@
 
       this.textCanvas = document.createElement('canvas');
       this.textCtx = this.textCanvas.getContext('2d');
-      
+
       this.resize();
     }
 
@@ -32,35 +32,35 @@
 
     resize() {
       super.resize();
-      if(this.canvas) {
+      if (this.canvas) {
         this.canvas.width = 16 * GU;
         this.canvas.height = 9 * GU;
       }
     }
 
     update(frame) {
-      if(this.textCanvas) {
+      if (this.textCanvas) {
         this.textCanvas.width = 9 * GU;
         this.textCanvas.height = 4 * GU;
 
         this.textCtx.save();
-        this.textCtx.scale(0.9*GU, 0.9*GU);
+        this.textCtx.scale(0.9 * GU, 0.9 * GU);
         this.textCtx.translate(5, 1);
         this.textCtx.textAlign = 'center';
-        this.textCtx.textBaseline = 'middle';
+        this.textCtx.textBaseline = 'alphabetic';
         this.textCtx.font = 'bold 1pt schmalibre';
         this.textCtx.fillStyle = 'white';
-        this.textCtx.fillText('NO EUCLIDEAN', 0, 0);
+        this.textCtx.fillText('NO EUCLIDEAN', 0, 0.51);
         this.textCtx.restore();
 
         this.textCtx.save();
-        this.textCtx.scale(0.9*GU, 0.9*GU);
+        this.textCtx.scale(0.9 * GU, 0.9 * GU);
         this.textCtx.translate(5, 2.5);
         this.textCtx.textAlign = 'center';
-        this.textCtx.textBaseline = 'middle';
+        this.textCtx.textBaseline = 'alphabetic';
         this.textCtx.font = 'bold 1pt schmalibre';
         this.textCtx.fillStyle = 'white';
-        this.textCtx.fillText('GEOMETRIES', 0, 0);
+        this.textCtx.fillText('GEOMETRIES', 0, 0.51);
         this.textCtx.restore();
       }
       this.frame = frame;
@@ -107,7 +107,7 @@
       this.ctx.scale(1 / GU, 1 / GU * bouncyScale);
       this.ctx.translate(0, -1.5 * GU);
       const step = 4;
-      for(let i  = 0; i < this.textCanvas.height; i+=step) {
+      for (let i = 0; i < this.textCanvas.height; i += step) {
         this.ctx.drawImage(
           this.textCanvas,
           0,
