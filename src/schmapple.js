@@ -136,7 +136,7 @@
         'skarla',
         'spaceballs',
         'still',
-        'stringray',
+        'stingray',
         'tbc',
         'the deadliners',
         'titan',
